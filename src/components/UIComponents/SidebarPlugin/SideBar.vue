@@ -9,11 +9,10 @@
     <!-- -->
     <div class="sidebar-wrapper" id="style-3">
       <div class="logo">
-        <a href="#" class="simple-text">
+        <a href="https://www.codento.com" class="simple-text">
             <div class="logo-img">
-                <img src="static/img/vue-logo.png" alt="">
+                <img src="static/img/codento_logo_sm.png" alt="">
             </div>
-          Paper Dashboard
         </a>
       </div>
       <slot>
