@@ -8,6 +8,8 @@ import Typography from 'src/components/Dashboard/Views/Typography.vue'
 import Icons from 'src/components/Dashboard/Views/Icons.vue'
 import UserProfile from 'src/components/Dashboard/Views/UserProfile.vue'
 import TableList from 'src/components/Dashboard/Views/TableList.vue'
+import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
+import Maps from 'src/components/Dashboard/Views/Maps.vue'
 
 const routes = [
   {
@@ -44,6 +46,16 @@ const routes = [
         path: 'tablelist',
         name: 'tablelist',
         component: TableList
+      },
+      {
+        path: 'notifications',
+        name: 'notifications',
+        component: Notifications
+      },
+      {
+        path: 'maps',
+        name: 'maps',
+        component: Maps
       }
     ]
   },

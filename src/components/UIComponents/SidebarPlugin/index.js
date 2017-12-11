@@ -27,6 +27,16 @@ const SidebarStore = {
       name: 'Icons',
       icon: 'ti-github',
       path: '/admin/icons'
+    },
+    {
+      name: 'Notifications',
+      icon: 'ti-bell',
+      path: '/admin/notifications'
+    },
+    {
+      name: 'Maps',
+      icon: 'ti-map',
+      path: '/admin/maps'
     }
   ],
   displaySidebar (value) {
