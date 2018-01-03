@@ -32,7 +32,11 @@
 </template>
 
 <script>
-  export default {}
+  export default {
+    created () {
+      this.$store.dispatch('fetchProjects')
+    }
+  }
 </script>
 
 <style lang="scss"></style>
