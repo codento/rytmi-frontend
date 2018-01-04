@@ -11,6 +11,9 @@ import App from './App'
 // router setup
 import routes from './routes/routes'
 
+// store setup
+import store from './store/store'
+
 // library imports
 import Chartist from 'chartist'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -42,6 +45,7 @@ new Vue({
   el: '#app',
   render: h => h(App),
   router,
+  store,
   data: {
     Chartist: Chartist
   }
