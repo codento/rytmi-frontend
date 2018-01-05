@@ -7,6 +7,7 @@ import GlobalDirectives from './globalDirectives'
 import Notifications from './components/UIComponents/NotificationPlugin'
 import SideBar from './components/UIComponents/SidebarPlugin'
 import App from './App'
+import filters from './filters/filters'
 
 // router setup
 import routes from './routes/routes'
@@ -26,6 +27,7 @@ Vue.use(GlobalComponents)
 Vue.use(GlobalDirectives)
 Vue.use(Notifications)
 Vue.use(SideBar)
+Vue.use(filters)
 
 // configure router
 const router = new VueRouter({
