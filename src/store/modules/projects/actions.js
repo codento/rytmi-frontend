@@ -1,9 +1,8 @@
-import axios from 'axios'
+import api from '../../../api/projects'
 import * as types from './mutation-types'
 
 export function fetchProjects ({ commit }) {
-  axios.get(process.env.API_URL + 'projects')
-      .then(response => {
-        commit(types.FETCH_PROJECTS, response.data)
-      })
+  api.getAll().then(response => {
+    commit(types.FETCH_PROJECTS, response.data)
+  })
 }
