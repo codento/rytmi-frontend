@@ -2,16 +2,16 @@
   <div class="animated fadeIn">
     <b-row>
       <b-col>
-        <UserProfileCard :basicInfo="basicInfo"/>
+        <UserProfileCard :profile="profile"/>
       </b-col>
       <b-col>
-        <b-card header='Taidot <i class="float-right fa fa-edit"></i>' >
+        <b-card header='Taidot' >
           <div class="row mb-1">
-            <SkillRow class="col-sm-6"  v-for='skill in sortSkills' :name="skill.name" v-bind:item="skill" :proficiency="skill.knows" :key='skill.id' />
+            <SkillRow class="col-sm-6"  v-for='skill in sortSkills' :name="skill.name" :proficiency="skill.knows" :key='skill.id' />
           </div>
         </b-card>
         <b-card header='Työkokemus'>
-          <ProjectRow v-for='project in projects' :project="project" :projectName="project.projectName" :key="project.projectId"/>
+          <ProjectRow v-for='project in projects' :project="project"  :key="project.projectId"/>
         </b-card>
       </b-col>
     </b-row>
@@ -37,16 +37,17 @@ export default {
   },
   data () {
     return {
-      basicInfo: {
-        name: 'Nicholas Cage',
+      profile: {
+        firstName: 'Nicholas',
+        lastName: 'Cage',
         title: 'Actor',
-        mail: 'jari.sillanpaa@codento.com',
+        email: 'jari.sillanpaa@codento.com',
         phone: '050 555 5555',
-        aboutMe: 'Bacon ipsum dolor amet salami ham hock rump pork capicola short ribs ground round cupim landjaeger sirloin buffalo t-bone. Sirloin alcatra ham frankfurter t-bone pig spare ribs. Buffalo flank salami rump bacon short ribs meatball sirloin jowl alcatra. Tenderloin kevin venison landjaeger, tongue kielbasa ribeye prosciutto chicken salami pork chop doner ham hock pork belly pig.',
+        description: 'Bacon ipsum dolor amet salami ham hock rump pork capicola short ribs ground round cupim landjaeger sirloin buffalo t-bone. Sirloin alcatra ham frankfurter t-bone pig spare ribs. Buffalo flank salami rump bacon short ribs meatball sirloin jowl alcatra. Tenderloin kevin venison landjaeger, tongue kielbasa ribeye prosciutto chicken salami pork chop doner ham hock pork belly pig.',
         photo: 'https://baconmockup.com/300/200',
         accounts: [
           {type: 'facebook', address: 'linkedin.com/testprofile'},
-          {type: 'linkedIn', address: 'linkedin.com/testprofile'},
+          {type: 'linkedin', address: 'linkedin.com/testprofile'},
           {type: 'twitter', address: 'linkedin.com/testprofile'}]
       },
       skills: [
@@ -107,41 +108,40 @@ export default {
       ],
       projects: [
         {
-          projectName: 'Teuvon telakoneet',
+          name: 'Teuvon telakoneet',
           title: 'Arkkitehti',
           projectID: '123',
-          projectDescription: 'Spicy jalapeno venison landjaeger doner short loin, boudin pork loin swine. Strip steak jerky fatback tail. Fatback brisket landjaeger, kielbasa swine capicola venison ham boudin short loin cow sirloin. T-bone prosciutto leberkas sausage capicola kevin porchetta, brisket beef ribs pork belly meatloaf shankle drumstick. Beef venison brisket fatback prosciutto tail jerky shankle boudin pancetta tenderloin biltong. Spare ribs brisket shank jowl jerky. Biltong pig pork belly pork alcatra venison.',
-          projectStartDate: '19/10/2015',
-          projectEndDate: '20/10/2017'
+          description: 'Spicy jalapeno venison landjaeger doner short loin, boudin pork loin swine. Strip steak jerky fatback tail. Fatback brisket landjaeger, kielbasa swine capicola venison ham boudin short loin cow sirloin. T-bone prosciutto leberkas sausage capicola kevin porchetta, brisket beef ribs pork belly meatloaf shankle drumstick. Beef venison brisket fatback prosciutto tail jerky shankle boudin pancetta tenderloin biltong. Spare ribs brisket shank jowl jerky. Biltong pig pork belly pork alcatra venison.',
+          startDate: '19/10/2015',
+          endDate: '20/10/2017'
         },
         {
-          projectName: 'Jake järkkääävä',
+          name: 'Jake järkkääävä',
           projectID: '123',
           title: 'Siivooja',
-          projectDescription: 'It’s about making placeholder text great again. That’s what people want, they want placeholder text to be great again. That other text? Sadly, it’s no longer a 10. This placeholder text is gonna be HUGE. Look at these words. Are they small words? And he referred to my words - if they\'re small, something else must be small. I guarantee you there\'s no problem, I guarantee.',
-          projectStartDate: '29/10/2015',
-          projectEndDate: '20/11/2017'
+          description: 'It’s about making placeholder text great again. That’s what people want, they want placeholder text to be great again. That other text? Sadly, it’s no longer a 10. This placeholder text is gonna be HUGE. Look at these words. Are they small words? And he referred to my words - if they\'re small, something else must be small. I guarantee you there\'s no problem, I guarantee.',
+          startDate: '29/10/2015',
+          endDate: '20/11/2017'
         },
         {
-          projectName: 'Ramin riemut',
+          name: 'Ramin riemut',
           projectID: '123',
           title: 'Iso Kiho',
-          projectDescription: 'Well, the way they make shows is, they make one show. That show\'s called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they\'re going to make more shows. Some pilots get picked and become television programs. Some don\'t, become nothing. She starred in one of the ones that became nothing.',
-          projectStartDate: '19/9/2016',
-          projectEndDate: '20/10/2016'
+          description: 'Well, the way they make shows is, they make one show. That show\'s called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they\'re going to make more shows. Some pilots get picked and become television programs. Some don\'t, become nothing. She starred in one of the ones that became nothing.',
+          startDate: '19/9/2016',
+          endDate: '20/10/2016'
         },
         {
-          projectName: 'Heikki Hipsterin Kahvila',
+          name: 'Heikki Hipsterin Kahvila',
           projectID: '123',
           title: 'Barista',
-          projectDescription: 'Lyft mixtape air plant raw denim, iceland single-origin coffee semiotics jean shorts man braid live-edge bespoke forage. Trust fund whatever cold-pressed cred, chia hammock butcher single-origin coffee actually truffaut ramps edison bulb neutra vice XOXO. Fanny pack seitan shaman thundercats gastropub butcher hexagon narwhal microdosing fam PBR&B squid. Woke brooklyn literally, ennui paleo street art mlkshk truffaut VHS celiac wolf. Taiyaki neutra palo santo stumptown chillwave meggings authentic brunch mixtape. Yr lomo ugh actually, viral copper mug food truck pour-over lumbersexual seitan helvetica knausgaard hammock austin. Tacos franzen slow-carb blue bottle tumblr literally organic godard next level.',
-          projectStartDate: '19/9/2015',
-          projectEndDate: '20/9/2015'
+          description: 'Lyft mixtape air plant raw denim, iceland single-origin coffee semiotics jean shorts man braid live-edge bespoke forage. Trust fund whatever cold-pressed cred, chia hammock butcher single-origin coffee actually truffaut ramps edison bulb neutra vice XOXO. Fanny pack seitan shaman thundercats gastropub butcher hexagon narwhal microdosing fam PBR&B squid. Woke brooklyn literally, ennui paleo street art mlkshk truffaut VHS celiac wolf. Taiyaki neutra palo santo stumptown chillwave meggings authentic brunch mixtape. Yr lomo ugh actually, viral copper mug food truck pour-over lumbersexual seitan helvetica knausgaard hammock austin. Tacos franzen slow-carb blue bottle tumblr literally organic godard next level.',
+          startDate: '19/9/2015',
+          endDate: '20/9/2015'
         }
       ]
     }
   },
-
   methods: {
     getKnowledge (knows) {
       switch (knows) {

@@ -5,11 +5,11 @@
     </div>
     <div class="col-sm-12" >
        <span style="color: #f89500; font-size: 16px;">
-          {{project.projectName}}  {{project.projectStartDate}} - {{project.projectEndDate}} 
+          {{project.name}}  {{project.startDate}} - {{project.endDate}} 
         </span>
     </div>
     <div class="col-sm-12">
-      w{{project.projectDescription}}
+      {{project.description}}
     </div>
   </div>
 </template>

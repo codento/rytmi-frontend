@@ -4,21 +4,21 @@
       <img src="https://www.placecage.com/c/150/175" />
     </div>
     <div style='text-align: center; color:#869fac'>
-
-      <h2> {{basicInfo.name}} 
-        <small ><br>{{basicInfo.title}}</small>
+      <h2> {{getNames}} 
+        <small ><br>{{profile.title}}</small>
       </h2> 
-      <i  style="padding: 4px;" v-for="account in basicInfo.accounts" class="fa fa-facebook" />
+      <a style="padding: 4px;" v-for="account in profile.accounts" class='fa' :class='getFAClass(account)' :href='account.address'/>
     </div>
     <div >
       <div class="profileCardDetails">
-        Email: {{basicInfo.mail}}
+        Email: {{profile.email}}
       </div>
       <div class="profileCardDetails">
-        Puhelinnumero: {{basicInfo.phone}}
+        Puhelinnumero: {{profile.phone}}
       </div>
+      <br/>
       <div class="profileCardDetails">
-        Description: {{basicInfo.aboutMe}}
+        {{profile.description}}
       </div>
     </div>
   </b-card>
@@ -27,7 +27,17 @@
 export default {
   name: 'UserProfileCard',
   props: {
-    'basicInfo': Object
+    'profile': Object
+  },
+  computed: {
+    getNames: function () {
+      return this.profile.firstName + ' ' + this.profile.lastName
+    }
+  },
+  methods: {
+    getFAClass: function (object) {
+      return 'fa-'.concat(object.type)
+    }
   }
 }
 </script>
