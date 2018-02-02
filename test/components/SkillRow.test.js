@@ -7,7 +7,7 @@ describe('UserProfileCard.test.js', () => {
   it('Template is correct', () => {
     let wrapper = mount(SkillRow, {
       propsData: {
-        basicInfo: {
+        basicInformation: {
           proficiency: 121231312,
           name: 'mail'
         }

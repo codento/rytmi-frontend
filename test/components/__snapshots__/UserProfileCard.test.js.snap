@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`UserProfileCard.test.js Template is correct 1`] = `
-"<b-card><div style=\\"text-align: center;\\"><img src=\\"https://www.placecage.com/c/150/175\\"></div> <div style=\\"text-align: center; color: rgb(134, 159, 172);\\"><h2> test 
+"<b-card><div style=\\"text-align: center;\\"><img src=\\"https://www.placecage.com/c/150/175\\"></div> <div style=\\"text-align: center; color: rgb(134, 159, 172);\\"><h2> undefined undefined 
       <small><br></small></h2> </div> <div><div class=\\"profileCardDetails\\">
-      Email: mail@mail.comi
+      Email: mail
     </div> <div class=\\"profileCardDetails\\">
       Puhelinnumero: 1231123
-    </div> <div class=\\"profileCardDetails\\">
-      Description: 
+    </div> <br> <div class=\\"profileCardDetails\\">
+      
     </div></div></b-card>"
 `;

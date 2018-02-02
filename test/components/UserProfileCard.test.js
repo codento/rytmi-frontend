@@ -8,7 +8,7 @@ describe('UserProfileCard.test.js', () => {
   it('Template is correct', () => {
     let wrapper = mount(UserProfileCard, {
       propsData: {
-        basicInfo: {
+        profile: {
           name: 'test',
           email: 'mail',
           phone: '1231123',
