@@ -4,7 +4,9 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router'
+import lodash from 'lodash'
 
+Object.defineProperty(Vue.prototype, '$lodash', { value: lodash })
 Vue.use(BootstrapVue)
 
 /* eslint-disable no-new */
