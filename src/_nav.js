@@ -11,9 +11,14 @@ export default {
       icon: 'icon-star'
     },
     {
-      name: 'editProfile',
+      name: 'EditProfile',
       url: '/edit',
       icon: 'icon-star'
+    },
+    {
+      name: 'EditSkills',
+      url: 'editSkills',
+      icon: 'home'
     }
   ]
 }

@@ -8,6 +8,7 @@ import Full from '@/containers/Full'
 import Dashboard from '@/views/Dashboard'
 import Profile from '@/views/Profile'
 import EditProfile from '@/views/EditProfile'
+import EditSkills from '@/views/EditSkills'
 
 Vue.use(Router)
 
@@ -33,9 +34,14 @@ export default new Router({
           component: Profile
         },
         {
-          path: 'edit',
+          path: 'Edit ',
           name: 'edit',
           component: EditProfile
+        },
+        {
+          path: 'editSkills',
+          name: 'editSkills',
+          component: EditSkills
         }
       ]
     }
