@@ -19,6 +19,11 @@ export default {
       name: 'EditSkills',
       url: '/editSkills',
       icon: 'home'
+    },
+    {
+      name: 'Search',
+      url: 'Search',
+      icon: 'icon-magnifier'
     }
   ]
 }

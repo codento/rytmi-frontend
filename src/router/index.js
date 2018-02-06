@@ -9,6 +9,7 @@ import Dashboard from '@/views/Dashboard'
 import Profile from '@/views/Profile'
 import EditProfile from '@/views/EditProfile'
 import EditSkills from '@/views/EditSkills'
+import Search from '@/views/Search'
 
 Vue.use(Router)
 
@@ -42,6 +43,11 @@ export default new Router({
           path: 'editSkills',
           name: 'Edit Skills',
           component: EditSkills
+        },
+        {
+          path: 'search',
+          name: 'Search',
+          component: Search
         }
       ]
     }
