@@ -9,6 +9,11 @@ export default {
       name: 'Profile',
       url: '/Profile',
       icon: 'icon-star'
+    },
+    {
+      name: 'Search',
+      url: 'Search',
+      icon: 'icon-magnifier'
     }
   ]
 }
