@@ -6,5 +6,8 @@ export const mutations = {
   },
   [types.UPDATE_PROFILELIST] (state) {
     state.profileList = Object.keys(state.profiles)
+  },
+  [types.UPDATE_PROFILE] (state, profile) {
+    state.profiles[profile.id] = profile
   }
 }
