@@ -1,31 +1,34 @@
 <template>
 <div class="container">
+  <div class="card">
+  <div class="card-body">
+
+
   <div id="gSignInWrapper">
-  <span class="label">Sign in with:</span>
-    <div id="customBtn" class="customGPlusSignIn">
-      <span class="icon"></span>
-      <span class="buttonText">Google</span>
+      <span v-show="!isAuthenticated">
+        <button id="customBtn" class="btn btn-primary btn-lg">Sign in with Google</button>
+      </span>
+      <span v-show="isAuthenticated">
+        <button v-on:click="signOut" class="btn btn-secondary btn-lg">
+          Logout
+        </button>
+      </span>
+  <div id="name"></div>
     </div>
-    <div id="name"></div>
-  </div>
-  <a href="#" class="btn btn-alert" v-on:click="signout" v-show="isLoggedIn">Sign out</a>
+</div>
+</div>
 </div>
 </template>
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
       auth2: {}
     }
   },
+  computed: mapGetters(['isAuthenticated']),
   methods: {
-    onSuccess (googleUser) {
-      console.log('Logged in as: ' + googleUser.getBasicProfile().getName())
-    },
-    onFailure (error) {
-      console.log(error)
-    },
     isLoggedIn () {
       console.log('Is logged in ' + this.auth2.isSignedIn.get())
       if (this.auth2.isSignedIn.get() === true) {
@@ -38,23 +41,58 @@ export default {
       console.log(element.id)
       this.auth2.attachClickHandler(element, {},
         (googleUser) => {
-          console.log('ID Token: ' + googleUser.getAuthResponse().id_token)
-          console.log('Email ' + googleUser.getBasicProfile().getEmail())
-          document.getElementById('name').innerText = 'Signed in: ' +
-              googleUser.getBasicProfile().getName()
+          this.$store.dispatch('login', {id_token: googleUser.getAuthResponse().id_token})
+            .then(() => {
+              this.$toasted.success('Successfully Login', {
+                theme: 'bubble',
+                position: 'top-right',
+                duration: 5000
+              })
+            })
+            .catch(() => {
+              this.$toasted.error('Login failed, please login with codento mail! ', {
+                theme: 'bubble',
+                position: 'top-right',
+                duration: 5000
+              })
+              this.revokeAllScopes()
+            })
         }, (error) => {
-          alert(JSON.stringify(error, undefined, 2))
+          this.$toasted.warning('Login failed' + error, {
+            theme: 'bubble',
+            position: 'top-right',
+            duration: 5000
+          })
         })
     },
-    signout (event) {
-      console.log('Is logged in ' + this.auth2.isSignedIn.get())
-      console.log('End of an Era ' + this.auth2.currentUser.get())
+    signOut (event) {
       /* eslint-disable */
       var auth = gapi.auth2.getAuthInstance()
       auth.signOut().then(() => {
-        console.log('User signed out.')
+        this.$store.dispatch('logout')
+          .then(() => {
+            this.$toasted.success('Successfully log out', {
+              theme: 'bubble',
+              position: 'top-right',
+              duration: 5000
+            })
+            this.revokeAllScopes()
+            this.initAuth2()
+            this.attachSignin(document.getElementById('customBtn'))
+          })
       })
       /* eslint-enable */
+    },
+    initAuth2 () {
+      /* eslint-disable */
+      this.auth2 = gapi.auth2.init({
+        client_id: '487139903401-9u7854e8ainjhu5775s7s2ed3au5fj3e.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin'
+      })
+      /* eslint-enable */
+    },
+    revokeAllScopes () {
+      this.auth2.disconnect()
     }
   },
   created () {
@@ -62,49 +100,10 @@ export default {
     gapi.load ('auth2', () => {
     // Retrieve the singleton for the GoogleAuth library and set up the client.
     console.log('About to start init')
-     this.auth2 = gapi.auth2.init({
-       client_id: '487139903401-9u7854e8ainjhu5775s7s2ed3au5fj3e.apps.googleusercontent.com',
-       cookiepolicy: 'single_host_origin'
-     })
-     this.attachSignin(document.getElementById('customBtn'))
+    this.initAuth2()
+    this.attachSignin(document.getElementById('customBtn'))
     })
     /* eslint-enable */
   }
 }
 </script>
-<style type="text/css">
-    #customBtn {
-      display: inline-block;
-      background: white;
-      color: #444;
-      width: 190px;
-      border-radius: 5px;
-      border: thin solid #888;
-      box-shadow: 1px 1px 1px grey;
-      white-space: nowrap;
-    }
-    #customBtn:hover {
-      cursor: pointer;
-    }
-    span.label {
-      font-family: serif;
-      font-weight: normal;
-    }
-    span.icon {
-      background: url('/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
-      display: inline-block;
-      vertical-align: middle;
-      width: 42px;
-      height: 42px;
-    }
-    span.buttonText {
-      display: inline-block;
-      vertical-align: middle;
-      padding-left: 42px;
-      padding-right: 42px;
-      font-size: 14px;
-      font-weight: bold;
-      /* Use the Roboto font that is loaded in the <head> */
-      font-family: 'Roboto', sans-serif;
-    }
-  </style>
