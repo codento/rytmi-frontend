@@ -1,6 +1,6 @@
 <template lang="html">
   <ul>
-    <li v-for='profile in profiles'>
+    <li v-for='profile in profileFilter(search)'>
       <b-card>
         <b-row>
           <b-col class="col-sm-4" style="text-align:center">
@@ -19,15 +19,46 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import { mapGetters } from 'vuex'
+
 import SkillRow from '../SkillRow'
 
 export default {
   name: 'Results',
+  data () {
+    return {
+      search: ''
+    }
+  },
   props: {
-    'profiles': Array
+    param: String
+  },
+  computed: {
+    ...mapGetters([
+      'profileFilter',
+      'skills'
+    ])
+  },
+  watch: {
+    param: function () {
+      this.delaySearch()
+    }
+  },
+  methods: {
+    delaySearch: _.debounce(
+      function () {
+        this.search = this.param
+      },
+      500
+    )
   },
   components: {
     SkillRow
+  },
+  created () {
+    this.$store.dispatch('fetchProfiles')
+    this.$store.dispatch('fetchSkills')
   }
 }
 </script>
