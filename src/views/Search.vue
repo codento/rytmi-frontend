@@ -8,13 +8,12 @@
       </b-card>
     </b-col>
     <b-col class="col-sm-9" style="float:right">
-      <Results :profiles='profileFilter(param)'></Results>
+      <Results :param='param'></Results>
     </b-col>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import Results from '../components/Search/Results'
 
 export default {
@@ -24,22 +23,8 @@ export default {
       param: ''
     }
   },
-  computed: {
-    ...mapGetters([
-      'profiles',
-      'profileById',
-      'profileFilter',
-      'skills'
-    ])
-  },
   components: {
     Results
-  },
-  created () {
-    this.$store.dispatch('fetchProfiles')
-    this.$store.dispatch('fetchSkills')
-  },
-  methods: {
   }
 }
 </script>
