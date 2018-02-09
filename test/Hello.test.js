@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import jsdom from 'jsdom'
-import DashBoard from '../src/views/DashBoard.vue'
+import DashBoard from '../src/views/Dashboard.vue'
 
 const renderer = require('vue-server-renderer').createRenderer()
 
