@@ -12,7 +12,7 @@ export default {
     },
     {
       name: 'EditProfile',
-      url: '/edit',
+      url: '/edit/10',
       icon: 'icon-star'
     },
     {

@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 import nav from '../_nav'
 import { Header as AppHeader, Sidebar, Aside as AppAside, Footer as AppFooter, Breadcrumb } from '../components/'
 
@@ -32,6 +33,16 @@ export default {
     return {
       nav: nav.items
     }
+  },
+  created () {
+    this.fetchProfiles()
+    this.fetchSkills()
+  },
+  methods: {
+    ...mapActions([
+      'fetchProfiles',
+      'fetchSkills'
+    ])
   },
   computed: {
     name () {

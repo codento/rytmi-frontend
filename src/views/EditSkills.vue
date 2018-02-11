@@ -5,7 +5,7 @@
     <b-container fluid>
       <h1>Taidot</h1>
       <b-row > 
-        <b-col v-for="skill, index in profile.skills"  class="col-sm-4">
+        <b-col v-for="skill, index in profile.skills"  class="col-sm-3">
           <div v-on:click="deleteSkill(index)">
           <skill-card :skill="skill"  :name="skill.name"/>
           </div>

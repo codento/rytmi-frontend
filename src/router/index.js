@@ -34,13 +34,13 @@ export default new Router({
           component: Profile
         },
         {
-          path: 'Edit ',
-          name: 'edit',
+          path: 'edit/:id',
+          name: 'Edit Profile',
           component: EditProfile
         },
         {
           path: 'editSkills',
-          name: 'editSkills',
+          name: 'Edit Skills',
           component: EditSkills
         }
       ]
