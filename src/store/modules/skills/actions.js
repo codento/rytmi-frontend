@@ -8,7 +8,6 @@ export function fetchSkills ({ commit, state }) {
     axios.get(process.env.API_URL + '/skills')
       .then(response => {
         commit(types.FETCH_SKILLS, normalize(response.data, [skill]).entities.skills)
-        commit(types.UPDATE_SKILLLIST)
       })
       .catch(err => console.log(err))
   })
