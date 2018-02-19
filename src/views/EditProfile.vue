@@ -104,9 +104,7 @@ export default {
     onSubmit (evt) {
       evt.preventDefault()
       this.showError = false
-      this.updateProfile(this.profile).then(result => {
-        console.log(result) // "Stuff worked!"
-      }, err => {
+      this.updateProfile(this.profile).then(err => {
         this.error = !this.showError
         console.log(err) // Error: "It broke"
       })

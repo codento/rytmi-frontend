@@ -13,16 +13,6 @@ export function fetchProfiles ({ commit, state }) {
   })
 }
 
-export function updateProfile ({ commit, state }, updatedProfile) {
-  return new Promise((resolve, reject) => {
-    axios.put(process.env.API_URL + '/profiles/' + updatedProfile.id, denormalize(updatedProfile, profile))
-      .then(response => {
-        commit(types.UPDATE_PROFILE, normalize(response.data, profile).entities.profiles)
-      })
-      .catch(err => console.log(err))
-  })
-}
-
 export function fetchProfileSkills ({ commit, state }) {
   return new Promise((resolve, reject) => {
     axios.get(process.env.API_URL + '/profileskills')
@@ -39,7 +29,6 @@ export function updateProfile ({ commit, state }, data) {
       .then(response => {
         commit(types.UPDATE_PROFILE, normalize(response.data, [profile]).entities.profiles)
       }).catch(function (error) {
-        console.log(error)
         reject(error)
       })
   })
