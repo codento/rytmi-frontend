@@ -17,7 +17,7 @@ export default {
     },
     {
       name: 'EditSkills',
-      url: 'editSkills',
+      url: '/editSkills',
       icon: 'home'
     }
   ]

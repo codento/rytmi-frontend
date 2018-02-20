@@ -14,6 +14,5 @@ export const mutations = {
   },
   [types.FETCH_PROFILESKILLS] (state, profileSkills) {
     state.profileSkills = profileSkills
-    state.profileSkillList = Object.keys(profileSkills)
   }
 }

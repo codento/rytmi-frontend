@@ -89,12 +89,12 @@ export default {
       'profileById'
     ]),
     profile () {
-      let val = this.profileById(this.$route.params.id)
-      if (!val) {
+      let profile = this.profileById(this.$route.params.id)
+      if (!profile) {
         // if profile not found, use empty profile
-        val = {firstName: '', lastName: ''}
+        profile = {firstName: '', lastName: ''}
       }
-      return val
+      return profile
     }
   },
   methods: {

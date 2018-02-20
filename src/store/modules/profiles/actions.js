@@ -33,3 +33,14 @@ export function updateProfile ({ commit, state }, data) {
       })
   })
 }
+
+export function addProfileSkill ({commit, state}, data) {
+  return new Promise((resolve, reject) => {
+    axios.post(process.env.API_URL + '')
+      .then(response => {
+        commit(types.ADD_PROFILE_SKILL, 'normalizedData')
+      }).catch(error => {
+        reject(error)
+      })
+  })
+}

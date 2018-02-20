@@ -1,6 +1,6 @@
 <template>
   <b-card 
-    :title="skill.name"
+    :title="getSkillName"
     tag="skill"
     style="max-width: 20rem;" >
   <b-row >
@@ -32,9 +32,21 @@
 </b-card>
 </template>
 <script>
+import {mapGetters} from 'vuex'
+
 export default {
   name: 'SkillCard',
-  props: {'skill': Object}
+  props: {'skill': Object},
+  computed: {
+    ...mapGetters(['skillById']),
+    getSkillName () {
+      const skill = this.skillById(this.skill.skillId)
+      if (!skill) {
+        return ''
+      }
+      return skill.name
+    }
+  }
 }
 </script>
 <style scoped>
