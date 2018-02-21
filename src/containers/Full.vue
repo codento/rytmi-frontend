@@ -37,11 +37,13 @@ export default {
   created () {
     this.fetchProfiles()
     this.fetchSkills()
+    this.fetchProfileSkills()
   },
   methods: {
     ...mapActions([
       'fetchProfiles',
-      'fetchSkills'
+      'fetchSkills',
+      'fetchProfileSkills'
     ])
   },
   computed: {

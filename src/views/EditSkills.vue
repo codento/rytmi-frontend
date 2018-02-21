@@ -39,8 +39,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchProfileSkills',
-      'addProfileSkill'
+      'addProfileSkill',
+      'deleteProfileSkill'
     ]),
     addNew () {
       const request = {
@@ -55,9 +55,6 @@ export default {
       }
       this.addProfileSkill(request)
     }
-  },
-  created () {
-    this.fetchProfileSkills()
   },
   data () {
     return {
