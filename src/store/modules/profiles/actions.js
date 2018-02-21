@@ -13,22 +13,37 @@ export function fetchProfiles ({ commit, state }) {
   })
 }
 
-export function updateProfile ({ commit, state }, updatedProfile) {
+export function fetchProfileSkills ({ commit, state }) {
   return new Promise((resolve, reject) => {
-    axios.put(process.env.API_URL + '/profiles/' + updatedProfile.id, denormalize(updatedProfile, profile))
+    axios.get(process.env.API_URL + '/profileskills')
       .then(response => {
-        commit(types.UPDATE_PROFILE, normalize(response.data, profile).entities.profiles)
+        console.log(response)
+        commit(types.FETCH_PROFILESKILLS, response.data)
       })
       .catch(err => console.log(err))
   })
 }
 
-export function fetchProfileSkills ({ commit, state }) {
+export function updateProfile ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
-    axios.get(process.env.API_URL + '/profileskills')
+    axios.put(process.env.API_URL + '/profiles/' + data.id, denormalize(data, [profile]))
       .then(response => {
-        commit(types.FETCH_PROFILESKILLS, normalize(response.data, [skill]).entities.skills)
+        commit(types.UPDATE_PROFILE, normalize(response.data, [profile]).entities.profiles)
+      }).catch(function (error) {
+        reject(error)
       })
-      .catch(err => console.log(err))
+  })
+}
+
+export function addProfileSkill ({commit, state}, data) {
+  return new Promise((resolve, reject) => {
+    axios.post(process.env.API_URL + '/profiles/' + data.id + '/skills', denormalize(data.body, [skill]))
+      .then(response => {
+        const normalized = normalize(response.data, [skill]).entities.skills
+        console.log('resp', response, 'norm', normalized)
+        commit(types.ADD_PROFILE_SKILL, response.data)
+      }).catch(error => {
+        reject(error)
+      })
   })
 }

@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <b-row>
       <b-col>
-        <UserProfileCard :profile="profile"/>
+        <UserProfileCard :profile="getProfile"/>
       </b-col>
       <b-col>
         <b-card header='Taidot' >
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import SkillRow from '../components/SkillRow'
 import ProjectRow from '../components/ProjectRow'
 import UserProfileCard from '../components/UserProfileCard'
@@ -26,6 +27,17 @@ import UserProfileCard from '../components/UserProfileCard'
 export default {
   name: 'Profile',
   computed: {
+    ...mapGetters([
+      'profileById',
+      'profiles',
+      'skillsById'
+    ]),
+    getProfile () {
+      return this.profileById(10)
+    },
+    getSkills () {
+      return this.skillsById(10)
+    },
     sortSkills (param) {
       return this.$lodash.orderBy(this.skills, ['wantsTo', 'name'], ['desc', 'asc']) // TODO Figure out how lodash should be handled in tests
     }
@@ -37,19 +49,6 @@ export default {
   },
   data () {
     return {
-      profile: {
-        firstName: 'Nicholas',
-        lastName: 'Cage',
-        title: 'Actor',
-        email: 'jari.sillanpaa@codento.com',
-        phone: '050 555 5555',
-        description: 'Bacon ipsum dolor amet salami ham hock rump pork capicola short ribs ground round cupim landjaeger sirloin buffalo t-bone. Sirloin alcatra ham frankfurter t-bone pig spare ribs. Buffalo flank salami rump bacon short ribs meatball sirloin jowl alcatra. Tenderloin kevin venison landjaeger, tongue kielbasa ribeye prosciutto chicken salami pork chop doner ham hock pork belly pig.',
-        photo: 'https://baconmockup.com/300/200',
-        accounts: [
-          {type: 'facebook', address: 'linkedin.com/testprofile'},
-          {type: 'linkedin', address: 'linkedin.com/testprofile'},
-          {type: 'twitter', address: 'linkedin.com/testprofile'}]
-      },
       skills: [
         {
           name: 'Vue.js',
