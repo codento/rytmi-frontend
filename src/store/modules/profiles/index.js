@@ -6,6 +6,7 @@ const initialState = {
   profiles: {
   },
   profileList: [],
+  profileSkillList: [],
   profileSkills: {}
 }
 

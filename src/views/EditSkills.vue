@@ -2,12 +2,10 @@
 '
 <template>
   <div class="animated fadeIn">
-    <SkillModal v-if="showModal" @close="showModal = false"/>
-
     <b-container fluid>
       <h1>Taidot</h1>
       <b-row > 
-        <b-col v-for="skill, index in skillsByUserId(5)"  class="col-sm-3">
+        <b-col v-for="skill, index in skillsByUserId(10)"  class="col-sm-3">
           <div v-on:click="deleteSkill(index)">
           <skill-card :skill="skill" />
           </div>
@@ -27,13 +25,11 @@
 <script>
 import {mapGetters, mapActions} from 'vuex'
 import SkillCard from '../components/SkillCard'
-import SkillModal from '../components/SkillModal'
 
 export default {
   name: 'EditProfile',
   components: {
-    SkillCard,
-    SkillModal
+    SkillCard
   },
   computed: {
     ...mapGetters([
@@ -43,19 +39,21 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchProfileSkills'
+      'fetchProfileSkills',
+      'addProfileSkill'
     ]),
-    deleteSkill (skill) {
-      this.profile.skills.splice(skill, 1)
-    },
     addNew () {
-      const key = Math.floor(Math.random() * Object.keys(this.skills).length) - 1
-      this.profile.skills.push(
-        {
-          name: this.skills[key].name,
+      const request = {
+        id: 10,
+        body: {
+          skillId: Math.floor(Math.random() * Object.keys(this.skills).length) - 1,
           knows: Math.floor(Math.random() * 5),
           wantsTo: Math.floor(Math.random() * 3) + 1,
-          id: this.profile.skills.length + 1})
+          visibleInCV: true,
+          description: 'blah'
+        }
+      }
+      this.addProfileSkill(request)
     }
   },
   created () {
@@ -63,18 +61,7 @@ export default {
   },
   data () {
     return {
-      showModal: false,
-      profile: {
-        id: 0,
-        skills: [
-          {
-            name: 'Vue.js',
-            knows: 0,
-            wantsTo: 2,
-            id: 7
-          }
-        ]
-      }
+      showModal: false
     }
   }
 }
