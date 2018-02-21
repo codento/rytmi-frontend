@@ -3,7 +3,6 @@
     <b-row>
       <b-col>
         <UserProfileCard :profile="getProfile"/>
-        <router-link to="edit/1">edit</router-link>
       </b-col>
       <b-col>
         <b-card header='Taidot' >
