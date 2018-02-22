@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <ul>
     <li v-for='profile in profileFilter(search)'>
       <b-card>
