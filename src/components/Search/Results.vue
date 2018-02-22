@@ -1,9 +1,9 @@
-<template lang="html">
+<template>
   <ul>
     <li v-for='profile in results'>
       <b-card>
         <b-row>
-          <b-col class="col-md-4" style="text-align:center">
+          <b-col class="col-sm-4" style="text-align:center">
             <img :src='profile.photoPath' alt="">
             <h3>{{profile.firstName}} {{profile.lastName}}</h3>
             <b>Email: {{profile.email}}</b><br>

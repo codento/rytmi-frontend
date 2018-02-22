@@ -31,7 +31,9 @@ export default {
   },
   computed: {
     getNames: function () {
-      return this.profile.firstName + ' ' + this.profile.lastName
+      if (this.profile) {
+        return this.profile.firstName + ' ' + this.profile.lastName
+      }
     }
   },
   methods: {
