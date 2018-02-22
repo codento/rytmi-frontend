@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <ul>
     <li v-for='profile in profileFilter(search)'>
       <b-card>
@@ -55,10 +55,6 @@ export default {
   },
   components: {
     SkillRow
-  },
-  created () {
-    this.$store.dispatch('fetchProfiles')
-    this.$store.dispatch('fetchSkills')
   }
 }
 </script>
