@@ -4,6 +4,7 @@ export const skillsByUserId = (state) => (userId) => {
   return state.profileSkillList
     .filter(skillId => state.profileSkills[skillId].profileId === userId)
     .map(skillId => state.profileSkills[skillId])
+}
 export const profileFilter = (state) => (param) => {
   let keys = Object.keys(state.profiles)
   let result = []
