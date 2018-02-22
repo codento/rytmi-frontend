@@ -24,6 +24,11 @@ export default {
       name: 'Search',
       url: 'Search',
       icon: 'icon-magnifier'
+    },
+    {
+      name: 'Login',
+      url: '/login',
+      icon: 'icon-lock'
     }
   ]
 }
