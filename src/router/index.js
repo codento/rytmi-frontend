@@ -1,6 +1,7 @@
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
+import store from '@/store'
 import Router from 'vue-router'
-
 // Containers
 import Full from '@/containers/Full'
 
@@ -18,6 +19,7 @@ export default new Router({
   mode: 'hash',
   linkActiveClass: 'open active',
   scrollBehavior: () => ({ y: 0 }),
+  computed: mapGetters(['isAuthenticated']),
   routes: [
     {
       path: '/',
@@ -28,12 +30,32 @@ export default new Router({
         {
           path: 'dashboard',
           name: 'Dashboard',
-          component: Dashboard
+          component: Dashboard,
+          beforeEnter: (to, from, next) => {
+            if (!store.getters.isAuthenticated) {
+              next({
+                path: '/login',
+                query: { redirect: to.fullPath }
+              })
+            } else {
+              next()
+            }
+          }
         },
         {
           path: 'profile',
           name: 'Profile',
-          component: Profile
+          component: Profile,
+          beforeEnter: (to, from, next) => {
+            if (!store.getters.isAuthenticated) {
+              next({
+                path: '/login',
+                query: { redirect: to.fullPath }
+              })
+            } else {
+              next()
+            }
+          }
         },
         {
           path: 'edit/:id',
