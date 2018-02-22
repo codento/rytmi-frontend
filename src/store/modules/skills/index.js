@@ -3,8 +3,8 @@ import * as getters from './getters'
 import { mutations } from './mutations'
 
 const initialState = {
-  // skills: {},
-  // skillList: []
+  skills: {},
+  skillList: []
 }
 
 export default {
