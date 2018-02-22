@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
 import store from '@/store'
 import Router from 'vue-router'
 // Containers
@@ -19,7 +18,6 @@ export default new Router({
   mode: 'hash',
   linkActiveClass: 'open active',
   scrollBehavior: () => ({ y: 0 }),
-  computed: mapGetters(['isAuthenticated']),
   routes: [
     {
       path: '/',
@@ -60,12 +58,32 @@ export default new Router({
         {
           path: 'edit/:id',
           name: 'Edit Profile',
-          component: EditProfile
+          component: EditProfile,
+          beforeEnter: (to, from, next) => {
+            if (!store.getters.isAuthenticated) {
+              next({
+                path: '/login',
+                query: { redirect: to.fullPath }
+              })
+            } else {
+              next()
+            }
+          }
         },
         {
           path: 'editSkills',
           name: 'Edit Skills',
-          component: EditSkills
+          component: EditSkills,
+          beforeEnter: (to, from, next) => {
+            if (!store.getters.isAuthenticated) {
+              next({
+                path: '/login',
+                query: { redirect: to.fullPath }
+              })
+            } else {
+              next()
+            }
+          }
         },
         {
           path: 'search',
