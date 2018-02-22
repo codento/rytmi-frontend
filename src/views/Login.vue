@@ -21,6 +21,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+require('dotenv').config()
 export default {
   data () {
     return {
@@ -58,7 +59,7 @@ export default {
               this.revokeAllScopes()
             })
         }, (error) => {
-          this.$toasted.warning('Login failed' + error, {
+          this.$toasted.error('Login failed' + error, {
             theme: 'bubble',
             position: 'top-right',
             duration: 5000
@@ -84,6 +85,7 @@ export default {
       /* eslint-enable */
     },
     initAuth2 () {
+      console.log('Cliend id: ' + process.env.CLIENT_ID)
       /* eslint-disable */
       this.auth2 = gapi.auth2.init({
         client_id: process.env.CLIENT_ID,
