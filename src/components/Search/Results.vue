@@ -131,11 +131,6 @@ export default {
   },
   components: {
     SkillRow
-  },
-  created () {
-    this.$store.dispatch('fetchSkills')
-    this.$store.dispatch('fetchProfiles')
-    this.$store.dispatch('fetchProfileSkills')
   }
 }
 </script>
