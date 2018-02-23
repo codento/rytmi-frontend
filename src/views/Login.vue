@@ -88,7 +88,7 @@ export default {
       console.log('Cliend id: ' + process.env.CLIENT_ID)
       /* eslint-disable */
       this.auth2 = gapi.auth2.init({
-        client_id: '487139903401-h5gnhs9s6jdpj2foitv7narf6h80g0ul.apps.googleusercontent.com',
+        client_id: process.env.CLIENT_ID,
         cookiepolicy: 'single_host_origin'
       })
       /* eslint-enable */
