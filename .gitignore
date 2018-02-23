@@ -9,6 +9,7 @@ test/e2e/reports
 selenium-debug.log
 yarn.lock
 coverage
+.env
 # Editor directories and files
 .idea
 *.suo
