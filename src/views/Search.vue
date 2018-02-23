@@ -66,9 +66,6 @@ export default {
   },
   components: {
     Results
-  },
-  created () {
-    this.$store.dispatch('fetchSkills')
   }
 }
 </script>
