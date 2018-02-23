@@ -6,10 +6,11 @@ import App from './App'
 import router from './router'
 import store from './store'
 import lodash from 'lodash'
+import Toasted from 'vue-toasted'
 
 Object.defineProperty(Vue.prototype, '$lodash', { value: lodash })
 Vue.use(BootstrapVue)
-
+Vue.use(Toasted)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
