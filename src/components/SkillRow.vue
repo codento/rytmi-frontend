@@ -26,9 +26,6 @@ export default {
     ...mapGetters([
       'skillById'
     ])
-  },
-  created () {
-    this.$store.dispatch('fetchSkills')
   }
 }
 </script>
