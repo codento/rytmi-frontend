@@ -72,17 +72,19 @@
       <b-button type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Peruuta</b-button>
     </b-form>
+    <edit-skills :profileId="profile.id"/>
   </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
 import SkillCard from '../components/SkillCard'
-
+import EditSkills from './EditSkills'
 export default {
   name: 'EditProfile',
   components: {
-    SkillCard
+    SkillCard,
+    EditSkills
   },
   computed: {
     ...mapGetters([

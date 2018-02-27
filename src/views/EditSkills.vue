@@ -5,7 +5,7 @@
     <b-container fluid>
       <h1>Taidot</h1>
       <b-row > 
-        <b-col v-for="skill, index in skillsByUserId(10)"  class="col-sm-3">
+        <b-col v-for="skill, index in skillsByUserId(profileId)"  class="col-sm-3">
           <div v-on:click="deleteSkill(index)">
           <skill-card :skill="skill" />
           </div>
@@ -31,6 +31,9 @@ export default {
   components: {
     SkillCard
   },
+  props: {
+    'profileId': Number
+  },
   computed: {
     ...mapGetters([
       'skills',
@@ -44,7 +47,7 @@ export default {
     ]),
     addNew () {
       const request = {
-        id: 10,
+        id: this.profileId,
         body: {
           skillId: Math.floor(Math.random() * Object.keys(this.skills).length) - 1,
           knows: Math.floor(Math.random() * 5),
