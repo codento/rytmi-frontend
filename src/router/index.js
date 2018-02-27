@@ -4,12 +4,12 @@ import Router from 'vue-router'
 import Full from '@/containers/Full'
 
 // Views
-import Dashboard from '@/views/Dashboard'
+import Login from '@/views/Login'
 import Profile from '@/views/Profile'
 import EditProfile from '@/views/EditProfile'
 import EditSkills from '@/views/EditSkills'
 import Search from '@/views/Search'
-
+import PageNotFound from '@/views/PageNotFound'
 import store from '../store'
 
 Vue.use(Router)
@@ -32,14 +32,14 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/Dashboard',
+      redirect: '/home',
       name: 'Home',
       component: Full,
       children: [
         {
-          path: 'dashboard',
-          name: 'Dashboard',
-          component: Dashboard
+          path: 'home',
+          name: 'Home',
+          component: Login
         },
         {
           path: 'profile',
@@ -64,6 +64,10 @@ export default new Router({
           name: 'Search',
           component: Search,
           beforeEnter: requireAuth
+        },
+        {
+          path: '*',
+          component: PageNotFound
         }
       ]
     }
