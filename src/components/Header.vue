@@ -9,7 +9,7 @@
     </button>
     <button id="loginBtn"  v-if="!isAuthenticated" v-on:click="login" class="btn">Sign in</button>
     <button id="logoutBtn" v-if="isAuthenticated" v-on:click="logout" class="btn">Sign out</button>
-    <button id="logoutBtn"  v-on:click="checkStatus" class="btn">Sign out</button>
+    <button id="logoutBtn"  v-on:click="checkStatus" class="btn">Check status</button>
 
     <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button" @click="asideToggle">
       <span class="navbar-toggler-icon"></span>
@@ -44,7 +44,9 @@ export default {
       document.body.classList.toggle('aside-menu-hidden')
     },
     checkStatus () {
-      console.log(this.isAuthenticated)
+      this.$toasted.global.rytmi_success({
+        message: 'Authenticated: ' + this.isAuthenticated
+      })
     },
     logout () {
       handleLogout().then(() => {
@@ -53,11 +55,7 @@ export default {
     },
     login () {
       handleLogin().then((response) => {
-        console.log(response)
         this.requestAuth(response.Zi.id_token)
-        this.$toasted.global.rytmi_success({
-          message: 'Login success'
-        })
       }).catch((error) => {
         console.log(error)
         this.$toasted.global.rytmi_error({
