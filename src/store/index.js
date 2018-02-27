@@ -3,14 +3,18 @@ import Vuex from 'vuex'
 
 import skills from './modules/skills'
 import profiles from './modules/profiles'
+import auth from './modules/auth'
+
 Vue.use(Vuex)
 const state = {
-  loading: false
+  loading: false,
+  token: null
 }
 export default new Vuex.Store({
   state,
   modules: {
     skills,
-    profiles
+    profiles,
+    auth
   }
 })
