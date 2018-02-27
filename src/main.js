@@ -11,6 +11,32 @@ import Toasted from 'vue-toasted'
 Object.defineProperty(Vue.prototype, '$lodash', { value: lodash })
 Vue.use(BootstrapVue)
 Vue.use(Toasted)
+
+const options = {
+  theme: 'bubble',
+  position: 'top-right',
+  duration: 5000
+}
+Vue.toasted.register('rytmi_success', (payload) => {
+  if (!payload.message) {
+    return 'Success'
+  }
+  return payload.message
+}, {
+  type: 'success',
+  ...options
+})
+
+Vue.toasted.register('rytmi_error', (payload) => {
+  if (!payload.message) {
+    return 'Oops.. Something Went Wrong..'
+  }
+  return 'Oops.. ' + payload.message
+}, {
+  type: 'error',
+  ...options
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
