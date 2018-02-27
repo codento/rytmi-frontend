@@ -7,8 +7,9 @@
     <button class="navbar-toggler sidebar-toggler d-md-down-none mr-auto" type="button" @click="sidebarToggle">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <button id="loginBtn"  v-if="!loggedIn" v-on:click="login" class="btn">Sign in</button>
-    <button id="logoutBtn" v-if="loggedIn" v-on:click="logout" class="btn">Sign out</button>
+    <button id="loginBtn"  v-if="!isAuthenticated" v-on:click="login" class="btn">Sign in</button>
+    <button id="logoutBtn" v-if="isAuthenticated" v-on:click="logout" class="btn">Sign out</button>
+    <button id="logoutBtn"  v-on:click="checkStatus" class="btn">Sign out</button>
 
     <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button" @click="asideToggle">
       <span class="navbar-toggler-icon"></span>
@@ -17,14 +18,13 @@
   </header>
 </template>
 <script>
+import {mapGetters, mapActions} from 'vuex'
+import {loadAuthClient, handleLogin, handleLogout} from '../utils/auth'
 
-import {loadAuthClient, handleLogout, handleLogin} from '../utils/auth'
 export default {
   name: 'c-header',
-  data () {
-    return {
-      loggedIn: false
-    }
+  computed: {
+    ...mapGetters(['isAuthenticated'])
   },
   methods: {
     sidebarToggle (e) {
@@ -43,22 +43,18 @@ export default {
       e.preventDefault()
       document.body.classList.toggle('aside-menu-hidden')
     },
+    checkStatus () {
+      console.log(this.isAuthenticated)
+    },
     logout () {
       handleLogout().then(() => {
-        this.loggedIn = false
-        this.$toasted.global.rytmi_success({
-          message: 'Logout success'
-        })
-      }).catch((error) => {
-        console.log(error)
-        this.$toasted.global.rytmi_error({
-          message: 'Logout failed'
-        })
+        this.logoutAuth()
       })
     },
     login () {
-      handleLogin().then(() => {
-        this.loggedIn = true
+      handleLogin().then((response) => {
+        console.log(response)
+        this.requestAuth(response.Zi.id_token)
         this.$toasted.global.rytmi_success({
           message: 'Login success'
         })
@@ -68,7 +64,8 @@ export default {
           message: 'Login failed'
         })
       })
-    }
+    },
+    ...mapActions(['requestAuth', 'logoutAuth'])
   },
   created () {
     /* eslint-disable */
