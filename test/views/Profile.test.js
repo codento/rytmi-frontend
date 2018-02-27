@@ -14,10 +14,9 @@ import { shallow, createLocalVue } from 'vue-test-utils'
 import View from '../../src/views/Profile.vue'
 import lodash from 'lodash'
 
-describe('Profile.vue', () => {
+describe('Profile.vue shallow', () => {
   let localVue = createLocalVue()
   localVue.use(Vuex)
-  
   let store, getters, cmp
   let $lodash = lodash
 
