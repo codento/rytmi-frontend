@@ -10,9 +10,20 @@ import EditProfile from '@/views/EditProfile'
 import EditSkills from '@/views/EditSkills'
 import Search from '@/views/Search'
 
-import { requireAuth } from '../utils/auth'
+import store from '../store'
 
 Vue.use(Router)
+
+const requireAuth = (to, from, next) => {
+  if (!store.getters.isAuthenticated) {
+    next({
+      path: '/',
+      query: { redirect: to.fullPath }
+    })
+  } else {
+    next()
+  }
+}
 
 export default new Router({
   mode: 'hash',
