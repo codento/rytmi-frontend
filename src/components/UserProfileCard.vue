@@ -1,7 +1,7 @@
 <template>
   <b-card >
     <div style="text-align: center;">
-      <img src="https://www.placecage.com/c/150/175" />
+      <img :src="profile.photoPath" />
     </div>
     <div style='text-align: center; color:#869fac'>
       <h2> {{getNames}} 
@@ -21,6 +21,7 @@
         {{profile.description}}
       </div>
     </div>
+    <b-button v-on:click="editProfile" variant="secondary">Edit Profile</b-button>
   </b-card>
 </template>
 <script>
@@ -39,6 +40,9 @@ export default {
   methods: {
     getFAClass: function (object) {
       return 'fa-'.concat(object.type)
+    },
+    editProfile: function () {
+      this.$router.replace({name: 'Edit', params: { id: this.profile.id }})
     }
   }
 }
