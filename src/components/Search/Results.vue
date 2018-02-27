@@ -1,7 +1,7 @@
 <template>
   <ul>
     <li v-for='profile in results'>
-      <b-card>
+      <b-card v-on:click="openProfile(profile)">
         <b-row>
           <b-col class="col-sm-4" style="text-align:center">
             <img :src='profile.photoPath' alt="">
@@ -77,6 +77,9 @@ export default {
     }
   },
   methods: {
+    openProfile (profile) {
+      this.$router.replace({name: 'Profile', params: { id: profile.id }})
+    },
     delaySearch: _.debounce(
       function () {
         this.search = this.param

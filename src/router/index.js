@@ -49,7 +49,7 @@ export default new Router({
         },
         {
           path: 'edit/:id',
-          name: 'Edit Profile',
+          name: 'Edit',
           component: EditProfile,
           beforeEnter: requireAuth
         },

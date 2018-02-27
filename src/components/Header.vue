@@ -9,7 +9,7 @@
     </button>
 
     <b-navbar-nav v-if="isAuthenticated">
-      <b-nav-item to="Search">Search</b-nav-item>
+      <b-nav-item to="/Search">Search</b-nav-item>
     </b-navbar-nav>
     <b-navbar-nav class="ml-auto">
       <button id="loginBtn"  v-if="!isAuthenticated" v-on:click="login" class="btn">Sign in</button>
