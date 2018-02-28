@@ -37,7 +37,7 @@ export function updateProfile ({ commit, state }, data) {
 
 export function addProfileSkill ({commit, state}, data) {
   return new Promise((resolve, reject) => {
-    axios.post(process.env.API_URL + '/profiles/' + data.id + '/skills', denormalize(data.body, [skill]))
+    axios.post(process.env.API_URL + '/profiles/' + data.profileId + '/skills', denormalize(data, [skill]))
       .then(response => {
         const normalized = normalize(response.data, [skill]).entities.skills
         console.log('resp', response, 'norm', normalized)
