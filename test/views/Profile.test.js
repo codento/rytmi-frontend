@@ -9,20 +9,22 @@ jest.mock('lodash', () => ({
   })
 }))
 import Vuex from 'vuex'
+import VueRouter from 'vue-router'
 import { shallow, createLocalVue } from 'vue-test-utils'
 import View from '../../src/views/Profile.vue'
 import lodash from 'lodash'
 
-describe('Profile.test.js', () => {
+describe('Profile.vue shallow', () => {
   let localVue = createLocalVue()
   localVue.use(Vuex)
-  let store
-  let getters
-  let cmp
+  let store, getters, cmp
   let $lodash = lodash
+
+  const $route = {
+    path: '/id',
+    params: {id: 5}
+  }
   beforeEach(() => {
-
-
     getters = {
       profileById: () => (arg) => arg,
       profiles: () => (arg) => arg,
@@ -34,7 +36,8 @@ describe('Profile.test.js', () => {
       store,
       localVue,
       mocks: {
-        $lodash
+        $lodash,
+        $route
       }
     })
   })
