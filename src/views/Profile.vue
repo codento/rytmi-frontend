@@ -33,10 +33,10 @@ export default {
       'skillsById'
     ]),
     getProfile () {
-      return this.profileById(10)
+      return this.profileById(this.$route.params.id)
     },
     getSkills () {
-      return this.skillsById(10)
+      return this.skillsById(this.$route.params.id)
     },
     sortSkills (param) {
       return this.$lodash.orderBy(this.skills, ['wantsTo', 'name'], ['desc', 'asc']) // TODO Figure out how lodash should be handled in tests

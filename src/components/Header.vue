@@ -4,13 +4,18 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <b-link class="navbar-brand" to="#"></b-link>
-    <button class="navbar-toggler sidebar-toggler d-md-down-none mr-auto" type="button" @click="sidebarToggle">
+    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" @click="sidebarToggle">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <button id="loginBtn"  v-if="!isAuthenticated" v-on:click="login" class="btn">Sign in</button>
-    <button id="logoutBtn" v-if="isAuthenticated" v-on:click="logout" class="btn">Sign out</button>
-    <button id="logoutBtn"  v-on:click="checkStatus" class="btn">Check status</button>
 
+    <b-navbar-nav v-if="isAuthenticated">
+      <b-nav-item to="/Search">Search</b-nav-item>
+    </b-navbar-nav>
+    <b-navbar-nav class="ml-auto">
+      <button id="loginBtn"  v-if="!isAuthenticated" v-on:click="login" class="btn">Sign in</button>
+      <button id="logoutBtn" v-if="isAuthenticated" v-on:click="logout" class="btn">Sign out</button>
+      <button id="logoutBtn"  v-on:click="checkStatus" class="btn">Check status</button>
+    </b-navbar-nav>
     <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button" @click="asideToggle">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -51,6 +56,7 @@ export default {
     logout () {
       handleLogout().then(() => {
         this.logoutAuth()
+        this.$router.push(this.$route.query.redirect || '/home')
       })
     },
     login () {

@@ -13,7 +13,8 @@ describe('UserProfileCard.test.js', () => {
           email: 'mail',
           phone: '1231123',
           mail: 'mail@mail.comi',
-          accounts: null
+          accounts: null,
+          photoPath: 'shouldNotWork'
         }
       }
     })
