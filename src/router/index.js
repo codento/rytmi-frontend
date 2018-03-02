@@ -7,7 +7,6 @@ import Full from '@/containers/Full'
 import Login from '@/views/Login'
 import Profile from '@/views/Profile'
 import EditProfile from '@/views/EditProfile'
-import EditSkills from '@/views/EditSkills'
 import Search from '@/views/Search'
 import PageNotFound from '@/views/PageNotFound'
 import store from '../store'
@@ -50,14 +49,7 @@ export default new Router({
         {
           path: 'edit/:id',
           name: 'Edit',
-          component: EditProfile,
-          beforeEnter: requireAuth
-        },
-        {
-          path: 'editSkills',
-          name: 'Edit Skills',
-          component: EditSkills,
-          beforeEnter: requireAuth
+          component: EditProfile
         },
         {
           path: 'search',
