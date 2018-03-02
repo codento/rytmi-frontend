@@ -21,7 +21,6 @@
         {{profile.description}}
       </div>
     </div>
-    <b-button v-on:click="editProfile" variant="secondary">Edit Profile</b-button>
   </b-card>
 </template>
 <script>
@@ -40,9 +39,6 @@ export default {
   methods: {
     getFAClass: function (object) {
       return 'fa-'.concat(object.type)
-    },
-    editProfile: function () {
-      this.$router.replace({name: 'Edit', params: { id: this.profile.id }})
     }
   }
 }
