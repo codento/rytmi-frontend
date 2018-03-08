@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // Containers
-import Full from '@/containers/Full'
 
 // Views
 import Login from '@/views/Login'
@@ -16,7 +15,7 @@ Vue.use(Router)
 const requireAuth = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
     next({
-      path: '/',
+      path: '/unauth',
       query: { redirect: to.fullPath }
     })
   } else {
@@ -31,37 +30,35 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home',
       name: 'Home',
-      component: Full,
-      children: [
-        {
-          path: 'home',
-          name: 'Home',
-          component: Login
-        },
-        {
-          path: 'profile/:id',
-          name: 'Profile',
-          component: Profile,
-          beforeEnter: requireAuth
-        },
-        {
-          path: 'edit/:id',
-          name: 'Edit',
-          component: EditProfile
-        },
-        {
-          path: 'search',
-          name: 'Search',
-          component: Search,
-          beforeEnter: requireAuth
-        },
-        {
-          path: '*',
-          component: PageNotFound
-        }
-      ]
+      redirect: '/home',
+      component: Login
+    },
+    {
+      path: '/home',
+      name: 'Home',
+      component: Login
+    },
+    {
+      path: '/profile/:id',
+      name: 'Profile',
+      component: Profile,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/edit/:id',
+      name: 'Edit',
+      component: EditProfile
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/*',
+      component: PageNotFound
     }
   ]
 })
