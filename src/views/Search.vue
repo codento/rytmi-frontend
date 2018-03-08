@@ -48,6 +48,7 @@ export default {
   },
   watch: {
     skills: function () {
+      console.log('watch')
       if (!this.lockDropdown) {
         this.dropdown = Object.assign({}, this.skills)
       }

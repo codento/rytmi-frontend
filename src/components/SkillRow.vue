@@ -10,6 +10,13 @@
         variant='primary'
         class="mb-6"
       />
+      <br/>
+       <b-progress
+        height="0.9rem"
+        :value="wantsTo*20"
+        variant='success'
+        class="mb-6"
+      />
     </b-col>
   </b-row>
 </template>
@@ -20,7 +27,8 @@ export default {
   props: {
     'proficiency': Number,
     'name': String,
-    'skillId': Number
+    'skillId': Number,
+    'wantsTo': Number
   },
   computed: {
     ...mapGetters([

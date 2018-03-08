@@ -3,7 +3,7 @@ import Router from 'vue-router'
 // Containers
 
 // Views
-import Login from '@/views/Login'
+import LandingPage from '@/views/LandingPage'
 import Profile from '@/views/Profile'
 import EditProfile from '@/views/EditProfile'
 import Search from '@/views/Search'
@@ -32,12 +32,12 @@ export default new Router({
       path: '/',
       name: 'Home',
       redirect: '/home',
-      component: Login
+      component: LandingPage
     },
     {
       path: '/home',
       name: 'Home',
-      component: Login
+      component: LandingPage
     },
     {
       path: '/profile/:id',
