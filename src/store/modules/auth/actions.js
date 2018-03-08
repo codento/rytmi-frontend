@@ -11,6 +11,8 @@ export function requestAuth ({commit, dispatch}, token) {
         // example with axios
         // axios.defaults.headers.common['Authorization'] = resp.token
         commit(types.AUTH_SUCCESS, resp.data.token.token)
+        commit(types.SET_PROFILEID, resp.data.profileId)
+        if (resp.data.userId) { commit(types.SET_USERID, resp.data.userId) }
         resolve(resp)
       })
       .catch(err => {
@@ -24,6 +26,7 @@ export function requestAuth ({commit, dispatch}, token) {
 export function logoutAuth ({commit, dispatch}) {
   return new Promise((resolve, reject) => {
     commit(types.AUTH_LOGOUT)
+    commit(types.CLEAR_PROFILEID)
     localStorage.removeItem('user-token')
     resolve()
   })
