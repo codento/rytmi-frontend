@@ -2,7 +2,7 @@
   <b-card 
     :title="getSkillName"
     tag="skill"
-    style="max-width: 20rem;" >
+    >
   <b-row >
     <b-col class="col-mb-3 nohover" style="text-size: 20px;">
       <b>Wants</b>:

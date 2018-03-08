@@ -3,6 +3,7 @@ import * as getters from './getters'
 import { mutations } from './mutations'
 
 const initialState = {
+  userProfile: '',
   profiles: {
   },
   profileList: [],

@@ -23,5 +23,11 @@ export const mutations = {
   },
   [types.CREATE_PROFILE] (state, profile) {
     state.profiles[profile.id] = profile
+  },
+  [types.SET_PROFILEID] (state, profileId) {
+    state.profileId = profileId
+  },
+  [types.CLEAR_PROFILEID] (state) {
+    state.profileId = ''
   }
 }
