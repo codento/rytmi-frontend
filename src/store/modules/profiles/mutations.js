@@ -20,6 +20,8 @@ export const mutations = {
     console.log(profileSkill)
     state.profileSkills[profileSkill.id] = profileSkill
     state.profileSkillList.push(profileSkill.id)
+  },
+  [types.CREATE_PROFILE] (state, profile) {
+    state.profiles[profile.id] = profile
   }
-
 }
