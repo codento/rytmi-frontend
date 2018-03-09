@@ -51,6 +51,7 @@ export default {
   },
   props: {
     param: String,
+    selected: String,
     active: Array
   },
   computed: {
@@ -94,10 +95,10 @@ export default {
       for (let i = 0; i < skills.length; i++) {
         if (skills[i].skillId === skillToSearch) {
           if (multipleSkills) {
-            this.updateSortable(profile, skills[i].knows)
+            this.updateSortable(profile, skills[i][this.selected])
           } else {
-            if (skills[i].knows > 0) {
-              this.sortable.push([profile, skills[i].knows])
+            if (skills[i][this.selected] > 0) {
+              this.sortable.push([profile, skills[i][this.selected]])
             } else {
               return false
             }
