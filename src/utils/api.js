@@ -29,10 +29,13 @@ export function getProfileSkills (token) {
 }
 
 export function alterProfile (data, token) {
-  console.log(data)
   return axios.put(process.env.API_URL + PATH_PROFILES + '/' + data.id, denormalize(data, [profile]))
 }
 
 export function newProfileSkill (data, token) {
   return axios.post(process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS, denormalize(data, [skill]))
+}
+
+export function deleteProfileSkill (data, token) {
+  return axios.delete(process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id)
 }
