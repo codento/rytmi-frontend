@@ -4,8 +4,7 @@ import { mutations } from './mutations'
 
 const initialState = {
   userProfile: '',
-  profiles: {
-  },
+  profiles: {},
   profileList: [],
   profileSkillList: [],
   profileSkills: {}

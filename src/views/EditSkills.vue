@@ -9,7 +9,7 @@
         <b-col class="col-sm-9">
           <b-row>
             <b-col v-for="skill, index in skillsByUserId(profileId)" class="col-sm-3">
-              <div v-on:click="deleteSkill(index)">
+              <div v-on:click="removeProfileSkill({profileId: profileId, id: skill.id})">
               <skill-card :skill="skill" />
               </div>
             </b-col>
@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import SkillForm from '../components/SkillForm'
 import SkillCard from '../components/SkillCard'
 
 export default {
-  name: 'EditProfile',
+  name: 'EditSkills',
   components: {
     SkillForm,
     SkillCard
@@ -38,6 +38,11 @@ export default {
     ...mapGetters([
       'skills',
       'skillsByUserId'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'removeProfileSkill'
     ])
   },
   data () {
