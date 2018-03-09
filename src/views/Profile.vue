@@ -2,13 +2,20 @@
   <div class="animated fadeIn">
     <b-row>
       <b-col>
-        <UserProfileCard :profile="getProfile"/>
+        <UserProfileCard :profile="profileById(this.$route.params.id)"/>
       </b-col>
       <b-col>
         <b-card header='Taidot' >
-          <div class="row mb-1">
-            <SkillRow class="col-sm-6"  v-for='skill in sortSkills' :name="skill.name" :proficiency="skill.knows" :key='skill.id' />
-          </div>
+          <b-row>
+            <b-col class="col mb-1">
+              <h4>Osaaminen</h4>
+              <SkillRow v-for='skill in skillsByUserId(profileById($route.params.id).userId)' :name="skillName(skill.skillId)" :proficiency="skill.knows" :key='skill.id'></SkillRow>
+            </b-col>
+            <b-col class="col mb-1">
+              <h4>Halukkuus</h4>
+              <SkillRow v-for='skill in skillsByUserId(profileById($route.params.id).userId)' :name="skillName(skill.skillId)" :proficiency="skill.wantsTo" :key='skill.id'></SkillRow>
+            </b-col>
+          </b-row>
         </b-card>
         <b-card header='Työkokemus'>
           <ProjectRow v-for='project in projects' :project="project"  :key="project.projectId"/>
@@ -30,17 +37,9 @@ export default {
     ...mapGetters([
       'profileById',
       'profiles',
-      'skillsById'
-    ]),
-    getProfile () {
-      return this.profileById(this.$route.params.id)
-    },
-    getSkills () {
-      return this.skillsById(this.$route.params.id)
-    },
-    sortSkills (param) {
-      return this.$lodash.orderBy(this.skills, ['wantsTo', 'name'], ['desc', 'asc']) // TODO Figure out how lodash should be handled in tests
-    }
+      'skillById',
+      'skillsByUserId'
+    ])
   },
   components: {
     SkillRow,
@@ -49,62 +48,6 @@ export default {
   },
   data () {
     return {
-      skills: [
-        {
-          name: 'Vue.js',
-          knows: 0,
-          wantsTo: 2,
-          id: 7
-        },
-        {
-          name: 'Node.js',
-          knows: 2,
-          wantsTo: 1,
-          id: 8
-        },
-        {
-          name: 'JavaScript',
-          knows: 2,
-          wantsTo: 1,
-          id: 0
-        },
-        {
-          name: 'React.js',
-          knows: 5,
-          wantsTo: 2,
-          id: 1
-        },
-        {
-          name: 'CoffeeScript',
-          knows: 4,
-          wantsTo: 1,
-          id: 2
-        },
-        {
-          name: 'Angular v.4',
-          knows: 3,
-          wantsTo: 2,
-          id: 3
-        },
-        {
-          name: 'TypeScript',
-          knows: 3,
-          wantsTo: 1,
-          id: 4
-        },
-        {
-          name: 'Java',
-          knows: 4,
-          wantsTo: 0,
-          id: 5
-        },
-        {
-          name: 'Python',
-          knows: 3,
-          wantsTo: 2,
-          id: 6
-        }
-      ],
       projects: [
         {
           name: 'Teuvon telakoneet',
@@ -142,33 +85,19 @@ export default {
     }
   },
   methods: {
-    getKnowledge (knows) {
-      switch (knows) {
-        case 1:
-          return { text: 'Alkeet', class: 'text-warning' }
-        case 2:
-          return { text: 'Duunari', class: 'text-primary' }
-        case 3:
-          return { text: 'Seniori', class: 'text-primary' }
-        case 4:
-          return { text: 'Arkkitehti', class: 'text-success' }
-        case 5:
-          return { text: 'Guru', class: 'text-success' }
-        default:
-          return { text: 'Ei osaa', class: 'text-warning' }
-      }
+    getProfile () {
+      return this.profileById(this.$route.params.id)
     },
-    getWants (wantsTo) {
-      switch (wantsTo) {
-        case 0:
-          return { text: 'En halua tehdä', class: 'text-danger' }
-        case 1:
-          return { text: 'Voin tehdä varauksella', class: 'text-primary' }
-        case 2:
-          return { text: 'Haluan tehdä', class: 'text-success' }
-        default:
-          return { text: 'Arvoa ei ole annettu', class: 'text-warning' }
-      }
+    getSkills () {
+      let results = this.skillsByUserId(this.$route.params.id)
+      console.log(results)
+      return results
+    },
+    sortSkills (param) {
+      return this.$lodash.orderBy(this.skills, ['wantsTo', 'name'], ['desc', 'asc']) // TODO Figure out how lodash should be handled in tests
+    },
+    skillName (skillId) {
+      return this.skillById(skillId).name
     }
   }
 }
