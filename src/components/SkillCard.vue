@@ -1,13 +1,14 @@
 <template>
-  <b-card 
+  <b-card
+    class="skillCard"
     :title="getSkillName"
     tag="skill"
-    >
-  <b-row >
+    style="max-width: 20rem;" >
+  <b-row>
     <b-col class="col-mb-3 nohover" style="text-size: 20px;">
       <b>Wants</b>:
     </b-col>
-    <b-col class="col-mb-9" >
+    <b-col class="col-mb-9">
       <b-progress
         height="0.9rem"
         :value="skill.wantsTo*20" 
@@ -50,5 +51,7 @@ export default {
 }
 </script>
 <style scoped>
-
+.skillCard :hover{
+  background-color: hsla(34, 100%, 51%, 0.541); 
+}
 </style>
