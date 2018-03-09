@@ -1,7 +1,15 @@
 import { normalize } from 'normalizr'
 import * as types from '../../mutation-types'
 import { profile } from '../../schema'
-import { createNewProfile, createNewUser, getProfiles, getProfileSkills, alterProfile, newProfileSkill } from '../../../utils/api'
+import {
+  createNewProfile,
+  createNewUser,
+  getProfiles,
+  getProfileSkills,
+  alterProfile,
+  newProfileSkill,
+  deleteProfileSkill
+} from '../../../utils/api'
 
 export function fetchProfiles ({ commit, state }) {
   return new Promise((resolve, reject) => {
@@ -62,6 +70,17 @@ export function addProfileSkill ({commit, state}, data) {
     newProfileSkill(data)
       .then(response => {
         commit(types.ADD_PROFILE_SKILL, response.data)
+      }).catch(error => {
+        reject(error)
+      })
+  })
+}
+
+export function removeProfileSkill ({commit, state}, data) {
+  return new Promise((resolve, reject) => {
+    deleteProfileSkill(data)
+      .then(response => {
+        commit(types.REMOVE_PROFILE_SKILL, data.id)
       }).catch(error => {
         reject(error)
       })

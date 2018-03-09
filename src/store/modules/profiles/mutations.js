@@ -17,9 +17,18 @@ export const mutations = {
     state.profileSkillList = Object.keys(profileSkills)
   },
   [types.ADD_PROFILE_SKILL] (state, profileSkill) {
-    console.log(profileSkill)
     state.profileSkills[profileSkill.id] = profileSkill
     state.profileSkillList.push(profileSkill.id)
+  },
+  [types.REMOVE_PROFILE_SKILL] (state, profileSkillId) {
+    state.profileSkills = Object.keys(state.profileSkills)
+      .reduce((acc, key) => {
+        if (parseInt(key) !== profileSkillId) {
+          acc[key] = state.profileSkills[key]
+        }
+        return acc
+      }, {})
+    state.profileSkillList = Object.keys(state.profileSkills)
   },
   [types.CREATE_PROFILE] (state, profile) {
     state.profiles[profile.id] = profile
