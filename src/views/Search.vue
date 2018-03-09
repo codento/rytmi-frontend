@@ -5,6 +5,9 @@
         <h2>Search</h2>
         <p>(Filters by name)</p>
         <input v-model="param"></input>
+        <b-form-group label='Search by:'>
+          <b-form-radio-group id="btnradios" buttons v-model='selected' :options='options' name='radioBtnStacked' />
+        </b-form-group>
         <div id="active">
           <ul>
             <li v-for='skill in active' class="active">
@@ -14,7 +17,7 @@
         </div>
         <div>
           <b-dropdown id="ddown1" text="Add skills to search:" class="m-md-2">
-            <b-dropdown-item-button v-for="skill in dropdown" :key="skill.id" @click="addToSearch(skill)">
+            <b-dropdown-item-button v-for="skill in skillsNotIn(active)" :key="skill.id" @click="addToSearch(skill)">
               {{skill.name}}
             </b-dropdown-item-button>
           </b-dropdown>
@@ -22,7 +25,7 @@
       </b-card>
     </b-col>
     <b-col class="col-md-9" style="float:right">
-      <Results :param='param' :active='active'></Results>
+      <Results :param='param' :selected='selected ':active='active'></Results>
     </b-col>
   </div>
 </template>
@@ -36,31 +39,25 @@ export default {
   data () {
     return {
       param: '',
-      active: [],
-      dropdown: [],
-      lockDropdown: false
+      selected: 'knows',
+      options: [
+        { text: 'Skills', value: 'knows' },
+        { text: 'Willingness', value: 'wantsTo' }
+      ],
+      active: []
     }
   },
   computed: {
     ...mapGetters([
-      'skills'
+      'skills',
+      'skillsNotIn'
     ])
-  },
-  watch: {
-    skills: function () {
-      if (!this.lockDropdown) {
-        this.dropdown = Object.assign({}, this.skills)
-      }
-    }
   },
   methods: {
     addToSearch: function (skill) {
-      this.lockDropdown = true
       this.active.push(skill)
-      delete this.dropdown[skill.id]
     },
     removeFromSearch: function (skill) {
-      this.dropdown[skill.id] = skill
       this.active = this.active.filter(el => (el.id !== skill.id))
     }
   },
