@@ -3,7 +3,7 @@
     <b-container fluid>
       <h1>Skills</h1>
       <b-row>
-        <b-col v-for="skill, index in skillsByUserId(profileId)" class="col-sm-3">
+        <b-col v-for="skill, index in skillsByUserId(profileId)" class="col-sm-3" :key='skill.id'>
           <div v-on:click="deleteSkill(index)">
             <skill-card :skill="skill" class="skillCard" />
           </div>
@@ -20,7 +20,7 @@
                 label-for="skill">
                 <b-form-select
                   id="skill"
-                  v-model="profileSkill.skillId" 
+                  v-model="profileSkill.skillId"
                   :options="availableSkills"
                   value-field="id"
                   text-field="name">
@@ -29,8 +29,8 @@
                   </template>
                 </b-form-select>
               </b-form-group>
-              <b-form-group 
-                id="description" 
+              <b-form-group
+                id="description"
                 vertical
                 label="Description:"
                 label-for="descriptionInput">
@@ -42,12 +42,12 @@
                     placeholder="Short description">
                 </b-form-textarea>
               </b-form-group>
-              <b-form-group 
-                id="wantsToLabel" 
+              <b-form-group
+                id="wantsToLabel"
                 vertical
                 label="Wants:"
                 label-for="wantsTo">
-                <b-form-input 
+                <b-form-input
                   id="wantsTo"
                   type="range"
                   min="0"
@@ -55,12 +55,12 @@
                   v-model="profileSkill.wantsTo">
                 </b-form-input>
               </b-form-group>
-              <b-form-group 
-                id="knowsLabel" 
+              <b-form-group
+                id="knowsLabel"
                 vertical
                 label="Knows:"
                 label-for="knows">
-                <b-form-input 
+                <b-form-input
                   id="knows"
                   type="range"
                   min="0"
@@ -68,12 +68,12 @@
                   v-model="profileSkill.knows">
                 </b-form-input>
               </b-form-group>
-              <b-form-group 
-                id="visibleInCVLabel" 
+              <b-form-group
+                id="visibleInCVLabel"
                 vertical
                 label="Show in CV:"
                 label-for="visibleInCV">
-                <input type="checkbox" 
+                <input type="checkbox"
                   id="visibleInCV"
                   v-model="profileSkill.visibleInCV">
               </b-form-group>
