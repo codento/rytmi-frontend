@@ -1,11 +1,12 @@
-import axios from 'axios'
-import { normalize, denormalize } from 'normalizr'
+import { normalize } from 'normalizr'
 import * as types from '../../mutation-types'
 import { profile, skill } from '../../schema'
+import { getProfiles, getProfileSkills, alterProfile, newProfileSkill } from '../../../utils/api'
 
 export function fetchProfiles ({ commit, state }) {
   return new Promise((resolve, reject) => {
-    axios.get(process.env.API_URL + '/profiles')
+    console.log('Getting profiles..')
+    getProfiles()
       .then(response => {
         commit(types.FETCH_PROFILES, normalize(response.data, [profile]).entities.profiles)
       })
@@ -15,9 +16,9 @@ export function fetchProfiles ({ commit, state }) {
 
 export function fetchProfileSkills ({ commit, state }) {
   return new Promise((resolve, reject) => {
-    axios.get(process.env.API_URL + '/profileskills')
+    console.log('Getting profileSkills..')
+    getProfileSkills()
       .then(response => {
-        console.log(response)
         commit(types.FETCH_PROFILESKILLS, response.data)
       })
       .catch(err => console.log(err))
@@ -26,7 +27,8 @@ export function fetchProfileSkills ({ commit, state }) {
 
 export function updateProfile ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
-    axios.put(process.env.API_URL + '/profiles/' + data.id, denormalize(data, [profile]))
+    console.log('Updating a profile..')
+    alterProfile(data)
       .then(response => {
         commit(types.UPDATE_PROFILE, normalize(response.data, [profile]).entities.profiles)
       }).catch(function (error) {
@@ -37,10 +39,11 @@ export function updateProfile ({ commit, state }, data) {
 
 export function addProfileSkill ({commit, state}, data) {
   return new Promise((resolve, reject) => {
-    axios.post(process.env.API_URL + '/profiles/' + data.profileId + '/skills', denormalize(data, [skill]))
+    console.log('Adding a skill to a profile..')
+    newProfileSkill(data)
       .then(response => {
         const normalized = normalize(response.data, [skill]).entities.skills
-        console.log('resp', response, 'norm', normalized)
+        console.log('Normalized data:' + normalized)
         commit(types.ADD_PROFILE_SKILL, response.data)
       }).catch(error => {
         reject(error)
