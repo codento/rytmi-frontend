@@ -5,7 +5,6 @@ import { getProfiles, getProfileSkills, alterProfile, newProfileSkill } from '..
 
 export function fetchProfiles ({ commit, state }) {
   return new Promise((resolve, reject) => {
-    console.log('Getting profiles..')
     getProfiles()
       .then(response => {
         commit(types.FETCH_PROFILES, normalize(response.data, [profile]).entities.profiles)
@@ -16,7 +15,6 @@ export function fetchProfiles ({ commit, state }) {
 
 export function fetchProfileSkills ({ commit, state }) {
   return new Promise((resolve, reject) => {
-    console.log('Getting profileSkills..')
     getProfileSkills()
       .then(response => {
         commit(types.FETCH_PROFILESKILLS, response.data)
@@ -27,7 +25,6 @@ export function fetchProfileSkills ({ commit, state }) {
 
 export function updateProfile ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
-    console.log('Updating a profile..')
     alterProfile(data)
       .then(response => {
         commit(types.UPDATE_PROFILE, normalize(response.data, [profile]).entities.profiles)
@@ -39,11 +36,10 @@ export function updateProfile ({ commit, state }, data) {
 
 export function addProfileSkill ({commit, state}, data) {
   return new Promise((resolve, reject) => {
-    console.log('Adding a skill to a profile..')
     newProfileSkill(data)
       .then(response => {
         const normalized = normalize(response.data, [skill]).entities.skills
-        console.log('Normalized data:' + normalized)
+        console.log('resp', response, 'norm', normalized)
         commit(types.ADD_PROFILE_SKILL, response.data)
       }).catch(error => {
         reject(error)
