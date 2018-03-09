@@ -1,6 +1,6 @@
 import { normalize } from 'normalizr'
 import * as types from '../../mutation-types'
-import { profile, skill } from '../../schema'
+import { profile } from '../../schema'
 import { createNewProfile, createNewUser, getProfiles, getProfileSkills, alterProfile, newProfileSkill } from '../../../utils/api'
 
 export function fetchProfiles ({ commit, state }) {
@@ -61,8 +61,6 @@ export function addProfileSkill ({commit, state}, data) {
   return new Promise((resolve, reject) => {
     newProfileSkill(data)
       .then(response => {
-        const normalized = normalize(response.data, [skill]).entities.skills
-        console.log('resp', response, 'norm', normalized)
         commit(types.ADD_PROFILE_SKILL, response.data)
       }).catch(error => {
         reject(error)
