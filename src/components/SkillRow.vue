@@ -1,5 +1,5 @@
 <template>
-  <b-row>
+  <b-row style="margin-bottom: 12px">
     <b-col class="col-mb-4" style="text-size: 20px;">
       <b>{{ name }}:</b>
     </b-col>
@@ -10,7 +10,6 @@
         variant='primary'
         class="mb-6"
       />
-      <br/>
        <b-progress
         height="0.9rem"
         :value="wantsTo*20"
