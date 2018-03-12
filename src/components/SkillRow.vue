@@ -10,12 +10,6 @@
         variant='primary'
         class="mb-6"
       />
-       <b-progress
-        height="0.9rem"
-        :value="wantsTo*20"
-        variant='success'
-        class="mb-6"
-      />
     </b-col>
   </b-row>
 </template>
