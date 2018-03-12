@@ -28,7 +28,8 @@ describe('Profile.vue shallow', () => {
     getters = {
       profileById: () => (arg) => arg,
       profiles: () => (arg) => arg,
-      skillsById: () => (arg) => arg
+      skillsById: () => (arg) => arg,
+      skillsByUserId: () => (arg) => arg
     }
     store = new Vuex.Store({ getters })
 
