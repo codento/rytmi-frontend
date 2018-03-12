@@ -21,15 +21,6 @@ exports[`Profile.vue shallow Template is correct 1`] = `
       </b-card>
        
       <b-card
-        header="Taidot"
-      >
-        <b-table
-          items="[object Object]"
-          small=""
-        />
-      </b-card>
-       
-      <b-card
         header="Työkokemus"
       >
         <!---->
