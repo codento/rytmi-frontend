@@ -1,13 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // Containers
-import Full from '@/containers/Full'
 
 // Views
-import Login from '@/views/Login'
+import LandingPage from '@/views/LandingPage'
 import Profile from '@/views/Profile'
 import EditProfile from '@/views/EditProfile'
-import EditSkills from '@/views/EditSkills'
 import Search from '@/views/Search'
 import PageNotFound from '@/views/PageNotFound'
 import store from '../store'
@@ -17,7 +15,7 @@ Vue.use(Router)
 const requireAuth = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
     next({
-      path: '/',
+      path: '/unauth',
       query: { redirect: to.fullPath }
     })
   } else {
@@ -32,44 +30,35 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home',
       name: 'Home',
-      component: Full,
-      children: [
-        {
-          path: 'home',
-          name: 'Home',
-          component: Login
-        },
-        {
-          path: 'profile/:id',
-          name: 'Profile',
-          component: Profile,
-          beforeEnter: requireAuth
-        },
-        {
-          path: 'edit/:id',
-          name: 'Edit',
-          component: EditProfile,
-          beforeEnter: requireAuth
-        },
-        {
-          path: 'editSkills',
-          name: 'Edit Skills',
-          component: EditSkills,
-          beforeEnter: requireAuth
-        },
-        {
-          path: 'search',
-          name: 'Search',
-          component: Search,
-          beforeEnter: requireAuth
-        },
-        {
-          path: '*',
-          component: PageNotFound
-        }
-      ]
+      redirect: '/home',
+      component: LandingPage
+    },
+    {
+      path: '/home',
+      name: 'Home',
+      component: LandingPage
+    },
+    {
+      path: '/profile/:id',
+      name: 'Profile',
+      component: Profile,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/edit/:id',
+      name: 'Edit',
+      component: EditProfile
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/*',
+      component: PageNotFound
     }
   ]
 })
