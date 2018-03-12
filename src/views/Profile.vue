@@ -5,8 +5,17 @@
         <UserProfileCard :profile="profileById(this.$route.params.id)"/>     
       </b-col>
       <b-col>
-        <b-card header='Taidot' >
-          <b-row>
+        <b-card id="Taidot">
+          <h5 slot="header" class="mb-0">
+            Taidot
+            <span style="float:right; cursor:pointer" v-on:mouseenter="showExplanations(true)" v-on:mouseout="showExplanations(false)">
+              &#9432;
+            </span>
+          </h5>
+          <b-row v-if="this.showInfo">
+            <skillExplanations />
+          </b-row>
+          <b-row v-else>
             <b-col class="col mb-1">
               <h4>Osaaminen</h4>
               <SkillRow v-for='skill in skillsByUserId(profileById($route.params.id).userId)' :name="skillName(skill.skillId)" :proficiency="skill.knows" :key='skill.id'></SkillRow>
@@ -30,6 +39,7 @@ import {mapGetters} from 'vuex'
 import SkillRow from '../components/SkillRow'
 import ProjectRow from '../components/ProjectRow'
 import UserProfileCard from '../components/UserProfileCard'
+import SkillExplanations from '../components/skillExplanations'
 
 export default {
   name: 'Profile',
@@ -43,7 +53,8 @@ export default {
   components: {
     SkillRow,
     ProjectRow,
-    UserProfileCard
+    UserProfileCard,
+    SkillExplanations
   },
   data () {
     return {
@@ -80,7 +91,8 @@ export default {
           startDate: '19/9/2015',
           endDate: '20/9/2015'
         }
-      ]
+      ],
+      showInfo: false
     }
   },
   methods: {
@@ -97,6 +109,11 @@ export default {
     },
     skillName (skillId) {
       return this.skillById(skillId).name
+    },
+    showExplanations (show) {
+      this.showInfo = show
+      // let display = (show ? 'block' : 'none')
+      // document.getElementById('explanations').style.display = display
     }
   }
 }
@@ -104,5 +121,7 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
+#explanations {
 
+}
 </style>
