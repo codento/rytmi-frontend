@@ -1,11 +1,12 @@
 import * as types from '../../mutation-types'
 import * as actions from './actions'
 
-const state = { token: localStorage.getItem('user-token') || '', status: '', hasLoadedOnce: false }
+const state = { token: localStorage.getItem('user-token') || '', status: '', hasLoadedOnce: false, userId: '' }
 
 const getters = {
   isAuthenticated: state => !!state.token,
-  authStatus: state => state.status
+  authStatus: state => state.status,
+  getUserId: state => state.userId
 }
 
 const mutations = {
@@ -23,6 +24,10 @@ const mutations = {
   },
   [types.AUTH_LOGOUT]: (state) => {
     state.token = ''
+    state.userId = ''
+  },
+  [types.SET_USERID]: (state) => {
+    state.userId = 10
   }
 }
 
