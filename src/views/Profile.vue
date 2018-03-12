@@ -10,9 +10,6 @@
             <SkillRow class="col-sm-6"  v-for='skill in sortSkills' :name="skill.name" :proficiency="skill.knows" :key='skill.id' :wantsTo="skill.wantsTo" />
           </div>
         </b-card>
-        <b-card header='Taidot' >
-            <b-table small :items="sortSkills"/>
-        </b-card>
         <b-card header='Työkokemus'>
           <ProjectRow v-for='project in projects' :project="project"  :key="project.projectId"/>
         </b-card>
