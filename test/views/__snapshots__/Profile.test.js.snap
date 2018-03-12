@@ -13,11 +13,25 @@ exports[`Profile.vue shallow Template is correct 1`] = `
       <b-card
         header="Taidot"
       >
-        <div
-          class="row mb-1"
-        >
-          <!---->
-        </div>
+        <b-row>
+          <b-col
+            class="col mb-1"
+          >
+            <h4>
+              Osaaminen
+            </h4>
+             
+          </b-col>
+           
+          <b-col
+            class="col mb-1"
+          >
+            <h4>
+              Halukkuus
+            </h4>
+             
+          </b-col>
+        </b-row>
       </b-card>
        
       <b-card
