@@ -1,5 +1,5 @@
 <template>
-  <b-row style="margin-bottom: 12px">
+  <b-row style="padding-bottom: 12px">
     <b-col class="col-mb-4" style="text-size: 20px;">
       <b>{{ name }}:</b>
     </b-col>
