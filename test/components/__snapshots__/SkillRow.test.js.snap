@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`UserProfileCard.test.js Template is correct 1`] = `"<b-row><b-col class=\\"col-mb-4\\"><b>:</b></b-col> <b-col class=\\"col-mb-8\\"><b-progress height=\\"0.9rem\\" value=\\"NaN\\" variant=\\"primary\\" class=\\"mb-6\\"></b-progress></b-col></b-row>"`;
+exports[`UserProfileCard.test.js Template is correct 1`] = `"<b-row><b-col class=\\"col-mb-4\\"><b>:</b></b-col> <b-col class=\\"col-mb-8\\"><b-progress height=\\"0.9rem\\" value=\\"NaN\\" variant=\\"primary\\" class=\\"mb-6\\"></b-progress> <br> <b-progress height=\\"0.9rem\\" value=\\"NaN\\" variant=\\"success\\" class=\\"mb-6\\"></b-progress></b-col></b-row>"`;
