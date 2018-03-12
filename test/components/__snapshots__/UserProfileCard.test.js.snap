@@ -8,5 +8,5 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
       Puhelinnumero: 1231123
     </div> <br> <div class=\\"profileCardDetails\\">
       
-    </div></div> <b-button variant=\\"secondary\\">Edit Profile</b-button></b-card>"
+    </div></div></b-card>"
 `;
