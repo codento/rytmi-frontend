@@ -1,5 +1,5 @@
 <template>
-  <b-row>
+  <b-row style="padding-bottom: 12px">
     <b-col class="col-mb-4" style="text-size: 20px;">
       <b>{{ name }}:</b>
     </b-col>
@@ -8,6 +8,12 @@
         height="0.9rem"
         :value="proficiency*20"
         variant='primary'
+        class="mb-6"
+      />
+       <b-progress
+        height="0.9rem"
+        :value="wantsTo*20"
+        variant='success'
         class="mb-6"
       />
     </b-col>
@@ -20,7 +26,8 @@ export default {
   props: {
     'proficiency': Number,
     'name': String,
-    'skillId': Number
+    'skillId': Number,
+    'wantsTo': Number
   },
   computed: {
     ...mapGetters([
