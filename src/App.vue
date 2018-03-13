@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import nav from './_nav'
 import { Header as AppHeader, Sidebar, Aside as AppAside, Footer as AppFooter, Breadcrumb } from './components/'
 
@@ -34,10 +34,15 @@ export default {
       nav: nav.items
     }
   },
-  created () {
-    this.fetchProfiles()
-    this.fetchSkills()
-    this.fetchProfileSkills()
+  compute: {
+    ...mapGetters(['isAuthenticated'])
+  },
+  mounted () {
+    if (this.isAuthenticated) {
+      this.fetchProfiles()
+      this.fetchSkills()
+      this.fetchProfileSkills()
+    }
   },
   methods: {
     ...mapActions([
