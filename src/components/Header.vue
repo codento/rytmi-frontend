@@ -66,7 +66,7 @@ export default {
       handleLogin().then((response) => {
         return this.requestAuth(response.Zi.id_token)
       }).then(() => {
-        this.$router.push(this.$route.query.to || '/callback')
+        this.$router.push(this.$route.query.redirect || '/callback')
       }).catch((error) => {
         console.log(error)
         this.$toasted.global.rytmi_error({
