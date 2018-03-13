@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import nav from './_nav'
 import { Header as AppHeader, Sidebar, Aside as AppAside, Footer as AppFooter, Breadcrumb } from './components/'
 
@@ -35,9 +35,11 @@ export default {
     }
   },
   created () {
-    this.fetchProfiles()
-    this.fetchSkills()
-    this.fetchProfileSkills()
+    if (this.isAuthenticated) {
+      this.fetchProfiles()
+      this.fetchSkills()
+      this.fetchProfileSkills()
+    }
   },
   methods: {
     ...mapActions([
@@ -47,6 +49,7 @@ export default {
     ])
   },
   computed: {
+    ...mapGetters(['isAuthenticated']),
     name () {
       return this.$route.name
     },
