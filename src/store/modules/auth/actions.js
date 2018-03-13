@@ -11,7 +11,7 @@ export function requestAuth ({commit, dispatch}, token) {
         // example with axios
         // axios.defaults.headers.common['Authorization'] = resp.token
         commit(types.AUTH_SUCCESS, resp.data.jwt.token)
-        commit(types.SET_PROFILEID, resp.data.userId)
+        commit(types.SET_PROFILEID, resp.data.profileId)
         if (resp.data.userId) { commit(types.SET_USERID, resp.data.userId) }
         resolve(resp)
       })
