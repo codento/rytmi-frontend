@@ -36,7 +36,6 @@ export default {
   computed: {
     ...mapGetters([
       'profileById',
-      'profiles',
       'skillById',
       'skillsByUserId'
     ])
