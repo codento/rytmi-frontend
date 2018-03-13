@@ -4,7 +4,7 @@ import * as actions from './actions'
 const state = { token: localStorage.getItem('user-token') || '', status: '', hasLoadedOnce: false, userId: '' }
 
 const getters = {
-  isAuthenticated: state => !!state.token,
+  isAuthenticated: state => state.token,
   authStatus: state => state.status,
   getUserId: state => state.userId
 }
