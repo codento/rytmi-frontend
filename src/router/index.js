@@ -9,7 +9,7 @@ import EditProfile from '@/views/EditProfile'
 import Search from '@/views/Search'
 import PageNotFound from '@/views/PageNotFound'
 import store from '../store'
-import callback from '@/components/callback'
+import Callback from '@/components/Callback'
 Vue.use(Router)
 
 const requireAuth = (to, from, next) => {
@@ -58,8 +58,8 @@ export default new Router({
     },
     {
       path: '/callback',
-      name: 'callback',
-      component: callback,
+      name: 'Callback',
+      component: Callback,
       beforeEnter: requireAuth
     },
     {

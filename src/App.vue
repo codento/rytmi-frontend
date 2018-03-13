@@ -34,10 +34,7 @@ export default {
       nav: nav.items
     }
   },
-  compute: {
-    ...mapGetters(['isAuthenticated'])
-  },
-  mounted () {
+  created () {
     if (this.isAuthenticated) {
       this.fetchProfiles()
       this.fetchSkills()
@@ -52,6 +49,7 @@ export default {
     ])
   },
   computed: {
+    ...mapGetters(['isAuthenticated']),
     name () {
       return this.$route.name
     },

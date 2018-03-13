@@ -6,11 +6,11 @@ export function requestAuth ({commit, dispatch}, token) {
     commit(types.AUTH_REQUEST)
     login(token)
       .then(resp => {
-        localStorage.setItem('user-token', resp.data.token.token)
+        localStorage.setItem('user-token', resp.data.jwt.token)
         // Here set the header of your ajax library to the token value.
         // example with axios
         // axios.defaults.headers.common['Authorization'] = resp.token
-        commit(types.AUTH_SUCCESS, resp.data.token.token)
+        commit(types.AUTH_SUCCESS, resp.data.jwt.token)
         commit(types.SET_PROFILEID, resp.data.profileId)
         if (resp.data.userId) { commit(types.SET_USERID, resp.data.userId) }
         resolve(resp)
