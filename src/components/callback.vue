@@ -1,9 +1,12 @@
+<template>
+  
+</template>
+
 <script>
 import {mapActions} from 'vuex'
 
 export default {
-  mounted () {
-    console.log('clalback')
+  created () {
     this.$nextTick(() => {
       this.fetchProfiles()
       this.fetchSkills()
