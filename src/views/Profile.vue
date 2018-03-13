@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <b-row>
       <b-col>
-        <UserProfileCard :profile="profileById(this.$route.params.id)"/>
+        <UserProfileCard :profile="profileById(this.$route.params.id)"/>     
       </b-col>
       <b-col>
         <b-card header='Taidot' >
