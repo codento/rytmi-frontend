@@ -3,6 +3,17 @@
     <b-row>
       <b-col>
         <UserProfileCard :profile="profileById(this.$route.params.id)"/>
+        <b-card header='Vapaat tunnit'>
+          <user-schedule :schedule="{ 
+            description: 'Vapaata neljänä päivänä.',
+            avaibilityByDay: {
+              Ma: '2h',
+              Ti: '4h',
+              Ke: '4h',
+              To: '0h',
+              Pe: '8h',
+            } }"/>          
+        </b-card>
       </b-col>
       <b-col>
         <b-card header='Taidot' >
@@ -30,6 +41,7 @@ import {mapGetters} from 'vuex'
 import SkillRow from '../components/SkillRow'
 import ProjectRow from '../components/ProjectRow'
 import UserProfileCard from '../components/UserProfileCard'
+import UserSchedule from '../components/UserSchedule'
 
 export default {
   name: 'Profile',
@@ -44,7 +56,8 @@ export default {
   components: {
     SkillRow,
     ProjectRow,
-    UserProfileCard
+    UserProfileCard,
+    UserSchedule
   },
   data () {
     return {
