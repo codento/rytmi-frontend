@@ -21,11 +21,11 @@ describe('Profile.vue shallow', () => {
   let $lodash = lodash
 
   const $route = {
-    path: '/id',
-    params: {id: 5}
+    path: '/id'
   }
   beforeEach(() => {
     getters = {
+      profile: () => (arg) => arg,
       profileById: () => (arg) => arg,
       profiles: () => (arg) => arg,
       skillsById: () => (arg) => arg,
