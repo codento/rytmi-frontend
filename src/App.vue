@@ -16,7 +16,6 @@
 
 <script>
 import {mapActions, mapGetters} from 'vuex'
-import nav from './_nav'
 import { Header as AppHeader, Sidebar, Aside as AppAside, Footer as AppFooter, Breadcrumb } from './components/'
 
 export default {
@@ -27,11 +26,6 @@ export default {
     AppAside,
     AppFooter,
     Breadcrumb
-  },
-  data () {
-    return {
-      nav: nav.items
-    }
   },
   created () {
     if (this.isAuthenticated) {
@@ -48,7 +42,22 @@ export default {
     ])
   },
   computed: {
-    ...mapGetters(['isAuthenticated']),
+    ...mapGetters([
+      'isAuthenticated',
+      'profileId'
+    ]),
+    nav () {
+      return [{
+        name: 'Profile',
+        url: '/profile/' + this.profileId,
+        icon: 'icon-star'
+      },
+      {
+        name: 'EditProfile',
+        url: '/edit/' + this.profileId,
+        icon: 'icon-star'
+      }]
+    },
     name () {
       return this.$route.name
     },
