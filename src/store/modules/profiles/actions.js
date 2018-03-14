@@ -31,7 +31,7 @@ export function fetchProfileSkills ({ commit, state }) {
   })
 }
 
-const updateProfile = ({ commit, state }, data) => {
+export const updateProfile = ({ commit, state }, data) => {
   return new Promise((resolve, reject) => {
     alterProfile(data)
       .then(response => {
