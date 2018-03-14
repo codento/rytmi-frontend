@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <li v-for='profile in results'>
+    <li v-for='profile in results' :key="profile.userId">
       <b-card v-on:click="openProfile(profile)">
         <b-row>
           <b-col class="col-sm-4" style="text-align:center">
@@ -10,21 +10,11 @@
             <b>puhelinnumero: {{profile.phone}}</b>
           </b-col>
           <b-col class="col-md-6">
-            <br>
             <b-col>
-              <h3>Skills:</h3>
               <SkillRow v-for='skill in skillsByUserId(profile.userId)'
                 :name="skillName(skill.skillId)"
-                :proficiency='skill.knows'
-                :key='skill.id'>
-              </SkillRow>
-            </b-col>
-            <br>
-            <b-col>
-              <h3>Willingnes:</h3>
-              <SkillRow v-for='skill in skillsByUserId(profile.userId)'
-                :name="skillName(skill.skillId)"
-                :proficiency='skill.wantsTo'
+                :knows='skill.knows'
+                :wants='skill.wantsTo'
                 :key='skill.id'>
               </SkillRow>
             </b-col>
