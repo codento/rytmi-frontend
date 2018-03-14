@@ -8,9 +8,9 @@
         </b-col>
         <b-col class="col-sm-9">
           <b-row>
-            <b-col v-for="skill, index in skillsByUserId(profileId)" class="col-sm-3">
+            <b-col v-for="skill in skillsByUserId(profileId)" class="col-sm-3" :key="skill.id">
               <div v-on:click="removeProfileSkill({profileId: profileId, id: skill.id})">
-              <skill-card :skill="skill" />
+                <skill-card :skill="skill" />
               </div>
             </b-col>
           </b-row>
