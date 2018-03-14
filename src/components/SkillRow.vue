@@ -4,15 +4,36 @@
       <b>{{ name }}:</b>
     </b-col>
     <b-col class="col-mb-8" >
-      <b-progress
-        height="0.9rem"
-        :value="proficiency*20"
-        variant='primary'
-        class="mb-6"
-      />
+      <div @mouseover="active = true" @mouseleave="active = false">
+        <div v-if="active">
+          <b-progress
+            height="0.9rem"
+            class="mb-6"
+          >Osaaminen</b-progress>
+          <b-progress
+            height="0.9rem"
+            class="mb-6"
+          >Halukkuus</b-progress>
+        </div>
+        <div v-else>
+          <b-progress
+            height="0.9rem"
+            :value="knows*20"
+            variant='primary'
+            class="mb-6"
+          />
+          <b-progress
+            height="0.9rem"
+            :value="wants*20"
+            variant='success'
+            class="mb-6"
+          />
+        </div>
+      </div>
     </b-col>
   </b-row>
 </template>
+
 <script>
 import { mapGetters } from 'vuex'
 export default {
@@ -21,7 +42,14 @@ export default {
     'proficiency': Number,
     'name': String,
     'skillId': Number,
-    'wantsTo': Number
+    'wantsTo': Number,
+    'wants': Number,
+    'knows': Number
+  },
+  data () {
+    return {
+      active: false
+    }
   },
   computed: {
     ...mapGetters([
@@ -30,6 +58,6 @@ export default {
   }
 }
 </script>
-<style scoped>
 
+<style scoped>
 </style>
