@@ -2,12 +2,12 @@ export default {
   items: [
     {
       name: 'Profile',
-      url: '/profile/10',
+      url: '/profile',
       icon: 'icon-star'
     },
     {
       name: 'EditProfile',
-      url: '/edit/10',
+      url: '/edit',
       icon: 'icon-star'
     }
   ]

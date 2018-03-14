@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <b-row>
       <b-col>
-        <UserProfileCard :profile="profileById(this.$route.params.id)"/>     
+        <UserProfileCard :profile="profile"/>     
       </b-col>
       <b-col>
         <b-card id="Taidot">
@@ -17,7 +17,7 @@
           </b-row>
           <b-row v-else>
             <b-col class="col mb-1">
-              <SkillRow v-for='skill in skillsByUserId(profileById($route.params.id).userId)'
+              <SkillRow v-for='skill in skillsByUserId(profile.userId)'
                 :name="skillName(skill.skillId)"
                 :knows='skill.knows'
                 :wants='skill.wantsTo'
@@ -45,7 +45,7 @@ export default {
   name: 'Profile',
   computed: {
     ...mapGetters([
-      'profileById',
+      'profile',
       'skillById',
       'skillsByUserId'
     ])
@@ -96,13 +96,8 @@ export default {
     }
   },
   methods: {
-    getProfile () {
-      return this.profileById(this.$route.params.id)
-    },
     getSkills () {
-      let results = this.skillsByUserId(this.$route.params.id)
-      console.log(results)
-      return results
+      return this.skillsByUserId(this.profile.userId)
     },
     sortSkills (param) {
       return this.$lodash.orderBy(this.skills, ['wantsTo', 'name'], ['desc', 'asc']) // TODO Figure out how lodash should be handled in tests
@@ -112,8 +107,6 @@ export default {
     },
     showExplanations (show) {
       this.showInfo = show
-      // let display = (show ? 'block' : 'none')
-      // document.getElementById('explanations').style.display = display
     }
   }
 }

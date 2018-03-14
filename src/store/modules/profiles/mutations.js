@@ -26,9 +26,6 @@ export const mutations = {
     })
     state.profileSkillList = Object.keys(state.profileSkills)
   },
-  [types.CREATE_PROFILE] (state, profile) {
-    state.profiles[profile.id] = profile
-  },
   [types.SET_PROFILEID] (state, profileId) {
     state.profileId = profileId
   },

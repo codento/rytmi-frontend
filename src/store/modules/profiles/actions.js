@@ -2,8 +2,6 @@ import { normalize } from 'normalizr'
 import * as types from '../../mutation-types'
 import { profile } from '../../schema'
 import {
-  createNewProfile,
-  createNewUser,
   getProfiles,
   getProfileSkills,
   alterProfile,
@@ -42,27 +40,6 @@ export const updateProfile = ({ commit, state }, data) => {
         reject(error)
       })
   })
-}
-export function createProfile ({commit, state}, data) {
-  return new Promise((resolve, reject) => {
-    createNewProfile(data)
-      .then(response => {
-        commit(types.CREATE_PROFILE, response.data)
-        commit(types.ADD_PROFILEID, response.data.id)
-      })
-  })
-}
-
-export function saveProfileChanges ({ commit, state }, data) {
-  if (data.id) {
-    return updateProfile({commit, state}, data)
-  } else {
-    return createNewUser().then(response => {
-      console.log(response)
-      data.userId = response.data.id
-      return createProfile({commit, state}, data)
-    })
-  }
 }
 
 export function addProfileSkill ({commit, state}, data) {
