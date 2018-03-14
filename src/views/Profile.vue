@@ -8,12 +8,12 @@
         <b-card header='Taidot' >
           <b-row>
             <b-col class="col mb-1">
-              <h4>Osaaminen</h4>
-              <SkillRow v-for='skill in skillsByUserId(profileById($route.params.id).userId)' :name="skillName(skill.skillId)" :proficiency="skill.knows" :key='skill.id'></SkillRow>
-            </b-col>
-            <b-col class="col mb-1">
-              <h4>Halukkuus</h4>
-              <SkillRow v-for='skill in skillsByUserId(profileById($route.params.id).userId)' :name="skillName(skill.skillId)" :proficiency="skill.wantsTo" :key='skill.id'></SkillRow>
+              <SkillRow v-for='skill in skillsByUserId(profileById($route.params.id).userId)'
+                :name="skillName(skill.skillId)"
+                :knows='skill.knows'
+                :wants='skill.wantsTo'
+                :key='skill.id'>
+              </SkillRow>
             </b-col>
           </b-row>
         </b-card>

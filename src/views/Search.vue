@@ -10,7 +10,7 @@
         </b-form-group>
         <div id="active">
           <ul>
-            <li v-for='skill in active' class="active">
+            <li v-for='skill in active' class="active" :key="skill.name">
               <a class="remove" @click="removeFromSearch(skill)">&times;</a> {{skill.name}}
             </li>
           </ul>
@@ -25,7 +25,7 @@
       </b-card>
     </b-col>
     <b-col class="col-md-9" style="float:right">
-      <Results :param='param' :selected='selected ':active='active'></Results>
+      <Results :param='param' :selected='selected ' :active='active'></Results>
     </b-col>
   </div>
 </template>
