@@ -109,8 +109,8 @@
       ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
     },
     "collectCoverage": true,
-    "mapCoverage": true,
     "coverageReporters": [
+      "lcov",
       "json",
       "html",
       "text-summary"
