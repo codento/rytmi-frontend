@@ -40,13 +40,13 @@ export default new Router({
       component: LandingPage
     },
     {
-      path: '/profile/:id',
+      path: '/profile',
       name: 'Profile',
       component: Profile,
       beforeEnter: requireAuth
     },
     {
-      path: '/edit/:id',
+      path: '/edit',
       name: 'Edit',
       component: EditProfile
     },

@@ -1,3 +1,4 @@
+export const profile = (state) => state.profiles[state.profileId]
 export const profiles = (state) => state.profiles
 export const profileById = (state) => (id) => state.profiles[id]
 export const skillsByUserId = (state) => (userId) => {
