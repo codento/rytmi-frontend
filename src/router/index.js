@@ -1,8 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// Containers
-
-// Views
 import LandingPage from '@/views/LandingPage'
 import Profile from '@/views/Profile'
 import EditProfile from '@/views/EditProfile'
@@ -40,13 +37,13 @@ export default new Router({
       component: LandingPage
     },
     {
-      path: '/profile',
+      path: '/profile/:id',
       name: 'Profile',
       component: Profile,
       beforeEnter: requireAuth
     },
     {
-      path: '/edit',
+      path: '/edit/:id',
       name: 'Edit',
       component: EditProfile
     },

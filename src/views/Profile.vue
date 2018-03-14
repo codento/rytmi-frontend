@@ -45,10 +45,13 @@ export default {
   name: 'Profile',
   computed: {
     ...mapGetters([
-      'profile',
+      'profileById',
       'skillById',
       'skillsByUserId'
-    ])
+    ]),
+    profile () {
+      return this.profileById(this.$route.params.id)
+    }
   },
   components: {
     SkillRow,

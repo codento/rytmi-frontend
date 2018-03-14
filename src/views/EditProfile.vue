@@ -88,8 +88,11 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'profile'
-    ])
+      'profileById'
+    ]),
+    profile () {
+      return this.profileById(this.$route.params.id)
+    }
   },
   methods: {
     ...mapActions([
