@@ -75,7 +75,7 @@ export default {
       function () {
         this.search = this.param
       },
-      500
+      200 // Wait between searches can be changed here
     ),
     skillName (skillId) {
       return this.skillById(skillId).name
