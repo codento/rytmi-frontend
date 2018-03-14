@@ -2,7 +2,6 @@
   <b-card
     class="skillCard"
     :title="getSkillName"
-    tag="skill"
     style="max-width: 20rem;" >
   <b-row>
     <b-col class="col-mb-3 nohover" style="text-size: 20px;">
@@ -32,8 +31,9 @@
   </b-row>
 </b-card>
 </template>
+
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'SkillCard',
@@ -50,6 +50,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .skillCard :hover{
   background-color: hsla(34, 100%, 51%, 0.541); 
