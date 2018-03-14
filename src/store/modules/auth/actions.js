@@ -7,12 +7,13 @@ export function requestAuth ({commit, dispatch}, token) {
     login(token)
       .then(resp => {
         localStorage.setItem('user-token', resp.data.jwt.token)
+        localStorage.setItem('profile-id', resp.data.profileId)
         // Here set the header of your ajax library to the token value.
         // example with axios
         // axios.defaults.headers.common['Authorization'] = resp.token
         commit(types.AUTH_SUCCESS, resp.data.jwt.token)
+        commit(types.SET_USERID, resp.data.userId)
         commit(types.SET_PROFILEID, resp.data.profileId)
-        if (resp.data.userId) { commit(types.SET_USERID, resp.data.userId) }
         resolve(resp)
       })
       .catch(err => {
@@ -28,6 +29,7 @@ export function logoutAuth ({commit, dispatch}) {
     commit(types.AUTH_LOGOUT)
     commit(types.CLEAR_PROFILEID)
     localStorage.removeItem('user-token')
+    localStorage.removeItem('profile-id')
     resolve()
   })
 }

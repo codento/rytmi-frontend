@@ -97,9 +97,7 @@ export default {
   },
   methods: {
     getSkills () {
-      let results = this.skillsByUserId(this.profile.userId)
-      console.log(results)
-      return results
+      return this.skillsByUserId(this.profile.userId)
     },
     sortSkills (param) {
       return this.$lodash.orderBy(this.skills, ['wantsTo', 'name'], ['desc', 'asc']) // TODO Figure out how lodash should be handled in tests
@@ -109,8 +107,6 @@ export default {
     },
     showExplanations (show) {
       this.showInfo = show
-      // let display = (show ? 'block' : 'none')
-      // document.getElementById('explanations').style.display = display
     }
   }
 }
