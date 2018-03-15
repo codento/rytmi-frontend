@@ -29,12 +29,10 @@ export function fetchProfileSkills ({ commit, state }) {
   })
 }
 
-export const updateProfile = ({ commit, state }, data) => {
+export function updateProfile ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
     alterProfile(data)
       .then(response => {
-        const normalized = normalize(response.data, [profile]).entities.profiles
-        console.log('normalized', normalized)
         commit(types.UPDATE_PROFILE, response.data)
       }).catch(function (error) {
         reject(error)
