@@ -91,6 +91,17 @@
         v-model="editedProfile.birthday">
       </b-form-input>
     </b-form-group>
+    <!--<b-form-group
+      id="photoPath"
+      horizontal
+      label="Profile picture url:"
+      label-for="photoPathInput">
+      <b-form-input
+        id="photoPathInput"
+        type="text"
+        v-model="editedProfile.photoPath">
+      </b-form-input>
+    </b-form-group>-->
     <b-button type="submit" variant="primary">Submit</b-button>
     <b-button type="reset" variant="danger">Peruuta</b-button>
   </b-form>

@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <profile-form :profile="profile" />
+    <ProfileForm :profile="profile" />
     <EditLinks :profile="profile" />
     <edit-skills :profileId="profile.id" />
   </div>
