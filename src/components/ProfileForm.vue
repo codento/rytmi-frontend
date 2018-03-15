@@ -11,7 +11,7 @@
       <b-form-input
         id="firstNameInput"
         type="text"
-        v-model="profile.firstName"
+        v-model="editedProfile.firstName"
         required
         placeholder="Enter firstName">
       </b-form-input>
@@ -24,7 +24,7 @@
       <b-form-input
         id="lastNameInput"
         type="text"
-        v-model="profile.lastName"
+        v-model="editedProfile.lastName"
         required
         placeholder="Enter lastName">
       </b-form-input>
@@ -37,7 +37,7 @@
       <b-form-input
         id="emailInput"
         type="email"
-        v-model="profile.email"
+        v-model="editedProfile.email"
         required
         placeholder="Enter Email">
       </b-form-input>
@@ -50,7 +50,7 @@
       <b-form-input
         id="PhonenumberInput"
         type='tel'
-        v-model="profile.phone"
+        v-model="editedProfile.phone"
         required
         placeholder="Enter Phonenumber">
       </b-form-input>
@@ -64,7 +64,7 @@
         id="descriptionInput"
         :rows="3"
         type="text"
-        v-model="profile.description"
+        v-model="editedProfile.description"
         placeholder="Short description">
       </b-form-input>
     </b-form-group>
@@ -89,11 +89,12 @@ export default {
     onSubmit (evt) {
       evt.preventDefault()
       this.showError = false
-      this.updateProfile(this.profile)
+      this.updateProfile(this.editedProfile)
         .then(err => {
           this.error = !this.showError
           console.log(err) // Error: "It broke"
         })
+      this.redirect()
     },
     onReset (evt) {
       evt.preventDefault()
@@ -101,12 +102,17 @@ export default {
       this.show = false
       this.showError = false
       this.$nextTick(() => { this.show = true })
+      this.redirect()
+    },
+    redirect () {
+      this.$router.push('/profile/' + this.$route.params.id)
     }
   },
   data () {
     return {
       show: true,
-      showError: false
+      showError: false,
+      editedProfile: Object.assign({}, this.profile)
     }
   }
 }
