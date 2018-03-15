@@ -11,7 +11,7 @@
           </b-col>
           <b-col class="col-md-6">
             <b-col>
-              <SkillRow v-for='skill in skillsByUserId(profile.userId)'
+              <SkillRow v-for='skill in skillsByUserId(profile.id)'
                 :name="skillName(skill.skillId)"
                 :knows='skill.knows'
                 :wants='skill.wantsTo'
