@@ -31,6 +31,18 @@
     </b-form-group>
     <b-form-group
       horizontal
+      id="titleLabel"
+      label="Title:"
+      label-for="titleInput">
+      <b-form-input
+        id="titleInput"
+        type="text"
+        v-model="editedProfile.title"
+        placeholder="Enter title">
+      </b-form-input>
+    </b-form-group>
+    <b-form-group
+      horizontal
       id="emailLabel"
       label="Email:"
       label-for="emailInput">
@@ -66,6 +78,17 @@
         type="text"
         v-model="editedProfile.description"
         placeholder="Short description">
+      </b-form-input>
+    </b-form-group>
+    <b-form-group
+      id="birthday"
+      horizontal
+      label="Birthday:"
+      label-for="birthdayInput">
+      <b-form-input
+        id="birthdayInput"
+        type="date"
+        v-model="editedProfile.birthday">
       </b-form-input>
     </b-form-group>
     <b-button type="submit" variant="primary">Submit</b-button>
