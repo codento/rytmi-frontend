@@ -36,10 +36,13 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import SkillRow from '../components/SkillRow'
-import ProjectRow from '../components/ProjectRow'
-import UserProfileCard from '../components/UserProfileCard'
-import SkillExplanations from '../components/skillExplanations'
+
+import {
+  ProjectRow,
+  SkillExplanations,
+  SkillRow,
+  UserProfileCard
+} from '../components/Profile'
 
 export default {
   name: 'Profile',

@@ -1,22 +1,28 @@
 <template>
-    <div class="app">
-      <AppHeader/>
-      <div class="app-body">
-        <Sidebar :navItems="nav"/>
-        <main class="main">
-          <div class="container-fluid">
-            <router-view></router-view>
-          </div>
-        </main>
-        <AppAside/>
-      </div>
+  <div class="app">
+    <AppHeader/>
+    <div class="app-body">
+      <Sidebar :navItems="nav"/>
+      <main class="main">
+        <div class="container-fluid">
+          <router-view></router-view>
+        </div>
+      </main>
+      <AppAside/>
+    </div>
     <AppFooter/>
   </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from 'vuex'
-import { Header as AppHeader, Sidebar, Aside as AppAside, Footer as AppFooter, Breadcrumb } from './components/'
+import {
+  Sidebar,
+  Header as AppHeader,
+  Aside as AppAside,
+  Footer as AppFooter,
+  Breadcrumb
+} from './components'
 
 export default {
   name: 'app',

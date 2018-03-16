@@ -32,7 +32,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Results from '../components/Search/Results'
+import { Results } from '../components/Search'
 
 export default {
   name: 'Search',

@@ -6,7 +6,7 @@ import EditProfile from '@/views/EditProfile'
 import Search from '@/views/Search'
 import PageNotFound from '@/views/PageNotFound'
 import store from '../store'
-import Callback from '@/components/Callback'
+import Callback from '@/components/helpers/Callback'
 Vue.use(Router)
 
 const requireAuth = (to, from, next) => {

@@ -2,7 +2,7 @@ import {
   shallow,
   mount
 } from 'vue-test-utils'
-import UserProfileCard from '../../src/components/UserProfileCard.vue'
+import { UserProfileCard } from '../../src/components/Profile'
 
 describe('UserProfileCard.test.js', () => {
   it('Template is correct', () => {

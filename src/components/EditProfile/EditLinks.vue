@@ -3,7 +3,7 @@
     <br>
     <h5>Edit Links:</h5>
     <b-card id="editLinks">
-      <span v-for="link in profile.links" style="padding-right:20px">
+      <span v-for="link in profile.links" style="padding-right:20px" :key="link">
         <span v-on:click="removeLink(link)" style="color:red; padding-right:10px; cursor:pointer">X</span> {{ link }}
       </span>
         <b-form @submit="add">

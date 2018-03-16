@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from 'vue-test-utils'
-import SkillRow from '../../src/components/SkillRow.vue'
+import { SkillRow } from '../../src/components/Profile'
 import Vuex from 'vuex'
 
 const localVue = createLocalVue()
