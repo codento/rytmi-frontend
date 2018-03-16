@@ -81,6 +81,12 @@ export default {
   props: {
     'profile': Object
   },
+  data () {
+    return {
+      show: true,
+      showError: false
+    }
+  },
   methods: {
     ...mapActions([
       'createProfile',
@@ -102,16 +108,8 @@ export default {
       this.showError = false
       this.$nextTick(() => { this.show = true })
     }
-  },
-  data () {
-    return {
-      show: true,
-      showError: false
-    }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped />

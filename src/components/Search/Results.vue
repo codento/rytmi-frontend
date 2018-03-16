@@ -28,21 +28,20 @@
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
-
 import SkillRow from '../SkillRow'
 
 export default {
   name: 'Results',
+  props: {
+    param: String,
+    selected: String,
+    active: Array
+  },
   data () {
     return {
       search: '',
       sortable: []
     }
-  },
-  props: {
-    param: String,
-    selected: String,
-    active: Array
   },
   computed: {
     ...mapGetters([
@@ -129,5 +128,4 @@ export default {
 }
 </script>
 
-<style lang="css">
-</style>
+<style lang="css" />

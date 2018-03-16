@@ -1,15 +1,15 @@
 <template>
     <div class="app">
-    <AppHeader/>
-    <div class="app-body">
-      <Sidebar :navItems="nav"/>
-      <main class="main">
-        <div class="container-fluid">
-          <router-view></router-view>
-        </div>
-      </main>
-      <AppAside/>
-    </div>
+      <AppHeader/>
+      <div class="app-body">
+        <Sidebar :navItems="nav"/>
+        <main class="main">
+          <div class="container-fluid">
+            <router-view></router-view>
+          </div>
+        </main>
+        <AppAside/>
+      </div>
     <AppFooter/>
   </div>
 </template>
@@ -26,13 +26,6 @@ export default {
     AppAside,
     AppFooter,
     Breadcrumb
-  },
-  created () {
-    if (this.isAuthenticated) {
-      this.fetchProfiles()
-      this.fetchSkills()
-      this.fetchProfileSkills()
-    }
   },
   methods: {
     ...mapActions([
@@ -63,6 +56,13 @@ export default {
     },
     list () {
       return this.$route.matched
+    }
+  },
+  created () {
+    if (this.isAuthenticated) {
+      this.fetchProfiles()
+      this.fetchSkills()
+      this.fetchProfileSkills()
     }
   }
 }

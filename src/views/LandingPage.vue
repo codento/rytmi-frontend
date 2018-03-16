@@ -1,14 +1,12 @@
 <template>
   <div class="animated fadeIn container" style="margin-top: 24px">
     <b-jumbotron  bg-variant="info" text-variant="white" border-variant="dark" header="Rytmiryhmä app" :lead="!isAuthenticated? 'Please Login' : 'Tattaraa'" >
-        <p>For more information visit website</p>
-</b-jumbotron>
-
+      <p>For more information visit website</p>
+    </b-jumbotron>
   </div>
 </template>
 
 <script>
-
 import {mapGetters} from 'vuex'
 export default {
   name: 'login',

@@ -20,6 +20,7 @@
     </button>
   </header>
 </template>
+
 <script>
 import {mapGetters, mapActions} from 'vuex'
 import {loadAuthClient, handleLogin, handleLogout} from '../utils/auth'
