@@ -34,7 +34,7 @@
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
-import SkillRow from '../SkillRow'
+import { SkillRow } from '../Profile'
 
 export default {
   name: 'Results',

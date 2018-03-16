@@ -22,8 +22,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import SkillForm from '../components/SkillForm'
-import SkillCard from '../components/SkillCard'
+import SkillForm from './SkillForm'
+import SkillCard from './SkillCard'
+
 export default {
   name: 'EditSkills',
   props: {

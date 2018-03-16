@@ -8,9 +8,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ProfileForm from '../components/ProfileForm'
-import EditLinks from '../components/EditLinks'
-import EditSkills from './EditSkills'
+import {
+  EditLinks,
+  EditSkills,
+  ProfileForm
+} from '../components/EditProfile'
 
 export default {
   name: 'EditProfile',

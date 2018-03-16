@@ -1,7 +1,5 @@
-import {
-  mount
-} from 'vue-test-utils'
-import ProjectRow from '../../src/components/ProjectRow.vue'
+import { mount } from 'vue-test-utils'
+import { ProjectRow } from '../../src/components/Profile'
 
 describe('UserProfileCard.test.js', () => {
   it('Template is correct', () => {
