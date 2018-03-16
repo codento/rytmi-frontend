@@ -118,7 +118,8 @@ export default {
   data () {
     return {
       show: true,
-      showError: false
+      showError: false,
+      editedProfile: Object.assign({}, this.profile)
     }
   },
   methods: {
@@ -147,19 +148,6 @@ export default {
     redirect () {
       this.$router.push('/profile/' + this.$route.params.id)
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-  },
-  data () {
-    return {
-      show: true,
-      showError: false,
-      editedProfile: Object.assign({}, this.profile)
-    }
-=======
->>>>>>> Styling improvements
-=======
->>>>>>> styling_improvements
   }
 }
 </script>
