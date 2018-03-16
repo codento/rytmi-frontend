@@ -72,6 +72,7 @@
     </b-form>
   </b-card>
 </template>
+
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
@@ -89,6 +90,11 @@ export default {
   name: 'SkillForm',
   props: {
     'profileId': Number
+  },
+  data () {
+    return {
+      profileSkill: skillTemplate()
+    }
   },
   computed: {
     ...mapGetters([
@@ -115,14 +121,8 @@ export default {
     onReset () {
       this.profileSkill = skillTemplate()
     }
-  },
-  data () {
-    return {
-      profileSkill: skillTemplate()
-    }
   }
 }
 </script>
-<style scoped>
 
-</style>
+<style scoped />

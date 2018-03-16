@@ -7,7 +7,7 @@
       <h2> {{getNames}} 
         <small ><br>{{profile.title}}</small>
       </h2> 
-      <a style="padding: 4px;" v-for="account in profile.accounts" class='fa' :class='getFAClass(account)' :href='account.address'/>
+      <a style="padding: 4px;" v-for="account in profile.accounts" class='fa' :class='getFAClass(account)' :href='account.address' :key="account.address"/>
     </div>
     <div >
       <div class="profileCardDetails">
@@ -45,6 +45,4 @@ export default {
 </script>
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>
+<style scoped />

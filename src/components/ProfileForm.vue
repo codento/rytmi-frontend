@@ -115,6 +115,12 @@ export default {
   props: {
     'profile': Object
   },
+  data () {
+    return {
+      show: true,
+      showError: false
+    }
+  },
   methods: {
     ...mapActions([
       'createProfile',
@@ -141,6 +147,7 @@ export default {
     redirect () {
       this.$router.push('/profile/' + this.$route.params.id)
     }
+<<<<<<< HEAD
   },
   data () {
     return {
@@ -148,10 +155,10 @@ export default {
       showError: false,
       editedProfile: Object.assign({}, this.profile)
     }
+=======
+>>>>>>> Styling improvements
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped />
