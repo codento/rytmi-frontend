@@ -1,7 +1,7 @@
 <template>
   <ul>
     <li v-for='profile in results' :key="profile.userId">
-      <b-card v-on:click="openProfile(profile)">
+      <b-card>
         <b-row>
           <b-col class="col-sm-4" style="text-align:center">
             <img :src='profile.photoPath' alt="">
@@ -18,6 +18,12 @@
                 :key='skill.id'>
               </SkillRow>
             </b-col>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col class="col-md-9"/>
+          <b-col class="col-md-3">
+            <b-button @click="openProfile(profile)">Go to profile</b-button>
           </b-col>
         </b-row>
       </b-card>
