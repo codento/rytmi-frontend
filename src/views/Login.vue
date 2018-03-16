@@ -1,27 +1,27 @@
 <template>
-<div class="container">
-  <div class="card">
-  <div class="card-body">
-
-
-  <div id="gSignInWrapper">
-      <span v-show="!isAuthenticated">
-        <button id="customBtn" class="btn btn-primary btn-lg">Sign in with Google</button>
-      </span>
-      <span v-show="isAuthenticated">
-        <button v-on:click="signOut" class="btn btn-secondary btn-lg">
-          Logout
-        </button>
-      </span>
-  <div id="name"></div>
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <div id="gSignInWrapper">
+          <span v-show="!isAuthenticated">
+            <button id="customBtn" class="btn btn-primary btn-lg">Sign in with Google</button>
+          </span>
+          <span v-show="isAuthenticated">
+            <button v-on:click="signOut" class="btn btn-secondary btn-lg">
+              Logout
+            </button>
+          </span>
+          <div id="name" />
+        </div>
+      </div>
     </div>
-</div>
-</div>
-</div>
+  </div>
 </template>
+
 <script>
 import { mapGetters } from 'vuex'
 require('dotenv').config()
+
 export default {
   data () {
     return {

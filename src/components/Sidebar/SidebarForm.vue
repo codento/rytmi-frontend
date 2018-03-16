@@ -1,8 +1,7 @@
-<template>
+<template />
   <!-- <div class="sidebar-form"></div> -->
-</template>
-<script>
 
+<script>
 export default {
   name: 'sidebar-form'
 }

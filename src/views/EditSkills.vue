@@ -26,12 +26,12 @@ import SkillForm from '../components/SkillForm'
 import SkillCard from '../components/SkillCard'
 export default {
   name: 'EditSkills',
+  props: {
+    'profileId': Number
+  },
   components: {
     SkillForm,
     SkillCard
-  },
-  props: {
-    'profileId': Number
   },
   computed: {
     ...mapGetters([
@@ -52,5 +52,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped />

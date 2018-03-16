@@ -1,40 +1,41 @@
 <template>
   <transition name="modal">
     <div>
-    <b-btn v-b-modal.modal1>Launch demo modal</b-btn>
-
-    <b-modal id="modal1" title="Bootstrap-Vue">
-
-          <div class="modal-header">
-            <slot name="header">
-              default header
-            </slot>
-          </div>
-
-          <div class="modal-body">
-            <slot name="body">
-              default body
-            </slot>
-          </div>
-
-          <div class="modal-footer">
-            <slot name="footer">
-              default footer
-              <button class="modal-default-button" @click="$emit('close')">
-                OK
-              </button>
-            </slot>
-          </div>
-        </b-modal>
+      <b-btn v-b-modal.modal1>Launch demo modal</b-btn>
+      <b-modal id="modal1" title="Bootstrap-Vue">
+        <div class="modal-header">
+          <slot name="header">
+            default header
+          </slot>
+        </div>
+        <div class="modal-body">
+          <slot name="body">
+            default body
+          </slot>
+        </div>
+        <div class="modal-footer">
+          <slot name="footer">
+            default footer
+            <button class="modal-default-button" @click="$emit('close')">
+              OK
+            </button>
+          </slot>
+        </div>
+      </b-modal>
     </div>
   </transition>
 </template>
+
 <script>
 export default {
   name: 'SkillModal',
-  props: {'skill': Object, 'showModal': Function}
+  props: {
+    'skill': Object, 
+    'showModal': Function
+  }
 }
 </script>
+
 <style scoped>
 .modal-mask {
   position: fixed;
