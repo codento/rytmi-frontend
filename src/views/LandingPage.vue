@@ -10,7 +10,7 @@
 import {mapGetters} from 'vuex'
 
 export default {
-  name: 'login',
+  name: 'landing-page',
   computed: {
     ...mapGetters(['isAuthenticated'])
   }

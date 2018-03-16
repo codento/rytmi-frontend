@@ -22,7 +22,7 @@ import {
   Aside as AppAside,
   Footer as AppFooter,
   Breadcrumb
-} from './components'
+} from './components/appStructures'
 
 export default {
   name: 'app',
