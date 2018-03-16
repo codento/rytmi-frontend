@@ -1,5 +1,7 @@
 import Results from './Results.vue'
+import ProfilePreview from './ProfilePreview.vue'
 
 export {
-  Results
+  Results,
+  ProfilePreview
 }

@@ -1,40 +1,15 @@
 <template>
-  <ul>
-    <li v-for='profile in results' :key="profile.userId">
-      <b-card>
-        <b-row>
-          <b-col class="col-sm-4" style="text-align:center">
-            <img :src='profile.photoPath' alt="">
-            <h3>{{profile.firstName}} {{profile.lastName}}</h3>
-            <b>Email: {{profile.email}}</b><br>
-            <b>puhelinnumero: {{profile.phone}}</b>
-          </b-col>
-          <b-col class="col-md-6">
-            <b-col>
-              <SkillRow v-for='skill in skillsByUserId(profile.id)'
-                :name="skillName(skill.skillId)"
-                :knows='skill.knows'
-                :wants='skill.wantsTo'
-                :key='skill.id'>
-              </SkillRow>
-            </b-col>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col class="col-md-9"/>
-          <b-col class="col-md-3">
-            <b-button @click="openProfile(profile)">Go to profile</b-button>
-          </b-col>
-        </b-row>
-      </b-card>
-    </li>
-  </ul>
+  <div>
+    <div v-for="profile, index in results" :key="index">
+      <profile-preview :profile="profile"/>
+    </div>
+  </div>
 </template>
 
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
-import { SkillRow } from '../Profile'
+import ProfilePreview from './ProfilePreview.vue'
 
 export default {
   name: 'Results',
@@ -51,9 +26,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'profileFilter',
-      'skillsByUserId',
-      'skillById'
+      'profileFilter'
     ]),
     results: function () {
       let results = this.profileFilter(this.search)
@@ -73,18 +46,12 @@ export default {
     }
   },
   methods: {
-    openProfile (profile) {
-      this.$router.replace({name: 'Profile', params: { id: profile.id }})
-    },
     delaySearch: _.debounce(
       function () {
         this.search = this.param
       },
-      200 // Wait between searches can be changed here
+      100 // Wait between searches can be changed here
     ),
-    skillName (skillId) {
-      return this.skillById(skillId).name
-    },
     hasSkill (profile, skillToSearch, multipleSkills) {
       let skills = this.skillsByUserId(profile.id)
       for (let i = 0; i < skills.length; i++) {
@@ -129,7 +96,7 @@ export default {
     }
   },
   components: {
-    SkillRow
+    ProfilePreview
   }
 }
 </script>

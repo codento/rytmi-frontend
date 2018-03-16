@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: 'login'
+  name: 'not-found'
 }
 </script>
