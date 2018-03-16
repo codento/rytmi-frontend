@@ -148,6 +148,7 @@ export default {
       this.$router.push('/profile/' + this.$route.params.id)
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
   },
   data () {
     return {
@@ -157,6 +158,8 @@ export default {
     }
 =======
 >>>>>>> Styling improvements
+=======
+>>>>>>> styling_improvements
   }
 }
 </script>
