@@ -1,23 +1,15 @@
 <template>
   <header class="app-header navbar">
-    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">
-      <span class="navbar-toggler-icon"></span>
-    </button>
     <b-link class="navbar-brand" to="/home" exact></b-link>
-    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" @click="sidebarToggle">
-      <span class="navbar-toggler-icon"></span>
-    </button>
      <b-navbar-nav v-if="isAuthenticated">
       <b-nav-item to="/search">Search</b-nav-item>
+      <b-nav-item :to="'/profile/' + profileId" >Profile</b-nav-item>
     </b-navbar-nav>
     <b-navbar-nav class="ml-auto">
       <b-nav-item id="loginBtn" v-if="!isAuthenticated" v-on:click="login">Sign in</b-nav-item>
       <b-nav-item id="logoutBtn" v-if="isAuthenticated" v-on:click="logout">Sign out</b-nav-item>
       <b-nav-item id="logoutBtn" v-on:click="checkStatus">Check status</b-nav-item>
     </b-navbar-nav>
-    <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button" @click="asideToggle">
-      <span class="navbar-toggler-icon"></span>
-    </button>
   </header>
 </template>
 
@@ -28,7 +20,7 @@ import {loadAuthClient, handleLogin, handleLogout} from '../../utils/auth'
 export default {
   name: 'c-header',
   computed: {
-    ...mapGetters(['isAuthenticated', 'getProfileId', 'getToken'])
+    ...mapGetters(['isAuthenticated', 'profileId', 'getToken'])
   },
   methods: {
     sidebarToggle (e) {
@@ -51,6 +43,9 @@ export default {
       this.$toasted.global.rytmi_success({
         message: 'Authenticated: ' + this.isAuthenticated
       })
+    },
+    getProfileUrl () {
+      return '/profile/' + this.profileId
     },
     logout () {
       handleLogout().then(() => {

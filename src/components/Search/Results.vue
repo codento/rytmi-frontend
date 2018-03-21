@@ -1,13 +1,11 @@
 <template>
-  <ul>
+  <ul class="search-results">
     <li v-for='profile in results' :key="profile.userId">
       <b-card>
         <b-row>
           <b-col class="col-sm-4" style="text-align:center">
             <img :src='profile.photoPath' alt="">
             <h3>{{profile.firstName}} {{profile.lastName}}</h3>
-            <b>Email: {{profile.email}}</b><br>
-            <b>puhelinnumero: {{profile.phone}}</b>
           </b-col>
           <b-col class="col-md-6">
             <b-col>
@@ -19,12 +17,14 @@
               </SkillRow>
             </b-col>
           </b-col>
-        </b-row>
-        <b-row>
-          <b-col class="col-md-9"/>
-          <b-col class="col-md-3">
-            <b-button @click="openProfile(profile)">Go to profile</b-button>
-          </b-col>
+          <div :key="profile.id" style="float: right; margin: 0 auto;" @mouseover="active = profile.id" @mouseleave="active = false">
+              <b-button  v-if="active == profile.id" style=" height: 100%; background: #fff; border: 0px;" @click="openProfile(profile)">
+                <span style="font-size: 20px; color: gray;">Open profile</span>
+              </b-button>
+              <b-button v-else style=" height: 100%; background: #fff; border: 0px;" @click="openProfile(profile)">
+                <i style="font-size: 76px; color: gray;" class="fa fa-5x fa-angle-right"></i>
+              </b-button>
+          </div>
         </b-row>
       </b-card>
     </li>

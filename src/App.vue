@@ -2,7 +2,7 @@
   <div class="app">
     <AppHeader/>
     <div class="app-body">
-      <Sidebar :navItems="nav"/>
+      <!-- <Sidebar :navItems="nav"/> -->
       <main class="main">
         <div class="container-fluid">
           <router-view></router-view>
