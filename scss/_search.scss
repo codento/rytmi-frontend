@@ -5,9 +5,6 @@
     // Keeps skill filter dropdown visible when there are no results;
     min-height: 60vh;
 }
-.profile-editor {
-    padding: 1em;
-}
 .search-bar {
     padding: 1em;
     height: 15em;
@@ -19,4 +16,13 @@
 .search-tag-dropdown {
     float: left;
     width: 40%;
+}
+// In search results
+.profile-open-button {
+    button {
+        height: 100%;
+        background: #fff;
+        border: 0px;
+        width: 100%;
+    }
 }

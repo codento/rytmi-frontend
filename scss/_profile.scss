@@ -1,6 +1,9 @@
 .profile {
     padding: 1em;
 }
+.profile-editor {
+    padding: 1em;
+}
 .profile-details {
     text-align: center;
 }
@@ -12,14 +15,4 @@
 }
 .profile-name {
     font-size: 32px;
-}
-.profile-open-button {
-    float: right;
-    margin: 0 auto;
-    button {
-        height: 100%;
-        background: #fff;
-        border: 0px;
-        width: 100%;
-    }
 }
