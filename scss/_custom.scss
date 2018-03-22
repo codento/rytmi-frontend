@@ -1,59 +1,17 @@
 // Here you can add other styles
+@import "search";
+@import "profile";
+
+.main {
+    background: #fff;
+}
 .main .container-fluid {
     background: #fff;
     overflow: auto;
     padding: 0;
 }
-
-.search-results {
-    padding: 0;
-}
-
 .nav-link {
     margin-right: 10px;
-}
-
-.profile {
-    padding: 1em;
-}
-
-.profile-details {
-    text-align: center;
-}
-
-.profile-card-detail-row {
-    margin-top: 0.5em;
-}
-
-.profile-title {
-    font-size: 13px;
-}
-.profile-name {
-    font-size: 32px;
-}
-
-.profile-editor {
-    padding: 1em;
-}
-
-#search.search-bar {
-    padding: 1em;
-    min-height: 15em;
-}
-.search-bar-sort {
-    float: right;
-    margin-bottom: 1em;
-    span {
-        margin-right: 1em;
-    }
-}
-.search-tag-dropdown {
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 1.5em;
-}
-.search-tag-container {
-    min-height: 3em;
 }
 b {
     color: gray;

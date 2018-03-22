@@ -6,6 +6,8 @@
           <b-col class="col-sm-4" style="text-align:center">
             <img :src='profile.photoPath' alt="">
             <h3>{{profile.firstName}} {{profile.lastName}}</h3>
+            <b>{{profile.email}}</b><br>
+            <b>{{profile.phone}}</b>
           </b-col>
           <b-col class="col-md-6">
             <b-col>
@@ -17,11 +19,8 @@
               </SkillRow>
             </b-col>
           </b-col>
-          <div :key="profile.id" style="float: right; margin: 0 auto;" @mouseover="active = profile.id" @mouseleave="active = false">
-              <b-button  v-if="active == profile.id" style=" height: 100%; background: #fff; border: 0px;" @click="openProfile(profile)">
-                <span style="font-size: 20px; color: gray;">Open profile</span>
-              </b-button>
-              <b-button v-else style=" height: 100%; background: #fff; border: 0px;" @click="openProfile(profile)">
+          <div :key="profile.id" class="profile-open-button">
+              <b-button @click="openProfile(profile)">
                 <i style="font-size: 76px; color: gray;" class="fa fa-5x fa-angle-right"></i>
               </b-button>
           </div>

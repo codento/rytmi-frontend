@@ -1,26 +1,28 @@
 <template>
-  <div class="animated fadeIn">
+  <div class="animated fadeIn search-container">
     <b-col class="col-md-13">
       <div class="search-bar" id="search">
         <h2>Find people</h2>
         <input class="form-control" placeholder="Filter by name" v-model="param" />
+        <div class="search-options">
+          <div class="search-tag-dropdown">
+            <b-dropdown id="ddown1" text="Add skill filters:">
+              <b-dropdown-item-button v-for="skill in skillsNotIn(active)" :key="skill.id" @click="addToSearch(skill)">
+                {{skill.name}}
+              </b-dropdown-item-button>
+            </b-dropdown>
+          </div>
+          <div class="search-bar-sort">
+            <span>Sort:</span>
+            <b-form-radio-group id="btnradios" buttons v-model='selected' :options='options' name='radioBtnStacked' />
+          </div>
+        </div>
         <div class="search-tag-container" id="active">
           <ul>
             <li @click="removeFromSearch(skill)" v-for='skill in active' class="active remove" :key="skill.name">
               <a class="remove" >&times;</a> {{skill.name}}
             </li>
           </ul>
-        </div>
-        <div class="search-tag-dropdown">
-          <b-dropdown id="ddown1" text="Add skill filters:" class="m-md-2">
-            <b-dropdown-item-button v-for="skill in skillsNotIn(active)" :key="skill.id" @click="addToSearch(skill)">
-              {{skill.name}}
-            </b-dropdown-item-button>
-          </b-dropdown>
-        </div>
-        <div class="search-bar-sort">
-          <span>Sort:</span>
-          <b-form-radio-group id="btnradios" buttons v-model='selected' :options='options' name='radioBtnStacked' />
         </div>
       </div>
     </b-col>
