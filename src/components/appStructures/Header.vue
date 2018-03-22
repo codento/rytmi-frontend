@@ -44,9 +44,6 @@ export default {
         message: 'Authenticated: ' + this.isAuthenticated
       })
     },
-    getProfileUrl () {
-      return '/profile/' + this.profileId
-    },
     logout () {
       handleLogout().then(() => {
         this.logoutAuth()
