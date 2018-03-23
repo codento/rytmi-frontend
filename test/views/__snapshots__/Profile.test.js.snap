@@ -2,7 +2,7 @@
 
 exports[`Profile.vue shallow Template is correct 1`] = `
 <div
-  class="animated fadeIn"
+  class="animated fadeIn profile"
 >
   <b-row>
     <b-col>

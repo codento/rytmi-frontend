@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn">
+  <div class="animated fadeIn profile">
     <b-row>
       <b-col>
         <UserProfileCard :profile="profile"/>     

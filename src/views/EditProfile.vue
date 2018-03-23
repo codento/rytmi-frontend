@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn">
+  <div class="animated fadeIn profile-editor">
     <ProfileForm :profile="profile" />
     <EditLinks :profile="profile" />
     <edit-skills :profileId="profile.id" />

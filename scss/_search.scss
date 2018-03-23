@@ -1,0 +1,29 @@
+.search-results {
+    padding: 0;
+}
+.search-container {
+    // Keeps skill filter dropdown visible when there are no results;
+    min-height: 60vh;
+}
+.search-bar {
+    padding: 1em;
+    height: 15em;
+}
+.search-options {
+    width: 100%;
+    padding: 1em 0;
+}
+.search-tag-dropdown {
+    float: left;
+    width: 40%;
+}
+// In search results
+.profile-open-button {
+    margin: 0 auto;
+    button {
+        height: 100%;
+        background: #fff;
+        border: 0px;
+        width: 100%;
+    }
+}

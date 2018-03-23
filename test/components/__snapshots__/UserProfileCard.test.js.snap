@@ -1,12 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`UserProfileCard.test.js Template is correct 1`] = `
-"<b-card><div style=\\"text-align: center;\\"><img src=\\"shouldNotWork\\"></div> <div style=\\"text-align: center; color: rgb(134, 159, 172);\\"><h2> undefined undefined 
-      <small><br></small></h2> </div> <div><div class=\\"profileCardDetails\\">
-      Email: mail
-    </div> <div class=\\"profileCardDetails\\">
-      Puhelinnumero: 1231123
-    </div> <br> <div class=\\"profileCardDetails\\">
+<div
+  class="profile-details"
+>
+  <div
+    style="text-align: center;"
+  >
+    <img
+      src="shouldNotWork"
+    />
+  </div>
+   
+  <div
+    style="text-align: center; color: rgb(134, 159, 172);"
+  >
+    <span
+      class="profile-name"
+    >
+       undefined undefined
+    </span>
+    <br />
+     
+    <span
+      class="profile-title"
+    >
       
-    </div></div></b-card>"
+    </span>
+     
+  </div>
+   
+  <div>
+    <div
+      class="profileCardDetails profile-card-detail-row"
+    >
+      
+      mail
+    
+    </div>
+     
+    <div
+      class="profileCardDetails profile-card-detail-row"
+    >
+      
+      1231123
+    
+    </div>
+     
+    <br />
+     
+    <div
+      class="profileCardDetails profile-card-detail-row"
+    >
+      
+      
+    
+    </div>
+     
+    <!---->
+  </div>
+</div>
 `;

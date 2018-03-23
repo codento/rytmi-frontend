@@ -17,12 +17,14 @@
         </div>
         <div v-else>
           <b-progress
+            show-progress
             height="0.9rem"
             :value="knows*20"
             variant='primary'
             class="mb-6"
           />
           <b-progress
+            show-progress
             height="0.9rem"
             :value="wants*20"
             variant='success'

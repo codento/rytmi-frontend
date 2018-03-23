@@ -1,30 +1,32 @@
 <template>
-  <div class="animated fadeIn">
-    <b-col class="col-md-3" style="float:left">
-      <b-card id="search">
-        <h2>Search</h2>
-        <p>(Filters by name)</p>
-        <input v-model="param"></input>
-        <b-form-group label='Search by:'>
-          <b-form-radio-group id="btnradios" buttons v-model='selected' :options='options' name='radioBtnStacked' />
-        </b-form-group>
-        <div id="active">
+  <div class="animated fadeIn search-container">
+    <b-col class="col-md-13">
+      <div class="search-bar" id="search">
+        <h2>Find people</h2>
+        <input class="form-control" placeholder="Filter by name" v-model="param" />
+        <div class="search-options">
+          <div class="search-tag-dropdown">
+            <b-dropdown id="ddown1" text="Add skill filters:">
+              <b-dropdown-item-button v-for="skill in skillsNotIn(active)" :key="skill.id" @click="addToSearch(skill)">
+                {{skill.name}}
+              </b-dropdown-item-button>
+            </b-dropdown>
+          </div>
+          <div class="search-bar-sort">
+            <span>Sort:</span>
+            <b-form-radio-group id="btnradios" buttons v-model='selected' :options='options' name='radioBtnStacked' />
+          </div>
+        </div>
+        <div class="search-tag-container" id="active">
           <ul>
-            <li v-for='skill in active' class="active" :key="skill.name">
-              <a class="remove" @click="removeFromSearch(skill)">&times;</a> {{skill.name}}
+            <li @click="removeFromSearch(skill)" v-for='skill in active' class="active remove" :key="skill.name">
+              <a class="remove" >&times;</a> {{skill.name}}
             </li>
           </ul>
         </div>
-        <div>
-          <b-dropdown id="ddown1" text="Add skills to search:" class="m-md-2">
-            <b-dropdown-item-button v-for="skill in skillsNotIn(active)" :key="skill.id" @click="addToSearch(skill)">
-              {{skill.name}}
-            </b-dropdown-item-button>
-          </b-dropdown>
-        </div>
-      </b-card>
+      </div>
     </b-col>
-    <b-col class="col-md-9" style="float:right">
+    <b-col class="col-md-12" style="float:right">
       <Results :param='param' :selected='selected ' :active='active'></Results>
     </b-col>
   </div>

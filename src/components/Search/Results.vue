@@ -1,13 +1,13 @@
 <template>
-  <ul>
+  <ul class="search-results">
     <li v-for='profile in results' :key="profile.userId">
       <b-card>
         <b-row>
           <b-col class="col-sm-4" style="text-align:center">
             <img :src='profile.photoPath' alt="">
             <h3>{{profile.firstName}} {{profile.lastName}}</h3>
-            <b>Email: {{profile.email}}</b><br>
-            <b>puhelinnumero: {{profile.phone}}</b>
+            <b>{{profile.email}}</b><br>
+            <b>{{profile.phone}}</b>
           </b-col>
           <b-col class="col-md-6">
             <b-col>
@@ -19,12 +19,11 @@
               </SkillRow>
             </b-col>
           </b-col>
-        </b-row>
-        <b-row>
-          <b-col class="col-md-9"/>
-          <b-col class="col-md-3">
-            <b-button @click="openProfile(profile)">Go to profile</b-button>
-          </b-col>
+          <div :key="profile.id" class="profile-open-button">
+              <b-button @click="openProfile(profile)">
+                <i style="font-size: 76px; color: gray;" class="fa fa-5x fa-angle-right"></i>
+              </b-button>
+          </div>
         </b-row>
       </b-card>
     </li>

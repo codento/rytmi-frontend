@@ -1,1 +1,18 @@
 // Here you can add other styles
+@import "search";
+@import "profile";
+
+.main {
+    background: #fff;
+}
+.main .container-fluid {
+    background: #fff;
+    overflow: auto;
+    padding: 0;
+}
+.nav-link {
+    margin: 0px 10px;
+}
+b {
+    color: gray;
+}
