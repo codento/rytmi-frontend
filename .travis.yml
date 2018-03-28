@@ -19,7 +19,7 @@ before_deploy:
 deploy:
   provider: script
   skip_cleanup: true
-  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/dist $DEPLOY_USER@$DEPLOY_HOST:/var/rytmi-staging/rytmi-frontend
+  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/dist/ $DEPLOY_USER@$DEPLOY_HOST:/var/rytmi-staging/rytmi-frontend/
   on:
     branch: dev
 after_script:
