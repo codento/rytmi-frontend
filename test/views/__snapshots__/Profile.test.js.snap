@@ -37,7 +37,7 @@ exports[`Profile.vue shallow Template is correct 1`] = `
       </b-card>
        
       <b-card
-        header="Työkokemus"
+        header="Työkokemus (placeholder-esimerkkejä)"
       >
         <!---->
         <!---->
