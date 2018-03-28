@@ -1,6 +1,5 @@
 import * as types from '../../mutation-types'
 import {login} from '../../../utils/api'
-import axios from 'axios'
 
 export function requestAuth ({commit, dispatch}, token) {
   return new Promise((resolve, reject) => {
@@ -9,9 +8,6 @@ export function requestAuth ({commit, dispatch}, token) {
       .then(resp => {
         localStorage.setItem('user-token', resp.data.jwt.token)
         localStorage.setItem('profile-id', resp.data.profileId)
-        // Here set the header of your ajax library to the token value.
-        // example with axios
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + resp.data.jwt.token
         commit(types.AUTH_SUCCESS, resp.data.jwt.token)
         commit(types.SET_USERID, resp.data.userId)
         commit(types.SET_PROFILEID, resp.data.profileId)
