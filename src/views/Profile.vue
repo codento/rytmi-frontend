@@ -26,7 +26,7 @@
             </b-col>
           </b-row>
         </b-card>
-        <b-card header='Työkokemus'>
+        <b-card header='Työkokemus (placeholder-esimerkkejä)'>
           <ProjectRow v-for='project in projects' :project="project"  :key="project.projectId"/>
         </b-card>
       </b-col>
