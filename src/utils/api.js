@@ -19,27 +19,48 @@ export function login (token) {
 }
 
 export function getSkills (token) {
-  return axios.get(process.env.API_URL + PATH_SKILLS).catch(handleError)
+  return axios.get(process.env.API_URL + PATH_SKILLS, getAuthHeaders()).catch(handleError)
 }
 
 export function getProfiles (token) {
-  return axios.get(process.env.API_URL + PATH_PROFILES).catch(handleError)
+  return axios.get(process.env.API_URL + PATH_PROFILES, getAuthHeaders()).catch(handleError)
 }
 
 export function getProfileSkills (token) {
-  return axios.get(process.env.API_URL + PATH_PROFILESKILLS).catch(handleError)
+  return axios.get(process.env.API_URL + PATH_PROFILESKILLS, getAuthHeaders()).catch(handleError)
 }
 
 export function alterProfile (data, token) {
-  return axios.put(process.env.API_URL + PATH_PROFILES + '/' + data.id, denormalize(data, [profile])).catch(handleError)
+  return axios.put(
+    process.env.API_URL + PATH_PROFILES + '/' + data.id,
+    denormalize(data, [profile]),
+    getAuthHeaders())
+    .catch(handleError)
 }
 
 export function newProfileSkill (data, token) {
-  return axios.post(process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS, denormalize(data, [skill])).catch(handleError)
+  return axios.post(
+    process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS,
+    denormalize(data, [skill]),
+    getAuthHeaders())
+    .catch(handleError)
 }
 
 export function deleteProfileSkill (data, token) {
-  return axios.delete(process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id).catch(handleError)
+  return axios.delete(
+    process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+function getAuthHeaders () {
+  const token = localStorage.getItem('user-token') || ''
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    }
+  }
 }
 
 function handleError (error) {

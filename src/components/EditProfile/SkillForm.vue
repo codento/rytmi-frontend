@@ -113,7 +113,8 @@ export default {
     ...mapActions([
       'addProfileSkill'
     ]),
-    onSubmit () {
+    onSubmit (evt) {
+      evt.preventDefault()
       this.profileSkill.profileId = this.profileId
       this.addProfileSkill(this.profileSkill)
       this.profileSkill = skillTemplate()
