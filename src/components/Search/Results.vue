@@ -4,8 +4,10 @@
       <b-card>
         <b-row>
           <b-col class="col-sm-4" style="text-align:center">
-            <img :src='profile.photoPath' alt="">
-            <h3>{{profile.firstName}} {{profile.lastName}}</h3>
+            <span @click="openProfile(profile)" :style="{ cursor: 'pointer'}">
+              <img :src='profile.photoPath' alt="">
+              <h3>{{profile.firstName}} {{profile.lastName}}</h3>
+            </span>
             <b>{{profile.email}}</b><br>
             <b>{{profile.phone}}</b>
           </b-col>
