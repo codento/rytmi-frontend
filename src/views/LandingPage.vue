@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn container" style="margin-top: 24px">
-    <b-jumbotron bg-variant="white" text-variant="primary" border-variant="dark" header="Rytmiryhmä app" :lead="!isAuthenticated? 'Please Login' : 'Tattaraa'" >
+    <b-jumbotron bg-variant="white" text-variant="primary" border-variant="dark" header="Rytmiryhmä app" :lead="!isAuthenticated? 'Please Sign in' : 'Tattaraa'" >
       <p>For more information visit website</p>
     </b-jumbotron>
   </div>
