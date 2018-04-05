@@ -5,9 +5,9 @@
         <UserProfileCard :profile="profile"/>     
       </b-col>
       <b-col>
-        <b-card id="Taidot">
+        <b-card id="proficiency">
           <h5 slot="header" class="mb-0">
-            Taidot
+            Proficiency
             <span style="float:right; cursor:pointer" v-on:mouseenter="showExplanations(true)" v-on:mouseout="showExplanations(false)">
               &#9432;
             </span>
@@ -26,7 +26,7 @@
             </b-col>
           </b-row>
         </b-card>
-        <b-card header='Työkokemus (placeholder-esimerkkejä)'>
+        <b-card header='Working experience (placeholder)'>
           <ProjectRow v-for='project in projects' :project="project"  :key="project.projectId"/>
         </b-card>
       </b-col>

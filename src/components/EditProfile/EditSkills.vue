@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <b-container fluid>
-      <h1>Taidot</h1>
+      <h1>Proficiency</h1>
       <b-row>
         <b-col class="col-sm-3">
           <skill-form :profileId="profileId" />
