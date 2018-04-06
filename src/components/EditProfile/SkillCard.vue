@@ -4,7 +4,7 @@
     :title="getSkillName"
     style="max-width: 20rem;" >
     <b-row>
-      <b-col class="col-mb-3 nohover" style="text-size: 20px;">
+      <b-col class="col-mb-3" style="text-size: 20px;">
         <b>Wants</b>:
       </b-col>
       <b-col class="col-mb-9">
@@ -51,8 +51,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.skillCard :hover{
-  background-color: hsla(34, 100%, 51%, 0.541); 
-}
-</style>
+<style scoped />
