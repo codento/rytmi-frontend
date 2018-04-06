@@ -17,7 +17,7 @@
           </b-row>
           <b-row v-else>
             <b-col class="col mb-1">
-              <SkillRow v-for='skill in skillsByUserId(profile.id)'
+              <SkillRow v-for='skill in skillsByProfileId(profile.id)'
                 :name="skillName(skill.skillId)"
                 :knows='skill.knows'
                 :wants='skill.wantsTo'
@@ -50,7 +50,7 @@ export default {
     ...mapGetters([
       'profileById',
       'skillById',
-      'skillsByUserId'
+      'skillsByProfileId'
     ]),
     profile () {
       return this.profileById(this.$route.params.id)
@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     getSkills () {
-      return this.skillsByUserId(this.profile.userId)
+      return this.skillsByProfileId(this.profile.userId)
     },
     sortSkills (param) {
       return this.$lodash.orderBy(this.skills, ['wantsTo', 'name'], ['desc', 'asc']) // TODO Figure out how lodash should be handled in tests

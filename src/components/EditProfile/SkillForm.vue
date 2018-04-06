@@ -99,10 +99,10 @@ export default {
   computed: {
     ...mapGetters([
       'skills',
-      'skillsByUserId'
+      'skillsByProfileId'
     ]),
     availableSkills () {
-      const existingIds = this.skillsByUserId(this.profileId)
+      const existingIds = this.skillsByProfileId(this.profileId)
         .map(profileSkill => profileSkill.skillId)
       return this.$lodash.filter(this.skills, (value, key) => {
         return existingIds.indexOf(value.id) === -1

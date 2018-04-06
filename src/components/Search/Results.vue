@@ -13,7 +13,7 @@
           </b-col>
           <b-col class="col-md-6">
             <b-col>
-              <SkillRow v-for='skill in skillsByUserId(profile.id)'
+              <SkillRow v-for='skill in skillsByProfileId(profile.id)'
                 :name="skillName(skill.skillId)"
                 :knows='skill.knows'
                 :wants='skill.wantsTo'
@@ -53,7 +53,7 @@ export default {
   computed: {
     ...mapGetters([
       'profileFilter',
-      'skillsByUserId',
+      'skillsByProfileId',
       'skillById'
     ]),
     results: function () {
@@ -87,7 +87,7 @@ export default {
       return this.skillById(skillId).name
     },
     hasSkill (profile, skillToSearch, multipleSkills) {
-      let skills = this.skillsByUserId(profile.id)
+      let skills = this.skillsByProfileId(profile.id)
       for (let i = 0; i < skills.length; i++) {
         if (skills[i].skillId === skillToSearch) {
           if (multipleSkills) {

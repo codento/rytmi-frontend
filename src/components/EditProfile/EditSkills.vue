@@ -8,7 +8,7 @@
         </b-col>
         <b-col class="col-sm-9">
           <b-row>
-            <b-col v-for="skill in skillsByUserId(profileId)" class="col-sm-3" :key="skill.id">
+            <b-col v-for="skill in skillsByProfileId(profileId)" class="col-sm-3" :key="skill.id">
               <skill-card :skill="skill" />
             </b-col>
           </b-row>
@@ -35,7 +35,7 @@ export default {
   computed: {
     ...mapGetters([
       'skills',
-      'skillsByUserId'
+      'skillsByProfileId'
     ])
   },
   methods: {
