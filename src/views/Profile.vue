@@ -21,6 +21,7 @@
                 :name="skillName(skill.skillId)"
                 :knows='skill.knows'
                 :wants='skill.wantsTo'
+                :desc='skill.description'
                 :key='skill.id'>
               </SkillRow>
             </b-col>

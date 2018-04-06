@@ -4,7 +4,7 @@
       <b-card>
         <b-row>
           <b-col class="col-sm-4" style="text-align:center">
-            <span @click="openProfile(profile)" :style="{ cursor: 'pointer'}">
+            <span @click="openProfile(profile)" style="cursor: pointer">
               <img :src='profile.photoPath' alt="">
               <h3>{{profile.firstName}} {{profile.lastName}}</h3>
             </span>
@@ -17,6 +17,7 @@
                 :name="skillName(skill.skillId)"
                 :knows='skill.knows'
                 :wants='skill.wantsTo'
+                :desc='skill.description'
                 :key='skill.id'>
               </SkillRow>
             </b-col>

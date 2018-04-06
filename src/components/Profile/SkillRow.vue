@@ -1,37 +1,23 @@
 <template>
-  <b-row style="padding-bottom: 12px">
-    <b-col class="col-mb-4" style="text-size: 20px;">
+  <b-row class="" style="padding-bottom: 12px" v-b-tooltip.hover.top="desc">
+    <b-col class="col-mb-4 text-right valign-middle" style="text-size: 20px;">
       <b>{{ name }}:</b>
     </b-col>
     <b-col class="col-mb-8" >
-      <div @mouseover="active = true" @mouseleave="active = false">
-        <div v-if="active">
-          <b-progress
-            height="0.9rem"
-            class="mb-6"
-          >Osaaminen</b-progress>
-          <b-progress
-            height="0.9rem"
-            class="mb-6"
-          >Halukkuus</b-progress>
-        </div>
-        <div v-else>
-          <b-progress
-            show-progress
-            height="0.9rem"
-            :value="knows*20"
-            variant='primary'
-            class="mb-6"
-          />
-          <b-progress
-            show-progress
-            height="0.9rem"
-            :value="wants*20"
-            variant='success'
-            class="mb-6"
-          />
-        </div>
-      </div>
+      <b-progress :max="5" class="mb-6" height="0.9rem">
+        <b-progress-bar
+          class="rytmi-progress-knowledge"
+          :label="knows ? knows.toString() : ''"
+          :value="knows"
+        />
+      </b-progress>
+      <b-progress :max="5" class="mb-6" height="0.9rem">
+        <b-progress-bar
+          class="rytmi-progress-wants"
+          :label="wants ? wants.toString() : ''"
+          :value="wants"
+        />
+      </b-progress>
     </b-col>
   </b-row>
 </template>
@@ -41,12 +27,10 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'SkillRow',
   props: {
-    'proficiency': Number,
     'name': String,
-    'skillId': Number,
-    'wantsTo': Number,
     'wants': Number,
-    'knows': Number
+    'knows': Number,
+    'desc': String
   },
   data () {
     return {
@@ -61,4 +45,22 @@ export default {
 }
 </script>
 
-<style scoped />
+<style>
+.tooltip-inner {
+    max-width: 550px;
+    width: inherit;
+}
+</style>
+
+<style scoped>
+.rytmi-progress-knowledge {
+  background-color: #fda708;
+}
+.rytmi-progress-wants {
+  background-color: #fedfa7;
+}
+.valign-middle {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+</style>
