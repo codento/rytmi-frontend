@@ -13,7 +13,9 @@
             </span>
           </h5>
           <b-row v-if="this.showInfo">
-            <skillExplanations />
+            <skillExplanations 
+              :knowDesc='knowDesc'
+              :wantDesc='wantDesc' />
           </b-row>
           <b-row v-else>
             <b-col class="col mb-1">
@@ -38,6 +40,7 @@
 <script>
 import {mapGetters} from 'vuex'
 
+import proficiencyDesc from '../assets/proficiencyDesc'
 import {
   ProjectRow,
   SkillExplanations,
@@ -55,6 +58,12 @@ export default {
     ]),
     profile () {
       return this.profileById(this.$route.params.id)
+    },
+    knowDesc () {
+      return proficiencyDesc.knows
+    },
+    wantDesc () {
+      return proficiencyDesc.wants
     }
   },
   components: {
@@ -121,7 +130,4 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-#explanations {
-
-}
 </style>

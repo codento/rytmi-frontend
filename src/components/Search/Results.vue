@@ -15,6 +15,7 @@
             <b-col>
               <SkillRow v-for='skill in skillsByProfileId(profile.id)'
                 :name="skillName(skill.skillId)"
+                :skillId='skill.id'
                 :knows='skill.knows'
                 :wants='skill.wantsTo'
                 :desc='skill.description'
