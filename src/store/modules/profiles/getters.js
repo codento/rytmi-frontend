@@ -1,9 +1,9 @@
 export const profileId = (state) => state.profileId
 export const profiles = (state) => state.profiles
 export const profileById = (state) => (id) => state.profiles[id]
-export const skillsByUserId = (state) => (userId) => {
+export const skillsByProfileId = (state) => (profileId) => {
   const testi = state.profileSkillList
-    .filter(skillId => state.profileSkills[skillId].profileId === userId)
+    .filter(skillId => state.profileSkills[skillId].profileId === profileId)
     .map(skillId => state.profileSkills[skillId])
   return testi
 }

@@ -17,7 +17,7 @@ describe('UserProfileCard.test.js', () => {
       profileById: () => (arg) => arg,
       profiles: () => (arg) => arg,
       skillsById: () => (arg) => arg,
-      skillsByUserId: () => (arg) => arg
+      skillsByProfileId: () => (arg) => arg
     }
     store = new Vuex.Store({ getters })
   })

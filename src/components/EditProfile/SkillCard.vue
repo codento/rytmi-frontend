@@ -3,8 +3,9 @@
     class="skillCard"
     :title="getSkillName"
     style="max-width: 20rem;" >
+    <b-button-close class="top-right" @click="$emit('removeSkill', skill.id)"/>
     <b-row>
-      <b-col class="col-mb-3 nohover" style="text-size: 20px;">
+      <b-col class="col-mb-3" style="text-size: 20px;">
         <b>Wants</b>:
       </b-col>
       <b-col class="col-mb-9">
@@ -29,6 +30,9 @@
         />
       </b-col>
     </b-row>
+    <b-row>
+      <b-col>{{ skill.description }}</b-col>
+    </b-row>
   </b-card>
 </template>
 
@@ -52,7 +56,11 @@ export default {
 </script>
 
 <style scoped>
-.skillCard :hover{
-  background-color: hsla(34, 100%, 51%, 0.541); 
+
+.top-right {
+  position: absolute;
+  top:3px;
+  right: 3px;
 }
+
 </style>
