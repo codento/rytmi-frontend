@@ -37,7 +37,8 @@ export default {
     ...mapActions([
       'fetchProfiles',
       'fetchSkills',
-      'fetchProfileSkills'
+      'fetchProfileSkills',
+      'fetchProjects'
     ])
   },
   computed: {
@@ -69,6 +70,7 @@ export default {
       this.fetchProfiles()
       this.fetchSkills()
       this.fetchProfileSkills()
+      this.fetchProjects()
     }
   }
 }

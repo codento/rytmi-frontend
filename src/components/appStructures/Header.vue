@@ -4,6 +4,7 @@
      <b-navbar-nav v-if="isAuthenticated">
       <b-nav-item to="/search">Search</b-nav-item>
       <b-nav-item :to="'/profile/' + profileId" >Profile</b-nav-item>
+      <b-nav-item :to="'/projects'">Projects</b-nav-item>
     </b-navbar-nav>
     <b-navbar-nav class="ml-auto">
       <b-nav-item id="loginBtn" v-if="!isAuthenticated" v-on:click="login">Sign in</b-nav-item>

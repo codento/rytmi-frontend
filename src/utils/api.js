@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { denormalize } from 'normalizr'
-import { profile, skill } from '../store/schema'
+import { profile, skill, project } from '../store/schema'
 import store from '../store'
 import * as types from '../store/mutation-types'
 
@@ -8,6 +8,7 @@ const PATH_AUTH = '/auth'
 const PATH_SKILLS = '/skills'
 const PATH_PROFILES = '/profiles'
 const PATH_PROFILESKILLS = '/profileskills'
+const PATH_PROJECTS = '/projects'
 
 export function login (token) {
   return axios.post(process.env.API_URL + PATH_AUTH, {id_token: token})
@@ -49,6 +50,21 @@ export function newProfileSkill (data, token) {
 export function deleteProfileSkill (data, token) {
   return axios.delete(
     process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function newProject (data, token) {
+  return axios.post(
+    process.env.API_URL + PATH_PROJECTS,
+    denormalize(data, [project]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getProjects (token) {
+  return axios.get(
+    process.env.API_URL + PATH_PROJECTS,
     getAuthHeaders())
     .catch(handleError)
 }
