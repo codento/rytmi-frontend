@@ -19,10 +19,11 @@ describe('UserProfileCard.test.js', () => {
       store,
       localVue,
       propsData: {
-        basicInformation: {
-          proficiency: 121231312,
-          name: 'mail'
-        }
+        'skillId': 1,
+        'name': 'Python',
+        'wants': 1,
+        'knows': 2,
+        'desc': 'fdfas'
       }
     })
     expect(wrapper.html()).toMatchSnapshot()
