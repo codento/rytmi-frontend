@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     openProfile (profile) {
-      this.$router.replace({name: 'Profile', params: { id: profile.id }})
+      this.$router.push({name: 'profile', params: { id: profile.id }})
     },
     delaySearch: _.debounce(
       function () {
