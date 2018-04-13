@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Project.vue shallow Template is correct 1`] = `
+<div
+  class="animated fadeIn profile-editor"
+>
+  <h1>
+    
+  </h1>
+   
+  <p>
+    
+  </p>
+   
+  <p>
+    Start: Invalid Date
+  </p>
+   
+  <p>
+    End: Invalid Date
+  </p>
+</div>
+`;
