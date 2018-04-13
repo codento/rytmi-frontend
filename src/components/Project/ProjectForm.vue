@@ -1,38 +1,55 @@
 <template>
-  <div style="border: 1px solid black; width: 40%; padding: 1em;">
-    <h3>Create a new project</h3>
-    <b-form @submit="onSubmit" @reset="onReset">
-        <input 
-          class="form-control"
-          placeholder="Project name"
-          type="text"
-          v-model="project.name"
-        />
-        <input 
-          class="form-control" 
-          placeholder="Project desc" 
-          type="text"
-          v-model="project.description"
-        />
-        <input 
-          class="form-control" 
-          placeholder="Project start"
-          type="date"
-          v-model="project.startDate"
-        />
-        <input 
-          class="form-control" 
-          placeholder="Project end"
-          type="date"
-          v-model="project.endDate"
-        />
-        <button
-          class="form-control"
-          type="submit"
-        >submit
-        </button>
-    </b-form>
-    </div>
+  <b-container>
+    <b-card>
+      <h3>
+        Add a new Project
+        <span @click="showProjectForm = !showProjectForm" class="project-form-chevron">
+          <i v-if="!showProjectForm" class="fa fa-chevron-down" />
+          <i v-else class="fa fa-chevron-up" />
+        </span>
+      </h3>
+      <b-form v-if="showProjectForm" id="project_form" @submit="onSubmit">
+          <b-input 
+            placeholder="Project name"
+            type="text"
+            v-model="project.name"
+          />
+          <b-input 
+            class="form-control" 
+            placeholder="Project description" 
+            type="text"
+            v-model="project.description"
+          />
+          <b-input 
+            class="form-control" 
+            placeholder="Project start date"
+            required
+            type="text"
+            onfocus="(this.type='date')"
+            v-model="project.startDate"
+          />
+          <b-input 
+            class="form-control" 
+            placeholder="Project end date"
+            onfocus="(this.type='date')"
+            type="text"
+            v-model="project.endDate"
+          />
+          <b-button
+            class="form-control"
+            type="submit"
+            primary
+          >Submit
+          </b-button>
+      </b-form>
+      <div v-if="showError" class="project-creation-error">
+        Creating a project failed because:
+        <div v-for="detail in errorDetails" :key="detail">
+          {{parseErrorDetail(detail)}}
+        </div>
+      </div>
+    </b-card>
+  </b-container>
 </template>
 <script>
 import { mapActions } from 'vuex'
@@ -40,6 +57,9 @@ export default {
   name: 'ProjectForm',
   data () {
     return {
+      showProjectForm: false,
+      showError: false,
+      errorDetails: [],
       project: {}
     }
   },
@@ -49,15 +69,36 @@ export default {
     ]),
     onSubmit (evt) {
       evt.preventDefault()
-      console.log('submitted')
       this.createProject(this.project)
-        .then(err => {
-          console.log(err) // Error: "It broke"
+        .then((data) => {
+          this.$toasted.global.rytmi_success({
+            message: 'Project added!'
+          })
+          document.getElementById('project_form').reset()
+          this.showError = false
+          this.showProjectForm = false
+        }).catch(err => {
+          this.errorDetails = err.response.data.error.details
+          this.showError = true
         })
     },
-    onReset (evt) {
-      console.log('reset')
+    parseErrorDetail (detail) {
+      // Make the error a bit more human readable
+      return detail.replace('.', ' ').replace('null', 'empty')
     }
   }
 }
 </script>
+
+<style scoped>
+#project_form {
+  padding: 1em;
+}
+.project-creation-error {
+  color: red;
+}
+.project-form-chevron {
+  float: right;
+}
+
+</style>

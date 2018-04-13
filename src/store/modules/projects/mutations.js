@@ -6,5 +6,11 @@ export const mutations = {
   },
   [types.FETCH_PROJECTS] (state, projects) {
     state.projects = projects
+  },
+  [types.UPDATE_PROJECT] (state, project) {
+    state.projects[project.id] = project
+  },
+  [types.DELETE_PROJECT] (state, project) {
+    state.projects[project.id] = null
   }
 }

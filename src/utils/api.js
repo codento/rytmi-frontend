@@ -62,6 +62,21 @@ export function newProject (data, token) {
     .catch(handleError)
 }
 
+export function alterProject (data, token) {
+  return axios.put(
+    process.env.API_URL + PATH_PROJECTS + '/' + data.id,
+    denormalize(data, [project]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function deleteProject (data, token) {
+  return axios.delete(
+    process.env.API_URL + PATH_PROJECTS + '/' + data.id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function getProjects (token) {
   return axios.get(
     process.env.API_URL + PATH_PROJECTS,
@@ -83,6 +98,6 @@ function handleError (error) {
   if (error.response.status === 401) {
     store.commit(types.AUTH_LOGOUT)
   } else {
-    throw new Error(error)
+    throw error
   }
 }
