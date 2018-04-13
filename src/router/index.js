@@ -29,18 +29,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: 'root',
       redirect: '/home',
       component: LandingPage
     },
     {
       path: '/home',
-      name: 'Home',
+      name: 'home',
       component: LandingPage
     },
     {
       path: '/profile/:id',
-      name: 'Profile',
+      name: 'profile',
       component: Profile,
       beforeEnter: requireAuth
     },
@@ -57,19 +57,19 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/edit/:id',
-      name: 'Edit',
+      path: '/profile/:id/edit',
+      name: 'editProfile',
       component: EditProfile
     },
     {
       path: '/search',
-      name: 'Search',
+      name: 'search',
       component: Search,
       beforeEnter: requireAuth
     },
     {
       path: '/callback',
-      name: 'Callback',
+      name: 'callback',
       component: Callback,
       beforeEnter: requireAuth
     },
