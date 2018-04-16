@@ -8,14 +8,12 @@
   </b-container>
 </template>
 <script>
-import _ from 'lodash'
 import { mapGetters } from 'vuex'
 export default {
   name: 'ProjectList',
   data () {
     return {
-      projectFilterTerm: '',
-      projects: []
+      projectFilterTerm: ''
     }
   },
   computed: {
@@ -23,7 +21,7 @@ export default {
       'projectFilter'
     ]),
     projects () {
-      
+      return this.projectFilter(this.projectFilterTerm)
     }
   },
   methods: {
