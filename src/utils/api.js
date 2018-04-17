@@ -84,6 +84,13 @@ export function getProjects (token) {
     .catch(handleError)
 }
 
+export function getProjectProfiles (data, token) {
+  return axios.get(
+    process.env.API_URL + PATH_PROJECTS + '/' + data.id + '/profiles',
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 function getAuthHeaders () {
   const token = localStorage.getItem('user-token') || ''
   return {

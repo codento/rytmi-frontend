@@ -1,4 +1,4 @@
-import { newProject, getProjects, deleteProject, alterProject } from '../../../utils/api'
+import { getProjectProfiles, newProject, getProjects, deleteProject, alterProject } from '../../../utils/api'
 import * as types from '../../mutation-types'
 
 export function createProject ({ commit, state }, data) {
@@ -39,6 +39,16 @@ export function updateProject ({ commit, state }, data) {
       .then(response => {
         commit(types.UPDATE_PROJECT, response.data)
       })
-      .cath(err => console.log(err))
+      .catch(err => console.log(err))
+  })
+}
+
+export function fetchProjectProfiles ({ commit, state }, data) {
+  return new Promise((resolve, reject) => {
+    getProjectProfiles(data)
+      .then(response => {
+        commit(types.FETCH_PROJECTPROFILES, { projectId: data.id, profiles: response.data })
+      })
+      .catch(err => console.log(err))
   })
 }

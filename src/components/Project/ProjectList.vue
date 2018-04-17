@@ -2,45 +2,53 @@
   <b-container>
     <h2>Projects</h2>
     <b-input type="text" placeholder="Filter projects (by name or project code)" v-model="projectFilterTerm" />
-    <div v-for='project in projects' class="project-container" :key="project.id" @click="openProject(project)">
-      {{project.name}}
-    </div>
+    <b-table 
+      id="project-table"
+      striped
+      :items="projects" 
+      :fields="fields"
+      fixed
+      @row-clicked="openProject"
+    ></b-table>
   </b-container>
 </template>
 <script>
-import _ from 'lodash'
 import { mapGetters } from 'vuex'
 export default {
   name: 'ProjectList',
   data () {
     return {
       projectFilterTerm: '',
-      projects: []
+      projects: [],
+      fields: [
+        {
+          key: 'code',
+          sortable: true
+        },
+        {
+          key: 'name',
+          sortable: true
+        }
+      ]
     }
   },
   computed: {
     ...mapGetters([
       'projectFilter'
-    ]),
-    projects () {
-      
+    ])
+  },
+  watch: {
+    projectFilterTerm: function (val) {
+      this.projects = this.projectFilter(val)
     }
   },
   methods: {
     openProject (project) {
       this.$router.replace({name: 'Project', params: { id: project.id }})
-    },
-    filterProjects () {
-      return this.projectFilter(this.projectFilterTerm)
     }
+  },
+  mounted () {
+    this.projects = this.projectFilter('')
   }
 }
 </script>
-
-<style scoped>
-  .project-container {
-    padding: 1em;
-    border: 1px solid lightgray;
-    cursor: pointer;
-  }
-</style>

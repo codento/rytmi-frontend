@@ -12,5 +12,8 @@ export const mutations = {
   },
   [types.DELETE_PROJECT] (state, project) {
     state.projects[project.id] = null
+  },
+  [types.FETCH_PROJECTPROFILES] (state, projectProfiles) {
+    state.projectProfiles[projectProfiles.projectId] = projectProfiles.profiles
   }
 }
