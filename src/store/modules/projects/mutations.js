@@ -15,5 +15,11 @@ export const mutations = {
   },
   [types.FETCH_PROJECTPROFILES] (state, projectProfiles) {
     state.projectProfiles[projectProfiles.projectId] = projectProfiles.profiles
+  },
+  [types.ADD_PROJECTPROFILE] (state, projectProfile) {
+    if (state.projectProfiles[projectProfile.ProjectId] == null) {
+      state.projectProfiles[projectProfile.ProjectId] = []
+    }
+    state.projectProfiles[projectProfile.ProjectId].push(projectProfile)
   }
 }
