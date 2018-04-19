@@ -5,7 +5,7 @@ import { mutations } from './mutations'
 const initialState = {
   projects: {},
   projectList: [],
-  projectProfiles: []
+  projectProfiles: {}
 }
 
 export default {

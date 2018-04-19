@@ -1,4 +1,5 @@
 import * as types from '../../mutation-types'
+import Vue from 'vue'
 
 export const mutations = {
   [types.CREATE_PROJECT] (state, project) {
@@ -14,7 +15,9 @@ export const mutations = {
     state.projects[project.id] = null
   },
   [types.FETCH_PROJECTPROFILES] (state, projectProfiles) {
-    state.projectProfiles[projectProfiles.projectId] = projectProfiles.profiles
+    console.log(projectProfiles)
+    Vue.set(state.projectProfiles, projectProfiles.projectId, projectProfiles.profiles)
+    // state.projectProfiles.splice(projectProfiles.projectId, 1, projectProfiles.profiles)
   },
   [types.ADD_PROJECTPROFILE] (state, projectProfile) {
     if (state.projectProfiles[projectProfile.ProjectId] == null) {

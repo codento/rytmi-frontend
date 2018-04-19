@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     openProject (project) {
-      this.$router.replace({name: 'Project', params: { id: project.id }})
+      this.$router.push({name: 'Project', params: { id: project.id }})
     }
   },
   mounted () {

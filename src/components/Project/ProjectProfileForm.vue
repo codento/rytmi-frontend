@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>Add a member to the project</h3>
     <b-form @submit="this.onSubmit">
       <b-form-select text="Profile" v-model="projectProfile.ProfileId">
         <option 
@@ -14,6 +13,7 @@
       <b-input type="date" v-model="projectProfile.startAt"></b-input>
       <span>End date</span>
       <b-input type="date" v-model="projectProfile.endAt"></b-input>
+      <span>Work percentage</span>
       <b-input type="number" min="0" max="100" v-model="projectProfile.workPercentage"></b-input>
       <b-button primary type="submit">Submit</b-button>
     </b-form>
