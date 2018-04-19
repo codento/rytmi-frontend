@@ -86,6 +86,7 @@
     "semver": "5.5.0",
     "shelljs": "0.8.0",
     "url-loader": "0.6.2",
+    "vue-jest": "^2.4.1",
     "vue-loader": "13.7.0",
     "vue-server-renderer": "^2.5.13",
     "vue-style-loader": "3.0.3",
@@ -106,10 +107,12 @@
       "js",
       "vue"
     ],
-    "setupFiles": ["jest-localstorage-mock"],
+    "setupFiles": [
+      "jest-localstorage-mock"
+    ],
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
     },
     "collectCoverage": true,
     "coverageReporters": [

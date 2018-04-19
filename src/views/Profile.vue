@@ -5,28 +5,31 @@
         <UserProfileCard :profile="profile"/>     
       </b-col>
       <b-col>
-        <b-card id="Taidot">
+        <b-card id="proficiency">
           <h5 slot="header" class="mb-0">
-            Taidot
+            Proficiency
             <span style="float:right; cursor:pointer" v-on:mouseenter="showExplanations(true)" v-on:mouseout="showExplanations(false)">
               &#9432;
             </span>
           </h5>
           <b-row v-if="this.showInfo">
-            <skillExplanations />
+            <skillExplanations 
+              :knowDesc='knowDesc'
+              :wantDesc='wantDesc' />
           </b-row>
           <b-row v-else>
             <b-col class="col mb-1">
-              <SkillRow v-for='skill in skillsByUserId(profile.id)'
+              <SkillRow v-for='skill in skillsByProfileId(profile.id)'
                 :name="skillName(skill.skillId)"
                 :knows='skill.knows'
                 :wants='skill.wantsTo'
+                :desc='skill.description'
                 :key='skill.id'>
               </SkillRow>
             </b-col>
           </b-row>
         </b-card>
-        <b-card header='Työkokemus (placeholder-esimerkkejä)'>
+        <b-card header='Working experience (placeholder)'>
           <ProjectRow v-for='project in projects' :project="project"  :key="project.projectId"/>
         </b-card>
       </b-col>
@@ -37,6 +40,7 @@
 <script>
 import {mapGetters} from 'vuex'
 
+import proficiencyDesc from '../assets/proficiencyDesc'
 import {
   ProjectRow,
   SkillExplanations,
@@ -50,10 +54,16 @@ export default {
     ...mapGetters([
       'profileById',
       'skillById',
-      'skillsByUserId'
+      'skillsByProfileId'
     ]),
     profile () {
       return this.profileById(this.$route.params.id)
+    },
+    knowDesc () {
+      return proficiencyDesc.knows
+    },
+    wantDesc () {
+      return proficiencyDesc.wants
     }
   },
   components: {
@@ -103,7 +113,7 @@ export default {
   },
   methods: {
     getSkills () {
-      return this.skillsByUserId(this.profile.userId)
+      return this.skillsByProfileId(this.profile.userId)
     },
     sortSkills (param) {
       return this.$lodash.orderBy(this.skills, ['wantsTo', 'name'], ['desc', 'asc']) // TODO Figure out how lodash should be handled in tests
@@ -120,7 +130,4 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-#explanations {
-
-}
 </style>

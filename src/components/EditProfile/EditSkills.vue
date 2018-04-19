@@ -1,17 +1,15 @@
 <template>
   <div class="animated fadeIn">
     <b-container fluid>
-      <h1>Taidot</h1>
+      <h1>Proficiency</h1>
       <b-row>
         <b-col class="col-sm-3">
           <skill-form :profileId="profileId" />
         </b-col>
         <b-col class="col-sm-9">
           <b-row>
-            <b-col v-for="skill in skillsByUserId(profileId)" class="col-sm-3" :key="skill.id">
-              <div v-on:click="removeProfileSkill({profileId: profileId, id: skill.id})">
-                <skill-card :skill="skill" />
-              </div>
+            <b-col v-for="skill in skillsByProfileId(profileId)" class="col-sm-3" :key="skill.id">
+              <skill-card :skill="skill" @removeSkill="removeSkillFromProfile" />
             </b-col>
           </b-row>
         </b-col>
@@ -37,17 +35,15 @@ export default {
   computed: {
     ...mapGetters([
       'skills',
-      'skillsByUserId'
+      'skillsByProfileId'
     ])
   },
   methods: {
     ...mapActions([
       'removeProfileSkill'
-    ])
-  },
-  data () {
-    return {
-      showModal: false
+    ]),
+    removeSkillFromProfile (skillId) {
+      this.removeProfileSkill({profileId: this.profileId, id: skillId})
     }
   }
 }

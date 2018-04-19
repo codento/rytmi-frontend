@@ -2,13 +2,13 @@
   <header class="app-header navbar">
     <b-link class="navbar-brand" to="/home" exact></b-link>
      <b-navbar-nav v-if="isAuthenticated">
-      <b-nav-item to="/search">Search</b-nav-item>
-      <b-nav-item :to="'/profile/' + profileId" >Profile</b-nav-item>
+      <b-nav-item :to="{name: 'search'}">Search</b-nav-item>
+      <b-nav-item :to="{name: 'profile', params: { id: profileId }}" >My Profile</b-nav-item>
     </b-navbar-nav>
     <b-navbar-nav class="ml-auto">
       <b-nav-item id="loginBtn" v-if="!isAuthenticated" v-on:click="login">Sign in</b-nav-item>
       <b-nav-item id="logoutBtn" v-if="isAuthenticated" v-on:click="logout">Sign out</b-nav-item>
-      <b-nav-item id="logoutBtn" v-on:click="checkStatus">Check status</b-nav-item>
+      <b-nav-item id="checkStatusBtn" v-if="isDev" v-on:click="checkStatus">Check status</b-nav-item>
     </b-navbar-nav>
   </header>
 </template>
@@ -17,10 +17,15 @@
 import {mapGetters, mapActions} from 'vuex'
 import {loadAuthClient, handleLogin, handleLogout} from '../../utils/auth'
 
+require('dotenv').config()
+
 export default {
   name: 'c-header',
   computed: {
-    ...mapGetters(['isAuthenticated', 'profileId', 'getToken'])
+    ...mapGetters(['isAuthenticated', 'profileId', 'getToken']),
+    isDev () {
+      return process.env.NODE_ENV === 'development'
+    }
   },
   methods: {
     sidebarToggle (e) {

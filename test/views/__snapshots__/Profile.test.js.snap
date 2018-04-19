@@ -11,14 +11,14 @@ exports[`Profile.vue shallow Template is correct 1`] = `
      
     <b-col>
       <b-card
-        id="Taidot"
+        id="proficiency"
       >
         <h5
           class="mb-0"
           slot="header"
         >
           
-          Taidot
+          Proficiency
           
           <span
             style="float: right; cursor: pointer;"
@@ -37,7 +37,7 @@ exports[`Profile.vue shallow Template is correct 1`] = `
       </b-card>
        
       <b-card
-        header="Työkokemus (placeholder-esimerkkejä)"
+        header="Working experience (placeholder)"
       >
         <!---->
         <!---->
