@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { denormalize } from 'normalizr'
-import { profile, skill } from '../store/schema'
+import { profile, skill, project } from '../store/schema'
 import store from '../store'
 import * as types from '../store/mutation-types'
 
@@ -8,6 +8,7 @@ const PATH_AUTH = '/auth'
 const PATH_SKILLS = '/skills'
 const PATH_PROFILES = '/profiles'
 const PATH_PROFILESKILLS = '/profileskills'
+const PATH_PROJECTS = '/projects'
 
 export function login (token) {
   return axios.post(process.env.API_URL + PATH_AUTH, {id_token: token})
@@ -53,6 +54,51 @@ export function deleteProfileSkill (data, token) {
     .catch(handleError)
 }
 
+export function newProject (data, token) {
+  return axios.post(
+    process.env.API_URL + PATH_PROJECTS,
+    denormalize(data, [project]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function alterProject (data, token) {
+  return axios.put(
+    process.env.API_URL + PATH_PROJECTS + '/' + data.id,
+    denormalize(data, [project]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function deleteProject (data, token) {
+  return axios.delete(
+    process.env.API_URL + PATH_PROJECTS + '/' + data.id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getProjects (token) {
+  return axios.get(
+    process.env.API_URL + PATH_PROJECTS,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getProjectProfiles (data, token) {
+  return axios.get(
+    process.env.API_URL + PATH_PROJECTS + '/' + data.id + '/profiles',
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function newProjectProfile (data) {
+  return axios.post(
+    process.env.API_URL + PATH_PROJECTS + '/' + data.ProjectId + '/profiles',
+    data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 function getAuthHeaders () {
   const token = localStorage.getItem('user-token') || ''
   return {
@@ -67,6 +113,6 @@ function handleError (error) {
   if (error.response.status === 401) {
     store.commit(types.AUTH_LOGOUT)
   } else {
-    throw new Error(error)
+    throw error
   }
 }

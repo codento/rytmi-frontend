@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import skills from './modules/skills'
 import profiles from './modules/profiles'
 import auth from './modules/auth'
+import projects from './modules/projects'
 
 Vue.use(Vuex)
 const state = {
@@ -15,6 +16,7 @@ export default new Vuex.Store({
   modules: {
     skills,
     profiles,
-    auth
+    auth,
+    projects
   }
 })
