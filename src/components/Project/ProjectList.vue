@@ -2,9 +2,14 @@
   <b-container>
     <h2>Projects</h2>
     <b-input type="text" placeholder="Filter projects (by name or project code)" v-model="projectFilterTerm" />
-    <div v-for='project in projects' class="project-container" :key="project.id" @click="openProject(project)">
-      {{project.name}}
-    </div>
+    <b-table 
+      id="project-table"
+      striped
+      :items="results"
+      :fields="fields"
+      fixed
+      @row-clicked="openProject"
+    ></b-table>
   </b-container>
 </template>
 <script>
@@ -13,32 +18,31 @@ export default {
   name: 'ProjectList',
   data () {
     return {
-      projectFilterTerm: ''
+      projectFilterTerm: '',
+      fields: [
+        {
+          key: 'code',
+          sortable: true
+        },
+        {
+          key: 'name',
+          sortable: true
+        }
+      ]
     }
   },
   computed: {
     ...mapGetters([
       'projectFilter'
     ]),
-    projects () {
+    results () {
       return this.projectFilter(this.projectFilterTerm)
     }
   },
   methods: {
     openProject (project) {
-      this.$router.replace({name: 'Project', params: { id: project.id }})
-    },
-    filterProjects () {
-      return this.projectFilter(this.projectFilterTerm)
+      this.$router.push({name: 'Project', params: { id: project.id }})
     }
   }
 }
 </script>
-
-<style scoped>
-  .project-container {
-    padding: 1em;
-    border: 1px solid lightgray;
-    cursor: pointer;
-  }
-</style>

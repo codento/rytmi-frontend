@@ -3,8 +3,9 @@ import * as getters from './getters'
 import { mutations } from './mutations'
 
 const initialState = {
-  projects: {},
-  projectList: []
+  projects: [],
+  projectList: [],
+  projectProfiles: {}
 }
 
 export default {
