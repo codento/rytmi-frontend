@@ -50,11 +50,11 @@ export function updateProject ({ commit, state }, data) {
   })
 }
 
-export function fetchProjectProfiles ({ commit, state }, data) {
+export function fetchProjectProfiles ({ commit, state }, projectId) {
   return new Promise((resolve, reject) => {
-    getProjectProfiles(data)
+    getProjectProfiles(projectId)
       .then(response => {
-        commit(types.FETCH_PROJECTPROFILES, { projectId: data.id, profiles: response.data })
+        commit(types.FETCH_PROJECTPROFILES, { projectId: projectId, profiles: response.data })
       })
       .catch(err => console.log(err))
   })

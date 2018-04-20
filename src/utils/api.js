@@ -86,7 +86,7 @@ export function getProjects (token) {
 
 export function getProjectProfiles (data, token) {
   return axios.get(
-    process.env.API_URL + PATH_PROJECTS + '/' + data.id + '/profiles',
+    process.env.API_URL + PATH_PROJECTS + '/' + data + '/profiles',
     getAuthHeaders())
     .catch(handleError)
 }

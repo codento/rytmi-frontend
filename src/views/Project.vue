@@ -1,14 +1,17 @@
 <template>
-  <div class="animated fadeIn profile-editor">
+  <div class="animated fadeIn project-container">
+    <div class="project-details col-sm-12 col-md-6">
       <h1>{{project.name}}</h1>
       <p>{{project.description}}</p>
       <span>Duration</span>
       <p><DateFormatter :date="project.startDate" /> -> <DateFormatter :date="project.endDate" /></p>
+    </div>
+    <div class="project-members col-sm-12 col-md-6">
       <h1>Members</h1>
       <div v-if="this.members">
       <b-table 
-        :items="this.projectProfilesByProjectId(project.id)"
-        :fields="this.fields"
+        :items="members"
+        :fields="fields"
         hover
       >
         <template slot="ProfileId" slot-scope="data">
@@ -22,6 +25,10 @@
         </template>
       </b-table>
       </div>
+      <div v-else>
+        No members added yet
+      </div>
+    </div>
       <hr />
       <div class="project-profile-form-header">
         <h1 >Add a member
@@ -38,6 +45,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import store from '../store'
 import {
   ProjectProfileForm
 } from '../components/Project'
@@ -76,8 +84,9 @@ export default {
     ProjectProfileForm,
     DateFormatter
   },
-  mounted () {
-    this.$store.dispatch('fetchProjectProfiles', this.project)
+  beforeRouteEnter (to, from, next) {
+    store.dispatch('fetchProjectProfiles', to.params.id)
+    next()
   },
   methods: {
     toggleProfileForm () {
@@ -92,7 +101,8 @@ export default {
 </script>
 
 <style scoped >
-.project-profile-form-header {
+.project-container {
+  padding: 1em;
 }
 
 </style>

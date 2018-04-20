@@ -6,7 +6,10 @@ export const mutations = {
     state.projects.push(project)
   },
   [types.FETCH_PROJECTS] (state, projects) {
-    state.projects = projects
+    projects.forEach((project) => {
+      Vue.set(state.projects, project.id, project)
+    })
+    state.projectList = Object.keys(projects)
   },
   [types.UPDATE_PROJECT] (state, project) {
     state.projects[project.id] = project
@@ -15,9 +18,7 @@ export const mutations = {
     state.projects[project.id] = null
   },
   [types.FETCH_PROJECTPROFILES] (state, projectProfiles) {
-    console.log(projectProfiles)
     Vue.set(state.projectProfiles, projectProfiles.projectId, projectProfiles.profiles)
-    // state.projectProfiles.splice(projectProfiles.projectId, 1, projectProfiles.profiles)
   },
   [types.ADD_PROJECTPROFILE] (state, projectProfile) {
     if (state.projectProfiles[projectProfile.ProjectId] == null) {

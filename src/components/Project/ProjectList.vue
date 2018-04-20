@@ -5,7 +5,7 @@
     <b-table 
       id="project-table"
       striped
-      :items="projects" 
+      :items="results"
       :fields="fields"
       fixed
       @row-clicked="openProject"
@@ -19,7 +19,6 @@ export default {
   data () {
     return {
       projectFilterTerm: '',
-      projects: [],
       fields: [
         {
           key: 'code',
@@ -35,20 +34,15 @@ export default {
   computed: {
     ...mapGetters([
       'projectFilter'
-    ])
-  },
-  watch: {
-    projectFilterTerm: function (val) {
-      this.projects = this.projectFilter(val)
+    ]),
+    results () {
+      return this.projectFilter(this.projectFilterTerm)
     }
   },
   methods: {
     openProject (project) {
       this.$router.push({name: 'Project', params: { id: project.id }})
     }
-  },
-  mounted () {
-    this.projects = this.projectFilter('')
   }
 }
 </script>
