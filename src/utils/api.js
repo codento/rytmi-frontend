@@ -24,7 +24,7 @@ export function getSkills (token) {
 }
 
 export function getProfiles (token) {
-  return axios.get(process.env.API_URL + PATH_PROFILES, getAuthHeaders()).catch(handleError)
+  return axios.get(process.env.API_URL + PATH_PROFILES + '/all', getAuthHeaders()).catch(handleError)
 }
 
 export function getProfileSkills (token) {

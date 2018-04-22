@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form @submit="this.onSubmit">
-      <b-form-select text="Profile" v-model="projectProfile.ProfileId">
+      <b-form-select text="Profile" v-model="projectProfile.profileId">
         <option 
           v-for="profile in this.profiles"
           :key="profile.id"
@@ -12,7 +12,7 @@
       <span>Start date</span>
       <b-input type="date" v-model="projectProfile.startAt"></b-input>
       <span>End date</span>
-      <b-input type="date" v-model="projectProfile.endAt"></b-input>
+      <b-input type="date" v-model="projectProfile.finishAt"></b-input>
       <span>Work percentage</span>
       <b-input type="number" min="0" max="100" v-model="projectProfile.workPercentage"></b-input>
       <b-button primary type="submit">Submit</b-button>

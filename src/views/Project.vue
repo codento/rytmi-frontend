@@ -1,45 +1,52 @@
 <template>
   <div class="animated fadeIn project-container">
-    <div class="project-details col-sm-12 col-md-6">
-      <h1>{{project.name}}</h1>
-      <p>{{project.description}}</p>
-      <span>Duration</span>
-      <p><DateFormatter :date="project.startDate" /> -> <DateFormatter :date="project.endDate" /></p>
-    </div>
-    <div class="project-members col-sm-12 col-md-6">
-      <h1>Members</h1>
-      <div v-if="this.members">
-      <b-table 
-        :items="members"
-        :fields="fields"
-        hover
-      >
-        <template slot="ProfileId" slot-scope="data">
-          {{printMember(data.value)}}
-        </template>
-        <template slot="startAt" slot-scope="data">
-          <DateFormatter :date="data.value" />
-        </template>
-        <template slot="finishAt" slot-scope="data">
-          <DateFormatter :date="data.value" />
-        </template>
-      </b-table>
-      </div>
-      <div v-else>
-        No members added yet
-      </div>
-    </div>
-      <hr />
-      <div class="project-profile-form-header">
-        <h1 >Add a member
-          <span style="float: right">
-            <i class="fa fa-chevron-down" @click="toggleProfileForm"/>
-          </span>
-        </h1>
-        <div v-if="profileFormOpen">
-          <ProjectProfileForm :projectId="project.id" />
+    <b-row>
+      <b-col class="project-details col-sm-12 col-md-6">
+        <h1>{{project.name}}</h1>
+        <p>{{project.description}}</p>
+        <span>Duration</span>
+        <p><DateFormatter :date="project.startDate" /> -> <DateFormatter :date="project.endDate" /></p>
+      </b-col>
+      <b-col class="project-members col-sm-12 col-md-6">
+        <h1>Members</h1>
+        <div v-if="members">
+          <b-table 
+            :items="members"
+            :fields="fields"
+            hover
+            striped
+            responsive
+          >
+            <template slot="profileId" slot-scope="data">
+              {{printMember(data.value)}}
+            </template>
+            <template slot="startAt" slot-scope="data">
+              <DateFormatter :date="data.value" />
+            </template>
+            <template slot="finishAt" slot-scope="data">
+              <DateFormatter :date="data.value" />
+            </template>
+            <template slot="workPercentage" slot-scope="data">
+              {{data.value}} %
+            </template>
+          </b-table>
         </div>
+        <div v-else>
+          No members added yet
+        </div>
+      </b-col>
+    </b-row>
+    <hr />
+    <div class="project-profile-form-header col-md-5 col-sm-12">
+      <h1 >Add a member
+        <span style="float: right">
+          <i class="fa fa-chevron-down" @click="toggleProfileForm"/>
+        </span>
+      </h1>
+      <div v-if="profileFormOpen">
+        <ProjectProfileForm :projectId="project.id" />
       </div>
+    </div>
   </div>
 </template>
 
@@ -57,7 +64,7 @@ export default {
     return {
       profileFormOpen: false,
       fields: [
-        { key: 'ProfileId', label: 'Name' },
+        { key: 'profileId', label: 'Name' },
         { key: 'startAt', label: 'Start Date' },
         { key: 'finishAt', label: 'End Date' },
         { key: 'workPercentage', label: 'Percentage' }
@@ -94,7 +101,11 @@ export default {
     },
     printMember (profileId) {
       const member = this.profileById(profileId)
-      return member.firstName + ' ' + member.lastName
+      if (member) {
+        return member.firstName + ' ' + member.lastName
+      } else {
+        return 'Profile not found'
+      }
     }
   }
 }
