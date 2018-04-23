@@ -1,5 +1,6 @@
 import {
   getProjectProfiles,
+  getProfileProjects,
   newProjectProfile,
   newProject,
   getProjects,
@@ -65,6 +66,16 @@ export function addProjectProfile ({ commit, state }, data) {
     newProjectProfile(data)
       .then(response => {
         commit(types.ADD_PROJECTPROFILE, response.data)
+      })
+      .catch(err => reject(err))
+  })
+}
+
+export function fetchProfileProjects ({ commit, state }, profileId) {
+  return new Promise((resolve, reject) => {
+    getProfileProjects(profileId)
+      .then(response => {
+        commit(types.FETCH_PROFILEPROJECTS, { profileId: profileId, projects: response.data })
       })
       .catch(err => reject(err))
   })

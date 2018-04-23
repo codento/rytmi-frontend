@@ -20,6 +20,9 @@ export const mutations = {
   [types.FETCH_PROJECTPROFILES] (state, projectProfiles) {
     Vue.set(state.projectProfiles, projectProfiles.projectId, projectProfiles.profiles)
   },
+  [types.FETCH_PROFILEPROJECTS] (state, profileProjects) {
+    Vue.set(state.profileProjects, profileProjects.profileId, profileProjects.projects)
+  },
   [types.ADD_PROJECTPROFILE] (state, projectProfile) {
     if (state.projectProfiles[projectProfile.projectId] == null) {
       state.projectProfiles[projectProfile.projectId] = []

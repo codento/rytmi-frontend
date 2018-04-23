@@ -16,3 +16,5 @@ export const projectFilter = (state) => (param) => {
 }
 
 export const projectProfilesByProjectId = (state) => (param) => state.projectProfiles[param]
+
+export const profileProjectsByProfileId = (state) => (param) => state.profileProjects[param]

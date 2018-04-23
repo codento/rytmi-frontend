@@ -99,9 +99,9 @@ export function newProjectProfile (data) {
     .catch(handleError)
 }
 
-export function getProfileProjects (data) {
+export function getProfileProjects (profileId) {
   return axios.get(
-    process.env.API_URL + '/profileProjects/' + data.profileId + '/projects',
+    process.env.API_URL + PATH_PROFILES + '/' + profileId + '/projects',
     getAuthHeaders())
     .catch(handleError)
 }

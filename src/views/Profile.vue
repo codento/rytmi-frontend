@@ -29,8 +29,8 @@
             </b-col>
           </b-row>
         </b-card>
-        <b-card header='Working experience (placeholder)'>
-          <ProjectRow v-for='project in projects' :project="project"  :key="project.projectId"/>
+        <b-card header='Projects'>
+          <ProjectRow v-for='project in profileProjects' :profileProject="project"  :key="project.projectId"/>
         </b-card>
       </b-col>
     </b-row>
@@ -39,7 +39,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-
+import store from '../store'
 import proficiencyDesc from '../assets/proficiencyDesc'
 import {
   ProjectRow,
@@ -54,7 +54,8 @@ export default {
     ...mapGetters([
       'profileById',
       'skillById',
-      'skillsByProfileId'
+      'skillsByProfileId',
+      'profileProjectsByProfileId'
     ]),
     profile () {
       return this.profileById(this.$route.params.id)
@@ -64,6 +65,9 @@ export default {
     },
     wantDesc () {
       return proficiencyDesc.wants
+    },
+    profileProjects () {
+      return this.profileProjectsByProfileId(this.profile.id)
     }
   },
   components: {
@@ -94,7 +98,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     store.dispatch('fetchProfileProjects', to.params.id)
     next()
-  },
+  }
 }
 </script>
 

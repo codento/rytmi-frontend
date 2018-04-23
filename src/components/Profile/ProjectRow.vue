@@ -1,22 +1,32 @@
 <template>
-  <div class="row mb-1" v-on:click="show = !show">
-    <div class="col-sm-12">
-      <span style="font-size: 24px;" >{{project.title}} </span>
-    </div>
-    <div class="col-sm-12" >
-       <span style="color: #f89500; font-size: 16px;">
-          {{project.name}}  {{project.startDate}} - {{project.endDate}} 
-        </span>
-    </div>
-    <transition name="fade">
-      <div class="col-sm-12" v-if="show">
-        {{project.description}}
+  <div>
+    <div class="row mb-1" v-on:click="show = !show">
+      <div class="col-sm-12">
+        <span class="project-header">{{project.name}} </span>
       </div>
-    </transition>
+      <div class="col-sm-12 duration-container" >
+        <span class="duration-item">
+            <small>From</small><br />
+            <DateFormatter :date="profileProject.startAt" />
+        </span>
+        <span class="duration-item">
+            <small>To</small><br />
+            <DateFormatter :date="profileProject.finishAt" /> 
+        </span>
+      </div>
+      <transition name="fade">
+        <div class="col-sm-12" v-if="show">
+          {{project.description}}
+        </div>
+      </transition>
+    </div>
+  <hr />
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import DateFormatter from '../helpers/DateFormatter.vue'
 export default {
   name: 'ProjectRow',
   data () {
@@ -24,8 +34,19 @@ export default {
       show: false
     }
   },
+  computed: {
+    ...mapGetters([
+      'projectById'
+    ]),
+    project () {
+      return this.projectById(this.profileProject.projectId)
+    }
+  },
   props: {
-    'project': Object
+    profileProject: Object
+  },
+  components: {
+    DateFormatter
   }
 }
 </script>
@@ -42,8 +63,20 @@ export default {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
-
-span {
-  user-select: none;
+.duration-container {
+  display: flex;
+  justify-content: flex-start;
+}
+.duration-item {
+  margin-right: 1em;
+  color: gray;
+}
+small {
+  color: black;
+}
+.project-header {
+  color: hsl(39, 98%, 51%);
+  font-weight: 500;
+  font-size: 1.5em;
 }
 </style>

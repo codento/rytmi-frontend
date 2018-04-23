@@ -29,7 +29,7 @@ export default {
   data () {
     return {
       projectProfile: {
-        ProjectId: this.projectId
+        projectId: this.projectId
       }
     }
   },
