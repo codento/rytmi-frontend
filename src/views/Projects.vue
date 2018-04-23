@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn profile-editor">
+  <div class="animated fadeIn col-sm-12 col-md-8 project-list-container">
       <ProjectForm />
       <ProjectList />
   </div>
@@ -22,4 +22,9 @@ export default {
 }
 </script>
 
-<style scoped />
+<style scoped >
+.project-list-container {
+  margin: 0 auto;
+  padding: 1em 0;
+}
+</style>

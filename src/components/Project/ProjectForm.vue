@@ -8,7 +8,7 @@
           <i v-else class="fa fa-chevron-up" />
         </span>
       </h3>
-      <b-form v-if="showProjectForm" id="project_form" @submit="onSubmit">
+      <b-form class="animated fadeIn" v-if="showProjectForm" id="project_form" @submit="onSubmit">
           <b-input 
             placeholder="Project name"
             type="text"

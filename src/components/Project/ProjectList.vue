@@ -1,15 +1,15 @@
 <template>
   <b-container>
-    <h2>Projects</h2>
-    <b-input type="text" placeholder="Filter projects (by name or project code)" v-model="projectFilterTerm" />
-    <b-table 
-      id="project-table"
-      striped
-      :items="results"
-      :fields="fields"
-      fixed
-      @row-clicked="openProject"
-    ></b-table>
+      <h2>Projects</h2>
+      <b-input type="text" placeholder="Filter projects (by name or project code)" v-model="projectFilterTerm" />
+      <b-table 
+        id="project-table"
+        striped
+        :items="results"
+        :fields="fields"
+        fixed
+        @row-clicked="openProject"
+      ></b-table>
   </b-container>
 </template>
 <script>
@@ -22,11 +22,13 @@ export default {
       fields: [
         {
           key: 'code',
-          sortable: true
+          sortable: true,
+          tdClass: 'clicable'
         },
         {
           key: 'name',
-          sortable: true
+          sortable: true,
+          tdClass: 'clicable'
         }
       ]
     }
@@ -46,3 +48,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.clickable {
+  cursor: pointer;
+}
+</style>
+

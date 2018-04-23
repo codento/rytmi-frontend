@@ -1,50 +1,43 @@
 <template>
-  <div class="animated fadeIn project-container">
-    <b-row>
-      <b-col class="project-details col-sm-12 col-md-6">
-        <h1>{{project.name}}</h1>
-        <p>{{project.description}}</p>
-        <span>Duration</span>
-        <p><DateFormatter :date="project.startDate" /> -> <DateFormatter :date="project.endDate" /></p>
-      </b-col>
-      <b-col class="project-members col-sm-12 col-md-6">
-        <h1>Members</h1>
-        <div v-if="members">
-          <b-table 
-            :items="members"
-            :fields="fields"
-            hover
-            striped
-            responsive
-          >
-            <template slot="profileId" slot-scope="data">
-              {{printMember(data.value)}}
-            </template>
-            <template slot="startAt" slot-scope="data">
-              <DateFormatter :date="data.value" />
-            </template>
-            <template slot="finishAt" slot-scope="data">
-              <DateFormatter :date="data.value" />
-            </template>
-            <template slot="workPercentage" slot-scope="data">
-              {{data.value}} %
-            </template>
-          </b-table>
+  <div style="width: 99vw">
+    <div class="animated fadeIn project-container col-sm-12 col-md-7">
+      <b-row>
+        <b-col class="project-details">
+          <b>{{project.code}}</b>
+          <h1>{{project.name}}</h1>
+          <div class="detail-container">
+            <span class="detail detail-start">
+              <small>Start date</small><br />
+              <b><DateFormatter :date="project.startDate" /></b>
+            </span>
+            <span class="detail detail-end">
+              <small>End date</small><br />
+              <b><DateFormatter :date="project.endDate" /></b>
+            </span>
+            <span class="detail members">
+              <small>Consultants</small><br />
+              <b v-if="members">{{members.length}}</b>
+            </span>
+          </div>
+          <p>
+            <small>Description</small><br />
+            {{project.description}}
+          </p>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col class="project-members">
+          <ProjectMemberTable :members="members" />
+        </b-col>
+      </b-row>
+      <hr />
+      <div>
+        <h3 class="project-profile-form-header" @click="toggleProfileForm">Add a consultant
+          <i class="fa fa-chevron-down" />
+        </h3>
+        <div class="animated fadeIn" v-if="profileFormOpen">
+          <ProjectProfileForm :projectId="project.id" />
         </div>
-        <div v-else>
-          No members added yet
-        </div>
-      </b-col>
-    </b-row>
-    <hr />
-    <div class="project-profile-form-header col-md-5 col-sm-12">
-      <h1 >Add a member
-        <span style="float: right">
-          <i class="fa fa-chevron-down" @click="toggleProfileForm"/>
-        </span>
-      </h1>
-      <div v-if="profileFormOpen">
-        <ProjectProfileForm :projectId="project.id" />
       </div>
     </div>
   </div>
@@ -54,7 +47,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import store from '../store'
 import {
-  ProjectProfileForm
+  ProjectProfileForm,
+  ProjectMemberTable
 } from '../components/Project'
 import DateFormatter from '../components/helpers/DateFormatter.vue'
 
@@ -62,13 +56,7 @@ export default {
   name: 'Project',
   data () {
     return {
-      profileFormOpen: false,
-      fields: [
-        { key: 'profileId', label: 'Name' },
-        { key: 'startAt', label: 'Start Date' },
-        { key: 'finishAt', label: 'End Date' },
-        { key: 'workPercentage', label: 'Percentage' }
-      ]
+      profileFormOpen: false
     }
   },
   computed: {
@@ -89,6 +77,7 @@ export default {
   },
   components: {
     ProjectProfileForm,
+    ProjectMemberTable,
     DateFormatter
   },
   beforeRouteEnter (to, from, next) {
@@ -98,14 +87,6 @@ export default {
   methods: {
     toggleProfileForm () {
       this.profileFormOpen = !this.profileFormOpen
-    },
-    printMember (profileId) {
-      const member = this.profileById(profileId)
-      if (member) {
-        return member.firstName + ' ' + member.lastName
-      } else {
-        return 'Profile not found'
-      }
     }
   }
 }
@@ -114,6 +95,19 @@ export default {
 <style scoped >
 .project-container {
   padding: 1em;
+  margin: 0 auto;
+}
+.project-profile-form-header {
+  text-align: center;
+  cursor: pointer;
+}
+.detail-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.5em 0;
+}
+.detail {
+  margin-right: 1em;
 }
 
 </style>
