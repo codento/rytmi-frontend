@@ -7,7 +7,8 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 const getters = {
-  projects: () => (arg) => arg
+  projects: () => (arg) => arg,
+  projectFilter: () => (arg) => arg
 }
 const store = new Vuex.Store({ getters })
 

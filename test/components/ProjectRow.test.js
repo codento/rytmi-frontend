@@ -1,16 +1,28 @@
-import { mount } from 'vue-test-utils'
+import { mount, createLocalVue } from 'vue-test-utils'
 import { ProjectRow } from '../../src/components/Profile'
+import Vuex from 'vuex'
 
-describe('UserProfileCard.test.js', () => {
+describe('ProjectRow.test.js', () => {
+  let localVue = createLocalVue()
+  localVue.use(Vuex)
+  let getters, store
+  beforeEach(() => {
+    getters = {
+      projectById: () => (arg) => arg
+    }
+    store = new Vuex.Store({ getters })
+  })
   it('Template is correct', () => {
     let wrapper = mount(ProjectRow, {
+      store,
+      localVue,
       propsData: {
-        project: {
-          projectName: 'Testi prkkis',
-          title: 'mail',
-          projectStartDate: '15.05.2017',
-          projectEndDate: '16.06.2017',
-          projectprojectDescription: 'Hipster ipsum'
+        profileProject: {
+          projectId: 1,
+          name: 'Testi prkkis',
+          description: 'mail',
+          startAt: '15.05.2017',
+          finishAt: '16.06.2017'
         }
       }
     })

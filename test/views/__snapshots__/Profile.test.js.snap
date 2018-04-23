@@ -37,13 +37,8 @@ exports[`Profile.vue shallow Template is correct 1`] = `
       </b-card>
        
       <b-card
-        header="Working experience (placeholder)"
-      >
-        <!---->
-        <!---->
-        <!---->
-        <!---->
-      </b-card>
+        header="Projects"
+      />
     </b-col>
   </b-row>
 </div>
