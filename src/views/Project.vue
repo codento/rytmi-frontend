@@ -36,7 +36,7 @@
           <i class="fa fa-chevron-down" />
         </h3>
         <div class="animated fadeIn" v-if="profileFormOpen">
-          <ProjectProfileForm :projectId="project.id" />
+          <ProjectProfileForm :toggleForm="toggleProfileForm" :projectId="project.id" />
         </div>
       </div>
     </div>

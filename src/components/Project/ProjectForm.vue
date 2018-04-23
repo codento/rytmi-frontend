@@ -9,16 +9,19 @@
         </span>
       </h3>
       <b-form class="animated fadeIn" v-if="showProjectForm" id="project_form" @submit="onSubmit">
-          <b-input 
-            placeholder="Project name"
-            type="text"
-            v-model="project.name"
+          <b-input
+            placeholder="Project code"
+            required
+            type="number"
+            min="0"
+            max="99999"
+            v-model="project.code"
           />
           <b-input 
-            class="form-control" 
-            placeholder="Project description" 
+            placeholder="Project name"
+            required
             type="text"
-            v-model="project.description"
+            v-model="project.name"
           />
           <b-input 
             class="form-control" 
@@ -35,6 +38,13 @@
             type="text"
             v-model="project.endDate"
           />
+          <b-textarea 
+            class="form-control" 
+            placeholder="Project description" 
+            type="text"
+            rows="6"
+            v-model="project.description"
+          />
           <b-button
             class="form-control"
             type="submit"
@@ -44,15 +54,14 @@
       </b-form>
       <div v-if="showError" class="project-creation-error">
         Creating a project failed because:
-        <div v-for="detail in errorDetails" :key="detail">
-          {{parseErrorDetail(detail)}}
-        </div>
+        <ApiErrorDetailsPanel :errorDetails="errorDetails" />
       </div>
     </b-card>
   </b-container>
 </template>
 <script>
 import { mapActions } from 'vuex'
+import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
 export default {
   name: 'ProjectForm',
   data () {
@@ -81,11 +90,10 @@ export default {
           this.errorDetails = err.response.data.error.details
           this.showError = true
         })
-    },
-    parseErrorDetail (detail) {
-      // Make the error a bit more human readable
-      return detail.replace('.', ' ').replace('null', 'empty')
     }
+  },
+  components: {
+    ApiErrorDetailsPanel
   }
 }
 </script>

@@ -66,6 +66,7 @@ export function addProjectProfile ({ commit, state }, data) {
     newProjectProfile(data)
       .then(response => {
         commit(types.ADD_PROJECTPROFILE, response.data)
+        resolve(response)
       })
       .catch(err => reject(err))
   })
