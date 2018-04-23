@@ -93,8 +93,15 @@ export function getProjectProfiles (data, token) {
 
 export function newProjectProfile (data) {
   return axios.post(
-    process.env.API_URL + PATH_PROJECTS + '/' + data.ProjectId + '/profiles',
+    process.env.API_URL + PATH_PROJECTS + '/' + data.projectId + '/profiles',
     data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getProfileProjects (data) {
+  return axios.get(
+    process.env.API_URL + '/profileProjects/' + data.profileId + '/projects',
     getAuthHeaders())
     .catch(handleError)
 }
