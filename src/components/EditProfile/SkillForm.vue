@@ -32,31 +32,31 @@
           placeholder="Short description">
         </b-form-textarea>
       </b-form-group>
-      <b-form-group
-        id="wantsToLabel" 
-        vertical
-        label="Wants:"
-        label-for="wantsTo">
-        <b-form-input 
-          id="wantsTo"
-          type="range"
-          min="0"
-          max="5"
-          v-model="profileSkill.wantsTo">
-        </b-form-input>
-      </b-form-group>
       <b-form-group 
         id="knowsLabel" 
-        vertical
-        label="Knows:"
-        label-for="knows">
-        <b-form-input 
+        label="Proficiency level:"
+      >
+        <b-form-radio-group 
+          stacked
           id="knows"
-          type="range"
-          min="0"
-          max="5"
-          v-model="profileSkill.knows">
-        </b-form-input>
+          v-model="profileSkill.knows"
+          :options="knowsOptions"
+          plain
+          >
+        </b-form-radio-group>
+      </b-form-group>
+      <b-form-group
+        id="wantsToLabel" 
+        label="Willingness level:"
+      >
+        <b-form-radio-group 
+          stacked
+          id="wantsTo"
+          v-model="profileSkill.wantsTo"
+          name="wantsTo"
+          :options="wantsToOptions"
+          plain
+        />
       </b-form-group>
       <b-form-group 
         id="visibleInCVLabel" 
@@ -75,7 +75,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-
+import proficiencyDesc from '../../assets/proficiencyDesc'
 const skillTemplate = () => {
   return {
     skillId: null,
@@ -93,7 +93,9 @@ export default {
   },
   data () {
     return {
-      profileSkill: skillTemplate()
+      profileSkill: skillTemplate(),
+      wantsToOptions: proficiencyDesc.wants,
+      knowsOptions: proficiencyDesc.knows
     }
   },
   computed: {
