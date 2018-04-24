@@ -46,8 +46,9 @@ export function updateProject ({ commit, state }, data) {
     alterProject(data)
       .then(response => {
         commit(types.UPDATE_PROJECT, response.data)
+        resolve(response)
       })
-      .catch(err => console.log(err))
+      .catch(err => reject(err))
   })
 }
 

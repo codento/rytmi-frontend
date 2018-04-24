@@ -31,11 +31,13 @@
         </b-col>
       </b-row>
       <hr />
+      <ProjectForm :editableProject="project" />
+      <hr />
       <div>
         <h3 class="project-profile-form-header" @click="toggleProfileForm">Add a consultant
           <i class="fa fa-chevron-down" />
         </h3>
-        <div class="animated fadeIn" v-if="profileFormOpen">
+        <div v-if="profileFormOpen">
           <ProjectProfileForm :toggleForm="toggleProfileForm" :projectId="project.id" />
         </div>
       </div>
@@ -48,7 +50,8 @@ import { mapGetters, mapActions } from 'vuex'
 import store from '../store'
 import {
   ProjectProfileForm,
-  ProjectMemberTable
+  ProjectMemberTable,
+  ProjectForm
 } from '../components/Project'
 import DateFormatter from '../components/helpers/DateFormatter.vue'
 
@@ -78,6 +81,7 @@ export default {
   components: {
     ProjectProfileForm,
     ProjectMemberTable,
+    ProjectForm,
     DateFormatter
   },
   beforeRouteEnter (to, from, next) {
@@ -85,6 +89,7 @@ export default {
     next()
   },
   methods: {
+    // TODO: scroll to bottom when opening form
     toggleProfileForm () {
       this.profileFormOpen = !this.profileFormOpen
     }

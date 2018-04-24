@@ -20,6 +20,7 @@
     "bootstrap": "4.0.0",
     "bootstrap-vue": "1.4.1",
     "chart.js": "2.7.1",
+    "date-input-polyfill": "^2.14.0",
     "dotenv": "^5.0.0",
     "dotenv-webpack": "^1.5.4",
     "flag-icon-css": "2.9.0",
