@@ -80,6 +80,10 @@ exports[`Project.vue shallow Template is correct 1`] = `
      
     <hr />
      
+    <!---->
+     
+    <hr />
+     
     <div>
       <h3
         class="project-profile-form-header"
