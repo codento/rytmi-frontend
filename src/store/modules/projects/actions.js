@@ -2,6 +2,7 @@ import {
   getProjectProfiles,
   getProfileProjects,
   newProjectProfile,
+  deleteProjectProfile,
   newProject,
   getProjects,
   deleteProject,
@@ -67,6 +68,17 @@ export function addProjectProfile ({ commit, state }, data) {
     newProjectProfile(data)
       .then(response => {
         commit(types.ADD_PROJECTPROFILE, response.data)
+        resolve(response)
+      })
+      .catch(err => reject(err))
+  })
+}
+
+export function removeProjectProfile ({ commit, state }, projectProfile) {
+  return new Promise((resolve, reject) => {
+    deleteProjectProfile(projectProfile)
+      .then(response => {
+        commit(types.REMOVE_PROJECTPROFILE, projectProfile)
         resolve(response)
       })
       .catch(err => reject(err))

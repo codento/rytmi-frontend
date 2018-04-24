@@ -24,6 +24,9 @@
         <template slot="workPercentage" slot-scope="percentage">
           {{percentage.value}} %
         </template>
+        <template slot="remove" slot-scope="remove">
+          <b-btn variation="danger" @click.stop="removeMember(remove.item)">Remove</b-btn>
+        </template>
       </b-table>
     </div>
     <div v-else>
@@ -32,7 +35,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import DateFormatter from '../helpers/DateFormatter.vue'
 export default {
   name: 'ProjectMemberTable',
@@ -45,7 +48,8 @@ export default {
         { key: 'profileId', label: 'Name' },
         { key: 'startAt', label: 'From' },
         { key: 'finishAt', label: 'To' },
-        { key: 'workPercentage', label: 'Utilization' }
+        { key: 'workPercentage', label: 'Utilization' },
+        { key: 'remove', label: ' ' }
       ]
     }
   },
@@ -55,6 +59,9 @@ export default {
     ])
   },
   methods: {
+    ...mapActions([
+      'removeProjectProfile'
+    ]),
     printMember (profileId) {
       const member = this.profileById(profileId)
       if (member) {
@@ -65,6 +72,21 @@ export default {
     },
     openProfile (projectProfile) {
       this.$router.push({name: 'profile', params: { id: projectProfile.profileId }})
+    },
+    removeMember (projectProfile) {
+      const confirmation = confirm('Are you sure?')
+      if (confirmation) {
+        this.removeProjectProfile(projectProfile)
+          .then((reponse) => {
+            this.$toasted.global.rytmi_success({
+              message: 'Member removed!'
+            })
+          }).catch(err => {
+            this.$toasted.global.rytmi_error({
+              message: err
+            })
+          })
+      }
     }
   },
   components: {

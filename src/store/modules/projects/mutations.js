@@ -28,5 +28,13 @@ export const mutations = {
       state.projectProfiles[projectProfile.projectId] = []
     }
     state.projectProfiles[projectProfile.projectId].push(projectProfile)
+  },
+  [types.REMOVE_PROJECTPROFILE] (state, projectProfile) {
+    const index = state.projectProfiles[projectProfile.projectId].indexOf(projectProfile)
+    if (index !== -1) {
+      let newProfiles = state.projectProfiles[projectProfile.projectId]
+      newProfiles.splice(index, 1)
+      Vue.set(state.projectProfiles, projectProfile.projectId, newProfiles)
+    }
   }
 }
