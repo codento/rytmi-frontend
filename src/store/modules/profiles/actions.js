@@ -6,7 +6,8 @@ import {
   getProfileSkills,
   alterProfile,
   newProfileSkill,
-  deleteProfileSkill
+  deleteProfileSkill,
+  alterProfileSkill
 } from '../../../utils/api'
 
 export function fetchProfiles ({ commit, state }) {
@@ -59,5 +60,16 @@ export function removeProfileSkill ({commit, state}, data) {
       }).catch(error => {
         reject(error)
       })
+  })
+}
+
+export function updateProfileSkill ({commit, state}, data) {
+  return new Promise((resolve, reject) => {
+    alterProfileSkill(data)
+      .then(response => {
+        commit(types.UPDATE_PROFILE_SKILL, response.data)
+        resolve(response.data)
+      })
+      .catch(err => reject(err))
   })
 }

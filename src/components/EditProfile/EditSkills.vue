@@ -1,25 +1,64 @@
 <template>
   <div class="animated fadeIn">
-    <b-container fluid>
-      <h1>Proficiency</h1>
+      <h1>Proficiencies</h1>
+      <hr />
       <b-row>
-        <b-col class="col-sm-3">
-          <skill-form :profileId="profileId" />
+        <b-col class="col-sm-5 col-md-5">
+          <SkillForm :profileId="profileId" />
         </b-col>
-        <b-col class="col-sm-9">
-          <b-row>
-            <b-col v-for="skill in skillsByProfileId(profileId)" class="col-sm-3" :key="skill.id">
-              <skill-card :skill="skill" @removeSkill="removeSkillFromProfile" />
-            </b-col>
-          </b-row>
+        <b-col class="col-sm-7 col-md-7">
+          <b-table
+            :items="skillsByProfileId(profileId)"
+            :fields="fields"
+            fixed
+            caption-top
+          >
+            <template slot="table-caption">
+              Current proficiencies (click on value to update)
+            </template>
+            <template slot="skillId" slot-scope="skillId">
+              {{skillById(skillId.value).name}}
+            </template>
+            <template slot="knows" slot-scope="knows">
+              <span @click.stop="showKnowsModal(knows)">
+                <b-progress
+                  :value="knows.value"
+                  :max=5
+                  show-value
+                />
+              </span>
+            </template>
+            <template slot="wantsTo" slot-scope="wantsTo">
+              <span @click.stop="showWantsModal(wantsTo)">
+                <b-progress
+                  :value="wantsTo.value"
+                  :max=5
+                  show-value
+                />
+              </span>
+            </template>
+            <template slot="remove" slot-scope="remove">
+              <b-btn size="sm" variant="danger" @click.stop="removeSkillFromProfile(remove.item.id)">Remove</b-btn>
+            </template>
+          </b-table>
         </b-col>
       </b-row>
-    </b-container>
+      <b-modal ref="wantsToModal" title="Update skill willingness" hide-footer>
+        <b-radio-group plain stacked v-model="editedSkill.wantsTo" :options="wantsToOptions" />
+        <b-btn @click="updateSkill()">Save</b-btn>
+        <b-btn @click="hideModals()">Cancel</b-btn>
+      </b-modal>
+      <b-modal ref="knowsModal" title="Update skill proficiency" hide-footer>
+        <b-radio-group plain stacked v-model="editedSkill.knows" :options="knowsOptions" />
+        <b-btn @click="updateSkill()">Save</b-btn>
+        <b-btn @clock="hideModals()">Cancel</b-btn>
+      </b-modal>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import proficiencyDesc from '../../assets/proficiencyDesc'
 import SkillForm from './SkillForm'
 import SkillCard from './SkillCard'
 
@@ -28,6 +67,19 @@ export default {
   props: {
     'profileId': Number
   },
+  data () {
+    return {
+      fields: [
+        { key: 'skillId', label: 'Proficiency' },
+        { key: 'knows', label: 'Level' },
+        { key: 'wantsTo', label: 'Willingness' },
+        { key: 'remove', label: ' ' }
+      ],
+      wantsToOptions: proficiencyDesc.wants,
+      knowsOptions: proficiencyDesc.knows,
+      editedSkill: {}
+    }
+  },
   components: {
     SkillForm,
     SkillCard
@@ -35,18 +87,51 @@ export default {
   computed: {
     ...mapGetters([
       'skills',
+      'skillById',
       'skillsByProfileId'
     ])
   },
   methods: {
     ...mapActions([
-      'removeProfileSkill'
+      'removeProfileSkill',
+      'updateProfileSkill'
     ]),
     removeSkillFromProfile (skillId) {
-      this.removeProfileSkill({profileId: this.profileId, id: skillId})
+      const confirmation = confirm('Are you sure?')
+      if (confirmation) {
+        this.removeProfileSkill({profileId: this.profileId, id: skillId})
+      }
+    },
+    showWantsModal (el) {
+      this.editedSkill = Object.assign({}, el.item)
+      this.$refs.wantsToModal.show()
+    },
+    showKnowsModal (el) {
+      this.editedSkill = Object.assign({}, el.item)
+      this.$refs.knowsModal.show()
+    },
+    hideModals () {
+      this.$refs.knowsModal.hide()
+      this.$refs.wantsToModal.hide()
+    },
+    updateSkill () {
+      this.updateProfileSkill(this.editedSkill)
+        .then(response => {
+          this.$toasted.global.rytmi_success({
+            message: 'Proficiency updated.'
+          })
+          this.$refs.wantsToModal.hide()
+          this.$refs.knowsModal.hide()
+        })
     }
   }
 }
 </script>
 
-<style scoped />
+<style scoped >
+button {
+  width: 100%;
+  margin-top: 0.5em;
+}
+
+</style>
