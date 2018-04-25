@@ -6,27 +6,27 @@
     <b-form-group
       horizontal
       id="firstNameLabel"
-      label="Firstname:"
+      label="First name:"
       label-for="firstName">
       <b-form-input
         id="firstNameInput"
         type="text"
         v-model="editedProfile.firstName"
         required
-        placeholder="Enter firstName">
+      >
       </b-form-input>
     </b-form-group>
     <b-form-group
       horizontal
       id="lastNameLabel"
-      label="Lastname:"
+      label="Last name:"
       label-for="lastNameInput">
       <b-form-input
         id="lastNameInput"
         type="text"
         v-model="editedProfile.lastName"
         required
-        placeholder="Enter lastName">
+      >
       </b-form-input>
     </b-form-group>
     <b-form-group
@@ -51,20 +51,20 @@
         type="email"
         v-model="editedProfile.email"
         required
-        placeholder="Enter Email">
+      >
       </b-form-input>
     </b-form-group>
     <b-form-group
       id="PhonenumberLabel"
       horizontal
-      label="Phonenumber:"
+      label="Phone number:"
       label-for="PhonenumberInput">
       <b-form-input
         id="PhonenumberInput"
         type='tel'
         v-model="editedProfile.phone"
         required
-        placeholder="Enter Phonenumber">
+      >
       </b-form-input>
     </b-form-group >
     <b-form-group
@@ -77,31 +77,9 @@
         :rows="3"
         type="text"
         v-model="editedProfile.description"
-        placeholder="Short description">
+      >
       </b-form-input>
     </b-form-group>
-    <b-form-group
-      id="birthday"
-      horizontal
-      label="Birthday:"
-      label-for="birthdayInput">
-      <b-form-input
-        id="birthdayInput"
-        type="date"
-        v-model="editedProfile.birthday">
-      </b-form-input>
-    </b-form-group>
-    <!--<b-form-group
-      id="photoPath"
-      horizontal
-      label="Profile picture url:"
-      label-for="photoPathInput">
-      <b-form-input
-        id="photoPathInput"
-        type="text"
-        v-model="editedProfile.photoPath">
-      </b-form-input>
-    </b-form-group>-->
     <b-button type="submit" variant="primary">Submit</b-button>
     <b-button type="reset" variant="danger">Reset</b-button>
   </b-form>
