@@ -13,7 +13,9 @@
           v-model="profileSkill.skillId" 
           :options="availableSkills"
           value-field="id"
-          text-field="name">
+          text-field="name"
+          required  
+        >
           <template slot="first">
             <option :value="null" disabled>-- Select skill --</option>
           </template>

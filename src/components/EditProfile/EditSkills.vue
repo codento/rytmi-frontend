@@ -4,7 +4,7 @@
       <hr />
       <b-row>
         <b-col class="col-sm-5 col-md-5">
-          <skill-form :profileId="profileId" />
+          <SkillForm :profileId="profileId" />
         </b-col>
         <b-col class="col-sm-7 col-md-7">
           <b-table
@@ -14,24 +14,28 @@
             caption-top
           >
             <template slot="table-caption">
-              Current proficiencies
+              Current proficiencies (click on value to update)
             </template>
             <template slot="skillId" slot-scope="skillId">
               {{skillById(skillId.value).name}}
             </template>
             <template slot="knows" slot-scope="knows">
-              <b-progress
-                :value="knows.value"
-                max="5"
-                show-value
-              />
+              <span @click.stop="showKnowsModal(knows)">
+                <b-progress
+                  :value="knows.value"
+                  :max=5
+                  show-value
+                />
+              </span>
             </template>
             <template slot="wantsTo" slot-scope="wantsTo">
-              <b-progress
-                :value="wantsTo.value"
-                max="5"
-                show-value
-              />
+              <span @click.stop="showWantsModal(wantsTo)">
+                <b-progress
+                  :value="wantsTo.value"
+                  :max=5
+                  show-value
+                />
+              </span>
             </template>
             <template slot="remove" slot-scope="remove">
               <b-btn size="sm" variant="danger" @click.stop="removeSkillFromProfile(remove.item.id)">Remove</b-btn>
@@ -39,11 +43,22 @@
           </b-table>
         </b-col>
       </b-row>
+      <b-modal ref="wantsToModal" title="Update skill willingness" hide-footer>
+        <b-radio-group plain stacked v-model="editedSkill.wantsTo" :options="wantsToOptions" />
+        <b-btn @click="updateSkill()">Save</b-btn>
+        <b-btn @click="hideModals()">Cancel</b-btn>
+      </b-modal>
+      <b-modal ref="knowsModal" title="Update skill proficiency" hide-footer>
+        <b-radio-group plain stacked v-model="editedSkill.knows" :options="knowsOptions" />
+        <b-btn @click="updateSkill()">Save</b-btn>
+        <b-btn @clock="hideModals()">Cancel</b-btn>
+      </b-modal>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import proficiencyDesc from '../../assets/proficiencyDesc'
 import SkillForm from './SkillForm'
 import SkillCard from './SkillCard'
 
@@ -59,7 +74,10 @@ export default {
         { key: 'knows', label: 'Level' },
         { key: 'wantsTo', label: 'Willingness' },
         { key: 'remove', label: ' ' }
-      ]
+      ],
+      wantsToOptions: proficiencyDesc.wants,
+      knowsOptions: proficiencyDesc.knows,
+      editedSkill: {}
     }
   },
   components: {
@@ -75,16 +93,45 @@ export default {
   },
   methods: {
     ...mapActions([
-      'removeProfileSkill'
+      'removeProfileSkill',
+      'updateProfileSkill'
     ]),
     removeSkillFromProfile (skillId) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {
         this.removeProfileSkill({profileId: this.profileId, id: skillId})
       }
+    },
+    showWantsModal (el) {
+      this.editedSkill = Object.assign({}, el.item)
+      this.$refs.wantsToModal.show()
+    },
+    showKnowsModal (el) {
+      this.editedSkill = Object.assign({}, el.item)
+      this.$refs.knowsModal.show()
+    },
+    hideModals () {
+      this.$refs.knowsModal.hide()
+      this.$refs.wantsToModal.hide()
+    },
+    updateSkill () {
+      this.updateProfileSkill(this.editedSkill)
+        .then(response => {
+          this.$toasted.global.rytmi_success({
+            message: 'Proficiency updated.'
+          })
+          this.$refs.wantsToModal.hide()
+          this.$refs.knowsModal.hide()
+        })
     }
   }
 }
 </script>
 
-<style scoped />
+<style scoped >
+button {
+  width: 100%;
+  margin-top: 0.5em;
+}
+
+</style>

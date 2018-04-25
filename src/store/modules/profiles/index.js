@@ -7,8 +7,7 @@ const initialState = {
   userProfile: '',
   profiles: {},
   profileList: [],
-  profileSkillList: [],
-  profileSkills: {}
+  profileSkills: []
 }
 
 export default {
