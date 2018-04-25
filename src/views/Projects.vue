@@ -17,7 +17,8 @@ export default {
     ProjectForm,
     ProjectList
   },
-  computed: {
+  mounted () {
+    document.title = 'Rytmi - Project List'
   }
 }
 </script>

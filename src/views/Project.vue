@@ -88,6 +88,9 @@ export default {
     store.dispatch('fetchProjectProfiles', to.params.id)
     next()
   },
+  mounted () {
+    document.title = 'Rytmi - ' + this.project.name
+  },
   methods: {
     // TODO: scroll to bottom when opening form
     toggleProfileForm () {
