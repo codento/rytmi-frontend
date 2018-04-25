@@ -19,6 +19,9 @@ export default {
   name: 'login',
   computed: {
     ...mapGetters(['isAuthenticated'])
+  },
+  mounted () {
+    document.title = 'Rytmi'
   }
 }
 </script>

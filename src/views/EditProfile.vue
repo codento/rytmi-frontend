@@ -30,6 +30,9 @@ export default {
     profile () {
       return this.profileById(this.$route.params.id)
     }
+  },
+  mounted () {
+    document.title = 'Rytmi - Edit Profile'
   }
 }
 </script>

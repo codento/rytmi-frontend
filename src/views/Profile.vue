@@ -124,6 +124,9 @@ export default {
     showExplanations (show) {
       this.showInfo = show
     }
+  },
+  mounted () {
+    document.title = 'Rytmi - ' + this.profile.firstName + ' ' + this.profile.lastName
   }
 }
 </script>
