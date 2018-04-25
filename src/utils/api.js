@@ -99,6 +99,14 @@ export function newProjectProfile (data) {
     .catch(handleError)
 }
 
+export function alterProjectProfile (data) {
+  return axios.put(
+    process.env.API_URL + PATH_PROJECTS + '/' + data.projectId + '/profiles/' + data.profileId,
+    data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function deleteProjectProfile (data) {
   console.log(data)
   return axios.delete(
