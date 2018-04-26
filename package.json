@@ -108,6 +108,9 @@
       "js",
       "vue"
     ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
     "setupFiles": [
       "jest-localstorage-mock"
     ],
