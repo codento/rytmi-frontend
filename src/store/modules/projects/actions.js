@@ -2,6 +2,7 @@ import {
   getProjectProfiles,
   getProfileProjects,
   newProjectProfile,
+  alterProjectProfile,
   deleteProjectProfile,
   newProject,
   getProjects,
@@ -68,6 +69,18 @@ export function addProjectProfile ({ commit, state }, data) {
     newProjectProfile(data)
       .then(response => {
         commit(types.ADD_PROJECTPROFILE, response.data)
+        resolve(response)
+      })
+      .catch(err => reject(err))
+  })
+}
+
+export function updateProjectProfile ({ commit, state }, projectProfile) {
+  return new Promise((resolve, reject) => {
+    alterProjectProfile(projectProfile)
+      .then(response => {
+        response.data.index = projectProfile.index
+        commit(types.UPDATE_PROJECTPROFILE, response.data)
         resolve(response)
       })
       .catch(err => reject(err))

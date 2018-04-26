@@ -7,11 +7,11 @@
       <div class="col-sm-12 duration-container" >
         <span class="duration-item">
             <small>From</small><br />
-            <DateFormatter :date="profileProject.startAt" />
+            <DateFormatter :date="profileProject.startDate" />
         </span>
         <span class="duration-item">
             <small>To</small><br />
-            <DateFormatter :date="profileProject.finishAt" /> 
+            <DateFormatter :date="profileProject.endDate" /> 
         </span>
       </div>
       <transition name="fade">
