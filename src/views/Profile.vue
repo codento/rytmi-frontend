@@ -98,10 +98,9 @@ export default {
   beforeRouteEnter (to, from, next) {
     store.dispatch('fetchProfileProjects', to.params.id)
     next()
+  },
+  mounted () {
+    document.title = 'Rytmi - ' + this.profile.firstName + ' ' + this.profile.lastName
   }
 }
 </script>
-
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
-<style scoped>
-</style>

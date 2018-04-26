@@ -48,6 +48,14 @@ export function newProfileSkill (data, token) {
     .catch(handleError)
 }
 
+export function alterProfileSkill (data) {
+  return axios.put(
+    process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id,
+    denormalize(data, [skill]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function deleteProfileSkill (data, token) {
   return axios.delete(
     process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id,

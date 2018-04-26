@@ -1,18 +1,18 @@
 export default {
-  knows: {
-    0: 'En osaa',
-    1: 'Tutorial -tason osaaminen',
-    2: 'Perusteet hallussa',
-    3: 'Luulen tietäväni mitä teen',
-    4: 'Tiedän mitä teen',
-    5: 'Osaan erinomaisesti'
-  },
-  wants: {
-    0: 'Jos kysyt niin vaihdan firmaa...',
-    1: 'Jos on ihan pakko',
-    2: 'Kyllä tätä tekee ennemmin ku turpiinsa ottaa',
-    3: 'Ihan ok',
-    4: 'Kivaa!',
-    5: 'Haluan ehdottomasti mukaan!'
-  }
+  knows: [
+    { text: '0 - No proficiency', value: 0 },
+    { text: '1 - Tutorial-level', value: 1 },
+    { text: '2 - Basics', value: 2 },
+    { text: '3 - I think I know what I am doing', value: 3 },
+    { text: '4 - I know what I am doing', value: 4 },
+    { text: '5 - Excellent', value: 5 }
+  ],
+  wants: [
+    { text: '0 - No way, no how', value: 0 },
+    { text: '1 - If I have to', value: 1 },
+    { text: "2 - I'd rather not", value: 2 },
+    { text: "3 - It's OK", value: 3 },
+    { text: "4 - It's fun!", value: 4 },
+    { text: '5 - Pick me, pick me!', value: 5 }
+  ]
 }

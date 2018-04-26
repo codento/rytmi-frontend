@@ -1,4 +1,4 @@
-// import Vue from 'vue'
+import Vue from 'vue'
 import * as types from '../../mutation-types'
 
 export const mutations = {
@@ -14,17 +14,22 @@ export const mutations = {
   },
   [types.FETCH_PROFILESKILLS] (state, profileSkills) {
     state.profileSkills = profileSkills
-    state.profileSkillList = Object.keys(profileSkills)
   },
   [types.ADD_PROFILE_SKILL] (state, profileSkill) {
-    state.profileSkills[profileSkill.id] = profileSkill
-    state.profileSkillList.push(profileSkill.id)
+    Vue.set(state.profileSkills, profileSkill.id, profileSkill)
+  },
+  [types.UPDATE_PROFILE_SKILL] (state, profileSkill) {
+    // TODO: this might be wise to refactor
+    state.profileSkills = state.profileSkills.filter((skill) => {
+      return skill.id !== profileSkill.id
+    })
+    Vue.set(state.profileSkills, profileSkill.id, profileSkill)
+    state.profileSkills.sort((a, b) => { return a.id - b.id })
   },
   [types.REMOVE_PROFILE_SKILL] (state, profileSkillId) {
     state.profileSkills = state.profileSkills.filter((skill) => {
       return skill.id !== profileSkillId
     })
-    state.profileSkillList = Object.keys(state.profileSkills)
   },
   [types.SET_PROFILEID] (state, profileId) {
     state.profileId = profileId

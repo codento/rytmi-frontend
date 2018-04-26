@@ -7,16 +7,16 @@
       <b-progress :max="5" class="mb-6" height="0.9rem">
         <b-progress-bar class="rytmi-progress-knowledge"
           :value="knows">
-          <slot name="label" v-if="active !== skillId">{{ knows ? knows.toString() : '' }}</slot>
+          <slot name="label" v-if="active !== skillId">{{ knows ? knows.toString()  : '' }}</slot>
         </b-progress-bar>
-        <span v-if="active === skillId" class="skilldesc-center">{{ knowsToDesc }}</span>
+        <span v-if="active === skillId" class="skilldesc-center">{{ knowsToDesc.text }}</span>
       </b-progress>
       <b-progress :max="5" class="mb-6" height="0.9rem">
         <b-progress-bar class="rytmi-progress-wants"
           :value="wants">
           <slot name="label" v-if="active !== skillId">{{ wants ? wants.toString() : '' }}</slot>
         </b-progress-bar>
-        <span v-if="active === skillId" class="skilldesc-center">{{ wantsToDesc }}</span>
+        <span v-if="active === skillId" class="skilldesc-center">{{ wantsToDesc.text }}</span>
       </b-progress>
     </b-col>
   </b-row>

@@ -63,6 +63,9 @@ export default {
       this.active = this.active.filter(el => (el.id !== skill.id))
     }
   },
+  mounted () {
+    document.title = 'Rytmi - Search'
+  },
   components: {
     Results
   }

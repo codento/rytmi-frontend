@@ -6,6 +6,9 @@
 
 <script>
 export default {
-  name: 'login'
+  name: 'login',
+  mounted () {
+    document.title = 'Rytmi - 404'
+  }
 }
 </script>

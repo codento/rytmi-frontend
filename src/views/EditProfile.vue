@@ -1,5 +1,7 @@
 <template>
-  <div class="animated fadeIn profile-editor">
+  <div class="animated fadeIn profile-editor col-sm-12 col-md-10">
+    <h1>Basic Details</h1>
+    <hr />
     <ProfileForm :profile="profile" />
     <EditLinks :profile="profile" />
     <edit-skills :profileId="profile.id" />
@@ -28,8 +30,15 @@ export default {
     profile () {
       return this.profileById(this.$route.params.id)
     }
+  },
+  mounted () {
+    document.title = 'Rytmi - Edit Profile'
   }
 }
 </script>
 
-<style scoped />
+<style scoped>
+.profile-editor {
+  margin: 0 auto;
+}
+</style>
