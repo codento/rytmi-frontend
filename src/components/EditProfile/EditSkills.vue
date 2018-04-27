@@ -51,7 +51,7 @@
       <b-modal ref="knowsModal" title="Update skill proficiency" hide-footer>
         <b-radio-group plain stacked v-model="editedSkill.knows" :options="knowsOptions" />
         <b-btn @click="updateSkill()">Save</b-btn>
-        <b-btn @clock="hideModals()">Cancel</b-btn>
+        <b-btn @click="hideModals()">Cancel</b-btn>
       </b-modal>
   </div>
 </template>
