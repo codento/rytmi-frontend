@@ -7,6 +7,7 @@ import router from './router'
 import store from './store'
 import lodash from 'lodash'
 import Toasted from 'vue-toasted'
+import 'date-input-polyfill'
 
 Object.defineProperty(Vue.prototype, '$lodash', { value: lodash })
 Vue.use(BootstrapVue)

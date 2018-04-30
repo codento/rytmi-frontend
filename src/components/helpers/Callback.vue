@@ -8,7 +8,8 @@ export default {
     ...mapActions([
       'fetchProfiles',
       'fetchSkills',
-      'fetchProfileSkills'
+      'fetchProfileSkills',
+      'fetchProjects'
     ])
   },
   created () {
@@ -16,6 +17,7 @@ export default {
       this.fetchProfiles()
       this.fetchSkills()
       this.fetchProfileSkills()
+      this.fetchProjects()
       this.$router.push(this.$route.query.redirect || '/')
     })
   }
