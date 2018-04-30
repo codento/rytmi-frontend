@@ -2,7 +2,6 @@ import axios from 'axios'
 import { denormalize } from 'normalizr'
 import { profile, skill, project } from '../store/schema'
 import store from '../store'
-import router from '../router'
 import * as types from '../store/mutation-types'
 
 const PATH_AUTH = '/auth'
@@ -144,7 +143,6 @@ function getAuthHeaders () {
 function handleError (error) {
   if (error.response.status === 401) {
     store.commit(types.AUTH_LOGOUT)
-    router.push({name: 'home'})
   } else {
     throw error
   }
