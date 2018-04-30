@@ -22,6 +22,7 @@
             <template slot="knows" slot-scope="knows">
               <span @click.stop="showKnowsModal(knows)">
                 <b-progress
+                  height="1.7rem"
                   :value="knows.value"
                   :max=5
                   show-value
@@ -31,6 +32,7 @@
             <template slot="wantsTo" slot-scope="wantsTo">
               <span @click.stop="showWantsModal(wantsTo)">
                 <b-progress
+                  height="1.7rem"
                   :value="wantsTo.value"
                   :max=5
                   show-value
@@ -38,20 +40,20 @@
               </span>
             </template>
             <template slot="remove" slot-scope="remove">
-              <b-btn size="sm" variant="danger" @click.stop="removeSkillFromProfile(remove.item.id)">Remove</b-btn>
+              <b-btn size="sm" class="mr-1" variant="danger" @click.stop="removeSkillFromProfile(remove.item.id)">Remove</b-btn>
             </template>
           </b-table>
         </b-col>
       </b-row>
       <b-modal ref="wantsToModal" title="Update skill willingness" hide-footer>
         <b-radio-group plain stacked v-model="editedSkill.wantsTo" :options="wantsToOptions" />
-        <b-btn @click="updateSkill()">Save</b-btn>
-        <b-btn @click="hideModals()">Cancel</b-btn>
+        <b-btn class="modal-btn" @click="updateSkill()">Save</b-btn>
+        <b-btn class="modal-btn" @click="hideModals()">Cancel</b-btn>
       </b-modal>
       <b-modal ref="knowsModal" title="Update skill proficiency" hide-footer>
         <b-radio-group plain stacked v-model="editedSkill.knows" :options="knowsOptions" />
-        <b-btn @click="updateSkill()">Save</b-btn>
-        <b-btn @clock="hideModals()">Cancel</b-btn>
+        <b-btn class="modal-btn" @click="updateSkill()">Save</b-btn>
+        <b-btn class="modal-btn" @click="hideModals()">Cancel</b-btn>
       </b-modal>
   </div>
 </template>
@@ -131,7 +133,9 @@ export default {
 <style scoped >
 button {
   width: 100%;
-  margin-top: 0.5em;
+}
+.modal-btn {
+  margin-top: 0.5rem;
 }
 
 </style>

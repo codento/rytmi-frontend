@@ -10,6 +10,7 @@ const PATH_SKILLS = '/skills'
 const PATH_PROFILES = '/profiles'
 const PATH_PROFILESKILLS = '/profileskills'
 const PATH_PROJECTS = '/projects'
+const PATH_PROFILEPROJECTS = '/profileprojects'
 
 export function login (token) {
   return axios.post(process.env.API_URL + PATH_AUTH, {id_token: token})
@@ -102,7 +103,7 @@ export function getProjectProfiles (data, token) {
 
 export function newProjectProfile (data) {
   return axios.post(
-    process.env.API_URL + PATH_PROJECTS + '/' + data.projectId + '/profiles',
+    process.env.API_URL + PATH_PROJECTS + '/' + data.projectId + '/profiles/' + data.profileId,
     data,
     getAuthHeaders())
     .catch(handleError)
@@ -110,16 +111,15 @@ export function newProjectProfile (data) {
 
 export function alterProjectProfile (data) {
   return axios.put(
-    process.env.API_URL + PATH_PROJECTS + '/' + data.projectId + '/profiles/' + data.profileId,
+    process.env.API_URL + PATH_PROFILEPROJECTS + '/' + data.id,
     data,
     getAuthHeaders())
     .catch(handleError)
 }
 
 export function deleteProjectProfile (data) {
-  console.log(data)
   return axios.delete(
-    process.env.API_URL + PATH_PROJECTS + '/' + data.projectId + '/profiles/' + data.profileId,
+    process.env.API_URL + PATH_PROFILEPROJECTS + '/' + data.id,
     getAuthHeaders())
     .catch(handleError)
 }

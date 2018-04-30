@@ -32,7 +32,7 @@
           </span>
         </template>
         <template slot="remove" slot-scope="remove">
-          <b-btn variation="danger" @click.stop="removeMember(remove.item)">Remove</b-btn>
+          <b-btn size="sm" class="mr-1" variant="danger" @click.stop="removeMember(remove.item)">Remove</b-btn>
         </template>
       </b-table>
     </div>
