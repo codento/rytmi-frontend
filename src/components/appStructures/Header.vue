@@ -1,15 +1,16 @@
 <template>
   <header class="app-header navbar">
+    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">
+      <span class="navbar-toggler-icon"></span>
+    </button>
     <b-link class="navbar-brand" to="/home" exact></b-link>
-     <b-navbar-nav v-if="isAuthenticated">
-      <b-nav-item :to="{name: 'search'}">Search</b-nav-item>
-      <b-nav-item :to="{name: 'profile', params: { id: profileId }}" >My Profile</b-nav-item>
-      <b-nav-item :to="{name: 'projects'}">Projects</b-nav-item>
-    </b-navbar-nav>
     <b-navbar-nav class="ml-auto">
-      <b-nav-item id="loginBtn" v-if="!isAuthenticated" v-on:click="login">Sign in</b-nav-item>
-      <b-nav-item id="logoutBtn" v-if="isAuthenticated" v-on:click="logout">Sign out</b-nav-item>
-      <b-nav-item id="checkStatusBtn" v-if="isDev" v-on:click="checkStatus">Check status</b-nav-item>
+      <b-nav-item id="loginBtn" v-if="!isAuthenticated" v-on:click="login">
+        <i class="fa fa-unlock" />&nbsp; Sign in
+      </b-nav-item>
+      <b-nav-item id="logoutBtn" v-if="isAuthenticated" v-on:click="logout">
+        <i class="fa fa-lock" />&nbsp; Sign out
+      </b-nav-item>
     </b-navbar-nav>
   </header>
 </template>

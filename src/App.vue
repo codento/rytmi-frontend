@@ -2,7 +2,7 @@
   <div class="app">
     <AppHeader/>
     <div class="app-body">
-      <!-- <Sidebar :navItems="nav"/> -->
+      <Sidebar v-if="isAuthenticated" :navItems="nav"/>
       <main class="main">
         <div class="container-fluid">
           <router-view></router-view>
@@ -47,16 +47,31 @@ export default {
       'profileId'
     ]),
     nav () {
-      return [{
-        name: 'Profile',
-        url: '/profile/' + this.profileId,
-        icon: 'icon-star'
-      },
-      {
-        name: 'EditProfile',
-        url: '/edit/' + this.profileId,
-        icon: 'icon-star'
-      }]
+      return [
+        {
+          name: 'Search',
+          url: '/search',
+          icon: 'icon-magnifier'
+        },
+        {
+          name: 'Projects',
+          url: '/projects',
+          icon: 'icon-drawer'
+        },
+        {
+          divider: true
+        },
+        {
+          name: 'My Profile',
+          url: '/profile/' + this.profileId,
+          icon: 'icon-user'
+        },
+        {
+          name: 'Edit Profile',
+          url: '/edit/' + this.profileId,
+          icon: 'icon-pencil'
+        }
+      ]
     },
     name () {
       return this.$route.name

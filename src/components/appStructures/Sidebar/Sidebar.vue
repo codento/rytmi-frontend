@@ -1,9 +1,6 @@
 <template>
-  <div class="sidebar">
-    <SidebarHeader/>
-    <SidebarForm/>
+  <div class="sidebar light">
     <nav class="sidebar-nav">
-      <div slot="header"></div>
       <ul class="nav">
         <template v-for="(item, index) in navItems">
           <template v-if="item.title">
