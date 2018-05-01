@@ -11,11 +11,11 @@
         </option>
       </b-form-select>
       <span>Start date</span>
-      <b-input type="date" requred v-model="projectProfile.startDate"></b-input>
+      <b-input type="date" required v-model="projectProfile.startDate"></b-input>
       <span>End date</span>
       <b-input type="date" v-model="projectProfile.endDate"></b-input>
       <span>Utilization percentage</span>
-      <b-input type="number" min="0" max="100" v-model="projectProfile.workPercentage"></b-input>
+      <b-input type="number" required min="0" max="100" v-model="projectProfile.workPercentage"></b-input>
       <b-button primary type="submit">Submit</b-button>
     </b-form>
     <div class="profile-form-errors" v-if="showError">
