@@ -3,7 +3,7 @@
     <li v-for='profile in results' :key="profile.userId">
       <b-card>
         <b-row>
-          <b-col class="col-sm-4" style="text-align:center">
+          <b-col class="col-md-4 col-12" style="text-align:center">
             <span @click="openProfile(profile)" style="cursor: pointer">
               <img :src='profile.photoPath' alt="">
               <h3>{{profile.firstName}} {{profile.lastName}}</h3>
@@ -11,8 +11,7 @@
             <b>{{profile.email}}</b><br>
             <b>{{profile.phone}}</b>
           </b-col>
-          <b-col class="col-md-6">
-            <b-col>
+          <b-col class="col-md-6 col-12" style="margin-top: 1em;">
               <SkillRow v-for='skill in skillsByProfileId(profile.id)'
                 :name="skillName(skill.skillId)"
                 :skillId='skill.id'
@@ -21,13 +20,12 @@
                 :desc='skill.description'
                 :key='skill.id'>
               </SkillRow>
-            </b-col>
           </b-col>
-          <div :key="profile.id" class="profile-open-button">
+          <b-col class="col-12 col-md-2 profile-open-button">
               <b-button @click="openProfile(profile)">
                 <i style="font-size: 76px; color: gray;" class="fa fa-5x fa-angle-right"></i>
               </b-button>
-          </div>
+          </b-col>
         </b-row>
       </b-card>
     </li>

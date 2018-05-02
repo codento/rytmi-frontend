@@ -1,10 +1,10 @@
 <template>
   <div class="animated fadeIn profile">
     <b-row>
-      <b-col>
+      <b-col class="col-md-6 col-sm-12 col-12">
         <UserProfileCard :profile="profile"/>     
       </b-col>
-      <b-col>
+      <b-col class="col-md-6 col-sm-12 col-12">
         <b-card id="proficiency">
           <h5 slot="header" class="mb-0">
             Proficiency
