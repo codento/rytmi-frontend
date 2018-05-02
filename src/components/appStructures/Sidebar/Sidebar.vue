@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar light">
+  <div class="sidebar">
     <nav class="sidebar-nav">
       <ul v-if="isAuthenticated" class="nav">
         <template v-for="(item, index) in navItems">
