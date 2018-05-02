@@ -3,15 +3,13 @@
       <h1>Proficiencies</h1>
       <hr />
       <b-row>
-        <b-col class="col-sm-5 col-md-5">
-          <SkillForm :profileId="profileId" />
-        </b-col>
-        <b-col class="col-sm-7 col-md-7">
+        <b-col class="col-12 col-md-7">
           <b-table
             :items="skillsByProfileId(profileId)"
             :fields="fields"
             fixed
             caption-top
+            stacked="sm"
           >
             <template slot="table-caption">
               Current proficiencies (click on value to update)
@@ -43,6 +41,9 @@
               <b-btn size="sm" class="mr-1" variant="danger" @click.stop="removeSkillFromProfile(remove.item.id)">Remove</b-btn>
             </template>
           </b-table>
+        </b-col>
+        <b-col class="col-12 col-md-5">
+          <SkillForm :profileId="profileId" />
         </b-col>
       </b-row>
       <b-modal ref="wantsToModal" title="Update skill willingness" hide-footer>
