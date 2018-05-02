@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn profile">
+  <b-container class="animated fadeIn profile">
     <b-row>
       <b-col>
         <UserProfileCard :profile="profile"/>     
@@ -34,7 +34,7 @@
         </b-card>
       </b-col>
     </b-row>
-  </div>
+  </b-container>
 </template>
 
 <script>
