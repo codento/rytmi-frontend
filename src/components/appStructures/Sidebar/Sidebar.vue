@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar light">
     <nav class="sidebar-nav">
-      <ul class="nav">
+      <ul v-if="isAuthenticated" class="nav">
         <template v-for="(item, index) in navItems">
           <template v-if="item.title">
             <SidebarNavTitle :key="index" :name="item.name" :classes="item.class" :wrapper="item.wrapper"/>
@@ -41,6 +41,9 @@
           </template>
         </template>
       </ul>
+      <span v-else>
+        <SidebarNavLink name="Please sign in" icon="icon-unlock" />
+      </span>
       <slot></slot>
     </nav>
     <SidebarFooter/>
@@ -59,6 +62,7 @@ import SidebarNavLink from './SidebarNavLink'
 import SidebarNavTitle from './SidebarNavTitle'
 import SidebarNavItem from './SidebarNavItem'
 import SidebarNavLabel from './SidebarNavLabel'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'sidebar',
@@ -68,6 +72,11 @@ export default {
       required: true,
       default: () => []
     }
+  },
+  computed: {
+    ...mapGetters([
+      'isAuthenticated'
+    ])
   },
   components: {
     SidebarFooter,
