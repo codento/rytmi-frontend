@@ -5,11 +5,15 @@ exports[`Profile.vue shallow Template is correct 1`] = `
   class="animated fadeIn profile"
 >
   <b-row>
-    <b-col>
+    <b-col
+      class="col-md-6 col-sm-12 col-12"
+    >
       <!---->
     </b-col>
      
-    <b-col>
+    <b-col
+      class="col-md-6 col-sm-12 col-12"
+    >
       <b-card
         id="proficiency"
       >
@@ -37,13 +41,8 @@ exports[`Profile.vue shallow Template is correct 1`] = `
       </b-card>
        
       <b-card
-        header="Working experience (placeholder)"
-      >
-        <!---->
-        <!---->
-        <!---->
-        <!---->
-      </b-card>
+        header="Projects"
+      />
     </b-col>
   </b-row>
 </div>

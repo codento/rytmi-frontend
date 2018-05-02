@@ -1,7 +1,6 @@
 import {
   shallow,
-  createLocalVue,
-  mount
+  createLocalVue
 } from 'vue-test-utils'
 import Vuex from 'vuex'
 import { UserProfileCard } from '../../src/components/Profile'
@@ -9,7 +8,7 @@ import { UserProfileCard } from '../../src/components/Profile'
 describe('UserProfileCard.test.js', () => {
   let localVue = createLocalVue()
   localVue.use(Vuex)
-  let store, getters, cmp
+  let store, getters
 
   beforeEach(() => {
     getters = {
@@ -17,7 +16,8 @@ describe('UserProfileCard.test.js', () => {
       profileById: () => (arg) => arg,
       profiles: () => (arg) => arg,
       skillsById: () => (arg) => arg,
-      skillsByProfileId: () => (arg) => arg
+      skillsByProfileId: () => (arg) => arg,
+      profileProjectsByProfileId: () => (arg) => arg
     }
     store = new Vuex.Store({ getters })
   })

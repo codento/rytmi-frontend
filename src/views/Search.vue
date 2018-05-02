@@ -4,19 +4,20 @@
       <div class="search-bar" id="search">
         <h2>Find people</h2>
         <input class="form-control" placeholder="Filter by name" v-model="param" />
-        <div class="search-options">
-          <div class="search-tag-dropdown">
+        <b-row class="search-options">
+          <b-col class="search-options-item search-tag-dropdown col-md-4 col-12">
+            <small>Filter:</small><br />
             <b-dropdown id="ddown1" text="Add skill filters:">
               <b-dropdown-item-button v-for="skill in skillsNotIn(active)" :key="skill.id" @click="addToSearch(skill)">
                 {{skill.name}}
               </b-dropdown-item-button>
             </b-dropdown>
-          </div>
-          <div class="search-bar-sort">
-            <span>Sort:</span>
+          </b-col>
+          <b-col class="search-options-item search-bar-sort col-md-4 col-12">
+            <small>Sort:</small><br />
             <b-form-radio-group id="btnradios" buttons v-model='selected' :options='options' name='radioBtnStacked' />
-          </div>
-        </div>
+          </b-col>
+        </b-row>
         <div class="search-tag-container" id="active">
           <ul>
             <li @click="removeFromSearch(skill)" v-for='skill in active' class="active remove" :key="skill.name">
@@ -98,5 +99,22 @@ ul {
 img {
   object-fit: contain;
   margin-left: 10px
+}
+.search-container {
+    min-height: 60vh;
+}
+.search-bar {
+    padding: 1em;
+    min-height: 15em;
+}
+.search-options {
+    width: 100%;
+    padding: 1em 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+.search-tag-dropdown {
+    width: 100%;
+
 }
 </style>

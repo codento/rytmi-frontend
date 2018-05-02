@@ -7,6 +7,8 @@ import Search from '@/views/Search'
 import PageNotFound from '@/views/PageNotFound'
 import store from '../store'
 import Callback from '@/components/helpers/Callback'
+import Projects from '@/views/Projects'
+import Project from '@/views/Project'
 Vue.use(Router)
 
 const requireAuth = (to, from, next) => {
@@ -43,7 +45,19 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/profile/:id/edit',
+      path: '/projects',
+      name: 'projects',
+      component: Projects,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/projects/:id',
+      name: 'Project',
+      component: Project,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/edit/:id',
       name: 'editProfile',
       component: EditProfile
     },
