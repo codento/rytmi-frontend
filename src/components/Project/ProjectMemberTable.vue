@@ -6,6 +6,7 @@
         :fields="fields"
         hover
         striped
+        stacked="sm"
         caption-top
       >
         <template slot="table-caption">
