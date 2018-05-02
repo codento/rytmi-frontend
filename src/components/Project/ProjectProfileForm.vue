@@ -69,7 +69,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 button {
   width: 100%;
   margin-top: 1em;
