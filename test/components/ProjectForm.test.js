@@ -1,4 +1,4 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import { ProjectForm } from '../../src/components/Project'
 
 describe('ProjectForm.test.js', () => {

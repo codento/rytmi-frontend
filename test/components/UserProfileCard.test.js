@@ -1,7 +1,7 @@
 import {
-  shallow,
+  shallowMount,
   createLocalVue
-} from 'vue-test-utils'
+} from '@vue/test-utils'
 import Vuex from 'vuex'
 import { UserProfileCard } from '../../src/components/Profile'
 
@@ -22,7 +22,7 @@ describe('UserProfileCard.test.js', () => {
     store = new Vuex.Store({ getters })
   })
   it('Template is correct', () => {
-    let wrapper = shallow(UserProfileCard, {
+    let wrapper = shallowMount(UserProfileCard, {
       store,
       localVue,
       propsData: {

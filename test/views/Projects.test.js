@@ -1,14 +1,14 @@
 import Vuex from 'vuex'
-import { shallow, createLocalVue } from 'vue-test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import View from '../../src/views/Projects.vue'
 
-describe('Profile.vue shallow', () => {
+describe('Profile.vue shallowMount', () => {
   let localVue = createLocalVue()
   localVue.use(Vuex)
   let store, cmp
 
   beforeEach(() => {
-    cmp = shallow(View, {
+    cmp = shallowMount(View, {
       store,
       localVue
     })

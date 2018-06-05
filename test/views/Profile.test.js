@@ -11,12 +11,12 @@ jest.mock('lodash', () => ({
 /* eslint-disable */
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
-import { shallow, createLocalVue } from 'vue-test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import View from '../../src/views/Profile.vue'
 import lodash from 'lodash'
 /* eslint-enable */
 
-describe('Profile.vue shallow', () => {
+describe('Profile.vue shallowMount', () => {
   let localVue = createLocalVue()
   localVue.use(Vuex)
   let store, getters, cmp
@@ -37,7 +37,7 @@ describe('Profile.vue shallow', () => {
     }
     store = new Vuex.Store({ getters })
 
-    cmp = shallow(View, {
+    cmp = shallowMount(View, {
       store,
       localVue,
       mocks: {
