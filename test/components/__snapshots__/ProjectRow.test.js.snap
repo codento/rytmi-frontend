@@ -1,9 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ProjectRow.test.js Template is correct 1`] = `
-"<div><div class=\\"row mb-1\\"><div class=\\"col-sm-12\\"><span class=\\"project-header\\"> </span></div> <div class=\\"col-sm-12 duration-container\\"><span class=\\"duration-item\\"><small>From</small><br> <span>
+<div>
+  <div class="row mb-1">
+    <div class="col-sm-12"><span class="project-header"> </span></div>
+    <div class="col-sm-12 duration-container"><span class="duration-item"><small>From</small><br> <span>
   Invalid Date
-</span></span> <span class=\\"duration-item\\"><small>To</small><br> <span>
+</span></span> <span class="duration-item"><small>To</small><br> <span>
   Invalid Date
-</span></span></div> <!----></div> <hr></div>"
+</span></span>
+    </div>
+    <!---->
+  </div>
+  <hr>
+</div>
 `;

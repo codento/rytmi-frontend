@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Profile.vue shallow Template is correct 1`] = `
+exports[`Profile.vue shallowMount Template is correct 1`] = `
 <b-container
   class="animated fadeIn profile"
 >
@@ -43,6 +43,12 @@ exports[`Profile.vue shallow Template is correct 1`] = `
       <b-card
         header="Projects"
       />
+       
+      <b-card
+        header="Utilization"
+      >
+        <!---->
+      </b-card>
     </b-col>
   </b-row>
 </b-container>

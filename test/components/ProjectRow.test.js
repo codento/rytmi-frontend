@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from 'vue-test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import { ProjectRow } from '../../src/components/Profile'
 import Vuex from 'vuex'
 
