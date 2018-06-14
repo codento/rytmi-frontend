@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Profile.vue shallow Template is correct 1`] = `
-<div
+<b-container
   class="animated fadeIn profile"
 >
   <b-row>
@@ -45,5 +45,5 @@ exports[`Profile.vue shallow Template is correct 1`] = `
       />
     </b-col>
   </b-row>
-</div>
+</b-container>
 `;

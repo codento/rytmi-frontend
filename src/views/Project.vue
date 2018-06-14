@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 99vw">
+  <div>
     <div class="animated fadeIn project-container col-sm-12 col-md-7">
       <b-row>
         <b-col class="project-details">
