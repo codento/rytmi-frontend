@@ -34,6 +34,9 @@
           <loading v-if="!profileProjects"></loading>
           <ProjectRow v-else v-for='project in profileProjects' :profileProject="project"  :key="project.projectId"/>
         </b-card>
+        <b-card header='Utilization'>
+          <UtilizationChart :projects="profileProjects" />
+        </b-card>
       </b-col>
     </b-row>
   </b-container>
@@ -47,7 +50,8 @@ import {
   ProjectRow,
   SkillExplanations,
   SkillRow,
-  UserProfileCard
+  UserProfileCard,
+  UtilizationChart
 } from '../components/Profile'
 
 export default {
@@ -76,7 +80,8 @@ export default {
     SkillRow,
     ProjectRow,
     UserProfileCard,
-    SkillExplanations
+    SkillExplanations,
+    UtilizationChart
   },
   data () {
     return {
