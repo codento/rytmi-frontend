@@ -102,7 +102,7 @@ export function fetchProfileProjects ({ commit, state }, profileId) {
   return new Promise((resolve, reject) => {
     getProfileProjects(profileId)
       .then(response => {
-        commit(types.FETCH_PROFILEPROJECTS, { profileId: profileId, projects: response.data })
+        commit(types.FETCH_PROFILESPROJECTS, { profileId: profileId, projects: response.data })
       })
       .catch(err => reject(err))
   })
