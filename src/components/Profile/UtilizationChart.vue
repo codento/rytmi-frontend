@@ -1,16 +1,22 @@
 <template>
   <div>
-     <line-chart class="utilizationChart" :data="utilization" :options="options"></line-chart>
+    <loading v-if="profileProjectsStatus !== 'loading'"></loading>
+    <line-chart v-else class="utilizationChart" :style="style" :chartData="utilization" :options="options"></line-chart>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import LineChart from '../Charts/LineChart'
 
 export default {
   name: 'UtilizationChart',
   props: {
-    projects: Array
+    projects: Array,
+    height: {
+      type: String,
+      default: '75px'
+    }
   },
   data () {
     return {}
@@ -19,14 +25,23 @@ export default {
     LineChart
   },
   computed: {
+    ...mapGetters([
+      'profileProjectsStatus'
+    ]),
     minDate () {
       return new Date()
     },
     maxDate () {
       return new Date(new Date(this.minDate).setMonth(this.minDate.getMonth() + 6))
     },
+    style () {
+      return `height: ${this.height};`
+    },
     options () {
       return {
+        chartArea: {
+          backgroundColor: 'rgba(251, 85, 85, 0.4)'
+        },
         maintainAspectRatio: false,
         scales: {
           xAxes: [{
@@ -37,7 +52,12 @@ export default {
                 month: 'MM'
               }
             },
-            display: false
+            gridLines: {
+              display: true
+            },
+            ticks: {
+              display: false
+            }
           }],
           yAxes: [{
             type: 'linear',
@@ -61,7 +81,6 @@ export default {
     utilization () {
       const minDate = this.minDate
       const maxDate = this.maxDate
-
       let dates = new Set([minDate])
 
       function addDate (date) {
@@ -73,7 +92,8 @@ export default {
       this.projects.forEach(project => {
         addDate(new Date(project.startDate))
         const end = new Date(project.endDate)
-        addDate(new Date(end.setDate(end.getDate() + 1)))
+        end.setDate(end.getDate() + 1)
+        addDate(end)
       })
       const sortetDates = Array.from(dates).sort((a, b) => {
         return a - b
@@ -83,7 +103,6 @@ export default {
       sortetDates.map((date, index) => {
         this.projects.forEach(project => {
           if (new Date(project.startDate) <= date && date < new Date(project.endDate)) {
-            console.log('\tno')
             values[index] += project.workPercentage
           }
         })
@@ -96,8 +115,6 @@ export default {
         datasets: [{
           label: 'Utilization',
           backgroundColor: 'rgb(141, 193, 95)',
-          borderColor: 'rgb(0, 0, 0)',
-          borderWidth: 1,
           steppedLine: true,
           data: values
         }]
@@ -110,8 +127,5 @@ export default {
 <style scoped>
   .utilizationChart {
     position: relative;
-    height: 75px;
-    border: solid black 1px;
-    background-color: rgb(182, 71, 113);
   }
 </style>

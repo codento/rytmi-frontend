@@ -1,11 +1,17 @@
 export const profileId = (state) => state.profileId
+
 export const profiles = (state) => state.profiles
+
 export const profileById = (state) => (id) => state.profiles[id]
+
+export const profileProjectsStatus = (state) => state.profileProjectsStatus
+
 export const skillsByProfileId = (state) => (profileId) => {
   return state.profileSkills
     .filter(skill => skill.profileId === profileId)
     .sort((a, b) => { return a.id - b.id })
 }
+
 export const profileFilter = (state) => (param) => {
   let keys = Object.keys(state.profiles)
   let result = []
@@ -16,4 +22,9 @@ export const profileFilter = (state) => (param) => {
     }
   }
   return result
+}
+
+export const futureProfileProjectsByProfileId = (state) => (profileId) => {
+  const profileProjects = state.profileProjects[profileId]
+  return profileProjects || []
 }

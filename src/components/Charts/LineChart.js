@@ -1,10 +1,25 @@
 // LineChart.js
-import { Line } from 'vue-chartjs'
+import { Line, mixins } from 'vue-chartjs'
+const { reactiveProp } = mixins
 
 export default {
   extends: Line,
-  props: ['data', 'options'],
+  mixins: [reactiveProp],
+  props: ['options'],
   mounted () {
-    this.renderChart(this.data, this.options)
+    this.addPlugin({
+      beforeDraw: function (chart, easing) {
+        if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
+          var ctx = chart.chart.ctx
+          var chartArea = chart.chartArea
+
+          ctx.save()
+          ctx.fillStyle = chart.config.options.chartArea.backgroundColor
+          ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top)
+          ctx.restore()
+        }
+      }
+    })
+    this.renderChart(this.chartData, this.options)
   }
 }

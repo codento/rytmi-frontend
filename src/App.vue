@@ -36,6 +36,7 @@ export default {
   methods: {
     ...mapActions([
       'fetchProfiles',
+      'fetchAllFutureProfileProjects',
       'fetchSkills',
       'fetchProfileSkills',
       'fetchProjects'
@@ -83,6 +84,7 @@ export default {
   created () {
     if (this.isAuthenticated) {
       this.fetchProfiles()
+      this.fetchAllFutureProfileProjects()
       this.fetchSkills()
       this.fetchProfileSkills()
       this.fetchProjects()

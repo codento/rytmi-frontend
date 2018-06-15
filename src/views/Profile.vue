@@ -35,7 +35,8 @@
           <ProjectRow v-else v-for='project in profileProjects' :profileProject="project"  :key="project.projectId"/>
         </b-card>
         <b-card header='Utilization'>
-          <UtilizationChart :projects="profileProjects" />
+          <loading v-if="!profileProjects"></loading>
+          <UtilizationChart v-else :projects="profileProjects" />
         </b-card>
       </b-col>
     </b-row>
