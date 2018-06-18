@@ -1,7 +1,7 @@
 <template>
   <div>
     <loading v-if="profileProjectsStatus !== 'loading'"></loading>
-    <line-chart v-else class="utilizationChart" :style="style" :chartData="utilization" :options="options"></line-chart>
+    <line-chart v-else class="utilizationChart" :style="style" :chartData="chartData" :options="chartOptions"></line-chart>
   </div>
 </template>
 
@@ -45,7 +45,7 @@ export default {
     style () {
       return `height: ${this.height};`
     },
-    options () {
+    chartOptions () {
       return {
         chartArea: {
           backgroundColor: this.backgroundColor
@@ -86,11 +86,7 @@ export default {
         }
       }
     },
-    utilization () {
-      const minDate = this.minDate
-      const maxDate = this.maxDate
-      let dates = new Set([minDate])
-
+    chartData () {
       function addDate (date) {
         if (minDate < date && date < maxDate) {
           dates.add(date)
