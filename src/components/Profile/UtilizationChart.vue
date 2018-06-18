@@ -16,6 +16,14 @@ export default {
     height: {
       type: String,
       default: '75px'
+    },
+    backgroundColor: {
+      type: String,
+      default: 'rgba(251, 85, 85, 0.4)'
+    },
+    fillColor: {
+      type: String,
+      default: 'rgb(97, 176, 32)'
     }
   },
   data () {
@@ -40,7 +48,7 @@ export default {
     options () {
       return {
         chartArea: {
-          backgroundColor: 'rgba(251, 85, 85, 0.4)'
+          backgroundColor: this.backgroundColor
         },
         maintainAspectRatio: false,
         scales: {
@@ -114,7 +122,7 @@ export default {
         labels: sortetDates,
         datasets: [{
           label: 'Utilization',
-          backgroundColor: 'rgb(141, 193, 95)',
+          backgroundColor: this.fillColor,
           steppedLine: true,
           data: values
         }]
