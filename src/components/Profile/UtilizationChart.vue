@@ -8,6 +8,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import LineChart from '../Charts/LineChart'
+import moment from 'moment'
 
 export default {
   name: 'UtilizationChart',
@@ -37,10 +38,10 @@ export default {
       'profileProjectsStatus'
     ]),
     minDate () {
-      return new Date()
+      return moment()
     },
     maxDate () {
-      return new Date(new Date(this.minDate).setMonth(this.minDate.getMonth() + 6))
+      return this.minDate.clone().add(6, 'months')
     },
     style () {
       return `height: ${this.height};`
@@ -87,31 +88,32 @@ export default {
       }
     },
     chartData () {
+      const dates = new Set([this.minDate])
+      const self = this
       function addDate (date) {
-        if (minDate < date && date < maxDate) {
+        if (self.minDate < date && date < self.maxDate) {
           dates.add(date)
         }
       }
 
       this.projects.forEach(project => {
-        addDate(new Date(project.startDate))
-        const end = new Date(project.endDate)
-        end.setDate(end.getDate() + 1)
-        addDate(end)
+        addDate(moment(project.startDate))
+        addDate(moment(project.endDate).add(1, 'day'))
       })
       const sortetDates = Array.from(dates).sort((a, b) => {
         return a - b
       })
-      let values = new Array(dates.size).fill(0)
 
+      const values = new Array(dates.size).fill(0)
       sortetDates.map((date, index) => {
         this.projects.forEach(project => {
-          if (new Date(project.startDate) <= date && date < new Date(project.endDate)) {
+          if (moment(project.startDate) <= date && date < moment(project.endDate)) {
             values[index] += project.workPercentage
           }
         })
       })
-      sortetDates.push(maxDate)
+
+      sortetDates.push(this.maxDate)
       values.push(values[values.length - 1])
 
       return {
