@@ -1,8 +1,9 @@
 <template>
   <b-container class="animated fadeIn profile">
-    <b-row>
+    <loading v-if="!profile"></loading>
+    <b-row v-else>
       <b-col class="col-md-6 col-sm-12 col-12">
-        <UserProfileCard :profile="profile"/>     
+        <UserProfileCard :profile="profile"/>
       </b-col>
       <b-col class="col-md-6 col-sm-12 col-12">
         <b-card id="proficiency">
@@ -30,7 +31,8 @@
           </b-row>
         </b-card>
         <b-card header='Projects'>
-          <ProjectRow v-for='project in profileProjects' :profileProject="project"  :key="project.projectId"/>
+          <loading v-if="!profileProjects"></loading>
+          <ProjectRow v-else v-for='project in profileProjects' :profileProject="project"  :key="project.projectId"/>
         </b-card>
       </b-col>
     </b-row>
@@ -99,8 +101,12 @@ export default {
     store.dispatch('fetchProfileProjects', to.params.id)
     next()
   },
-  mounted () {
-    document.title = 'Rytmi - ' + this.profile.firstName + ' ' + this.profile.lastName
+  watch: {
+    profile: function (val, oldVal) {
+      if (val) {
+        document.title = `Rytmi - ${val.firstName} ${val.lastName}`
+      }
+    }
   }
 }
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="animated fadeIn project-container col-sm-12 col-md-7">
+    <loading v-if="!project"></loading>
+    <div v-else class="animated fadeIn project-container col-sm-12 col-md-7">
       <b-row>
         <b-col class="project-details">
           <b>{{project.code}}</b>
@@ -88,13 +89,17 @@ export default {
     store.dispatch('fetchProjectProfiles', to.params.id)
     next()
   },
-  mounted () {
-    document.title = 'Rytmi - ' + this.project.name
-  },
   methods: {
     // TODO: scroll to bottom when opening form
     toggleProfileForm () {
       this.profileFormOpen = !this.profileFormOpen
+    }
+  },
+  wathc: {
+    project: function (val, oldVal) {
+      if (val) {
+        document.title = 'Rytmi - ' + val.name
+      }
     }
   }
 }

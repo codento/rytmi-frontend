@@ -7,11 +7,15 @@ import router from './router'
 import store from './store'
 import lodash from 'lodash'
 import Toasted from 'vue-toasted'
+import Loading from './components/lib/loading'
+
 import 'date-input-polyfill'
 
 Object.defineProperty(Vue.prototype, '$lodash', { value: lodash })
 Vue.use(BootstrapVue)
 Vue.use(Toasted)
+
+Vue.component('loading', Loading)
 
 const options = {
   theme: 'bubble',

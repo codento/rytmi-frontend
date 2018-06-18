@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="project">
     <div class="row mb-1" v-on:click="show = !show">
       <div class="col-sm-12">
         <span class="project-header">{{project.name}} </span>

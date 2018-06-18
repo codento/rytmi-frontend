@@ -4,9 +4,11 @@
     <hr />
     <h1>Basic Details</h1>
     <hr />
-    <ProfileForm :profile="profile" />
-    <EditLinks :profile="profile" />
-    <edit-skills :profileId="profile.id" />
+    <template v-if="profile">
+      <ProfileForm :profile="profile" />
+      <EditLinks :profile="profile" />
+      <edit-skills :profileId="profile.id" />
+    </template>
   </div>
 </template>
 
