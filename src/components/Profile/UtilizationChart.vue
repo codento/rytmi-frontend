@@ -48,9 +48,9 @@ export default {
             type: 'time',
             time: {
               max: this.maxDate,
-              displayFormats: {
-                month: 'MM'
-              }
+              unit: 'month',
+              stepSize: 1,
+              tooltipFormat: 'D.M.YY'
             },
             gridLines: {
               display: true
