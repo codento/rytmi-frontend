@@ -36,5 +36,22 @@ export const mutations = {
   },
   [types.CLEAR_PROFILEID] (state) {
     state.profileId = ''
+  },
+  [types.PROFILEPROJECTS_SUCCESS] (state, profileProjects) {
+    const obj = {}
+    profileProjects.forEach((pp) => {
+      if (!(pp.profileId in obj)) {
+        obj[pp.profileId] = []
+      }
+      obj[pp.profileId].push(pp)
+    })
+    state.profileProjects = obj
+    state.profileProjectsStatus = 'success'
+  },
+  [types.PROFILEPROJECTS_REQUEST] (state) {
+    state.profileProjectsStatus = 'loading'
+  },
+  [types.PROFILEPROJECTS_ERROR] (state) {
+    state.profileProjectsStatus = 'error'
   }
 }

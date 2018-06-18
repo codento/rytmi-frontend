@@ -130,6 +130,13 @@ export function getProfileProjects (profileId) {
     .catch(handleError)
 }
 
+export function getAllFutureProfileProjects () {
+  return axios.get(
+    process.env.API_URL + PATH_PROFILEPROJECTS + '?infuture=true',
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 function getAuthHeaders () {
   const token = localStorage.getItem('user-token') || ''
   return {
