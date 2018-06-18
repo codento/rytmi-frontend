@@ -45,6 +45,12 @@ exports[`Profile.vue shallow Template is correct 1`] = `
       >
         <loading />
       </b-card>
+       
+      <b-card
+        header="Utilization"
+      >
+        <loading />
+      </b-card>
     </b-col>
   </b-row>
 </b-container>
