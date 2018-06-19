@@ -23,12 +23,12 @@ export default {
         {
           key: 'code',
           sortable: true,
-          tdClass: 'clicable'
+          tdClass: 'clickable'
         },
         {
           key: 'name',
           sortable: true,
-          tdClass: 'clicable'
+          tdClass: 'clickable'
         }
       ]
     }
@@ -38,7 +38,8 @@ export default {
       'projectFilter'
     ]),
     results () {
-      return this.projectFilter(this.projectFilterTerm)
+      const r = this.projectFilter(this.projectFilterTerm)
+      return Object.values(r)
     }
   },
   methods: {

@@ -2,9 +2,6 @@ import * as types from '../../mutation-types'
 import Vue from 'vue'
 
 export const mutations = {
-  [types.CREATE_PROJECT] (state, project) {
-    state.projects.push(project)
-  },
   [types.FETCH_PROJECTS] (state, projects) {
     projects.forEach((project) => {
       Vue.set(state.projects, project.id, project)
@@ -24,10 +21,14 @@ export const mutations = {
     Vue.set(state.profileProjects, profileProjects.profileId, profileProjects.projects)
   },
   [types.ADD_PROJECTPROFILE] (state, projectProfile) {
-    if (state.projectProfiles[projectProfile.projectId] == null) {
+    if (!(projectProfile.projectId in state.projectProfiles)) {
       state.projectProfiles[projectProfile.projectId] = []
     }
+    if (!(projectProfile.profileId in state.profileProjects)) {
+      state.profileProjects[projectProfile.profileId] = []
+    }
     state.projectProfiles[projectProfile.projectId].push(projectProfile)
+    state.profileProjects[projectProfile.profileId].push(projectProfile)
   },
   [types.UPDATE_PROJECTPROFILE] (state, projectProfile) {
     let projectProfiles = state.projectProfiles[projectProfile.projectId]

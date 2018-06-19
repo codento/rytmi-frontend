@@ -15,7 +15,7 @@ export function createProject ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
     newProject(data)
       .then(response => {
-        commit(types.CREATE_PROJECT, response.data)
+        commit(types.UPDATE_PROJECT, response.data)
         resolve(response)
       }).catch(error => {
         reject(error)

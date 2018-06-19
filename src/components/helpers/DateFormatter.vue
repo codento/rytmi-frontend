@@ -1,24 +1,28 @@
 <template>
   <span v-if="date">
-    {{new Date(date).toLocaleString(undefined, this.options)}}
+    {{ formatted }}
   </span>
   <span v-else>
     TBD
   </span>
 </template>
+
 <script>
+
+import moment from 'moment'
+
 export default {
   name: 'DateFormatter',
   props: {
-    date: String
+    date: String,
+    format: {
+      type: String,
+      default: 'DD.MM.YYYY'
+    }
   },
-  data () {
-    return {
-      options: {
-        month: 'long',
-        year: 'numeric',
-        day: 'numeric'
-      }
+  computed: {
+    formatted () {
+      return moment(this.date).format(this.format)
     }
   }
 }

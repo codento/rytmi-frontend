@@ -8,6 +8,7 @@
       <ProfileForm :profile="profile" />
       <EditLinks :profile="profile" />
       <edit-skills :profileId="profile.id" />
+      <edit-projects :profileId="profile.id" />
     </template>
   </div>
 </template>
@@ -17,26 +18,36 @@ import { mapGetters } from 'vuex'
 import {
   EditLinks,
   EditSkills,
+  EditProjects,
   ProfileForm
 } from '../components/EditProfile'
+import store from '../store'
 
 export default {
   name: 'EditProfile',
+  props: [
+    'profileId'
+  ],
   components: {
     ProfileForm,
     EditLinks,
-    EditSkills
+    EditSkills,
+    EditProjects
   },
   computed: {
     ...mapGetters([
       'profileById'
     ]),
     profile () {
-      return this.profileById(this.$route.params.id)
+      return this.profileById(this.profileId)
     }
   },
   mounted () {
     document.title = 'Rytmi - Edit Profile'
+  },
+  beforeRouteEnter (to, from, next) {
+    store.dispatch('fetchProfileProjects', to.params.profileId)
+    next()
   }
 }
 </script>
