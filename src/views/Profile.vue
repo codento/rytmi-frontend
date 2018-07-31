@@ -107,7 +107,7 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    store.dispatch('fetchProfileProjects', to.params.id)
+    store.dispatch('fetchPPsOfProfile', to.params.id)
     next()
   },
   watch: {

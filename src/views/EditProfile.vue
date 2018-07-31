@@ -46,7 +46,7 @@ export default {
     document.title = 'Rytmi - Edit Profile'
   },
   beforeRouteEnter (to, from, next) {
-    store.dispatch('fetchProfileProjects', to.params.profileId)
+    store.dispatch('fetchPPsOfProfile', to.params.profileId)
     next()
   }
 }

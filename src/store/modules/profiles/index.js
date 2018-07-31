@@ -1,5 +1,5 @@
-import * as actions from './actions'
-import * as getters from './getters'
+import { actions } from './actions'
+import { getters } from './getters'
 import { mutations } from './mutations'
 
 const initialState = {
@@ -8,7 +8,8 @@ const initialState = {
   profiles: {},
   profileList: [],
   profileSkills: [],
-  profileProjects: {}
+  profileProjectList: {},
+  futurePpList: {}
 }
 
 export default {

@@ -93,14 +93,16 @@ export function getProjects (token) {
     .catch(handleError)
 }
 
-export function getProjectProfiles (data, token) {
-  return axios.get(
-    process.env.API_URL + PATH_PROJECTS + '/' + data + '/profiles',
-    getAuthHeaders())
-    .catch(handleError)
+export function getProfilesOfProject (projectId) {
+  return function () {
+    return axios.get(
+      process.env.API_URL + PATH_PROJECTS + '/' + projectId + '/profiles',
+      getAuthHeaders())
+      .catch(handleError)
+  }
 }
 
-export function newProjectProfile (data) {
+export function createProjectProfile (data) {
   return axios.post(
     process.env.API_URL + PATH_PROJECTS + '/' + data.projectId + '/profiles/' + data.profileId,
     data,
@@ -123,11 +125,13 @@ export function deleteProjectProfile (data) {
     .catch(handleError)
 }
 
-export function getProfileProjects (profileId) {
-  return axios.get(
-    process.env.API_URL + PATH_PROFILES + '/' + profileId + '/projects',
-    getAuthHeaders())
-    .catch(handleError)
+export function getProjectsOfProfile (profileId) {
+  return function () {
+    return axios.get(
+      process.env.API_URL + PATH_PROFILES + '/' + profileId + '/projects',
+      getAuthHeaders())
+      .catch(handleError)
+  }
 }
 
 export function getAllFutureProfileProjects () {

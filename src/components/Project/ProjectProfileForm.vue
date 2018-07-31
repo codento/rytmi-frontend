@@ -113,11 +113,11 @@ export default {
   },
   methods: {
     ...mapActions([
-      'addProjectProfile'
+      'newProjectProfile'
     ]),
     onSubmit (evt) {
       evt.preventDefault()
-      this.addProjectProfile(this.profileProject)
+      this.newProjectProfile(this.profileProject)
         .then((reponse) => {
           this.$toasted.global.rytmi_success({
             message: 'Profile added to the project!'

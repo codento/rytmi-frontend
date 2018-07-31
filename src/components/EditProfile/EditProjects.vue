@@ -28,7 +28,7 @@
             </template>
 
             <template slot="remove" slot-scope="data">
-              <b-btn size="sm" class="mr-1" variant="danger" @click.stop="removeProjectProfile(data.item)">Remove</b-btn>
+              <b-btn size="sm" class="mr-1" variant="danger" @click.stop="removePP(data.item)">Remove</b-btn>
             </template>
           </b-table>
         </b-col>
@@ -77,7 +77,14 @@ export default {
   },
   methods: {
     ...mapActions([
-    ])
+      'removeProfileProject'
+    ]),
+    removePP (item) {
+      const confirmation = confirm('Are you sure?')
+      if (confirmation) {
+        this.removeProfileProject(item)
+      }
+    }
   }
 }
 </script>
