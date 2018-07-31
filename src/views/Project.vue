@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import store from '../store'
 import {
   ProjectProfileForm,
@@ -66,17 +66,14 @@ export default {
   computed: {
     ...mapGetters([
       'projectById',
-      'projectProfilesByProjectId',
+      'profileProjectsByProjectId',
       'profileById'
-    ]),
-    ...mapActions([
-      'fetchProjectProfiles'
     ]),
     project () {
       return this.projectById(this.$route.params.id)
     },
     members () {
-      return this.projectProfilesByProjectId(this.project.id)
+      return this.profileProjectsByProjectId(this.project.id)
     }
   },
   components: {
@@ -86,7 +83,7 @@ export default {
     DateFormatter
   },
   beforeRouteEnter (to, from, next) {
-    store.dispatch('fetchProjectProfiles', to.params.id)
+    store.dispatch('fetchPPsOfProject', to.params.id)
     next()
   },
   methods: {

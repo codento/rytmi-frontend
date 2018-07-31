@@ -14,7 +14,7 @@ describe('Project.vue shallow', () => {
   beforeEach(() => {
     getters = {
       projectById: () => (arg) => arg,
-      projectProfilesByProjectId: () => (arg) => arg
+      profileProjectsByProjectId: () => (arg) => arg
     }
     store = new Vuex.Store({ getters })
 

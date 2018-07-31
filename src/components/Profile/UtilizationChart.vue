@@ -1,6 +1,6 @@
 <template>
   <div>
-    <loading v-if="profileProjectsStatus !== 'loading'"></loading>
+    <loading v-if="profileProjectsStatus !== 'success'"></loading>
     <line-chart v-else class="utilizationChart" :style="style" :chartData="chartData" :options="chartOptions"></line-chart>
   </div>
 </template>
@@ -107,7 +107,7 @@ export default {
       const values = new Array(dates.size).fill(0)
       sortetDates.map((date, index) => {
         this.projects.forEach(project => {
-          if (moment(project.startDate) <= date && date < moment(project.endDate)) {
+          if (moment(project.startDate) <= date && (project.endDate == null || date < moment(project.endDate))) {
             values[index] += project.workPercentage
           }
         })

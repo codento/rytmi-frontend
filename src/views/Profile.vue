@@ -32,7 +32,10 @@
         </b-card>
         <b-card header='Projects'>
           <loading v-if="!profileProjects"></loading>
-          <ProjectRow v-else v-for='project in profileProjects' :profileProject="project"  :key="project.projectId"/>
+          <ProjectRow v-else v-for='profileProject in profileProjects'
+            :profileProject="profileProject"
+            :key="profileProject.id"
+          />
         </b-card>
         <b-card header='Utilization'>
           <loading v-if="!profileProjects"></loading>
@@ -104,7 +107,7 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    store.dispatch('fetchProfileProjects', to.params.id)
+    store.dispatch('fetchPPsOfProfile', to.params.id)
     next()
   },
   watch: {

@@ -57,9 +57,10 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/edit/:id',
+      path: '/edit/:profileId',
       name: 'editProfile',
-      component: EditProfile
+      component: EditProfile,
+      props: true
     },
     {
       path: '/search',

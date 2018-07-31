@@ -20,7 +20,7 @@
         {{profile.description}}
       </div>
       <div v-if="profileId == profile.id" class="profile-card-detail-row">
-        <router-link :to="{ name: 'editProfile', params: { id: profileId }}">Edit profile</router-link>
+        <router-link :to="{ name: 'editProfile', params: { profileId: profileId }}">Edit profile</router-link>
       </div>
     </div>
   </div>

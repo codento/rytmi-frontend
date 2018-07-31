@@ -12,7 +12,7 @@
             <b>{{profile.phone}}</b>
           </b-col>
           <b-col class="col-12 col-md-4 align-self-center">
-            <UtilizationChart :projects="futureProfileProjectsByProfileId(profile.id)" />
+            <UtilizationChart :projects="futureProjectsOfProfile(profile.id)" />
           </b-col>
           <b-col class="col-12 col-md-4 align-self-center" style="margin-top: 1em;">
             <SkillRow v-for='skill in skillsByProfileId(profile.id)'
@@ -62,7 +62,7 @@ export default {
       'profileFilter',
       'skillsByProfileId',
       'skillById',
-      'futureProfileProjectsByProfileId'
+      'futureProjectsOfProfile'
     ]),
     results: function () {
       let results = this.profileFilter(this.search)

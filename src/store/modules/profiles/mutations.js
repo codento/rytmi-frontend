@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import * as types from '../../mutation-types'
+import moment from 'moment'
 
 export const mutations = {
   [types.FETCH_PROFILES] (state, profiles) {
@@ -37,21 +38,31 @@ export const mutations = {
   [types.CLEAR_PROFILEID] (state) {
     state.profileId = ''
   },
-  [types.PROFILEPROJECTS_SUCCESS] (state, profileProjects) {
-    const obj = {}
-    profileProjects.forEach((pp) => {
-      if (!(pp.profileId in obj)) {
-        obj[pp.profileId] = []
+  [types.ADD_PPTOPROFILE] (state, profileProject) {
+    if (!(profileProject.profileId in state.profileProjectList)) {
+      Vue.set(state.profileProjectList, profileProject.profileId, [])
+    }
+    const index = state.profileProjectList[profileProject.profileId].indexOf(profileProject.id)
+    if (index === -1) {
+      state.profileProjectList[profileProject.profileId].push(profileProject.id)
+    }
+    if (profileProject.endDate == null || moment(profileProject.endDate) > moment()) {
+      if (!(profileProject.profileId in state.futurePpList)) {
+        Vue.set(state.futurePpList, profileProject.profileId, [])
       }
-      obj[pp.profileId].push(pp)
-    })
-    state.profileProjects = obj
-    state.profileProjectsStatus = 'success'
+      if (state.futurePpList[profileProject.profileId].indexOf(profileProject.id) === -1) {
+        state.futurePpList[profileProject.profileId].push(profileProject.id)
+      }
+    }
   },
-  [types.PROFILEPROJECTS_REQUEST] (state) {
-    state.profileProjectsStatus = 'loading'
-  },
-  [types.PROFILEPROJECTS_ERROR] (state) {
-    state.profileProjectsStatus = 'error'
+  [types.REMOVE_PPFROMPROFILE] (state, profileProject) {
+    const index = state.profileProjectList[profileProject.profileId].indexOf(profileProject.id)
+    if (index > -1) {
+      state.profileProjectList[profileProject.profileId].splice(index, 1)
+    }
+    const futureIndex = state.futurePpList[profileProject.profileId].indexOf(profileProject.id)
+    if (index > -1) {
+      state.futurePpList[profileProject.profileId].splice(futureIndex, 1)
+    }
   }
 }

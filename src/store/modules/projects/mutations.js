@@ -2,9 +2,6 @@ import * as types from '../../mutation-types'
 import Vue from 'vue'
 
 export const mutations = {
-  [types.CREATE_PROJECT] (state, project) {
-    state.projects.push(project)
-  },
   [types.FETCH_PROJECTS] (state, projects) {
     projects.forEach((project) => {
       Vue.set(state.projects, project.id, project)
@@ -17,29 +14,19 @@ export const mutations = {
   [types.DELETE_PROJECT] (state, project) {
     state.projects[project.id] = null
   },
-  [types.FETCH_PROJECTPROFILES] (state, projectProfiles) {
-    Vue.set(state.projectProfiles, projectProfiles.projectId, projectProfiles.profiles)
-  },
-  [types.FETCH_PROFILESPROJECTS] (state, profileProjects) {
-    Vue.set(state.profileProjects, profileProjects.profileId, profileProjects.projects)
-  },
-  [types.ADD_PROJECTPROFILE] (state, projectProfile) {
-    if (state.projectProfiles[projectProfile.projectId] == null) {
-      state.projectProfiles[projectProfile.projectId] = []
+  [types.ADD_PPTOPROJECT] (state, profileProject) {
+    if (!(profileProject.projectId in state.profileProjectList)) {
+      Vue.set(state.profileProjectList, profileProject.projectId, [])
     }
-    state.projectProfiles[projectProfile.projectId].push(projectProfile)
+    const index = state.profileProjectList[profileProject.projectId].indexOf(profileProject.id)
+    if (index === -1) {
+      state.profileProjectList[profileProject.projectId].push(profileProject.id)
+    }
   },
-  [types.UPDATE_PROJECTPROFILE] (state, projectProfile) {
-    let projectProfiles = state.projectProfiles[projectProfile.projectId]
-    Vue.set(projectProfiles, projectProfile.index, projectProfile)
-    Vue.set(state.projectProfiles, projectProfile.projectId, projectProfiles)
-  },
-  [types.REMOVE_PROJECTPROFILE] (state, projectProfile) {
-    const index = state.projectProfiles[projectProfile.projectId].indexOf(projectProfile)
-    if (index !== -1) {
-      let newProfiles = state.projectProfiles[projectProfile.projectId]
-      newProfiles.splice(index, 1)
-      Vue.set(state.projectProfiles, projectProfile.projectId, newProfiles)
+  [types.REMOVE_PPFROMPROJECT] (state, profileProject) {
+    const index = state.profileProjectList[profileProject.projectId].indexOf(profileProject.id)
+    if (index > -1) {
+      state.profileProjectList[profileProject.projectId].splice(index, 1)
     }
   }
 }

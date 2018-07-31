@@ -18,13 +18,11 @@ export function loadAuthClient () {
 }
 
 export function handleLogout () {
-  console.log('Logging out')
   /* eslint-disable */
   return gapi.auth2.getAuthInstance().signOut()
   /* eslint-enable */
 }
 export function handleLogin () {
-  console.log('Logging in')
   /* eslint-disable */
   return gapi.auth2.getAuthInstance().signIn()
   /* eslint-enable */
