@@ -21,8 +21,8 @@ describe('ProjectRow.test.js', () => {
           projectId: 1,
           name: 'Testi prkkis',
           description: 'mail',
-          startDate: '15.05.2017',
-          endDate: '16.06.2017'
+          startDate: '2017-05-15',
+          endDate: '2017-06-16'
         }
       }
     })
