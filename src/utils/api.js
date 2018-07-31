@@ -20,19 +20,19 @@ export function login (token) {
     })
 }
 
-export function getSkills (token) {
+export function getSkills () {
   return axios.get(process.env.API_URL + PATH_SKILLS, getAuthHeaders()).catch(handleError)
 }
 
-export function getProfiles (token) {
+export function getProfiles () {
   return axios.get(process.env.API_URL + PATH_PROFILES + '/all', getAuthHeaders()).catch(handleError)
 }
 
-export function getProfileSkills (token) {
+export function getProfileSkills () {
   return axios.get(process.env.API_URL + PATH_PROFILESKILLS, getAuthHeaders()).catch(handleError)
 }
 
-export function alterProfile (data, token) {
+export function alterProfile (data) {
   return axios.put(
     process.env.API_URL + PATH_PROFILES + '/' + data.id,
     denormalize(data, [profile]),
@@ -40,7 +40,7 @@ export function alterProfile (data, token) {
     .catch(handleError)
 }
 
-export function newProfileSkill (data, token) {
+export function newProfileSkill (data) {
   return axios.post(
     process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS,
     denormalize(data, [skill]),
@@ -56,14 +56,14 @@ export function alterProfileSkill (data) {
     .catch(handleError)
 }
 
-export function deleteProfileSkill (data, token) {
+export function deleteProfileSkill (data) {
   return axios.delete(
     process.env.API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id,
     getAuthHeaders())
     .catch(handleError)
 }
 
-export function newProject (data, token) {
+export function newProject (data) {
   return axios.post(
     process.env.API_URL + PATH_PROJECTS,
     denormalize(data, [project]),
@@ -71,7 +71,7 @@ export function newProject (data, token) {
     .catch(handleError)
 }
 
-export function alterProject (data, token) {
+export function alterProject (data) {
   return axios.put(
     process.env.API_URL + PATH_PROJECTS + '/' + data.id,
     denormalize(data, [project]),
@@ -79,14 +79,14 @@ export function alterProject (data, token) {
     .catch(handleError)
 }
 
-export function deleteProject (data, token) {
+export function deleteProject (data) {
   return axios.delete(
     process.env.API_URL + PATH_PROJECTS + '/' + data.id,
     getAuthHeaders())
     .catch(handleError)
 }
 
-export function getProjects (token) {
+export function getProjects () {
   return axios.get(
     process.env.API_URL + PATH_PROJECTS,
     getAuthHeaders())
