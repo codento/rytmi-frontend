@@ -15,6 +15,10 @@
               Projects participated
             </template>
 
+            <template slot="projectId" slot-scope="data">
+              {{ projectById(data.item.projectId).code }}
+            </template>
+
             <template slot="project" slot-scope="data">
               {{ projectById(data.item.projectId).name }}
             </template>

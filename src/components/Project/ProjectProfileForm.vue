@@ -45,7 +45,7 @@
             v-for="project in this.projects"
             :key="project.id"
             :value="project.id"
-          >{{ project.id }} - {{ project.name }}
+          >{{ project.code }} - {{ project.name }}
           </option>
         </b-form-select>
       </b-form-group>
