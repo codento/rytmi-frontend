@@ -58,7 +58,7 @@ export default {
             time: {
               max: this.maxDate,
               displayFormats: {
-                month: 'MM'
+                month: 'M'
               },
               unit: 'month',
               stepSize: 1,
