@@ -1,20 +1,17 @@
-export const projects = (state) => state.projects
+import _ from 'lodash'
 
-export const projectById = (state) => (id) => state.projects[id]
-
-export const projectFilter = (state) => (param) => {
-  if (param === null || param === '') {
-    return state.projects
-  }
-  param = param.toLowerCase()
-  return state.projects.filter(project => {
-    if (project.name && project.code) {
-      return project.name.toLowerCase().includes(param) || project.code.toString().includes(param)
+export default {
+  projects: (state) => state.projects,
+  projectById: (state) => (id) => state.projects[id],
+  profilesOfProject: (state, getters, rootState) => (projectId) => state.profileProjectList[projectId].map(id => rootState.profileProjects.profileProjects[id]),
+  projectFilter: (state) => (filter) => {
+    if (filter === null || filter === '') {
+      return state.projects
     }
-    return false
-  })
+    filter = filter.toLowerCase()
+
+    return _.filter(state.projects, (project, code) => {
+      return project.name.toLowerCase().includes(filter) || project.code.toString().includes(filter)
+    })
+  }
 }
-
-export const projectProfilesByProjectId = (state) => (param) => state.projectProfiles[param]
-
-export const profileProjectsByProfileId = (state) => (param) => state.profileProjects[param]

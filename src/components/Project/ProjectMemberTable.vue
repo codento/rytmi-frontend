@@ -48,7 +48,7 @@
       <b-input type="date" v-model="editedProjectProfile.endDate" />
       <small>Utilization %</small>
       <b-input type="number" :min=0 :max=100 v-model="editedProjectProfile.workPercentage" />
-      <b-btn class="modal-btn" @click="callUpdateProjectProfileAction()">Save</b-btn>
+      <b-btn class="modal-btn" @click="callUpdateProfileProjectAction()">Save</b-btn>
       <b-btn class="modal-btn" @click="closeEditModal()">Cancel</b-btn>
     </b-modal>
   </div>
@@ -80,8 +80,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'removeProjectProfile',
-      'updateProjectProfile'
+      'removeProfileProject',
+      'updateProfileProject'
     ]),
     printMember (profileId) {
       const member = this.profileById(profileId)
@@ -94,10 +94,10 @@ export default {
     openProfile (profileId) {
       this.$router.push({name: 'profile', params: { id: profileId }})
     },
-    removeMember (projectProfile) {
+    removeMember (profileProject) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {
-        this.removeProjectProfile(projectProfile)
+        this.removeProfileProject(profileProject)
           .then((reponse) => {
             this.$toasted.global.rytmi_success({
               message: 'Member removed!'
@@ -119,8 +119,8 @@ export default {
     closeEditModal () {
       this.$refs.projectProfileEditModal.hide()
     },
-    callUpdateProjectProfileAction () {
-      this.updateProjectProfile(this.editedProjectProfile)
+    callUpdateProfileProjectAction () {
+      this.updateProfileProject(this.editedProjectProfile)
         .then((response) => {
           this.$toasted.global.rytmi_success({
             message: 'Member updated.'

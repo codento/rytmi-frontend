@@ -1,8 +1,9 @@
 <template>
   <b-container class="animated fadeIn profile">
-    <b-row>
+    <loading v-if="!profile"></loading>
+    <b-row v-else>
       <b-col class="col-md-6 col-sm-12 col-12">
-        <UserProfileCard :profile="profile"/>     
+        <UserProfileCard :profile="profile"/>
       </b-col>
       <b-col class="col-md-6 col-sm-12 col-12">
         <b-card id="proficiency">
@@ -30,7 +31,15 @@
           </b-row>
         </b-card>
         <b-card header='Projects'>
-          <ProjectRow v-for='project in profileProjects' :profileProject="project"  :key="project.projectId"/>
+          <loading v-if="!profileProjects"></loading>
+          <ProjectRow v-else v-for='profileProject in profileProjects'
+            :profileProject="profileProject"
+            :key="profileProject.id"
+          />
+        </b-card>
+        <b-card header='Utilization'>
+          <loading v-if="!profileProjects"></loading>
+          <UtilizationChart v-else :projects="profileProjects" />
         </b-card>
       </b-col>
     </b-row>
@@ -45,7 +54,8 @@ import {
   ProjectRow,
   SkillExplanations,
   SkillRow,
-  UserProfileCard
+  UserProfileCard,
+  UtilizationChart
 } from '../components/Profile'
 
 export default {
@@ -74,7 +84,8 @@ export default {
     SkillRow,
     ProjectRow,
     UserProfileCard,
-    SkillExplanations
+    SkillExplanations,
+    UtilizationChart
   },
   data () {
     return {
@@ -96,11 +107,15 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    store.dispatch('fetchProfileProjects', to.params.id)
+    store.dispatch('fetchPPsOfProfile', to.params.id)
     next()
   },
-  mounted () {
-    document.title = 'Rytmi - ' + this.profile.firstName + ' ' + this.profile.lastName
+  watch: {
+    profile: function (val, oldVal) {
+      if (val) {
+        document.title = `Rytmi - ${val.firstName} ${val.lastName}`
+      }
+    }
   }
 }
 </script>

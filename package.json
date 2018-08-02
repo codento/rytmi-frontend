@@ -26,6 +26,7 @@
     "flag-icon-css": "2.9.0",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
+    "moment": "~2.18.0",
     "normalizr": "^3.2.4",
     "simple-line-icons": "^2.4.1",
     "vue": "2.5.13",
