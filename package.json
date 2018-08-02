@@ -1,10 +1,10 @@
 {
-  "name": "@coreui/vue",
-  "version": "1.0.9",
-  "description": "Open Source Bootstrap Admin Template",
-  "author": "Łukasz Holeczek",
-  "homepage": "http://coreui.io",
-  "copyright": "Copyright 2017 creativeLabs Łukasz Holeczek",
+  "name": "@codento/rytmi-frontend",
+  "version": "2.0.1",
+  "description": "Resource proficiency and utilization tool",
+  "author": "Codento Oy",
+  "homepage": "http://rytmi.codento.com",
+  "copyright": "Codento Oy",
   "license": "MIT",
   "private": true,
   "scripts": {
