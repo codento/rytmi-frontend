@@ -16,7 +16,7 @@ export default {
     projects: Array,
     height: {
       type: String,
-      default: '75px'
+      default: '90px'
     },
     backgroundColor: {
       type: String,
@@ -57,6 +57,9 @@ export default {
             type: 'time',
             time: {
               max: this.maxDate,
+              displayFormats: {
+                month: 'MM'
+              },
               unit: 'month',
               stepSize: 1,
               tooltipFormat: 'D.M.YY'
@@ -65,16 +68,21 @@ export default {
               display: true
             },
             ticks: {
-              display: false
+              display: true
             }
           }],
           yAxes: [{
             type: 'linear',
             ticks: {
               min: 0,
-              max: 100
+              max: 100,
+              callback: (value) => {
+                if (value === 0 || value === 100) {
+                  return `${value} %`
+                }
+              }
             },
-            display: false
+            display: true
           }]
         },
         legend: {
