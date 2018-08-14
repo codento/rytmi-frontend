@@ -41,7 +41,7 @@
           </template>
         </template>
       </ul>
-      <span v-else>
+      <span v-else v-on:click="login">
         <SidebarNavLink name="Please sign in" icon="icon-unlock" />
       </span>
       <slot></slot>
@@ -62,7 +62,10 @@ import SidebarNavLink from './SidebarNavLink'
 import SidebarNavTitle from './SidebarNavTitle'
 import SidebarNavItem from './SidebarNavItem'
 import SidebarNavLabel from './SidebarNavLabel'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import {handleLogin} from '../../../utils/auth'
+
+require('dotenv').config()
 
 export default {
   name: 'sidebar',
@@ -94,7 +97,20 @@ export default {
     handleClick (e) {
       e.preventDefault()
       e.target.parentElement.classList.toggle('open')
-    }
+    },
+    login () {
+      handleLogin().then((response) => {
+        return this.requestAuth(response.Zi.id_token)
+      }).then(() => {
+        this.$router.push(this.$route.query.redirect || '/callback')
+      }).catch((error) => {
+        console.log(error)
+        this.$toasted.global.rytmi_error({
+          message: 'Login failed'
+        })
+      })
+    },
+    ...mapActions(['requestAuth'])
   }
 }
 </script>
