@@ -1,26 +1,36 @@
 <template>
-  <header class="app-header navbar">
-    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <b-link class="navbar-brand" to="/home" exact></b-link>
+  <AppHeader>
+    <SidebarToggler class="d-lg-none" display="md" mobile />
+      <b-link class="navbar-brand" to="/home">
+        <img class="navbar-brand-full" src="/img/logo.png" width="143" height="25" alt="Codento Logo">
+        <img class="navbar-brand-minimized" src="/img/Codento C RGB medium square.jpg" width="30" height="30" alt="Codento Logo">
+      </b-link>
+    <SidebarToggler class="d-md-down-none" display="lg" />
+
     <b-navbar-nav class="ml-auto">
-      <b-nav-item id="loginBtn" v-if="!isAuthenticated" v-on:click="login">
+      <b-nav-item v-if="!isAuthenticated" class="px-3" v-on:click="login">
         <i class="fa fa-unlock" />&nbsp; Sign in
       </b-nav-item>
-      <b-nav-item id="logoutBtn" v-if="isAuthenticated" v-on:click="logout">
+      <b-nav-item v-if="isAuthenticated" class="px-3" v-on:click="logout">
         <i class="fa fa-lock" />&nbsp; Sign out
       </b-nav-item>
     </b-navbar-nav>
-  </header>
+  </AppHeader>
 </template>
 
 <script>
+
+import { Header as AppHeader, SidebarToggler } from '@coreui/vue'
+
 import {mapGetters, mapActions} from 'vuex'
 import {loadAuthClient, handleLogin, handleLogout} from '../../utils/auth'
 
 export default {
   name: 'c-header',
+  components: {
+    AppHeader,
+    SidebarToggler
+  },
   computed: {
     ...mapGetters(['isAuthenticated', 'profileId', 'getToken']),
     isDev () {
@@ -28,22 +38,6 @@ export default {
     }
   },
   methods: {
-    sidebarToggle (e) {
-      e.preventDefault()
-      document.body.classList.toggle('sidebar-hidden')
-    },
-    sidebarMinimize (e) {
-      e.preventDefault()
-      document.body.classList.toggle('sidebar-minimized')
-    },
-    mobileSidebarToggle (e) {
-      e.preventDefault()
-      document.body.classList.toggle('sidebar-mobile-show')
-    },
-    asideToggle (e) {
-      e.preventDefault()
-      document.body.classList.toggle('aside-menu-hidden')
-    },
     checkStatus () {
       this.$toasted.global.rytmi_success({
         message: 'Authenticated: ' + this.isAuthenticated

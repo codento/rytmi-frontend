@@ -27,5 +27,10 @@ module.exports = {
     'src/**/*.{js,vue}',
     '!**/node_modules/**'
   ],
-  coverageReporters: ['html', 'text-summary']
+  coverageReporters: [
+    'lcov',
+    'json',
+    'html',
+    'text-summary'
+  ]
 }

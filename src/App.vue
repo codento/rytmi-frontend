@@ -1,16 +1,13 @@
 <template>
   <div class="app">
-    <AppHeader>
-
-    </AppHeader>
+    <AppHeader />
     <div class="app-body">
-      <Sidebar :navItems="nav"/>
+      <Sidebar :navItems="nav" />
       <main class="main">
         <div class="container-fluid">
           <router-view></router-view>
         </div>
       </main>
-      <AppAside/>
     </div>
     <AppFooter/>
   </div>
@@ -18,14 +15,10 @@
 
 <script>
 import {mapActions, mapGetters} from 'vuex'
-
-import { Header as AppHeader } from '@coreui/vue'
-
 import {
   Sidebar,
-  Aside as AppAside,
-  Footer as AppFooter,
-  Breadcrumb
+  Header as AppHeader,
+  Footer as AppFooter
 } from './components/appStructures'
 
 export default {
@@ -33,9 +26,7 @@ export default {
   components: {
     AppHeader,
     Sidebar,
-    AppAside,
-    AppFooter,
-    Breadcrumb
+    AppFooter
   },
   methods: {
     ...mapActions([
@@ -52,31 +43,33 @@ export default {
       'profileId'
     ]),
     nav () {
-      return [
-        {
-          name: 'Search',
-          url: '/search',
-          icon: 'icon-magnifier'
-        },
-        {
-          name: 'Projects',
-          url: '/projects',
-          icon: 'icon-drawer'
-        },
-        {
-          divider: true
-        },
-        {
-          name: 'My Profile',
-          url: '/profile/' + this.profileId,
-          icon: 'icon-user'
-        },
-        {
-          name: 'Edit Profile',
-          url: '/edit/' + this.profileId,
-          icon: 'icon-pencil'
-        }
-      ]
+      return this.isAuthenticated
+        ? [
+          {
+            name: 'Search',
+            url: '/search',
+            icon: 'icon-magnifier'
+          },
+          {
+            name: 'Projects',
+            url: '/projects',
+            icon: 'icon-drawer'
+          },
+          {
+            divider: true
+          },
+          {
+            name: 'My Profile',
+            url: '/profile/' + this.profileId,
+            icon: 'icon-user'
+          },
+          {
+            name: 'Edit Profile',
+            url: '/edit/' + this.profileId,
+            icon: 'icon-pencil'
+          }
+        ]
+        : []
     },
     name () {
       return this.$route.name
@@ -113,3 +106,4 @@ export default {
   // Import Main styles for this application
   @import 'assets/scss/style';
 </style>
+

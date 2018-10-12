@@ -1,12 +1,28 @@
+// Variable overrides
+
 @import "~@coreui/coreui/scss/variables";
 
-// Variable overrides
+$c-orange: hsl(39, 98%, 51%);
+$c-orange-light: lighten($c-orange, 15%);
+
+$theme-colors: (
+  primary:             $c-orange,
+  secondary:           $c-orange
+);
+
+$body-bg: $white;
+
+$enable-rounded: false;
+
 $sidebar-bg: #eee;
 $sidebar-nav-link-color: $body-color;
 $sidebar-nav-link-active-color: #fff;
 $sidebar-nav-link-icon-color: $body-color;
 $sidebar-nav-link-active-icon-color: #fff;
-$sidebar-nav-link-active-bg: $orange;
 
-$navbar-brand-logo:                   url('../img/logo.png') !default;
-$navbar-brand-minimized-logo:         url('../img/Codento C RGB medium square.jpg') !default;
+$sidebar-nav-link-active-bg: $c-orange;
+$sidebar-nav-link-hover-bg: $c-orange;
+
+$progress-bar-bg: theme-color('primary');
+
+$table-accent-bg:    $c-orange-light;
