@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
-import { shallow, createLocalVue } from 'vue-test-utils'
-import View from '../../src/views/Projects.vue'
+import { shallow, createLocalVue } from '@vue/test-utils'
+import View from '../../../src/views/Projects.vue'
 
 describe('Profile.vue shallow', () => {
   let localVue = createLocalVue()

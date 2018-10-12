@@ -11,8 +11,8 @@ jest.mock('lodash', () => ({
 /* eslint-disable */
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
-import { shallow, createLocalVue } from 'vue-test-utils'
-import View from '../../src/views/Profile.vue'
+import { shallow, createLocalVue } from '@vue/test-utils'
+import View from '../../../src/views/Profile.vue'
 import lodash from 'lodash'
 /* eslint-enable */
 

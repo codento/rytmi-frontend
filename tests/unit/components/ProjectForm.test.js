@@ -1,5 +1,5 @@
-import { mount } from 'vue-test-utils'
-import { ProjectForm } from '../../src/components/Project'
+import { mount } from '@vue/test-utils'
+import { ProjectForm } from '../../../src/components/Project'
 
 describe('ProjectForm.test.js', () => {
   it('Template is correct', () => {

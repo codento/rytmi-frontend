@@ -1,9 +1,9 @@
 import {
   shallow,
   createLocalVue
-} from 'vue-test-utils'
+} from '@vue/test-utils'
 import Vuex from 'vuex'
-import { UserProfileCard } from '../../src/components/Profile'
+import { UserProfileCard } from '../../../src/components/Profile'
 
 describe('UserProfileCard.test.js', () => {
   let localVue = createLocalVue()

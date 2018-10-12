@@ -1,6 +1,6 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import * as api from '../../src/utils/api'
+import * as api from '../../../src/utils/api'
 const API_URL = 'http://localhost:8081/api'
 const PATH_AUTH = '/auth'
 const PATH_SKILLS = '/skills'
