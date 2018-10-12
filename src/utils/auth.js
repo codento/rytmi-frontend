@@ -1,11 +1,9 @@
 
-require('dotenv').config()
-
 function initClient () {
   /* eslint-disable */
   gapi.client.init({
     /* eslint-enable */
-    client_id: process.env.CLIENT_ID,
+    client_id: process.env.VUE_APP_CLIENT_ID,
     cookiepolicy: 'single_host_origin',
     scope: 'profile'
   })

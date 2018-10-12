@@ -65,8 +65,6 @@ import SidebarNavLabel from './SidebarNavLabel'
 import { mapGetters, mapActions } from 'vuex'
 import {handleLogin} from '../../../utils/auth'
 
-require('dotenv').config()
-
 export default {
   name: 'sidebar',
   props: {
