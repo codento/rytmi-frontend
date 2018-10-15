@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`UserProfileCard.test.js Template is correct 1`] = `
-<b-row style="padding-bottom: 12px;">
-  <b-col class="col-mb-4 text-right valign-middle"><b>Python:</b></b-col>
-  <b-col class="col-mb-8">
-    <b-progress max="5" height="0.9rem" class="mb-6">
-      <b-progress-bar value="2" class="rytmi-progress-knowledge">2</b-progress-bar>
+<div class="row" style="padding-bottom: 12px;" data-original-title="" title="">
+  <div class="col-mb-4 text-right valign-middle col"><b>Python:</b></div>
+  <div class="col-mb-8 col">
+    <div class="mb-6 progress" style="height: 0.9rem;">
+      <div role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2" class="rytmi-progress-knowledge progress-bar" style="width: 40%;">2</div>
       <!---->
-    </b-progress>
-    <b-progress max="5" height="0.9rem" class="mb-6">
-      <b-progress-bar value="1" class="rytmi-progress-wants">1</b-progress-bar>
+    </div>
+    <div class="mb-6 progress" style="height: 0.9rem;">
+      <div role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="1" class="rytmi-progress-wants progress-bar" style="width: 20%;">1</div>
       <!---->
-    </b-progress>
-  </b-col>
-</b-row>
+    </div>
+  </div>
+</div>
 `;
