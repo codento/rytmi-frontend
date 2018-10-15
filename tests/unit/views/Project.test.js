@@ -1,8 +1,8 @@
 import Vuex from 'vuex'
-import { shallow, createLocalVue } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import View from '../../../src/views/Project.vue'
 
-describe('Project.vue shallow', () => {
+describe('Project.vue shallowMount', () => {
   let localVue = createLocalVue()
   localVue.use(Vuex)
   let store, getters, cmp
@@ -18,7 +18,7 @@ describe('Project.vue shallow', () => {
     }
     store = new Vuex.Store({ getters })
 
-    cmp = shallow(View, {
+    cmp = shallowMount(View, {
       store,
       localVue,
       mocks: {

@@ -1,5 +1,5 @@
 import Vuex from 'vuex'
-import { shallow, createLocalVue } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import View from '../../../src/views/Projects.vue'
 
 describe('Profile.vue shallow', () => {
@@ -8,7 +8,7 @@ describe('Profile.vue shallow', () => {
   let store, cmp
 
   beforeEach(() => {
-    cmp = shallow(View, {
+    cmp = shallowMount(View, {
       store,
       localVue
     })
