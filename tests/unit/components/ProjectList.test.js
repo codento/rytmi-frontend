@@ -1,23 +1,32 @@
-import { mount, createLocalVue } from '@vue/test-utils'
-import { ProjectList } from '../../../src/components/Project'
 import Vuex from 'vuex'
+import BootstrapVue from 'bootstrap-vue'
 
-const localVue = createLocalVue()
-
-localVue.use(Vuex)
-
-const getters = {
-  projects: () => (arg) => arg,
-  projectFilter: () => (arg) => arg
-}
-const store = new Vuex.Store({ getters })
+import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { ProjectList } from '../../../src/components/Project'
 
 describe('ProjectList.test.js', () => {
+  const localVue = createLocalVue()
+  localVue.use(Vuex)
+  localVue.use(BootstrapVue)
+
+  let store, cmp
+
+  const getters = {
+    projects: () => (arg) => arg,
+    projectFilter: () => (arg) => arg
+  }
+
+  store = new Vuex.Store({ getters })
+  beforeEach(() => {
+    cmp = shallowMount(
+      ProjectList, {
+        store,
+        localVue
+      }
+    )
+  })
+
   it('Template is correct', () => {
-    let wrapper = mount(ProjectList, {
-      store,
-      localVue
-    })
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(cmp.element).toMatchSnapshot()
   })
 })
