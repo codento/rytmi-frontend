@@ -1,7 +1,12 @@
 <template>
   <div>
-    <loading v-if="profileProjectsStatus !== 'success'"></loading>
-    <line-chart v-else class="utilizationChart" :style="style" :chartData="chartData" :options="chartOptions"></line-chart>
+    <loading v-if="profileProjectsStatus !== 'success'"/>
+    <line-chart
+      v-else
+      :style="style"
+      :chart-data="chartData"
+      :options="chartOptions"
+      class="utilizationChart"/>
   </div>
 </template>
 
@@ -12,6 +17,9 @@ import moment from 'moment'
 
 export default {
   name: 'UtilizationChart',
+  components: {
+    LineChart
+  },
   props: {
     projects: Array,
     height: {
@@ -29,9 +37,6 @@ export default {
   },
   data () {
     return {}
-  },
-  components: {
-    LineChart
   },
   computed: {
     ...mapGetters([

@@ -1,7 +1,10 @@
 <template>
   <div>
-    <div class="error-detail-row" v-for="detail in errorDetails" :key="detail">
-      {{parseErrorDetail(detail)}}
+    <div
+      v-for="detail in errorDetails"
+      :key="detail"
+      class="error-detail-row">
+      {{ parseErrorDetail(detail) }}
     </div>
   </div>
 </template>

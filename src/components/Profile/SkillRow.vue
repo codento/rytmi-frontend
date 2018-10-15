@@ -1,22 +1,46 @@
 <template>
-  <b-row class="" style="padding-bottom: 12px" v-b-tooltip.hover.top="desc">
-    <b-col class="col-mb-4 text-right valign-middle" style="text-size: 20px;">
+  <b-row
+    v-b-tooltip.hover.top="desc"
+    class=""
+    style="padding-bottom: 12px">
+    <b-col
+      class="col-mb-4 text-right valign-middle"
+      style="text-size: 20px;">
       <b>{{ name }}:</b>
     </b-col>
-    <b-col class="col-mb-8" @mouseenter="active = skillId" @mouseleave="active = null">
-      <b-progress :max="5" class="mb-6" height="0.9rem">
-        <b-progress-bar class="rytmi-progress-knowledge"
-          :value="knows">
-          <slot name="label" v-if="active !== skillId">{{ knows ? knows.toString()  : '' }}</slot>
+    <b-col
+      class="col-mb-8"
+      @mouseenter="active = skillId"
+      @mouseleave="active = null">
+      <b-progress
+        :max="5"
+        class="mb-6"
+        height="0.9rem">
+        <b-progress-bar
+          :value="knows"
+          class="rytmi-progress-knowledge">
+          <slot
+            v-if="active !== skillId"
+            name="label">{{ knows ? knows.toString() : '' }}</slot>
         </b-progress-bar>
-        <span v-if="active === skillId" class="skilldesc-center">{{ knowsToDesc.text }}</span>
+        <span
+          v-if="active === skillId"
+          class="skilldesc-center">{{ knowsToDesc.text }}</span>
       </b-progress>
-      <b-progress :max="5" class="mb-6" height="0.9rem">
-        <b-progress-bar class="rytmi-progress-wants"
-          :value="wants">
-          <slot name="label" v-if="active !== skillId">{{ wants ? wants.toString() : '' }}</slot>
+      <b-progress
+        :max="5"
+        class="mb-6"
+        height="0.9rem">
+        <b-progress-bar
+          :value="wants"
+          class="rytmi-progress-wants">
+          <slot
+            v-if="active !== skillId"
+            name="label">{{ wants ? wants.toString() : '' }}</slot>
         </b-progress-bar>
-        <span v-if="active === skillId" class="skilldesc-center">{{ wantsToDesc.text }}</span>
+        <span
+          v-if="active === skillId"
+          class="skilldesc-center">{{ wantsToDesc.text }}</span>
       </b-progress>
     </b-col>
   </b-row>

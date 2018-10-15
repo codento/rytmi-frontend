@@ -1,7 +1,7 @@
 import * as types from '../../mutation-types'
-import {login} from '../../../utils/api'
+import { login } from '../../../utils/api'
 
-export function requestAuth ({commit, dispatch}, token) {
+export function requestAuth ({ commit, dispatch }, token) {
   return new Promise((resolve, reject) => {
     commit(types.AUTH_REQUEST)
     login(token)
@@ -21,7 +21,7 @@ export function requestAuth ({commit, dispatch}, token) {
   })
 }
 
-export function logoutAuth ({commit, dispatch}) {
+export function logoutAuth ({ commit, dispatch }) {
   return new Promise((resolve, reject) => {
     commit(types.AUTH_LOGOUT)
     commit(types.CLEAR_PROFILEID)

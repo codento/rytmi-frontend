@@ -20,7 +20,7 @@ export default {
         .catch(err => reject(err))
     })
   },
-  addProfileProjects ({dispatch}, profileProjects) {
+  addProfileProjects ({ dispatch }, profileProjects) {
     return Promise.all(profileProjects.map(pp => {
       dispatch('addProfileProject', pp)
     }))

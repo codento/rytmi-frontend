@@ -1,10 +1,7 @@
 # Rytmi Frontend
 
-## Workflow
+## Git Workflow
 
-We'll follow Git Flow branching model. Read more at https://leanpub.com/git-flow/read.
-
-In summary:
 ```bash
 git checkout dev
 git checkout -b feature-branch
@@ -13,40 +10,35 @@ git push -U origin feature-branch
 # When done with the feature create a pull request to the dev branch at github.
 # Someone merges the PR.
 
-# In time of release do a release branch.
-git checkout dev
-git checkout -b release-vX.Y.Z
-# Bump the version number in package.json
-git push -U origin release-vX.Y.Z
+# When time to release.
+# Bump version in package 
 
 git checkout dev
-git merge release-vX.Y.Z
+# bump 
 
-git checkout master
-git merge release-vX.Y.Z
 ```
 
 ## Project setup
+
+**Environment variables**
+Vue uses a public and local `env` files. Local/secret files must have a `.local` postfix.  
+Create a `.env.local` file with your secrets. You can use `.env.local.example` as a sample.
+
 ```
 yarn install
+
+yarn serve
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+## Editing Environment variables
+If you modify the secret files those must be encrypted first. See https://docs.travis-ci.com/user/encrypting-files/ for more information.  
+Travis CLI must be installed first. https://github.com/travis-ci/travis.rb#installation
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+```bash
+tar cvf secrets.tar .env.local .env.*.local
+travis encrypt-file secrets.tar --add
 
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Run your unit tests
-```
-yarn run test:unit
+git add secrets.tar.enc .travis.yml
+git commit -m 'use secret archive'
+git push
 ```

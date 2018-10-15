@@ -1,34 +1,60 @@
 <template>
   <div class="animated fadeIn search-container">
     <b-col class="col-md-13">
-      <div class="search-bar" id="search">
+      <div
+        id="search"
+        class="search-bar">
         <h2>Find people</h2>
-        <input class="form-control" placeholder="Filter by name" v-model="param" />
+        <input
+          v-model="param"
+          class="form-control"
+          placeholder="Filter by name" >
         <b-row class="search-options">
           <b-col class="search-options-item search-tag-dropdown col-md-4 col-12">
-            <small>Filter:</small><br />
-            <b-dropdown id="ddown1" text="Add skill filters:">
-              <b-dropdown-item-button v-for="skill in skillsNotIn(active)" :key="skill.id" @click="addToSearch(skill)">
-                {{skill.name}}
+            <small>Filter:</small><br >
+            <b-dropdown
+              id="ddown1"
+              text="Add skill filters:">
+              <b-dropdown-item-button
+                v-for="skill in skillsNotIn(active)"
+                :key="skill.id"
+                @click="addToSearch(skill)">
+                {{ skill.name }}
               </b-dropdown-item-button>
             </b-dropdown>
           </b-col>
           <b-col class="search-options-item search-bar-sort col-md-4 col-12">
-            <small>Sort:</small><br />
-            <b-form-radio-group id="btnradios" buttons v-model='selected' :options='options' name='radioBtnStacked' />
+            <small>Sort:</small><br >
+            <b-form-radio-group
+              id="btnradios"
+              v-model="selected"
+              :options="options"
+              buttons
+              name="radioBtnStacked" />
           </b-col>
         </b-row>
-        <div class="search-tag-container" id="active">
+        <div
+          id="active"
+          class="search-tag-container">
           <ul>
-            <li @click="removeFromSearch(skill)" v-for='skill in active' class="active remove" :key="skill.name">
-              <a class="remove" >&times;</a> {{skill.name}}
+            <li
+              v-for="skill in active"
+              :key="skill.name"
+              class="active remove"
+              @click="removeFromSearch(skill)">
+              <a class="remove" >&times;</a> {{ skill.name }}
             </li>
           </ul>
         </div>
       </div>
     </b-col>
-    <b-col class="col-md-12" style="float:right">
-      <Results :param='param' :selected='selected ' :active='active'></Results>
+    <b-col
+      class="col-md-12"
+      style="float:right">
+      <Results
+        :param="param"
+        :selected="selected "
+        :active="active"/>
     </b-col>
   </div>
 </template>
@@ -39,6 +65,9 @@ import { Results } from '../components/Search'
 
 export default {
   name: 'Search',
+  components: {
+    Results
+  },
   data () {
     return {
       param: '',
@@ -56,6 +85,9 @@ export default {
       'skillsNotIn'
     ])
   },
+  mounted () {
+    document.title = 'Rytmi - Search'
+  },
   methods: {
     addToSearch: function (skill) {
       this.active.push(skill)
@@ -63,12 +95,6 @@ export default {
     removeFromSearch: function (skill) {
       this.active = this.active.filter(el => (el.id !== skill.id))
     }
-  },
-  mounted () {
-    document.title = 'Rytmi - Search'
-  },
-  components: {
-    Results
   }
 }
 </script>

@@ -8,7 +8,7 @@ const initialState = {
 }
 
 export default {
-  state: {...initialState},
+  state: { ...initialState },
   actions,
   getters,
   mutations

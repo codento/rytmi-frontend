@@ -1,58 +1,58 @@
 <template>
-  <b-form @submit="onSubmit" @reset="onReset">
-    <div v-if='showError'>
-      <b-alert show variant="warning">Päivitys epäonnistui</b-alert>
+  <b-form
+    @submit="onSubmit"
+    @reset="onReset">
+    <div v-if="showError">
+      <b-alert
+        show
+        variant="warning">Päivitys epäonnistui</b-alert>
     </div>
     <b-form-group
-      horizontal
       id="firstNameLabel"
+      horizontal
       label="First name:"
       label-for="firstName">
       <b-form-input
         id="firstNameInput"
-        type="text"
         v-model="editedProfile.firstName"
+        type="text"
         required
-      >
-      </b-form-input>
+      />
     </b-form-group>
     <b-form-group
-      horizontal
       id="lastNameLabel"
+      horizontal
       label="Last name:"
       label-for="lastNameInput">
       <b-form-input
         id="lastNameInput"
-        type="text"
         v-model="editedProfile.lastName"
+        type="text"
         required
-      >
-      </b-form-input>
+      />
     </b-form-group>
     <b-form-group
-      horizontal
       id="titleLabel"
+      horizontal
       label="Title:"
       label-for="titleInput">
       <b-form-input
         id="titleInput"
-        type="text"
         v-model="editedProfile.title"
-        placeholder="Enter title">
-      </b-form-input>
+        type="text"
+        placeholder="Enter title"/>
     </b-form-group>
     <b-form-group
-      horizontal
       id="emailLabel"
+      horizontal
       label="Email:"
       label-for="emailInput">
       <b-form-input
         id="emailInput"
-        type="email"
         v-model="editedProfile.email"
+        type="email"
         required
-      >
-      </b-form-input>
+      />
     </b-form-group>
     <b-form-group
       id="PhonenumberLabel"
@@ -61,11 +61,10 @@
       label-for="PhonenumberInput">
       <b-form-input
         id="PhonenumberInput"
-        type='tel'
         v-model="editedProfile.phone"
+        type="tel"
         required
-      >
-      </b-form-input>
+      />
     </b-form-group >
     <b-form-group
       id="description"
@@ -75,13 +74,16 @@
       <b-form-input
         id="descriptionInput"
         :rows="3"
-        type="text"
         v-model="editedProfile.description"
-      >
-      </b-form-input>
+        type="text"
+      />
     </b-form-group>
-    <b-button type="submit" variant="primary">Submit</b-button>
-    <b-button type="reset" variant="danger">Reset</b-button>
+    <b-button
+      type="submit"
+      variant="primary">Submit</b-button>
+    <b-button
+      type="reset"
+      variant="danger">Reset</b-button>
   </b-form>
 </template>
 
