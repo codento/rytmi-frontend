@@ -12,7 +12,7 @@ script:
 before_deploy:
 - openssl aes-256-cbc -K $encrypted_113ad6956d9b_key -iv $encrypted_113ad6956d9b_iv -in secrets.tar.enc -out secrets.tar -d
 - tar xvf /tmp/secrets.tar -C /tmp
-- cp /tmp/.$TRAVIS_BRANCH.env.local $TRAVIS_BUILD_DIR/.env.local
+- cp /tmp/.env.$TRAVIS_BRANCH.local $TRAVIS_BUILD_DIR/.env.local
 - ssh-keyscan -H $DEPLOY_HOST 2>&1 | tee -a $HOME/.ssh/known_hosts
 - eval "$(ssh-agent -s)"
 - chmod 600 /tmp/deploy_rsa

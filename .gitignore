@@ -8,6 +8,7 @@ coverage/
 .env.*.local
 # travis secret tar
 secrets.tar
+deploy_rsa
 
 # Log files
 npm-debug.log*
