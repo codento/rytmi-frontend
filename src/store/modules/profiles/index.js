@@ -3,7 +3,7 @@ import { getters } from './getters'
 import { mutations } from './mutations'
 
 const initialState = {
-  profileId: localStorage.getItem('profile-id') || '',
+  profileId: window.localStorage ? window.localStorage.getItem('profile-id') || '' : '',
   userProfile: '',
   profiles: {},
   profileList: [],

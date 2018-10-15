@@ -142,7 +142,7 @@ export function getAllFutureProfileProjects () {
 }
 
 function getAuthHeaders () {
-  const token = localStorage.getItem('user-token') || ''
+  const token = window.localStorage ? window.localStorage.getItem('user-token') || '' : ''
   return {
     headers: {
       'Content-Type': 'application/json',
