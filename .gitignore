@@ -6,6 +6,8 @@ coverage/
 # local env files
 .env.local
 .env.*.local
+# travis secret tar
+secrets.tar
 
 # Log files
 npm-debug.log*
