@@ -5,9 +5,12 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
   <div
     class="animated fadeIn project-container col-sm-12 col-md-7"
   >
-    <b-row>
-      <b-col
+    <brow-stub
+      tag="div"
+    >
+      <bcol-stub
         class="project-details"
+        tag="div"
       >
         <b>
           
@@ -29,7 +32,9 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
             <br />
              
             <b>
-              <!---->
+              <dateformatter-stub
+                format="DD.MM.YYYY"
+              />
             </b>
           </span>
            
@@ -42,7 +47,9 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
             <br />
              
             <b>
-              <!---->
+              <dateformatter-stub
+                format="DD.MM.YYYY"
+              />
             </b>
           </span>
            
@@ -67,20 +74,25 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
           
         
         </p>
-      </b-col>
-    </b-row>
+      </bcol-stub>
+    </brow-stub>
      
-    <b-row>
-      <b-col
+    <brow-stub
+      tag="div"
+    >
+      <bcol-stub
         class="project-members"
+        tag="div"
       >
-        <!---->
-      </b-col>
-    </b-row>
+        <projectmembertable-stub />
+      </bcol-stub>
+    </brow-stub>
      
     <hr />
      
-    <!---->
+    <projectform-stub
+      editableproject="5"
+    />
      
     <hr />
      

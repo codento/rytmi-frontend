@@ -1,21 +1,34 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Profile.vue shallowMount Template is correct 1`] = `
-<b-container
+<bcontainer-stub
   class="animated fadeIn profile"
+  tag="div"
 >
-  <b-row>
-    <b-col
+  <brow-stub
+    tag="div"
+  >
+    <bcol-stub
       class="col-md-6 col-sm-12 col-12"
+      tag="div"
     >
-      <!---->
-    </b-col>
+      <userprofilecard-stub
+        profile="[object Object]"
+      />
+    </bcol-stub>
      
-    <b-col
+    <bcol-stub
       class="col-md-6 col-sm-12 col-12"
+      tag="div"
     >
-      <b-card
+      <bcard-stub
+        bodytag="div"
+        footertag="div"
+        headertag="div"
         id="proficiency"
+        subtitletag="h6"
+        tag="div"
+        titletag="h4"
       >
         <h5
           class="mb-0"
@@ -33,25 +46,52 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
           </span>
         </h5>
          
-        <b-row>
-          <b-col
+        <brow-stub
+          tag="div"
+        >
+          <bcol-stub
             class="col mb-1"
-          />
-        </b-row>
-      </b-card>
+            tag="div"
+          >
+            <skillrow-stub
+              desc="Python desc"
+              name="Python"
+            />
+          </bcol-stub>
+        </brow-stub>
+      </bcard-stub>
        
-      <b-card
+      <bcard-stub
+        bodytag="div"
+        footertag="div"
         header="Projects"
+        headertag="div"
+        subtitletag="h6"
+        tag="div"
+        titletag="h4"
       >
-        <loading />
-      </b-card>
+        <projectrow-stub
+          profileproject="[object Object]"
+        />
+      </bcard-stub>
        
-      <b-card
+      <bcard-stub
+        bodytag="div"
+        footertag="div"
         header="Utilization"
+        headertag="div"
+        subtitletag="h6"
+        tag="div"
+        titletag="h4"
       >
-        <loading />
-      </b-card>
-    </b-col>
-  </b-row>
-</b-container>
+        <utilizationchart-stub
+          backgroundcolor="rgba(251, 85, 85, 0.4)"
+          fillcolor="rgb(97, 176, 32)"
+          height="90px"
+          projects="[object Object]"
+        />
+      </bcard-stub>
+    </bcol-stub>
+  </brow-stub>
+</bcontainer-stub>
 `;
