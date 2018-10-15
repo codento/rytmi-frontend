@@ -15,8 +15,24 @@ describe('Project.vue shallowMount', () => {
   }
   beforeEach(() => {
     getters = {
-      projectById: () => (arg) => arg,
-      profileProjectsByProjectId: () => (arg) => arg
+      projectById: () => (projectId) => {
+        return {
+          id: projectId,
+          name: 'Project Foo',
+          description: 'Foo Bar'
+        }
+      },
+      profileProjectsByProjectId: () => (projectId) => {
+        return [
+          {
+            id: 1,
+            profile: 1,
+            projectId: projectId,
+            startDate: '2018-01-01',
+            endDate: '2018-02-01'
+          }
+        ]
+      }
     }
     store = new Vuex.Store({ getters })
 

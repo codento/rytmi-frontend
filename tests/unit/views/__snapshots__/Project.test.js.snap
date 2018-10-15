@@ -17,7 +17,7 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
         </b>
          
         <h1>
-          
+          Project Foo
         </h1>
          
         <div
@@ -61,7 +61,9 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
             </small>
             <br />
              
-            <!---->
+            <b>
+              1
+            </b>
           </span>
         </div>
          
@@ -71,7 +73,7 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
           </small>
           <br />
           
-          
+          Foo Bar
         
         </p>
       </bcol-stub>
@@ -84,14 +86,16 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
         class="project-members"
         tag="div"
       >
-        <projectmembertable-stub />
+        <projectmembertable-stub
+          members="[object Object]"
+        />
       </bcol-stub>
     </brow-stub>
      
     <hr />
      
     <projectform-stub
-      editableproject="5"
+      editableproject="[object Object]"
     />
      
     <hr />
