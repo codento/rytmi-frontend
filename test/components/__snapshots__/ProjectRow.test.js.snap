@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`ProjectRow.test.js Template is correct 1`] = `
-"<div><div class=\\"row mb-1\\"><div class=\\"col-sm-12\\"><span class=\\"project-header\\"> </span></div> <div class=\\"col-sm-12 duration-container\\"><span class=\\"duration-item\\"><small>From</small><br> <span>
-  15.05.2017
-</span></span> <span class=\\"duration-item\\"><small>To</small><br> <span>
-  16.06.2017
-</span></span></div> <!----></div> <hr></div>"
-`;

@@ -1,14 +1,13 @@
 <template>
   <div class="app">
-    <AppHeader/>
+    <AppHeader />
     <div class="app-body">
-      <Sidebar :navItems="nav"/>
+      <Sidebar :navItems="nav" />
       <main class="main">
         <div class="container-fluid">
           <router-view></router-view>
         </div>
       </main>
-      <AppAside/>
     </div>
     <AppFooter/>
   </div>
@@ -19,9 +18,7 @@ import {mapActions, mapGetters} from 'vuex'
 import {
   Sidebar,
   Header as AppHeader,
-  Aside as AppAside,
-  Footer as AppFooter,
-  Breadcrumb
+  Footer as AppFooter
 } from './components/appStructures'
 
 export default {
@@ -29,9 +26,7 @@ export default {
   components: {
     AppHeader,
     Sidebar,
-    AppAside,
-    AppFooter,
-    Breadcrumb
+    AppFooter
   },
   methods: {
     ...mapActions([
@@ -48,31 +43,33 @@ export default {
       'profileId'
     ]),
     nav () {
-      return [
-        {
-          name: 'Search',
-          url: '/search',
-          icon: 'icon-magnifier'
-        },
-        {
-          name: 'Projects',
-          url: '/projects',
-          icon: 'icon-drawer'
-        },
-        {
-          divider: true
-        },
-        {
-          name: 'My Profile',
-          url: '/profile/' + this.profileId,
-          icon: 'icon-user'
-        },
-        {
-          name: 'Edit Profile',
-          url: '/edit/' + this.profileId,
-          icon: 'icon-pencil'
-        }
-      ]
+      return this.isAuthenticated
+        ? [
+          {
+            name: 'Search',
+            url: '/search',
+            icon: 'icon-magnifier'
+          },
+          {
+            name: 'Projects',
+            url: '/projects',
+            icon: 'icon-drawer'
+          },
+          {
+            divider: true
+          },
+          {
+            name: 'My Profile',
+            url: '/profile/' + this.profileId,
+            icon: 'icon-user'
+          },
+          {
+            name: 'Edit Profile',
+            url: '/edit/' + this.profileId,
+            icon: 'icon-pencil'
+          }
+        ]
+        : []
     },
     name () {
       return this.$route.name
@@ -94,16 +91,19 @@ export default {
 </script>
 
 <style lang="scss">
+  // CoreUI Icons Set
+  @import '~@coreui/icons/css/coreui-icons.min.css';
   /* Import Font Awesome Icons Set */
   $fa-font-path: '~font-awesome/fonts/';
-  @import '~font-awesome/css/font-awesome.min.css';
+  @import '~font-awesome/scss/font-awesome.scss';
   /* Import Simple Line Icons Set */
   $simple-line-font-path: '~simple-line-icons/fonts/';
-  @import '~simple-line-icons/css/simple-line-icons.css';
+  @import '~simple-line-icons/scss/simple-line-icons.scss';
+  /* Import Flag Icons Set */
+  @import '~flag-icon-css/css/flag-icon.min.css';
   /* Import Bootstrap Vue Styles */
   @import '~bootstrap-vue/dist/bootstrap-vue.css';
-
   // Import Main styles for this application
-  @import './scss/style';
+  @import 'assets/scss/style';
 </style>
 

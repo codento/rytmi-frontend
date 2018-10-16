@@ -2,8 +2,8 @@ import * as types from '../../mutation-types'
 import * as actions from './actions'
 
 const state = {
-  token: localStorage.getItem('user-token') || '',
-  profileId: localStorage.getItem('profile-id') || '',
+  token: window.localStorage ? window.localStorage.getItem('user-token') || '' : '',
+  profileId: window.localStorage ? window.localStorage.getItem('profile-id') || '' : '',
   status: '',
   hasLoadedOnce: false,
   userId: ''

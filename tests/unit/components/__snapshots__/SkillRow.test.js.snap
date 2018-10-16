@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserProfileCard.test.js Template is correct 1`] = `
+<div class="row" style="padding-bottom: 12px;" data-original-title="" title="">
+  <div class="col-mb-4 text-right valign-middle col"><b>Python:</b></div>
+  <div class="col-mb-8 col">
+    <div class="mb-6 progress" style="height: 0.9rem;">
+      <div role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2" class="rytmi-progress-knowledge progress-bar" style="width: 40%;">2</div>
+      <!---->
+    </div>
+    <div class="mb-6 progress" style="height: 0.9rem;">
+      <div role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="1" class="rytmi-progress-wants progress-bar" style="width: 20%;">1</div>
+      <!---->
+    </div>
+  </div>
+</div>
+`;
