@@ -1,7 +1,13 @@
 language: node_js
 node_js:
 - '9'
-cache: yarn
+cache:
+  yarn: true
+  directories:
+    - node_modules
+before_install:
+- openssl aes-256-cbc -K $encrypted_113ad6956d9b_key -iv $encrypted_113ad6956d9b_iv -in secrets.tar.enc -out secrets.tar -d
+- tar xvf secrets.tar
 before_script:
 - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
   > ./cc-test-reporter
@@ -10,9 +16,6 @@ before_script:
 script:
 - yarn test:unit
 before_deploy:
-- openssl aes-256-cbc -K $encrypted_113ad6956d9b_key -iv $encrypted_113ad6956d9b_iv -in secrets.tar.enc -out secrets.tar -d
-- tar xvf /tmp/secrets.tar -C $TRAVIS_BUILD_DIR
-# - cp /tmp/.env.$TRAVIS_BRANCH.local $TRAVIS_BUILD_DIR/.env.local
 - ssh-keyscan -H $DEPLOY_HOST 2>&1 | tee -a $HOME/.ssh/known_hosts
 - eval "$(ssh-agent -s)"
 - chmod 600 $TRAVIS_BUILD_DIR/deploy_rsa
