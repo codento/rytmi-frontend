@@ -16,6 +16,13 @@ yarn serve
 Vue uses a public and local `.env` files. Local/secret files must have a `.local` postfix.  
 Create a `.env.development.local` file with your secrets. You can use `.env.local.example` as a sample.
 
+```
+.env                # loaded in all cases
+.env.local          # loaded in all cases, ignored by git
+.env.[mode]         # only loaded in specified mode
+.env.[mode].local   # only loaded in specified mode, ignored by git
+```
+
 **Editing Environment variables**  
 If you modify the secret files those must be encrypted first. See https://docs.travis-ci.com/user/encrypting-files/ for more information.  
 Travis CLI must be installed first. https://github.com/travis-ci/travis.rb#installation
