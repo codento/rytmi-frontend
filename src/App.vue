@@ -2,10 +2,10 @@
   <div class="app">
     <AppHeader />
     <div class="app-body">
-      <Sidebar :navItems="nav" />
+      <Sidebar :nav-items="nav" />
       <main class="main">
         <div class="container-fluid">
-          <router-view></router-view>
+          <router-view/>
         </div>
       </main>
     </div>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import {
   Sidebar,
   Header as AppHeader,
@@ -22,20 +22,11 @@ import {
 } from './components/appStructures'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     AppHeader,
     Sidebar,
     AppFooter
-  },
-  methods: {
-    ...mapActions([
-      'fetchProfiles',
-      'fetchAllFutureProfileProjects',
-      'fetchSkills',
-      'fetchProfileSkills',
-      'fetchProjects'
-    ])
   },
   computed: {
     ...mapGetters([
@@ -86,6 +77,15 @@ export default {
       this.fetchProfileSkills()
       this.fetchProjects()
     }
+  },
+  methods: {
+    ...mapActions([
+      'fetchProfiles',
+      'fetchAllFutureProfileProjects',
+      'fetchSkills',
+      'fetchProfileSkills',
+      'fetchProjects'
+    ])
   }
 }
 </script>
@@ -106,4 +106,3 @@ export default {
   // Import Main styles for this application
   @import 'assets/scss/style';
 </style>
-

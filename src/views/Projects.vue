@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn col-sm-12 col-md-8 project-list-container">
-      <ProjectForm />
-      <ProjectList />
+    <ProjectForm />
+    <ProjectList />
   </div>
 </template>
 

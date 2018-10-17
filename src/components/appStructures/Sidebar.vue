@@ -2,7 +2,7 @@
   <AppSidebar fixed>
     <SidebarHeader/>
     <SidebarForm/>
-    <SidebarNav :navItems="navItems"></SidebarNav>
+    <SidebarNav :nav-items="navItems"/>
     <SidebarFooter/>
     <SidebarMinimizer/>
   </AppSidebar>
@@ -13,10 +13,7 @@
 import { Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav } from '@coreui/vue'
 
 export default {
-  name: 'c-sidebar',
-  props: {
-    navItems: Array
-  },
+  name: 'CSidebar',
   components: {
     AppSidebar,
     SidebarHeader,
@@ -24,6 +21,12 @@ export default {
     SidebarNav,
     SidebarFooter,
     SidebarMinimizer
+  },
+  props: {
+    navItems: {
+      type: Array,
+      default: () => []
+    }
   },
   data () {
     return {}

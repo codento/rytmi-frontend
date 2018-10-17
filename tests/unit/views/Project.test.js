@@ -11,7 +11,7 @@ describe('Project.vue shallowMount', () => {
 
   const $route = {
     path: '/id',
-    params: {id: 5}
+    params: { id: 5 }
   }
   beforeEach(() => {
     getters = {

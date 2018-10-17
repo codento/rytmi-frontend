@@ -31,6 +31,15 @@ git commit -m 'update secret archive'
 git push
 ```
 
+## Coding style
+
+**EsLint**  
+For JavaScript we are using currently JavaScript Standard Style https://standardjs.com/.  
+For Vue specific styling we use quite strict `vue/recommended` mode.
+
+**.editorconfig**  
+Make sure your editor supports `.editorconfig` or follow rules on your own.
+
 ## Git Workflow
 
 This repo has a dev (default) and a master branches. All features are developed in a feature branch and merged to the dev branch.

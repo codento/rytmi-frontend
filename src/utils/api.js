@@ -12,7 +12,7 @@ const PATH_PROJECTS = '/projects'
 const PATH_PROFILEPROJECTS = '/profileprojects'
 
 export function login (token) {
-  return axios.post(process.env.VUE_APP_API_URL + PATH_AUTH, {id_token: token})
+  return axios.post(process.env.VUE_APP_API_URL + PATH_AUTH, { id_token: token })
     .then(response => {
       return response
     }).catch(response => {

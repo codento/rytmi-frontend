@@ -1,33 +1,45 @@
 <template>
   <ul class="search-results">
-    <li v-for='profile in results' :key="profile.userId">
+    <li
+      v-for="profile in results"
+      :key="profile.userId">
       <b-card>
         <b-row>
-          <b-col class="col-12 col-md-3" style="text-align:center">
-            <span @click="openProfile(profile)" style="cursor: pointer">
-              <img :src='profile.photoPath' alt="">
-              <h3>{{profile.firstName}} {{profile.lastName}}</h3>
+          <b-col
+            class="col-12 col-md-3"
+            style="text-align:center">
+            <span
+              style="cursor: pointer"
+              @click="openProfile(profile)">
+              <img
+                :src="profile.photoPath"
+                alt="">
+              <h3>{{ profile.firstName }} {{ profile.lastName }}</h3>
             </span>
-            <b>{{profile.email}}</b><br>
-            <b>{{profile.phone}}</b>
+            <b>{{ profile.email }}</b><br>
+            <b>{{ profile.phone }}</b>
           </b-col>
           <b-col class="col-12 col-md-4 align-self-center">
             <UtilizationChart :projects="futureProjectsOfProfile(profile.id)" />
           </b-col>
-          <b-col class="col-12 col-md-4 align-self-center" style="margin-top: 1em;">
-            <SkillRow v-for='skill in skillsByProfileId(profile.id)'
+          <b-col
+            class="col-12 col-md-4 align-self-center"
+            style="margin-top: 1em;">
+            <SkillRow
+              v-for="skill in skillsByProfileId(profile.id)"
               :name="skillName(skill.skillId)"
-              :skillId='skill.id'
-              :knows='skill.knows'
-              :wants='skill.wantsTo'
-              :desc='skill.description'
-              :key='skill.id'>
-            </SkillRow>
+              :skill-id="skill.id"
+              :knows="skill.knows"
+              :wants="skill.wantsTo"
+              :desc="skill.description"
+              :key="skill.id"/>
           </b-col>
           <b-col class="col-12 col-md-1 profile-open-button">
-              <b-button @click="openProfile(profile)">
-                <i style="font-size: 76px; color: gray;" class="fa fa-5x fa-angle-right"></i>
-              </b-button>
+            <b-button @click="openProfile(profile)">
+              <i
+                style="font-size: 76px; color: gray;"
+                class="fa fa-5x fa-angle-right"/>
+            </b-button>
           </b-col>
         </b-row>
       </b-card>
@@ -42,6 +54,10 @@ import { SkillRow, UtilizationChart } from '../Profile'
 
 export default {
   name: 'Results',
+  components: {
+    SkillRow,
+    UtilizationChart
+  },
   props: {
     param: String,
     selected: String,
@@ -53,10 +69,6 @@ export default {
       sortable: []
     }
   },
-  components: {
-    SkillRow,
-    UtilizationChart
-  },
   computed: {
     ...mapGetters([
       'profileFilter',
@@ -67,7 +79,7 @@ export default {
     results: function () {
       let results = this.profileFilter(this.search)
       if (this.active.length > 0) {
-        this.sortable = []
+        this.sortable = [] // TODO: FIX ME!
         for (let i = 0; i < this.active.length; i++) {
           results = results.filter((profile) => this.hasSkill(profile, this.active[i].id, i))
         }
@@ -83,7 +95,7 @@ export default {
   },
   methods: {
     openProfile (profile) {
-      this.$router.push({name: 'profile', params: { id: profile.id }})
+      this.$router.push({ name: 'profile', params: { id: profile.id } })
     },
     delaySearch: _.debounce(
       function () {

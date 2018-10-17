@@ -3,10 +3,15 @@
     <br>
     <h5>Edit Links:</h5>
     <b-card id="editLinks">
-      <span v-for="link in profile.links" style="padding-right:20px" :key="link">
-        <span v-on:click="removeLink(link)" style="color:red; padding-right:10px; cursor:pointer">X</span> {{ link }}
+      <span
+        v-for="link in profile.links"
+        :key="link"
+        style="padding-right:20px">
+        <span
+          style="color:red; padding-right:10px; cursor:pointer"
+          @click="removeLink(link)">X</span> {{ link }}
       </span>
-        <b-form @submit="add">
+      <b-form @submit="add">
         <b-form-group
           id="addLinks"
           horizontal
@@ -14,10 +19,11 @@
           label-for="linkInput">
           <b-form-input
             id="linkInput"
-            type="text">
-          </b-form-input>
+            type="text"/>
         </b-form-group>
-        <b-button id="add" type="submit">Add</b-button>
+        <b-button
+          id="add"
+          type="submit">Add</b-button>
       </b-form>
     </b-card>
   </div>
@@ -27,7 +33,7 @@
 export default {
   name: 'EditLinks',
   props: {
-    'profile': Object
+    profile: Object
   },
   methods: {
     removeLink: function (link) {

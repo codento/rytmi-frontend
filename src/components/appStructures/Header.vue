@@ -1,17 +1,40 @@
 <template>
   <AppHeader>
-    <SidebarToggler class="d-lg-none" display="md" mobile />
-      <b-link class="navbar-brand" to="/home">
-        <img class="navbar-brand-full" src="/img/logo.png" width="143" height="25" alt="Codento Logo">
-        <img class="navbar-brand-minimized" src="/img/Codento C RGB medium square.jpg" width="30" height="30" alt="Codento Logo">
-      </b-link>
-    <SidebarToggler class="d-md-down-none" display="lg" />
+    <SidebarToggler
+      class="d-lg-none"
+      display="md"
+      mobile />
+    <b-link
+      class="navbar-brand"
+      to="/home">
+      <img
+        class="navbar-brand-full"
+        src="/img/logo.png"
+        width="143"
+        height="25"
+        alt="Codento Logo">
+      <img
+        class="navbar-brand-minimized"
+        src="/img/Codento C RGB medium square.jpg"
+        width="30"
+        height="30"
+        alt="Codento Logo">
+    </b-link>
+    <SidebarToggler
+      class="d-md-down-none"
+      display="lg" />
 
     <b-navbar-nav class="ml-auto">
-      <b-nav-item v-if="!isAuthenticated" class="px-3" v-on:click="login">
+      <b-nav-item
+        v-if="!isAuthenticated"
+        class="px-3"
+        @click="login">
         <i class="fa fa-unlock" />&nbsp; Sign in
       </b-nav-item>
-      <b-nav-item v-if="isAuthenticated" class="px-3" v-on:click="logout">
+      <b-nav-item
+        v-if="isAuthenticated"
+        class="px-3"
+        @click="logout">
         <i class="fa fa-lock" />&nbsp; Sign out
       </b-nav-item>
     </b-navbar-nav>
@@ -22,11 +45,11 @@
 
 import { Header as AppHeader, SidebarToggler } from '@coreui/vue'
 
-import {mapGetters, mapActions} from 'vuex'
-import {loadAuthClient, handleLogin, handleLogout} from '../../utils/auth'
+import { mapGetters, mapActions } from 'vuex'
+import { loadAuthClient, handleLogin, handleLogout } from '../../utils/auth'
 
 export default {
-  name: 'c-header',
+  name: 'CHeader',
   components: {
     AppHeader,
     SidebarToggler
@@ -36,6 +59,10 @@ export default {
     isDev () {
       return process.env.NODE_ENV === 'development'
     }
+  },
+  created () {
+    /* eslint-disable */
+    loadAuthClient()
   },
   methods: {
     checkStatus () {
@@ -62,10 +89,6 @@ export default {
       })
     },
     ...mapActions(['requestAuth', 'logoutAuth', 'createUser'])
-  },
-  created () {
-    /* eslint-disable */
-    loadAuthClient()
   }
 }
 </script>

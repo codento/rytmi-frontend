@@ -8,7 +8,7 @@
 import { Footer as TheFooter } from '@coreui/vue'
 
 export default {
-  name: 'c-footer',
+  name: 'CFooter',
   components: {
     TheFooter
   }

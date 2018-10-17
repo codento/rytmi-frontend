@@ -39,7 +39,7 @@ export const actions = {
         })
     })
   },
-  addProfileSkill ({commit, state}, data) {
+  addProfileSkill ({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       newProfileSkill(data)
         .then(response => {
@@ -49,7 +49,7 @@ export const actions = {
         })
     })
   },
-  removeProfileSkill ({commit, state}, data) {
+  removeProfileSkill ({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       deleteProfileSkill(data)
         .then(response => {
@@ -59,7 +59,7 @@ export const actions = {
         })
     })
   },
-  updateProfileSkill ({commit, state}, data) {
+  updateProfileSkill ({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       alterProfileSkill(data)
         .then(response => {

@@ -1,15 +1,18 @@
 <template>
   <b-container>
-      <h2>Projects</h2>
-      <b-input type="text" placeholder="Filter projects (by name or project code)" v-model="projectFilterTerm" />
-      <b-table 
-        id="project-table"
-        striped
-        :items="results"
-        :fields="fields"
-        fixed
-        @row-clicked="openProject"
-      ></b-table>
+    <h2>Projects</h2>
+    <b-input
+      v-model="projectFilterTerm"
+      type="text"
+      placeholder="Filter projects (by name or project code)" />
+    <b-table
+      id="project-table"
+      :items="results"
+      :fields="fields"
+      striped
+      fixed
+      @row-clicked="openProject"
+    />
   </b-container>
 </template>
 <script>
@@ -44,7 +47,7 @@ export default {
   },
   methods: {
     openProject (project) {
-      this.$router.push({name: 'Project', params: { id: project.id }})
+      this.$router.push({ name: 'Project', params: { id: project.id } })
     }
   }
 }
@@ -54,4 +57,3 @@ export default {
   cursor: pointer;
 }
 </style>
-
