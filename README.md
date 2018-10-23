@@ -15,6 +15,7 @@ yarn serve
 
 Vue uses a public and local `.env` files. Local/secret files must have a `.local` postfix.  
 Create a `.env.development.local` file with your secrets. You can use `.env.local.example` as a sample.
+Vue only loads ENV variables that have VUE_APP prefix.
 
 **Editing Environment variables**  
 If you modify the secret files those must be encrypted first. See https://docs.travis-ci.com/user/encrypting-files/ for more information.  
