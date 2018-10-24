@@ -1,27 +1,12 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import merge from 'lodash.merge'
+import BootstrapVue from 'bootstrap-vue'
+import { merge } from 'lodash'
 import LandingPage from '../../../src/views/LandingPage'
 import Vuex from 'vuex'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
-
-describe('LandingPage.vue', () => {
-  it('Landing page shows unauthenticated view when user is not signed in', () => {
-    const wrapper = createWrapper()
-    expect(wrapper.text()).toContain('Please Sign in')
-  })
-
-  it('Landing page shows authenticated view when user is signed in', () => {
-    const store = createStore({
-      getters: {
-        isAuthenticated: jest.fn(() => true)
-      }
-    })
-    const wrapper = createWrapper({ store })
-    expect(wrapper.text()).toContain('Ready to Rock ’n’ Roll')
-  })
-})
+localVue.use(BootstrapVue)
 
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
@@ -40,4 +25,21 @@ function createWrapper (overrideMountingOptions) {
   }
   const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
   return shallowMount(LandingPage, mergedMountingOptions)
-};
+}
+
+describe('LandingPage.vue', () => {
+  it('Landing page shows unauthenticated view when user is not signed in', () => {
+    const wrapper = createWrapper()
+    expect(wrapper.text()).toContain('Please Sign in')
+  })
+
+  it('Landing page shows authenticated view when user is signed in', () => {
+    const store = createStore({
+      getters: {
+        isAuthenticated: jest.fn(() => true)
+      }
+    })
+    const wrapper = createWrapper({ store })
+    expect(wrapper.text()).toContain('Ready to Rock ’n’ Roll')
+  })
+})
