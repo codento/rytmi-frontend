@@ -83,9 +83,11 @@
         v-model="editedProjectProfile.workPercentage"
         type="number" />
       <b-btn
+        id="save"
         class="modal-btn"
         @click="callUpdateProfileProjectAction()">Save</b-btn>
       <b-btn
+        id="cancel"
         class="modal-btn"
         @click="closeEditModal()">Cancel</b-btn>
     </b-modal>
@@ -139,7 +141,7 @@ export default {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {
         this.removeProfileProject(profileProject)
-          .then((reponse) => {
+          .then(() => {
             this.$toasted.global.rytmi_success({
               message: 'Member removed!'
             })

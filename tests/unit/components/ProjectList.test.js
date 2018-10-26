@@ -36,7 +36,6 @@ describe('ProjectList.vue', () => {
     }
     const wrapper = createWrapper({ mocks })
     const table = wrapper.find({ name: 'bTable' })
-    console.log(table)
     table.vm.$emit('row-clicked', { id: 1 })
     expect(table.emitted).toHaveLength(1)
     expect(mocks.$router.push).toHaveBeenCalled()
