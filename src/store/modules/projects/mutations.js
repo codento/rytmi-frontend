@@ -9,7 +9,7 @@ export const mutations = {
     state.projectList = Object.keys(projects)
   },
   [types.UPDATE_PROJECT] (state, project) {
-    state.projects[project.id] = project
+    Vue.set(state.projects, project.id, project)
   },
   [types.DELETE_PROJECT] (state, project) {
     state.projects[project.id] = null
