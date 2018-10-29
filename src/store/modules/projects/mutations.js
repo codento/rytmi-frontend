@@ -12,7 +12,7 @@ export const mutations = {
     Vue.set(state.projects, project.id, project)
   },
   [types.DELETE_PROJECT] (state, project) {
-    state.projects[project.id] = null
+    Vue.delete(state.projects, project.id)
   },
   [types.ADD_PPTOPROJECT] (state, profileProject) {
     if (!(profileProject.projectId in state.profileProjectList)) {
