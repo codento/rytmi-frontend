@@ -1,10 +1,10 @@
 import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import projectModule from '../../../../../src/store/modules/projects'
+import projectModule from '@/store/modules/projects'
 import { cloneDeep } from 'lodash'
-import * as types from '../../../../../src/store/mutation-types'
+import * as types from '@/store/mutation-types'
 
-jest.mock('../../../../../src/utils/api')
+jest.mock('@/utils/api')
 const localVue = createLocalVue()
 localVue.use(Vuex)
 

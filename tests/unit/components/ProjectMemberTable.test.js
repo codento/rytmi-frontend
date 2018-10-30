@@ -3,7 +3,7 @@ import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
 import { merge } from 'lodash'
 import flushPromises from 'flush-promises'
-import { ProjectMemberTable } from '../../../src/components/Project'
+import { ProjectMemberTable } from '@/components/Project'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)

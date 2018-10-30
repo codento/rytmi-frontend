@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import { ProjectList } from '../../../src/components/Project'
+import { ProjectList } from '@/components/Project'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

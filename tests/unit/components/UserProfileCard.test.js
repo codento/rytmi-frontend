@@ -3,7 +3,7 @@ import {
   createLocalVue
 } from '@vue/test-utils'
 import Vuex from 'vuex'
-import { UserProfileCard } from '../../../src/components/Profile'
+import { UserProfileCard } from '@/components/Profile'
 
 describe('UserProfileCard.test.js', () => {
   let localVue = createLocalVue()

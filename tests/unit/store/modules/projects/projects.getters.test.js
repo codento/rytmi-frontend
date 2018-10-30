@@ -1,8 +1,8 @@
-import projectModule from '../../../../../src/store/modules/projects'
+import projectModule from '@/store/modules/projects'
 import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 
-jest.mock('../../../../../src/utils/api')
+jest.mock('@/utils/api')
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

@@ -3,8 +3,8 @@ import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
 import { merge } from 'lodash'
 import flushPromises from 'flush-promises'
-import { ProjectForm } from '../../../src/components/Project'
-import ApiErrorDetailsPanel from '../../../src/components/helpers/ApiErrorDetailsPanel'
+import { ProjectForm } from '@/components/Project'
+import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)

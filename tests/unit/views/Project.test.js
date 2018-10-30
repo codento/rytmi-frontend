@@ -2,9 +2,9 @@ import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import Project from '../../../src/views/Project.vue'
-import { ProjectProfileForm } from '../../../src/components/Project'
-import Loading from '../../../src/components/lib/loading'
+import Project from '@/views/Project.vue'
+import { ProjectProfileForm } from '@/components/Project'
+import Loading from '@/components/lib/loading'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

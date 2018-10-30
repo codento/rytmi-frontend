@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import { SkillRow } from '../../../src/components/Profile'
+import { SkillRow } from '@/components/Profile'
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 

@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 
-import View from '../../../src/views/Projects.vue'
+import View from '@/views/Projects.vue'
 
 describe('Profile.vue shallow', () => {
   let localVue = createLocalVue()

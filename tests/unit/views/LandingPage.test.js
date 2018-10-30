@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
-import LandingPage from '../../../src/views/LandingPage'
+import LandingPage from '@/views/LandingPage'
 import Vuex from 'vuex'
 
 const localVue = createLocalVue()
