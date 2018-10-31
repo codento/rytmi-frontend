@@ -83,6 +83,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import proficiencyDesc from '../../assets/proficiencyDesc'
+import { filter } from 'lodash'
 const skillTemplate = () => {
   return {
     skillId: null,
@@ -96,7 +97,8 @@ const skillTemplate = () => {
 export default {
   name: 'SkillForm',
   props: {
-    'profileId': Number
+    'profileId': Number,
+    required: true
   },
   data () {
     return {
@@ -111,11 +113,11 @@ export default {
       'skillsByProfileId'
     ]),
     availableSkills () {
-      const existingIds = this.skillsByProfileId(this.profileId)
+      const existingSkills = this.skillsByProfileId(this.profileId)
         .map(profileSkill => profileSkill.skillId)
-      return this.$lodash.filter(this.skills, (value, key) => {
-        return existingIds.indexOf(value.id) === -1
-      })
+      return filter(this.skills, (value, key) =>
+        existingSkills.indexOf(value.id) === -1
+      )
     }
   },
   methods: {

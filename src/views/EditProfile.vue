@@ -33,7 +33,7 @@ export default {
   },
   props: {
     profileId: {
-      type: Number,
+      type: String,
       required: true
     }
   },
