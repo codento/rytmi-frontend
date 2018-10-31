@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Project.vue shallowMount Template is correct 1`] = `
+exports[`Project.vue Template is correct 1`] = `
 <div>
   <div
     class="animated fadeIn project-container col-sm-12 col-md-7"
@@ -13,7 +13,7 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
         tag="div"
       >
         <b>
-          
+          50
         </b>
          
         <h1>
@@ -33,6 +33,7 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
              
             <b>
               <dateformatter-stub
+                date="2018-01-01"
                 format="DD.MM.YYYY"
               />
             </b>
@@ -48,6 +49,7 @@ exports[`Project.vue shallowMount Template is correct 1`] = `
              
             <b>
               <dateformatter-stub
+                date="2018-05-01"
                 format="DD.MM.YYYY"
               />
             </b>
