@@ -78,8 +78,7 @@ export default {
   computed: {
     ...mapGetters([
       'projectById',
-      'profileProjectsByProjectId',
-      'profileById'
+      'profileProjectsByProjectId'
     ]),
     project () {
       return this.projectById(this.$route.params.id)

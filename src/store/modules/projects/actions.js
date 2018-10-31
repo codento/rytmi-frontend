@@ -28,9 +28,9 @@ export function fetchProjects ({ commit, state }) {
   })
 }
 
-export function removeProject ({ commit, state }) {
+export function removeProject ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
-    deleteProject()
+    deleteProject(data)
       .then(response => {
         commit(types.DELETE_PROJECT, response.data)
       })

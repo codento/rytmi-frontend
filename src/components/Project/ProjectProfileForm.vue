@@ -87,7 +87,9 @@
       class="profile-form-errors">
       <div
         v-for="detail in errorDetails"
-        :key="detail"/>
+        :key="detail">
+        {{ detail }}
+      </div>
     </div>
   </div>
 </template>
@@ -162,5 +164,4 @@ button {
   width: 100%;
   margin-top: 1em;
 }
-
 </style>
