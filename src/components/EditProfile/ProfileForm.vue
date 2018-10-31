@@ -110,7 +110,6 @@ export default {
   },
   methods: {
     ...mapActions([
-      'createProfile',
       'updateProfile'
     ]),
     async onSubmit (evt) {
@@ -130,6 +129,7 @@ export default {
       /* Trick to reset/clear native browser form validation state */
       this.show = false
       this.showError = false
+      this.errorDetails = []
       this.$nextTick(() => { this.show = true })
       this.redirect()
     },
