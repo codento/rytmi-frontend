@@ -56,7 +56,7 @@ export default {
           },
           {
             name: 'Edit Profile',
-            url: '/edit/' + this.profileId,
+            url: '/profile/' + this.profileId + '/edit',
             icon: 'icon-pencil'
           }
         ]
