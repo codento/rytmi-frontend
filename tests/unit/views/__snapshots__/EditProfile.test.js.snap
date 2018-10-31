@@ -16,6 +16,20 @@ exports[`EditProfile.vue Should show correct components when profileId is not nu
    
   <hr />
    
-  <!---->
+  <profileform-stub
+    profile="[object Object]"
+  />
+   
+  <editlinks-stub
+    profile="[object Object]"
+  />
+   
+  <editskills-stub
+    profileid="5"
+  />
+   
+  <editprojects-stub
+    profileid="5"
+  />
 </div>
 `;
