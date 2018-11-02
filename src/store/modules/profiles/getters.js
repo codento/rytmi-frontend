@@ -9,10 +9,16 @@ export const getters = {
   profiles: (state) => state.profiles,
   profileById: (state) => (id) => state.profiles[id],
   projectsOfProfile: (state, getters, rootState) => (profileId) => state.profileProjectList[profileId].map(id => rootState.profileProjects.profileProjects[id]),
-  skillsByProfileId: (state) => (profileId) => {
+  skillsByProfileId: (state, getters) => (profileId) => {
     return state.profileSkills
       .filter(skill => skill.profileId === profileId)
-      .sort((a, b) => { return a.id - b.id })
+      .sort((a, b) => {
+        const nameA = getters.skillName(a.skillId).toLowerCase()
+        const nameB = getters.skillName(b.skillId).toLowerCase()
+        if (nameA < nameB) return -1
+        else if (nameA > nameB) return 1
+        return 0
+      })
   },
   profileFilter: (state) => (param) => {
     let keys = Object.keys(state.profiles)
