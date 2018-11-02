@@ -77,7 +77,6 @@ export default {
     addLink () {
       this.clearErrors()
       if (this.linkInput && this.findLink(this.linkInput) === -1) {
-        debugger
         const links = this.profile.links.slice()
         links.push(this.linkInput)
         this.submitChanges(links)
