@@ -24,7 +24,7 @@ const requireAuth = (to, from, next) => {
 
 export default new Router({
   mode: 'history',
-  linkActiveClass: 'open active',
+  linkExactActiveClass: 'open active',
   scrollBehavior: () => ({ y: 0 }),
   routes: [
     {
@@ -57,7 +57,7 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/edit/:profileId',
+      path: '/profile/:profileId/edit',
       name: 'editProfile',
       component: EditProfile,
       props: true

@@ -4,7 +4,7 @@
       v-for="detail in errorDetails"
       :key="detail"
       class="error-detail-row">
-      {{ parseErrorDetail(detail) }}
+      <li>{{ parseErrorDetail(detail) }}</li>
     </div>
   </div>
 </template>

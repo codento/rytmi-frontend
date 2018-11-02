@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditProfile.vue Should show correct components when profileId is not null 1`] = `
+<div
+  class="animated fadeIn profile-editor col-sm-12 col-md-10"
+>
+  <h1>
+    Edit Profile
+  </h1>
+   
+  <hr />
+   
+  <h1>
+    Basic Details
+  </h1>
+   
+  <hr />
+   
+  <profileform-stub
+    profile="[object Object]"
+  />
+   
+  <editlinks-stub
+    profile="[object Object]"
+  />
+   
+  <editskills-stub
+    profileid="5"
+  />
+   
+  <editprojects-stub
+    profileid="5"
+  />
+</div>
+`;
