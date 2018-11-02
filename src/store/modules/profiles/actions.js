@@ -34,8 +34,9 @@ export const actions = {
       alterProfile(data)
         .then(response => {
           commit(types.UPDATE_PROFILE, response.data)
-        }).catch(function (error) {
-          reject(error)
+          resolve(response.data)
+        }).catch(error => {
+          reject(error.response.data.error)
         })
     })
   },
