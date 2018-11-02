@@ -97,8 +97,10 @@ const skillTemplate = () => {
 export default {
   name: 'SkillForm',
   props: {
-    'profileId': Number,
-    required: true
+    'profileId': {
+      type: Number,
+      required: true
+    }
   },
   data () {
     return {

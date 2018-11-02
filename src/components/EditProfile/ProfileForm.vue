@@ -6,7 +6,7 @@
       <b-alert
         show
         variant="warning">
-        Päivitys epäonnistui
+        Update failed
         <ApiErrorDetailsPanel :error-details="errorDetails" />
       </b-alert>
     </div>
