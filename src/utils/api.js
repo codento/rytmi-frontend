@@ -24,6 +24,14 @@ export function getSkills () {
   return axios.get(process.env.VUE_APP_API_URL + PATH_SKILLS, getAuthHeaders()).catch(handleError)
 }
 
+export function newSkill (data) {
+  return axios.post(
+    process.env.VUE_APP_API_URL + PATH_SKILLS,
+    denormalize(data, [skill]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function getProfiles () {
   return axios.get(process.env.VUE_APP_API_URL + PATH_PROFILES + '/all', getAuthHeaders()).catch(handleError)
 }
