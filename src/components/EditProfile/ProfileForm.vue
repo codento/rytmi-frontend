@@ -5,7 +5,10 @@
     <div v-if="showError">
       <b-alert
         show
-        variant="warning">Päivitys epäonnistui</b-alert>
+        variant="warning">
+        Update failed
+        <ApiErrorDetailsPanel :error-details="errorDetails" />
+      </b-alert>
     </div>
     <b-form-group
       id="firstNameLabel"
@@ -89,9 +92,11 @@
 
 <script>
 import { mapActions } from 'vuex'
+import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 export default {
   name: 'ProfileForm',
+  components: { ApiErrorDetailsPanel },
   props: {
     'profile': Object
   },
@@ -99,34 +104,37 @@ export default {
     return {
       show: true,
       showError: false,
+      errorDetails: [],
       editedProfile: Object.assign({}, this.profile)
     }
   },
   methods: {
     ...mapActions([
-      'createProfile',
       'updateProfile'
     ]),
-    onSubmit (evt) {
+    async onSubmit (evt) {
       evt.preventDefault()
+      this.errorDetails = []
       this.showError = false
-      this.updateProfile(this.editedProfile)
-        .then(err => {
-          this.error = !this.showError
-          console.log(err) // Error: "It broke"
-        })
-      this.redirect()
+      try {
+        await this.updateProfile(this.editedProfile)
+        this.redirect()
+      } catch (error) {
+        this.showError = true
+        this.errorDetails = error.details
+      }
     },
     onReset (evt) {
       evt.preventDefault()
       /* Trick to reset/clear native browser form validation state */
       this.show = false
       this.showError = false
+      this.errorDetails = []
       this.$nextTick(() => { this.show = true })
       this.redirect()
     },
     redirect () {
-      this.$router.push('/profile/' + this.$route.params.id)
+      this.$router.push('/profile/' + this.profile.id)
     }
   }
 }
