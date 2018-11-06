@@ -1,0 +1,88 @@
+<template>
+  <b-card>
+    <b-row>
+      <b-col
+        class="col-12 col-md-3"
+        style="text-align:center">
+        <span
+          style="cursor: pointer"
+          @click="openProfile(profile)">
+          <img
+            :src="profile.photoPath"
+            alt="">
+          <h3>{{ profile.firstName }} {{ profile.lastName }}</h3>
+        </span>
+        <b>{{ profile.email }}</b><br>
+        <b>{{ profile.phone }}</b>
+      </b-col>
+      <b-col class="col-12 col-md-4 align-self-center">
+        <UtilizationChart :projects="futureProjectsOfProfile(profile.id)" />
+      </b-col>
+      <b-col
+        class="col-12 col-md-4 align-self-center"
+        style="margin-top: 1em;">
+        <SkillRow
+          v-for="skill in skillsByProfileId(profile.id)"
+          :name="skillName(skill.skillId)"
+          :skillId="skill.id"
+          :knows="skill.knows"
+          :wants="skill.wantsTo"
+          :desc="skill.description"
+          :key="skill.id"/>
+      </b-col>
+      <b-col class="col-12 col-md-1 profile-open-button">
+        <b-button @click="openProfile(profile)">
+          <i
+            style="font-size: 76px; color: gray;"
+            class="fa fa-5x fa-angle-right"/>
+        </b-button>
+      </b-col>
+    </b-row>
+  </b-card>
+</template>
+
+<script>
+import { SkillRow, UtilizationChart } from '../Profile'
+import { mapGetters } from 'vuex'
+
+export default {
+  name: 'ProfileCard',
+  components: { SkillRow, UtilizationChart },
+  props: {
+    profile: Object
+  },
+  data () {
+    return {}
+  },
+  computed: {
+    ...mapGetters([
+      'profileFilter',
+      'skillsByProfileId',
+      'skillById',
+      'futureProjectsOfProfile',
+      'skillName'
+    ])
+  },
+  methods: {
+    openProfile (profile) {
+      this.$router.push({ name: 'profile', params: { id: profile.id } })
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+img {
+  object-fit: contain;
+  margin-left: 10px
+}
+.profile-open-button {
+    margin: 0 auto;
+    button {
+        height: 100%;
+        background: #fff;
+        border: 0px;
+        width: 100%;
+    }
+}
+</style>
