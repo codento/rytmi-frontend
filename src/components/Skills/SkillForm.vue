@@ -3,7 +3,6 @@
     <b-form
       id="skills-add-form"
       @submit="onSubmit">
-
 <h1>Add a new skill</h1>
 <br>
 
@@ -14,7 +13,6 @@
       <b-button
         primary
         type="submit">Submit</b-button>
-    
     </b-form>
     <div
       v-if="showError"
@@ -58,7 +56,6 @@ export default {
           }
         })
         .catch(err => {
-          console.log("MyError", err);
           this.errorDetails = err.response.data.error.details;
           this.showError = true;
         });

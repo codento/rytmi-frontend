@@ -1,5 +1,5 @@
 <template>
- <b-container class="bv-example-row">
+ <b-container>
    <b-row>
    <b-col><SkillForm /></b-col>
    </b-row>
@@ -24,6 +24,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

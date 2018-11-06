@@ -25,16 +25,14 @@ export default {
   },
   computed: {
     ...mapGetters(["skills"]),
-    mapSkillsToArray(){
-        //palauttaa arrayn skills objektin keystä
-        const objectKeys = Object.keys(this.skills)
-        const skillsArray = objectKeys.map(skillKey => this.skills[skillKey])
-        return skillsArray
+    mapSkillsToArray() {
+      const objectKeys = Object.keys(this.skills);
+      const skillsArray = objectKeys.map(skillKey => this.skills[skillKey]);
+      return skillsArray;
     }
   },
   methods: {
-      removeSkill(item){
-      }
+    removeSkill(item) {}
   }
 };
 </script>

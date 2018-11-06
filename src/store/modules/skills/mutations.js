@@ -7,7 +7,6 @@ export const mutations = {
     state.skillList = Object.keys(state.skills)
   },
   [types.ADD_SKILL] (state, skill) {
-    //state , identifier ja itse skilli
     Vue.set(state.skills, skill.id, skill)  
   },
   [types.DELETE_SKILL] (state, skill){
