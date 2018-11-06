@@ -9,6 +9,8 @@ import store from '../store'
 import Callback from '@/components/helpers/Callback'
 import Projects from '@/views/Projects'
 import Project from '@/views/Project'
+import Skills from '@/views/Skills'
+
 Vue.use(Router)
 
 const requireAuth = (to, from, next) => {
@@ -60,6 +62,12 @@ export default new Router({
       path: '/profile/:profileId/edit',
       name: 'editProfile',
       component: EditProfile,
+      props: true
+    },
+    {
+      path: '/skills',
+      name: 'Skills',
+      component: Skills,
       props: true
     },
     {

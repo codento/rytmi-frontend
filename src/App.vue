@@ -58,6 +58,11 @@ export default {
             name: 'Edit Profile',
             url: '/profile/' + this.profileId + '/edit',
             icon: 'icon-pencil'
+          },
+          {
+            name: 'Add skill',
+            url: '/skills',
+            icon: 'icon-plus'
           }
         ]
         : []
