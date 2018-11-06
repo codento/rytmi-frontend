@@ -47,7 +47,6 @@ export default {
     ...mapGetters([
       'profileFilter',
       'skillsByProfileId',
-      'skillById',
       'profiles'
     ]),
     filterSkillIds () {
