@@ -71,7 +71,9 @@ export default {
   },
   methods: {
     addToSearch: function (skill) {
-      this.filterSkills.push(skill)
+      const skills = this.filterSkills.slice(0)
+      skills.push(skill)
+      this.filterSkills = skills
     },
     removeFromSearch: function (skill) {
       this.filterSkills = this.filterSkills.filter(el => (el.id !== skill.id))

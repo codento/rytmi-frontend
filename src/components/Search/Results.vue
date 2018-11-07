@@ -2,11 +2,11 @@
   <div>
     <b-row class="sortbar" align-h="end">
       <b-col cols="2">
-        <small class="fda">Sort profiles by: </small>
+        <small>Sort profiles by: </small>
         <b-form-radio-group
           id="btnradios"
           v-model="sortBy"
-          :options="options"
+          :options="sortOptions"
           buttons
           name="radioBtnStacked" />
       </b-col>
@@ -14,7 +14,9 @@
     <profile-card
       v-for="profile in ordered"
       :key="profile.id"
-      :profile="profile" />
+      :profile="profile"
+      :skill-highlight="filterSkillIds"
+    />
   </div>
 </template>
 
@@ -35,12 +37,7 @@ export default {
   data () {
     return {
       filteredProfiles: {},
-      sortBy: 'name',
-      options: [
-        { text: 'Name', value: 'name' },
-        { text: 'Skills', value: 'knows' },
-        { text: 'Willingness', value: 'wantsTo' }
-      ]
+      sortBy: 'name'
     }
   },
   computed: {
@@ -49,6 +46,18 @@ export default {
       'skillsByProfileId',
       'profiles'
     ]),
+    sortOptions () {
+      const options = [
+        { text: 'Name', value: 'name' }
+      ]
+      if (!_.isEmpty(this.filterSkills)) {
+        options.push(...[
+          { text: 'Proficiency', value: 'knows' },
+          { text: 'Willingness', value: 'wantsTo' }
+        ])
+      }
+      return options
+    },
     filterSkillIds () {
       return this.filterSkills.map(skill => skill.id)
     },
@@ -94,6 +103,10 @@ export default {
     },
     profiles: function () {
       this.search()
+    },
+    filterSkills (newValue, oldValue) {
+      if (_.isEmpty(newValue)) this.sortBy = 'name'
+      if (_.isEmpty(oldValue)) this.sortBy = 'knows'
     }
   },
   mounted () {
@@ -129,7 +142,6 @@ export default {
 
 <style scoped>
 .sortbar {
-  font-size: 40px !important;
-  padding: 10px !important;
+  padding: 8px !important;
 }
 </style>

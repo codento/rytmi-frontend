@@ -23,12 +23,10 @@
         style="margin-top: 1em;">
         <SkillRow
           v-for="skill in skillsByProfileId(profile.id)"
-          :name="skillName(skill.skillId)"
-          :skillId="skill.id"
-          :knows="skill.knows"
-          :wants="skill.wantsTo"
-          :desc="skill.description"
-          :key="skill.id"/>
+          :key="skill.id"
+          v-bind="skill"
+          :highlight="skillHighlight.includes(skill.skillId)"
+        />
       </b-col>
       <b-col class="col-12 col-md-1 profile-open-button">
         <b-button @click="openProfile(profile)">
@@ -49,7 +47,8 @@ export default {
   name: 'ProfileCard',
   components: { SkillRow, UtilizationChart },
   props: {
-    profile: Object
+    profile: Object,
+    skillHighlight: Array
   },
   data () {
     return {}
@@ -59,8 +58,7 @@ export default {
       'profileFilter',
       'skillsByProfileId',
       'skillById',
-      'futureProjectsOfProfile',
-      'skillName'
+      'futureProjectsOfProfile'
     ])
   },
   methods: {
