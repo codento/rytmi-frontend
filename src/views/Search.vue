@@ -59,11 +59,15 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'skills'
+      'skills',
+      'skillName'
     ]),
     selectableSkills () {
       const currentSkills = this.filterSkills.map(skill => skill.id)
-      return _.filter(this.skills, skill => !currentSkills.includes(skill.id))
+      return _(this.skills)
+        .filter(skill => !currentSkills.includes(skill.id))
+        .sortBy(skill => this.skillName(skill.id))
+        .value()
     }
   },
   mounted () {
