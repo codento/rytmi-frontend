@@ -24,7 +24,8 @@ function skillsMock () {
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
-      skills: () => skillsMock()
+      skills: () => skillsMock(),
+      skillName: () => (skillId) => skillsMock()[skillId],
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
