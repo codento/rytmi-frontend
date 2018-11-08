@@ -1,5 +1,7 @@
-import Results from './Results.vue'
+import Results from './Results'
+import ProfileCard from './ProfileCard'
 
 export {
-  Results
+  Results,
+  ProfileCard
 }

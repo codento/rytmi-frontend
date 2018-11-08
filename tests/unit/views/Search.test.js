@@ -3,6 +3,7 @@ import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Search from '@/views/Search.vue'
+import { Results } from '@/components/Search'
 import Loading from '@/components/lib/loading'
 
 const localVue = createLocalVue()
@@ -59,5 +60,13 @@ describe('Search.vue', () => {
     wrapper.vm.addToSearch(skillsMock()[2])
     wrapper.vm.removeFromSearch(skillsMock()[1])
     expect(wrapper.findAll(bDropdownItemButton).length).toBe(Object.keys(skillsMock()).length - 1)
+  })
+
+  it('should pass right attributes to Results component', () => {
+    const wrapper = createWrapper()
+    wrapper.vm.addToSearch(skillsMock()[1])
+    wrapper.vm.filterName = 'foo'
+    expect(wrapper.find(Results).props().filterSkills).toEqual([skillsMock()[1]])
+    expect(wrapper.find(Results).props().filterName).toBe('foo')
   })
 })
