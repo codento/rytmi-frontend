@@ -68,7 +68,7 @@ export default {
       'updateProfile'
     ]),
     removeLink: function (link) {
-      const links = this.profile.links.filter((l) => link !== l)
+      const links = this.profile.links.filter(l => link !== l)
       this.submitChanges(links)
     },
     clearErrors () {
@@ -94,7 +94,7 @@ export default {
       }
     },
     findLink (link) {
-      return this.profile.links.findIndex((l) => l === link)
+      return this.profile.links.findIndex(l => l === link)
     }
   }
 }
