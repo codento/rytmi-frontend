@@ -3,38 +3,45 @@
     <SidebarToggler
       class="d-lg-none"
       display="md"
-      mobile />
+      mobile
+    />
     <b-link
       class="navbar-brand"
-      to="/home">
+      to="/home"
+    >
       <img
         class="navbar-brand-full"
         src="/img/logo.png"
         width="143"
         height="25"
-        alt="Codento Logo">
+        alt="Codento Logo"
+      >
       <img
         class="navbar-brand-minimized"
         src="/img/Codento C RGB medium square.jpg"
         width="30"
         height="30"
-        alt="Codento Logo">
+        alt="Codento Logo"
+      >
     </b-link>
     <SidebarToggler
       class="d-md-down-none"
-      display="lg" />
+      display="lg"
+    />
 
     <b-navbar-nav class="ml-auto">
       <b-nav-item
         v-if="!isAuthenticated"
         class="px-3"
-        @click="login">
+        @click="login"
+      >
         <i class="fa fa-unlock" />&nbsp; Sign in
       </b-nav-item>
       <b-nav-item
         v-if="isAuthenticated"
         class="px-3"
-        @click="logout">
+        @click="logout"
+      >
         <i class="fa fa-lock" />&nbsp; Sign out
       </b-nav-item>
     </b-navbar-nav>

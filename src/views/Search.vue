@@ -8,17 +8,20 @@
             <b-form-input
               v-model="filterName"
               type="text"
-              placeholder="Filter by name" />
+              placeholder="Filter by name"
+            />
           </b-col>
         </b-row>
         <b-row class="search-item">
           <b-col>
             <b-dropdown
-              text="Add skill filters:">
+              text="Add skill filters:"
+            >
               <b-dropdown-item-button
                 v-for="skill in selectableSkills"
                 :key="skill.id"
-                @click="addToSearch(skill)">
+                @click="addToSearch(skill)"
+              >
                 {{ skill.name }}
               </b-dropdown-item-button>
             </b-dropdown>
@@ -27,7 +30,8 @@
                 v-for="skill in filterSkills"
                 :key="skill.name"
                 class="skillFilter"
-                @click="removeFromSearch(skill)">
+                @click="removeFromSearch(skill)"
+              >
                 &times; {{ skill.name }}
               </li>
             </ul>
@@ -36,8 +40,9 @@
       </b-col>
     </b-row>
     <Results
-      :filterName="filterName"
-      :filterSkills="filterSkills" />
+      :filter-name="filterName"
+      :filter-skills="filterSkills"
+    />
   </div>
 </template>
 
@@ -89,7 +94,7 @@ export default {
 <style scoped>
 #search {
     padding: 1em;
-    min-height: 15em;
+    min-height: 10em;
 }
 ul {
   list-style-type: none;

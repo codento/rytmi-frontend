@@ -6,7 +6,8 @@
       :style="style"
       :chart-data="chartData"
       :options="chartOptions"
-      class="utilizationChart"/>
+      class="utilizationChart"
+    />
   </div>
 </template>
 

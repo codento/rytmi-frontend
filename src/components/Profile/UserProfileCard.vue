@@ -12,7 +12,8 @@
         :href="account.address"
         :key="account.address"
         style="padding: 4px;"
-        class="fa"/>
+        class="fa"
+      />
     </div>
     <div >
       <div class="profileCardDetails profile-card-detail-row">
@@ -27,7 +28,8 @@
       </div>
       <div
         v-if="profileId == profile.id"
-        class="profile-card-detail-row">
+        class="profile-card-detail-row"
+      >
         <router-link :to="{ name: 'editProfile', params: { profileId: profileId }}">Edit profile</router-link>
       </div>
     </div>

@@ -2,7 +2,8 @@
   <div v-if="project">
     <div
       class="row mb-1"
-      @click="show = !show">
+      @click="show = !show"
+    >
       <div class="col-sm-12">
         <span class="project-header">{{ project.name }} </span>
       </div>
@@ -19,7 +20,8 @@
       <transition name="fade">
         <div
           v-if="show"
-          class="col-sm-12">
+          class="col-sm-12"
+        >
           {{ project.description }}
         </div>
       </transition>

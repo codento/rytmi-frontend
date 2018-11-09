@@ -14,7 +14,8 @@
           v-model="sortBy"
           :options="sortOptions"
           buttons
-          name="radioBtnStacked" />
+          name="radioBtnStacked"
+        />
       </b-col>
     </b-row>
     <profile-card

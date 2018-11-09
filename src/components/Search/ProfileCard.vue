@@ -8,10 +8,12 @@
       >
         <span
           style="cursor: pointer"
-          @click="openProfile(profile)">
+          @click="openProfile(profile)"
+        >
           <img
             :src="profile.photoPath"
-            alt="">
+            alt=""
+          >
           <h3>{{ profile.firstName }} {{ profile.lastName }}</h3>
         </span>
         <b>{{ profile.email }}</b><br>
@@ -45,7 +47,8 @@
         <b-button @click="openProfile(profile)">
           <i
             style="font-size: 76px; color: gray;"
-            class="fa fa-5x fa-angle-right"/>
+            class="fa fa-5x fa-angle-right"
+          />
         </b-button>
       </b-col>
     </b-row>

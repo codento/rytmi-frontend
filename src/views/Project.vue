@@ -3,7 +3,8 @@
     <loading v-if="!project"/>
     <div
       v-else
-      class="animated fadeIn project-container col-sm-12 col-md-7">
+      class="animated fadeIn project-container col-sm-12 col-md-7"
+    >
       <b-row>
         <b-col class="project-details">
           <b>{{ project.code }}</b>
@@ -39,13 +40,15 @@
       <div>
         <h3
           class="project-profile-form-header"
-          @click="toggleProfileForm">Add a consultant
+          @click="toggleProfileForm"
+        >Add a consultant
           <i class="fa fa-chevron-down" />
         </h3>
         <div v-if="profileFormOpen">
           <ProjectProfileForm
             :toggle-form="toggleProfileForm"
-            :project-id="project.id" />
+            :project-id="project.id"
+          />
         </div>
       </div>
     </div>

@@ -4,7 +4,8 @@
     <b-input
       v-model="projectFilterTerm"
       type="text"
-      placeholder="Filter projects (by name or project code)" />
+      placeholder="Filter projects (by name or project code)"
+    />
     <b-table
       id="project-table"
       :items="results"

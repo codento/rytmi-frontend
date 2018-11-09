@@ -2,14 +2,17 @@
   <b-card
     :title="getSkillName"
     class="skillCard"
-    style="max-width: 20rem;" >
+    style="max-width: 20rem;"
+  >
     <b-button-close
       class="top-right"
-      @click="$emit('removeSkill', skill.id)"/>
+      @click="$emit('removeSkill', skill.id)"
+    />
     <b-row>
       <b-col
         class="col-mb-3"
-        style="text-size: 20px;">
+        style="text-size: 20px;"
+      >
         <b>Wants</b>:
       </b-col>
       <b-col class="col-mb-9">
@@ -24,7 +27,8 @@
     <b-row>
       <b-col
         class="col-mb-3"
-        style="text-size: 20px;">
+        style="text-size: 20px;"
+      >
         <b>Knows</b>:
       </b-col>
       <b-col class="col-mb-9" >

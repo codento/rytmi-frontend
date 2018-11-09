@@ -1,7 +1,8 @@
 <template>
   <b-form
     @submit="onSubmit"
-    @reset="onReset">
+    @reset="onReset"
+  >
     <div v-if="showError">
       <b-alert
         show
@@ -14,7 +15,8 @@
       id="firstNameLabel"
       horizontal
       label="First name:"
-      label-for="firstName">
+      label-for="firstName"
+    >
       <b-form-input
         id="firstNameInput"
         v-model="editedProfile.firstName"
@@ -26,7 +28,8 @@
       id="lastNameLabel"
       horizontal
       label="Last name:"
-      label-for="lastNameInput">
+      label-for="lastNameInput"
+    >
       <b-form-input
         id="lastNameInput"
         v-model="editedProfile.lastName"
@@ -38,18 +41,21 @@
       id="titleLabel"
       horizontal
       label="Title:"
-      label-for="titleInput">
+      label-for="titleInput"
+    >
       <b-form-input
         id="titleInput"
         v-model="editedProfile.title"
         type="text"
-        placeholder="Enter title"/>
+        placeholder="Enter title"
+      />
     </b-form-group>
     <b-form-group
       id="emailLabel"
       horizontal
       label="Email:"
-      label-for="emailInput">
+      label-for="emailInput"
+    >
       <b-form-input
         id="emailInput"
         v-model="editedProfile.email"
@@ -61,7 +67,8 @@
       id="PhonenumberLabel"
       horizontal
       label="Phone number:"
-      label-for="PhonenumberInput">
+      label-for="PhonenumberInput"
+    >
       <b-form-input
         id="PhonenumberInput"
         v-model="editedProfile.phone"
@@ -73,7 +80,8 @@
       id="description"
       horizontal
       label="Description:"
-      label-for="descriptionInput">
+      label-for="descriptionInput"
+    >
       <b-form-input
         id="descriptionInput"
         :rows="3"
@@ -83,10 +91,12 @@
     </b-form-group>
     <b-button
       type="submit"
-      variant="primary">Submit</b-button>
+      variant="primary"
+    >Submit</b-button>
     <b-button
       type="reset"
-      variant="danger">Reset</b-button>
+      variant="danger"
+    >Reset</b-button>
   </b-form>
 </template>
 

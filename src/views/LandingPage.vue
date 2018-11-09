@@ -1,20 +1,24 @@
 <template>
   <div
     class="animated fadeIn container"
-    style="margin-top: 24px">
+    style="margin-top: 24px"
+  >
     <b-jumbotron
       bg-variant="white"
       text-variant="primary"
-      border-variant="dark">
+      border-variant="dark"
+    >
       <span slot="header">Codento Rytmi</span>
       <template
         v-if="!isAuthenticated"
-        slot="lead">
+        slot="lead"
+      >
         Please Sign in
       </template>
       <template
         v-else
-        slot="lead">
+        slot="lead"
+      >
         Ready to Rock ’n’ Roll
       </template>
     </b-jumbotron>

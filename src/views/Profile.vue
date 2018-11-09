@@ -9,19 +9,22 @@
         <b-card id="proficiency">
           <h5
             slot="header"
-            class="mb-0">
+            class="mb-0"
+          >
             Proficiency
             <span
               style="float:right; cursor:pointer"
               @mouseenter="showExplanations(true)"
-              @mouseout="showExplanations(false)">
+              @mouseout="showExplanations(false)"
+            >
               &#9432;
             </span>
           </h5>
           <b-row v-if="showInfo">
             <skillExplanations
               :know-desc="knowDesc"
-              :want-desc="wantDesc" />
+              :want-desc="wantDesc"
+            />
           </b-row>
           <b-row v-else>
             <b-col class="col mb-1">
@@ -46,7 +49,8 @@
           <loading v-if="!profileProjects"/>
           <UtilizationChart
             v-else
-            :projects="profileProjects" />
+            :projects="profileProjects"
+          />
         </b-card>
       </b-col>
     </b-row>

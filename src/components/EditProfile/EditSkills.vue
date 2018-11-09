@@ -16,12 +16,14 @@
           </template>
           <template
             slot="skillId"
-            slot-scope="skillId">
+            slot-scope="skillId"
+          >
             {{ skillById(skillId.value).name }}
           </template>
           <template
             slot="knows"
-            slot-scope="knows">
+            slot-scope="knows"
+          >
             <span @click.stop="showKnowsModal(knows)">
               <b-progress
                 :value="knows.value"
@@ -33,7 +35,8 @@
           </template>
           <template
             slot="wantsTo"
-            slot-scope="wantsTo">
+            slot-scope="wantsTo"
+          >
             <span @click.stop="showWantsModal(wantsTo)">
               <b-progress
                 :value="wantsTo.value"
@@ -45,12 +48,14 @@
           </template>
           <template
             slot="remove"
-            slot-scope="remove">
+            slot-scope="remove"
+          >
             <b-btn
               size="sm"
               class="mr-1"
               variant="danger"
-              @click.stop="removeSkillFromProfile(remove.item.id)">Remove</b-btn>
+              @click.stop="removeSkillFromProfile(remove.item.id)"
+            >Remove</b-btn>
           </template>
         </b-table>
       </b-col>
@@ -61,34 +66,42 @@
     <b-modal
       ref="wantsToModal"
       title="Update skill willingness"
-      hide-footer>
+      hide-footer
+    >
       <b-radio-group
         v-model="editedSkill.wantsTo"
         :options="wantsToOptions"
         plain
-        stacked />
+        stacked
+      />
       <b-btn
         class="modal-btn"
-        @click="updateSkill()">Save</b-btn>
+        @click="updateSkill()"
+      >Save</b-btn>
       <b-btn
         class="modal-btn"
-        @click="hideModals()">Cancel</b-btn>
+        @click="hideModals()"
+      >Cancel</b-btn>
     </b-modal>
     <b-modal
       ref="knowsModal"
       title="Update skill proficiency"
-      hide-footer>
+      hide-footer
+    >
       <b-radio-group
         v-model="editedSkill.knows"
         :options="knowsOptions"
         plain
-        stacked />
+        stacked
+      />
       <b-btn
         class="modal-btn"
-        @click="updateSkill()">Save</b-btn>
+        @click="updateSkill()"
+      >Save</b-btn>
       <b-btn
         class="modal-btn"
-        @click="hideModals()">Cancel</b-btn>
+        @click="hideModals()"
+      >Cancel</b-btn>
     </b-modal>
   </div>
 </template>

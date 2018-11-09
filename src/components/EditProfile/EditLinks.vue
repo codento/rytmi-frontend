@@ -22,7 +22,8 @@
           id="addLinks"
           horizontal
           label="Add Links:"
-          label-for="linkInput">
+          label-for="linkInput"
+        >
           <b-form-input
             id="linkInput"
             v-model="linkInput"
