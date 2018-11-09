@@ -77,20 +77,20 @@ export default {
         wantsTo: [],
         name: []
       }
-      const skillFilterCnt = this.filteredSkillIds.length
+      const skillFilterCount = this.filteredSkillIds.length
       if (this.filteredProfiles) {
         Object.values(this.filteredProfiles).forEach(profile => {
           const knows = []
           const wantsTo = []
-          let cnt = 0 // Count of skills. Does not count skills where wantsTo and knows are 0.
+          let count = 0 // Count of skills. Does not count skills where wantsTo and knows are 0.
           this.skillsByProfileId(profile.id).forEach(profileSkill => {
             if (this.filteredSkillIds.includes(profileSkill.skillId) && (profileSkill.wantsTo > 0 || profileSkill.knows > 0)) {
               knows.push(profileSkill.knows)
               wantsTo.push(profileSkill.wantsTo)
-              cnt += 1
+              count += 1
             }
           })
-          if (cnt === skillFilterCnt) {
+          if (count === skillFilterCount) {
             // add to orderMap only if profile has all selected skills.
             orderMap.knows.push({ profileId: profile.id, value: _max(knows) })
             orderMap.wantsTo.push({ profileId: profile.id, value: _max(wantsTo) })
