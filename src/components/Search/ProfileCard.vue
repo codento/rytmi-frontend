@@ -2,8 +2,10 @@
   <b-card>
     <b-row>
       <b-col
-        class="col-12 col-md-3"
-        style="text-align:center">
+        cols="12"
+        md="3"
+        style="text-align:center"
+      >
         <span
           style="cursor: pointer"
           @click="openProfile(profile)">
@@ -15,12 +17,19 @@
         <b>{{ profile.email }}</b><br>
         <b>{{ profile.phone }}</b>
       </b-col>
-      <b-col class="col-12 col-md-4 align-self-center">
+      <b-col
+        cols="12"
+        md="4"
+        class="align-self-center"
+      >
         <UtilizationChart :projects="futureProjectsOfProfile(profile.id)" />
       </b-col>
       <b-col
-        class="col-12 col-md-4 align-self-center"
-        style="margin-top: 1em;">
+        cols="12"
+        md="4"
+        class="align-self-center"
+        style="margin-top: 1em;"
+      >
         <SkillRow
           v-for="skill in skillsByProfileId(profile.id)"
           :key="skill.id"
@@ -28,7 +37,11 @@
           :highlight="skillHighlight.includes(skill.skillId)"
         />
       </b-col>
-      <b-col class="col-12 col-md-1 profile-open-button">
+      <b-col
+        cols="12"
+        md="1"
+        class="profile-open-button"
+      >
         <b-button @click="openProfile(profile)">
           <i
             style="font-size: 76px; color: gray;"
