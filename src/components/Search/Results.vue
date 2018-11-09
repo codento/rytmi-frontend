@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { isEmpty, intersection, debounce, keyBy, max as _max } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
 
@@ -56,7 +56,7 @@ export default {
       const options = [
         { text: 'Name', value: 'name' }
       ]
-      if (!_.isEmpty(this.filterSkills)) {
+      if (!isEmpty(this.filterSkills)) {
         options.push(...[
           { text: 'Proficiency', value: 'knows' },
           { text: 'Willingness', value: 'wantsTo' }
@@ -68,7 +68,7 @@ export default {
       return this.filterSkills.map(skill => skill.id)
     },
     ordered () {
-      const sortBy = !_.isEmpty(this.filterSkillIds) ? this.sortBy : 'name'
+      const sortBy = !isEmpty(this.filterSkillIds) ? this.sortBy : 'name'
       return this.orderMap[sortBy].map(sortItem => this.filteredProfiles[sortItem.profileId])
     },
     orderMap () {
@@ -91,8 +91,8 @@ export default {
             }
           })
           if (cnt === skillFilterCnt) {
-            orderMap.knows.push({ profileId: profile.id, value: _.max(knows) })
-            orderMap.wantsTo.push({ profileId: profile.id, value: _.max(wantsTo) })
+            orderMap.knows.push({ profileId: profile.id, value: _max(knows) })
+            orderMap.wantsTo.push({ profileId: profile.id, value: _max(wantsTo) })
             orderMap.name.push({ profileId: profile.id, value: profile.firstName.toLowerCase() })
           }
         })
@@ -111,15 +111,15 @@ export default {
       this.search()
     },
     filterSkills (newValue, oldValue) {
-      if (_.isEmpty(newValue)) this.sortBy = 'name'
-      if (_.isEmpty(oldValue)) this.sortBy = 'knows'
+      if (isEmpty(newValue)) this.sortBy = 'name'
+      if (isEmpty(oldValue)) this.sortBy = 'knows'
     }
   },
   mounted () {
     this.search()
   },
   methods: {
-    delayedSearch: _.debounce(
+    delayedSearch: debounce(
       function () {
         this.search()
       },
@@ -128,19 +128,19 @@ export default {
     search () {
       const results = this.profileFilter(this.filterName)
         .filter(profile => {
-          if (!_.isEmpty(this.filterSkillIds)) {
+          if (!isEmpty(this.filterSkillIds)) {
             const profilesSkills = this.skillsByProfileId(profile.id)
               .filter(profileSkill => {
                 return profileSkill.knows > 0 || profileSkill.wantsTo > 0
               })
               .map(profileSkill => profileSkill.skillId)
-            const common = _.intersection(profilesSkills, this.filterSkillIds)
-            return !_.isEmpty(common)
+            const common = intersection(profilesSkills, this.filterSkillIds)
+            return !isEmpty(common)
           }
           return true
         })
 
-      this.filteredProfiles = _.keyBy(results, 'id')
+      this.filteredProfiles = keyBy(results, 'id')
     }
   }
 }
