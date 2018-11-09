@@ -56,5 +56,23 @@ export default {
 }
 </script>
 
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
-<style scoped />
+<style scoped>
+.profile {
+    padding: 1em;
+}
+.profile-editor {
+    padding: 1em;
+}
+.profile-details {
+    text-align: center;
+}
+.profile-card-detail-row {
+    margin-top: 0.5em;
+}
+.profile-title {
+    font-size: 13px;
+}
+.profile-name {
+    font-size: 32px;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <AppHeader>
+  <AppHeader fixed>
     <SidebarToggler
       class="d-lg-none"
       display="md"

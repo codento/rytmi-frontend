@@ -1,3 +1,4 @@
+import _ from 'lodash'
 
 export const getters = {
   futureProjectsOfProfile: (state, getters, rootState) => (profileId) => {
@@ -9,20 +10,26 @@ export const getters = {
   profiles: (state) => state.profiles,
   profileById: (state) => (id) => state.profiles[id],
   projectsOfProfile: (state, getters, rootState) => (profileId) => state.profileProjectList[profileId].map(id => rootState.profileProjects.profileProjects[id]),
-  skillsByProfileId: (state) => (profileId) => {
+  skillsByProfileId: (state, getters) => (profileId) => {
     return state.profileSkills
       .filter(skill => skill.profileId === profileId)
-      .sort((a, b) => { return a.id - b.id })
+      .sort((a, b) => {
+        const nameA = getters.skillName(a.skillId).toLowerCase()
+        const nameB = getters.skillName(b.skillId).toLowerCase()
+        if (nameA < nameB) return -1
+        else if (nameA > nameB) return 1
+        return 0
+      })
   },
-  profileFilter: (state) => (param) => {
-    let keys = Object.keys(state.profiles)
-    let result = []
-    for (var i = 0; i < keys.length; i++) {
-      let name = state.profiles[keys[i]].firstName + ' ' + state.profiles[keys[i]].lastName
-      if (name.toLowerCase().includes(param.toLowerCase()) && state.profiles[keys[i]].active) {
-        result.push(state.profiles[keys[i]])
-      }
+  profileFilter: (state) => (nameFilter) => {
+    const profiles = Object.values(state.profiles)
+    if (_.isEmpty(nameFilter)) {
+      return profiles
+    } else {
+      return profiles.filter(profile => {
+        let name = profile.firstName + ' ' + profile.lastName
+        return (name.toLowerCase().includes(nameFilter.toLowerCase()) && profile.active)
+      })
     }
-    return result
   }
 }
