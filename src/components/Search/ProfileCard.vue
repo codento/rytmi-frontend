@@ -63,9 +63,6 @@ export default {
     profile: Object,
     skillHighlight: Array
   },
-  data () {
-    return {}
-  },
   computed: {
     ...mapGetters([
       'profileFilter',
