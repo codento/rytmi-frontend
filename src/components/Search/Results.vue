@@ -1,7 +1,13 @@
 <template>
   <div>
-    <b-row class="sortbar" align-h="end">
-      <b-col cols="2">
+    <b-row
+      class="sortbar"
+      align-h="end"
+    >
+      <b-col
+        cols="12"
+        class="text-right"
+      >
         <small>Sort profiles by: </small>
         <b-form-radio-group
           id="btnradios"
