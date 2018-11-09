@@ -21,7 +21,7 @@
       v-for="profile in ordered"
       :key="profile.id"
       :profile="profile"
-      :skill-highlight="filterSkillIds"
+      :skill-highlight="filteredSkillIds"
     />
   </div>
 </template>
@@ -64,11 +64,11 @@ export default {
       }
       return options
     },
-    filterSkillIds () {
+    filteredSkillIds () {
       return this.filterSkills.map(skill => skill.id)
     },
     ordered () {
-      const sortBy = !isEmpty(this.filterSkillIds) ? this.sortBy : 'name'
+      const sortBy = !isEmpty(this.filteredSkillIds) ? this.sortBy : 'name'
       return this.orderMap[sortBy].map(sortItem => this.filteredProfiles[sortItem.profileId])
     },
     orderMap () {
@@ -77,20 +77,21 @@ export default {
         wantsTo: [],
         name: []
       }
-      const skillFilterCnt = this.filterSkillIds.length
+      const skillFilterCnt = this.filteredSkillIds.length
       if (this.filteredProfiles) {
         Object.values(this.filteredProfiles).forEach(profile => {
           const knows = []
           const wantsTo = []
-          let cnt = 0
+          let cnt = 0 // Count of skills. Does not count skills where wantsTo and knows are 0.
           this.skillsByProfileId(profile.id).forEach(profileSkill => {
-            if (this.filterSkillIds.includes(profileSkill.skillId)) {
+            if (this.filteredSkillIds.includes(profileSkill.skillId) && (profileSkill.wantsTo > 0 || profileSkill.knows > 0)) {
               knows.push(profileSkill.knows)
               wantsTo.push(profileSkill.wantsTo)
               cnt += 1
             }
           })
           if (cnt === skillFilterCnt) {
+            // add to orderMap only if profile has all selected skills.
             orderMap.knows.push({ profileId: profile.id, value: _max(knows) })
             orderMap.wantsTo.push({ profileId: profile.id, value: _max(wantsTo) })
             orderMap.name.push({ profileId: profile.id, value: profile.firstName.toLowerCase() })
@@ -128,13 +129,13 @@ export default {
     search () {
       const results = this.profileFilter(this.filterName)
         .filter(profile => {
-          if (!isEmpty(this.filterSkillIds)) {
+          if (!isEmpty(this.filteredSkillIds)) {
             const profilesSkills = this.skillsByProfileId(profile.id)
               .filter(profileSkill => {
                 return profileSkill.knows > 0 || profileSkill.wantsTo > 0
               })
               .map(profileSkill => profileSkill.skillId)
-            const common = intersection(profilesSkills, this.filterSkillIds)
+            const common = intersection(profilesSkills, this.filteredSkillIds)
             return !isEmpty(common)
           }
           return true
