@@ -8,7 +8,12 @@ export function fetchSkills ({ commit, state }) {
     getSkills()
       .then(response => {
         commit(types.FETCH_SKILLS, normalize(response.data, [skill]).entities.skills)
+        resolve()
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        reject(err)
+      }
+      )
   })
 }
