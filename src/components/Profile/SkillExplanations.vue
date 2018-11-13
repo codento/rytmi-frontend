@@ -5,7 +5,7 @@
       <b-row
         v-for="desc in knowDesc"
         :key="desc.text">
-        <b-col>{{ desc.value }}: {{ desc.text }}</b-col>
+        <b-col>{{ desc.text }}</b-col>
       </b-row>
     </b-col>
     <b-col>
@@ -13,7 +13,7 @@
       <b-row
         v-for="desc in wantDesc"
         :key="desc.text">
-        <b-col>{{ desc.value }}: {{ desc.text }}</b-col>
+        <b-col>{{ desc.text }}</b-col>
       </b-row>
     </b-col>
   </b-row>
