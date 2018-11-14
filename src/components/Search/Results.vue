@@ -162,9 +162,8 @@ export default {
       })      
       return profilesWithSkills
     },
-    sortProfiles (profilesWithSkills) {
+    sortProfiles (profilesWithSkills) {      
       
-
     }
   }
 }
