@@ -54,7 +54,8 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
             tag="div"
           >
             <skillrow-stub
-              desc="Python desc"
+              description="Python desc"
+              id="1"
               name="Python"
             />
           </bcol-stub>

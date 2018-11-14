@@ -1,17 +1,20 @@
 <template>
   <b-row
-    v-b-tooltip.hover.top="desc"
-    class=""
-    style="padding-bottom: 12px">
+    v-b-tooltip.hover.top="description"
+    class="skillRow"
+  >
     <b-col
-      class="col-mb-4 text-right valign-middle"
-      style="text-size: 20px;">
-      <b>{{ name }}:</b>
+      :class="{ skillname:true, 'skillname-highlight': highlight, 'text-right': true, 'valign-middle': true }"
+      cols="4"
+    >
+      {{ skillName(skillId) }}:
     </b-col>
     <b-col
-      class="col-mb-8"
-      @mouseenter="active = skillId"
-      @mouseleave="active = null">
+      cols="8"
+      class=""
+      @mouseenter="active = id"
+      @mouseleave="active = null"
+    >
       <b-progress
         :max="5"
         class="mb-6"
@@ -20,27 +23,36 @@
           :value="knows"
           class="rytmi-progress-knowledge">
           <slot
-            v-if="active !== skillId"
-            name="label">{{ knows ? knows.toString() : '' }}</slot>
+            v-if="active !== id"
+            name="label"
+          >
+            {{ knows ? knows.toString() : '' }}
+          </slot>
         </b-progress-bar>
         <span
-          v-if="active === skillId"
-          class="skilldesc-center">{{ knowsToDesc.text }}</span>
+          v-show="active === id"
+          class="skilldesc-center"
+        >
+          {{ knowsToDesc.text }}
+        </span>
       </b-progress>
       <b-progress
         :max="5"
         class="mb-6"
         height="0.9rem">
         <b-progress-bar
-          :value="wants"
-          class="rytmi-progress-wants">
+          :value="wantsTo"
+          class="rytmi-progress-wants"
+        >
           <slot
-            v-if="active !== skillId"
-            name="label">{{ wants ? wants.toString() : '' }}</slot>
+            v-if="active !== id"
+            name="label"
+          >{{ wantsTo ? wantsTo.toString() : '' }}</slot>
         </b-progress-bar>
         <span
-          v-if="active === skillId"
-          class="skilldesc-center">{{ wantsToDesc.text }}</span>
+          v-show="active === id"
+          class="skilldesc-center"
+        >{{ wantsToDesc.text }}</span>
       </b-progress>
     </b-col>
   </b-row>
@@ -53,11 +65,12 @@ import proficiencyDesc from '../../assets/proficiencyDesc'
 export default {
   name: 'SkillRow',
   props: {
-    'skillId': Number,
-    'name': String,
-    'wants': Number,
-    'knows': Number,
-    'desc': String
+    id: Number,
+    skillId: Number,
+    wantsTo: Number,
+    knows: Number,
+    description: String,
+    highlight: Boolean
   },
   data () {
     return {
@@ -66,13 +79,14 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'skillById'
+      'skillById',
+      'skillName'
     ]),
     knowsToDesc: function () {
       return proficiencyDesc.knows[this.knows]
     },
     wantsToDesc: function () {
-      return proficiencyDesc.wants[this.wants]
+      return proficiencyDesc.wants[this.wantsTo]
     }
   },
   methods: {
@@ -88,6 +102,9 @@ export default {
 </style>
 
 <style scoped>
+.skillrow {
+  padding-bottom: 12px;
+}
 .rytmi-progress-knowledge {
   background-color: #fda708;
 }
@@ -103,5 +120,13 @@ export default {
   left: 0;
   right: 0;
   text-align: center;
+}
+.skillname {
+  color: gray;
+  font-weight: bolder;
+}
+.skillname-highlight {
+  color: black;
+  font-weight: 750;
 }
 </style>

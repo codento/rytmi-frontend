@@ -1,155 +1,154 @@
 <template>
-  <ul class="search-results">
-    <li
-      v-for="profile in results"
-      :key="profile.userId">
-      <b-card>
-        <b-row>
-          <b-col
-            class="col-12 col-md-3"
-            style="text-align:center">
-            <span
-              style="cursor: pointer"
-              @click="openProfile(profile)">
-              <img
-                :src="profile.photoPath"
-                alt="">
-              <h3>{{ profile.firstName }} {{ profile.lastName }}</h3>
-            </span>
-            <b>{{ profile.email }}</b><br>
-            <b>{{ profile.phone }}</b>
-          </b-col>
-          <b-col class="col-12 col-md-4 align-self-center">
-            <UtilizationChart :projects="futureProjectsOfProfile(profile.id)" />
-          </b-col>
-          <b-col
-            class="col-12 col-md-4 align-self-center"
-            style="margin-top: 1em;">
-            <SkillRow
-              v-for="skill in skillsByProfileId(profile.id)"
-              :name="skillName(skill.skillId)"
-              :skill-id="skill.id"
-              :knows="skill.knows"
-              :wants="skill.wantsTo"
-              :desc="skill.description"
-              :key="skill.id"/>
-          </b-col>
-          <b-col class="col-12 col-md-1 profile-open-button">
-            <b-button @click="openProfile(profile)">
-              <i
-                style="font-size: 76px; color: gray;"
-                class="fa fa-5x fa-angle-right"/>
-            </b-button>
-          </b-col>
-        </b-row>
-      </b-card>
-    </li>
-  </ul>
+  <div>
+    <b-row
+      class="sortbar"
+      align-h="end"
+    >
+      <b-col
+        cols="12"
+        class="text-right"
+      >
+        <small>Sort profiles by: </small>
+        <b-form-radio-group
+          id="btnradios"
+          v-model="sortBy"
+          :options="sortOptions"
+          buttons
+          name="radioBtnStacked" />
+      </b-col>
+    </b-row>
+    <profile-card
+      v-for="profile in ordered"
+      :key="profile.id"
+      :profile="profile"
+      :skill-highlight="filteredSkillIds"
+    />
+  </div>
 </template>
 
 <script>
-import _ from 'lodash'
+import { isEmpty, intersection, debounce, keyBy, max as _max } from 'lodash'
 import { mapGetters } from 'vuex'
-import { SkillRow, UtilizationChart } from '../Profile'
+import ProfileCard from './ProfileCard'
 
 export default {
   name: 'Results',
   components: {
-    SkillRow,
-    UtilizationChart
+    ProfileCard
   },
   props: {
-    param: String,
-    selected: String,
-    active: Array
+    filterName: String,
+    filterSkills: Array
   },
   data () {
     return {
-      search: '',
-      sortable: []
+      filteredProfiles: {},
+      sortBy: 'name'
     }
   },
   computed: {
     ...mapGetters([
       'profileFilter',
       'skillsByProfileId',
-      'skillById',
-      'futureProjectsOfProfile'
+      'profiles'
     ]),
-    results: function () {
-      let results = this.profileFilter(this.search)
-      if (this.active.length > 0) {
-        this.sortable = [] // TODO: FIX ME!
-        for (let i = 0; i < this.active.length; i++) {
-          results = results.filter((profile) => this.hasSkill(profile, this.active[i].id, i))
-        }
-        return this.sorted()
+    sortOptions () {
+      const options = [
+        { text: 'Name', value: 'name' }
+      ]
+      if (!isEmpty(this.filterSkills)) {
+        options.push(...[
+          { text: 'Proficiency', value: 'knows' },
+          { text: 'Willingness', value: 'wantsTo' }
+        ])
       }
-      return results
+      return options
+    },
+    filteredSkillIds () {
+      return this.filterSkills.map(skill => skill.id)
+    },
+    ordered () {
+      const sortBy = !isEmpty(this.filteredSkillIds) ? this.sortBy : 'name'
+      return this.orderMap[sortBy].map(sortItem => this.filteredProfiles[sortItem.profileId])
+    },
+    orderMap () {
+      const orderMap = {
+        knows: [],
+        wantsTo: [],
+        name: []
+      }
+      const skillFilterCount = this.filteredSkillIds.length
+      if (this.filteredProfiles) {
+        Object.values(this.filteredProfiles).forEach(profile => {
+          const knows = []
+          const wantsTo = []
+          let count = 0 // Count of skills. Does not count skills where wantsTo and knows are 0.
+          this.skillsByProfileId(profile.id).forEach(profileSkill => {
+            if (this.filteredSkillIds.includes(profileSkill.skillId) && (profileSkill.wantsTo > 0 || profileSkill.knows > 0)) {
+              knows.push(profileSkill.knows)
+              wantsTo.push(profileSkill.wantsTo)
+              count += 1
+            }
+          })
+          if (count === skillFilterCount) {
+            // add to orderMap only if profile has all selected skills.
+            orderMap.knows.push({ profileId: profile.id, value: _max(knows) })
+            orderMap.wantsTo.push({ profileId: profile.id, value: _max(wantsTo) })
+            orderMap.name.push({ profileId: profile.id, value: profile.firstName.toLowerCase() })
+          }
+        })
+        orderMap.knows.sort((a, b) => b.value - a.value)
+        orderMap.wantsTo.sort((a, b) => b.value - a.value)
+        orderMap.name.sort((a, b) => a.value > b.value ? 1 : -1)
+      }
+      return orderMap
     }
   },
   watch: {
-    param: function () {
-      this.delaySearch()
+    filterName: function () {
+      this.delayedSearch()
+    },
+    profiles: function () {
+      this.search()
+    },
+    filterSkills (newValue, oldValue) {
+      if (isEmpty(newValue)) this.sortBy = 'name'
+      if (isEmpty(oldValue)) this.sortBy = 'knows'
     }
   },
+  mounted () {
+    this.search()
+  },
   methods: {
-    openProfile (profile) {
-      this.$router.push({ name: 'profile', params: { id: profile.id } })
-    },
-    delaySearch: _.debounce(
+    delayedSearch: debounce(
       function () {
-        this.search = this.param
+        this.search()
       },
       200 // Wait between searches can be changed here
     ),
-    skillName (skillId) {
-      return this.skillById(skillId).name
-    },
-    hasSkill (profile, skillToSearch, multipleSkills) {
-      let skills = this.skillsByProfileId(profile.id)
-      for (let i = 0; i < skills.length; i++) {
-        if (skills[i].skillId === skillToSearch) {
-          if (multipleSkills) {
-            this.updateSortable(profile, skills[i][this.selected])
-          } else {
-            if (skills[i][this.selected] > 0) {
-              this.sortable.push([profile, skills[i][this.selected]])
-            } else {
-              return false
-            }
+    search () {
+      const results = this.profileFilter(this.filterName)
+        .filter(profile => {
+          if (!isEmpty(this.filteredSkillIds)) {
+            const profilesSkills = this.skillsByProfileId(profile.id)
+              .filter(profileSkill => {
+                return profileSkill.knows > 0 || profileSkill.wantsTo > 0
+              })
+              .map(profileSkill => profileSkill.skillId)
+            const common = intersection(profilesSkills, this.filteredSkillIds)
+            return !isEmpty(common)
           }
           return true
-        }
-      }
-      if (multipleSkills) {
-        this.updateSortable(profile, 0)
-      }
-      return false
-    },
-    updateSortable: function (profile, value) {
-      for (let i = 0; i < this.sortable.length; i++) {
-        if (this.sortable[i][0].id === profile.id) {
-          if (value) {
-            this.sortable[i][1] = this.sortable[i][1] + value
-          } else {
-            this.sortable.splice(i, 1)
-          }
-        }
-      }
-    },
-    sorted: function () {
-      this.sortable.sort(function (a, b) {
-        return b[1] - a[1]
-      })
-      let sortedResults = []
-      for (let j = 0; j < this.sortable.length; j++) {
-        sortedResults.push(this.sortable[j][0])
-      }
-      return sortedResults
+        })
+
+      this.filteredProfiles = keyBy(results, 'id')
     }
   }
 }
 </script>
 
-<style lang="css" />
+<style scoped>
+.sortbar {
+  padding: 8px !important;
+}
+</style>

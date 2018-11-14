@@ -11,7 +11,8 @@ localVue.use(BootstrapVue)
 const getters = {
   profileById: () => (arg) => arg,
   profiles: () => (arg) => arg,
-  skillsById: () => (arg) => arg
+  skillsById: () => (arg) => arg,
+  skillName: () => (skillId) => 'Python'
 }
 const store = new Vuex.Store({ getters })
 
@@ -21,13 +22,13 @@ describe('UserProfileCard.test.js', () => {
       store,
       localVue,
       propsData: {
+        'id': 1,
         'skillId': 1,
-        'name': 'Python',
-        'wants': 1,
+        'wantsTo': 1,
         'knows': 2,
-        'desc': 'fdfas'
+        'description': 'fdfas'
       }
     })
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 })

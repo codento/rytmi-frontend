@@ -1,67 +1,50 @@
 <template>
-  <div class="animated fadeIn search-container">
-    <b-col class="col-md-13">
-      <div
-        id="search"
-        class="search-bar">
-        <h2>Find people</h2>
-        <input
-          v-model="param"
-          class="form-control"
-          placeholder="Filter by name" >
-        <b-row class="search-options">
-          <b-col class="search-options-item search-tag-dropdown col-md-4 col-12">
-            <small>Filter:</small><br >
+  <div class="animated fadeIn">
+    <h2>Profiles</h2>
+    <b-row id="search">
+      <b-col>
+        <b-row class="search-item">
+          <b-col>
+            <b-form-input
+              v-model="filterName"
+              type="text"
+              placeholder="Filter by name" />
+          </b-col>
+        </b-row>
+        <b-row class="search-item">
+          <b-col>
             <b-dropdown
-              id="ddown1"
               text="Add skill filters:">
               <b-dropdown-item-button
-                v-for="skill in skillsNotIn(active)"
+                v-for="skill in selectableSkills"
                 :key="skill.id"
                 @click="addToSearch(skill)">
                 {{ skill.name }}
               </b-dropdown-item-button>
             </b-dropdown>
-          </b-col>
-          <b-col class="search-options-item search-bar-sort col-md-4 col-12">
-            <small>Sort:</small><br >
-            <b-form-radio-group
-              id="btnradios"
-              v-model="selected"
-              :options="options"
-              buttons
-              name="radioBtnStacked" />
+            <ul>
+              <li
+                v-for="skill in filterSkills"
+                :key="skill.name"
+                class="skillFilter"
+                @click="removeFromSearch(skill)">
+                &times; {{ skill.name }}
+              </li>
+            </ul>
           </b-col>
         </b-row>
-        <div
-          id="active"
-          class="search-tag-container">
-          <ul>
-            <li
-              v-for="skill in active"
-              :key="skill.name"
-              class="active remove"
-              @click="removeFromSearch(skill)">
-              <a class="remove" >&times;</a> {{ skill.name }}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </b-col>
-    <b-col
-      class="col-md-12"
-      style="float:right">
-      <Results
-        :param="param"
-        :selected="selected "
-        :active="active"/>
-    </b-col>
+      </b-col>
+    </b-row>
+    <Results
+      :filterName="filterName"
+      :filterSkills="filterSkills" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { Results } from '../components/Search'
+import _ from 'lodash'
 
 export default {
   name: 'Search',
@@ -70,77 +53,57 @@ export default {
   },
   data () {
     return {
-      param: '',
-      selected: 'knows',
-      options: [
-        { text: 'Skills', value: 'knows' },
-        { text: 'Willingness', value: 'wantsTo' }
-      ],
-      active: []
+      filterName: '',
+      filterSkills: []
     }
   },
   computed: {
     ...mapGetters([
       'skills',
-      'skillsNotIn'
-    ])
+      'skillName'
+    ]),
+    selectableSkills () {
+      const currentSkills = this.filterSkills.map(skill => skill.id)
+      return _(this.skills)
+        .filter(skill => !currentSkills.includes(skill.id))
+        .sortBy(skill => this.skillName(skill.id))
+        .value()
+    }
   },
   mounted () {
     document.title = 'Rytmi - Search'
   },
   methods: {
     addToSearch: function (skill) {
-      this.active.push(skill)
+      const skills = this.filterSkills.slice(0)
+      skills.push(skill)
+      this.filterSkills = skills
     },
     removeFromSearch: function (skill) {
-      this.active = this.active.filter(el => (el.id !== skill.id))
+      this.filterSkills = this.filterSkills.filter(el => (el.id !== skill.id))
     }
   }
 }
 </script>
 
 <style scoped>
-input {
-  width: 100%;
+#search {
+    padding: 1em;
+    min-height: 15em;
 }
 ul {
   list-style-type: none;
 }
-.active {
+.skillFilter {
   display: inline-block;
   border-radius: 10px;
   padding: .5vw;
   margin: .1vw;
   background-color: orange;
-}
-#active {
-  margin-top: 1vw;
-}
-#active ul {
-  padding: 0;
-}
-.remove {
   cursor: pointer;
 }
-img {
-  object-fit: contain;
-  margin-left: 10px
-}
-.search-container {
-    min-height: 60vh;
-}
-.search-bar {
-    padding: 1em;
-    min-height: 15em;
-}
-.search-options {
+.search-item {
     width: 100%;
-    padding: 1em 0;
-    display: flex;
-    flex-wrap: wrap;
-}
-.search-tag-dropdown {
-    width: 100%;
-
+    padding: 0.5em 0;
 }
 </style>

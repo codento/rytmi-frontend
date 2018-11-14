@@ -27,11 +27,9 @@
             <b-col class="col mb-1">
               <SkillRow
                 v-for="skill in skillsByProfileId(profile.id)"
-                :name="skillName(skill.skillId)"
-                :knows="skill.knows"
-                :wants="skill.wantsTo"
-                :desc="skill.description"
-                :key="skill.id"/>
+                :key="skill.id"
+                v-bind="skill"
+              />
             </b-col>
           </b-row>
         </b-card>
