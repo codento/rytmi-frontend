@@ -8,7 +8,7 @@
     <loading-spinner v-if="!appInitialized" />
     <div v-else>
       <div v-if="skillList.length === 0 || skillProfiles.length === 0">
-        Sorry there is no data to display :(
+        <span id="no-data-message">Sorry there is no data to display :(</span>
       </div>
       <div v-else>
         <b-row class="no-gutters mt-1">
