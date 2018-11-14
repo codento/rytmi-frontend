@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MostWillingnessChart.vue Template is correct 1`] = `
+<chartcard-stub
+  class="ml-1"
+  size="6"
+>
+  <template>
+    <div
+      class="h3"
+    >
+      
+      What people wanna work with?
+    
+    </div>
+  </template>
+   
+  <bcol-stub
+    tag="div"
+  >
+    <p
+      class="lead px-2"
+    >
+      
+      Most enthusiastic people are about
+      
+      <strong>
+        SkillTwo
+      </strong>
+      . 
+      <br />
+      
+      There are 
+      <strong>
+        2
+      </strong>
+      
+      who really wanna learn the tech
+      and our current skill level average is
+      
+      <strong>
+        4
+      </strong>
+    </p>
+  </bcol-stub>
+</chartcard-stub>
+`;
