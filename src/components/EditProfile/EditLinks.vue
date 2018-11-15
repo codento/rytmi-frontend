@@ -81,8 +81,8 @@ export default {
     },
     addLink () {
       this.clearErrors()
-      if (this.linkInput && this.findLink(this.linkInput) === -1) {
-        const links = this.profile.links.slice()
+      if (this.linkInput && !this.linkExists(this.linkInput)) {
+        const links = this.profile.links ? this.profile.links.slice() : []
         links.push(this.linkInput)
         this.submitChanges(links)
       } else {
@@ -98,8 +98,11 @@ export default {
         this.errorDetails = error.details
       }
     },
-    findLink (link) {
-      return this.profile.links.findIndex(l => l === link)
+    linkExists (link) {
+      if (!this.profile.links) {
+        return false
+      }
+      return this.profile.links.includes(link)
     }
   }
 }
