@@ -3,7 +3,7 @@
     <br>
     <h5>Edit Links:</h5>
     <b-card id="editLinks">
-      <div v-show="profile.links.length > 0">
+      <div v-show="profileHasLinks">
         <ul>
           <li
             v-for="(link, idx) in profile.links"
@@ -61,6 +61,11 @@ export default {
     return {
       linkInput: '',
       errorDetails: []
+    }
+  },
+  computed: {
+    profileHasLinks () {
+      return this.profile.links && this.profile.links.length > 0
     }
   },
   methods: {
