@@ -117,7 +117,7 @@ export default {
           return profilesWithSkills.sort(function (profile1, profile2) {
             let profile1SkillLevel = getProfileSkill(profile1, skillToSortBy, propertyToSortBy)
             let profile2SkillLevel = getProfileSkill(profile2, skillToSortBy, propertyToSortBy)        
-            return profile2SkillLevel - profile1SkillLevel;
+            return profile2SkillLevel - profile1SkillLevel
           })         
       }
 
