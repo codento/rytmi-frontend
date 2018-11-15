@@ -88,14 +88,13 @@ export default {
   },  
   methods: {
     getProfilesBySkill (profilesToFilter, skillId) {
-      let matchingProfiles = profilesToFilter.filter(profile => profile.skills.filter(skill => skill.skillId === skillId).length > 0)
-      return matchingProfiles
+      return profilesToFilter.filter(profile => profile.skills.filter(skill => skill.skillId === skillId).length > 0)
     },
     mapSkillsToProfiles () {      
       //First, get profiles, filtered by name
-      let profilesWithoutSkills = Object.values(this.profileFilter(this.filterName))
+      const profilesWithoutSkills = Object.values(this.profileFilter(this.filterName))
       //Then map skills for each profile
-      let profilesWithSkills = []
+      const profilesWithSkills = []
       profilesWithoutSkills.forEach(profile => {             
         profilesWithSkills.push({
           profile: profile,
@@ -112,11 +111,11 @@ export default {
           if (this.filteredSkillIds.length < 1) {
             return profilesWithSkills
           }
-          let skillToSortBy = this.filteredSkillIds[0] //TODO: What should be done here if several skills are selected?
-          let propertyToSortBy = (this.sortAttribute === sortAttributeEnum.wantsTo ? "wantsTo" : "knows")
+          const skillToSortBy = this.filteredSkillIds[0] //TODO: What should be done here if several skills are selected?
+          const propertyToSortBy = (this.sortAttribute === sortAttributeEnum.wantsTo ? "wantsTo" : "knows")
           return profilesWithSkills.sort(function (profile1, profile2) {
-            let profile1SkillLevel = getProfileSkill(profile1, skillToSortBy, propertyToSortBy)
-            let profile2SkillLevel = getProfileSkill(profile2, skillToSortBy, propertyToSortBy)        
+            const profile1SkillLevel = getProfileSkill(profile1, skillToSortBy, propertyToSortBy)
+            const profile2SkillLevel = getProfileSkill(profile2, skillToSortBy, propertyToSortBy)        
             return profile2SkillLevel - profile1SkillLevel
           })         
       }
