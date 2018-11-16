@@ -48,6 +48,34 @@ For Vue specific styling we use quite strict `vue/recommended` mode.
 **.editorconfig**  
 Make sure your editor supports `.editorconfig` or follow rules on your own.
 
+### VS Code Settings
+Install extensions
+- Vetur
+- Eslint
+- EditorConfig for VS Code
+
+Add to User/Workspace settings
+```json
+"eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    {
+        "language": "vue",
+        "autoFix": true
+    },
+],
+"vetur.validation.template": false,
+"vetur.format.defaultFormatter.js": "vscode-typescript",
+"javascript.format.insertSpaceBeforeFunctionParenthesis": true
+```
+
+If you are using Yarn add also
+```
+"eslint.packageManager": "yarn"
+```
+
+
+
 ## Git Workflow
 
 This repo has a dev (default) and a master branches. All features are developed in a feature branch and merged to the dev branch.
