@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { isEmpty, sortBy, mean } from 'lodash'
+import { isEmpty, sortBy, mean, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
@@ -71,36 +71,31 @@ export default {
     },
     orderedProfiles () {
       // Every profile with skills, already filtered by name
-      let filteredProfilesWithSkills = this.mapSkillsToProfiles()
-
-      // Filter by skill(s)
-      this.filteredSkillIds.forEach(skillId => {
-        filteredProfilesWithSkills = this.getProfilesBySkill(filteredProfilesWithSkills, skillId)
-      })
+      const profilesWithSkills = this.mapSkillsToProfiles()
+      let filteredProfilesWithSkills = this.getProfilesFilteredBySkills(profilesWithSkills, this.filteredSkillIds)
 
       // Sort profiles
       filteredProfilesWithSkills = this.sortProfiles(filteredProfilesWithSkills)
 
-      // Mapped skills aren't needed anymore from this point on, return only profiles
+      // Profiles' skills aren't needed anymore from this point on, return only profiles
       return filteredProfilesWithSkills.map(profileWithSkills => profileWithSkills.profile)
     }
   },
   methods: {
-    getProfilesBySkill (profilesToFilter, skillId) {
-      return profilesToFilter.filter(profile => profile.skills.map(skill => skill.skillId).includes(skillId))
+    getProfilesFilteredBySkills (profilesToFilter, skillIds) {
+      // Return profiles that have all the skills we're filtering for
+      return profilesToFilter.filter(profile => difference(skillIds, profile.skills.map(skill => skill.skillId)).length === 0)
     },
     mapSkillsToProfiles () {
       // First, get profiles, filtered by name
       const profilesWithoutSkills = Object.values(this.profileFilter(this.filterName))
       // Then map skills for each profile
-      const profilesWithSkills = []
-      profilesWithoutSkills.forEach(profile => {
-        profilesWithSkills.push({
+      return profilesWithoutSkills.map(profile => (
+        {
           profile: profile,
           skills: this.skillsByProfileId(profile.id)
         })
-      })
-      return profilesWithSkills
+      )
     },
     sortProfiles (profilesWithSkills) {
       if (this.sortAttribute === sortAttributeEnum.name) {
