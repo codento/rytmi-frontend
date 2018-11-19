@@ -1,9 +1,10 @@
 <template>
   <chart-card
     :size="size"
-    class="ml-1">
+    :md-size="mdSize"
+    class="ml-md-1">
     <template slot="header">
-      <div class="h3">
+      <div class="h3 px-2">
         What people wanna work with?
       </div>
     </template>
@@ -29,6 +30,10 @@ export default {
   },
   props: {
     size: {
+      type: Number,
+      default: 12
+    },
+    mdSize: {
       type: Number,
       default: 6
     },

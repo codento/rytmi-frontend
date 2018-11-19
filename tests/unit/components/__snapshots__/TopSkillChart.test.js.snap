@@ -2,11 +2,12 @@
 
 exports[`TopSkillChart.vue Should match the template 1`] = `
 <chartcard-stub
-  size="6"
+  mdsize="6"
+  size="12"
 >
   <template>
     <div
-      class="h3"
+      class="h3 px-2"
     >
       
       Top skill

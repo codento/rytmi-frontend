@@ -1,6 +1,7 @@
 <template>
   <b-col
     :cols="size"
+    :md="mdSize"
     class="draw-border">
     <div class="header-container">
       <slot name="header"/>
@@ -15,7 +16,14 @@
 <script>
 export default {
   props: {
-    size: Number
+    size: {
+      type: Number,
+      default: 12
+    },
+    mdSize: {
+      type: Number,
+      default: 6
+    }
   }
 }
 </script>

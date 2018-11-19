@@ -3,22 +3,21 @@
     class="animated fadeIn container"
     style="margin-top: 24px">
     <b-jumbotron
+      v-if="!isAuthenticated"
       bg-variant="white"
       text-variant="primary"
       border-variant="dark">
       <span slot="header">Codento Rytmi</span>
       <template
-        v-if="!isAuthenticated"
         slot="lead">
         Please Sign in
       </template>
-      <template
-        v-else
-        slot="lead">
-        Ready to Rock ’n’ Roll
-      </template>
     </b-jumbotron>
-    <dashboard v-if="isAuthenticated"/>
+    <dashboard v-if="isAuthenticated">
+      <template slot="header">
+        Codento Rytmi
+      </template>
+    </dashboard>
   </div>
 </template>
 

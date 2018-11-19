@@ -1,7 +1,9 @@
 <template>
-  <chart-card :size="size">
+  <chart-card
+    :size="size"
+    :md-size="mdSize">
     <template slot="header">
-      <div class="h3">
+      <div class="h3 px-2">
         Top skill
       </div>
     </template>
@@ -26,6 +28,10 @@ export default {
   },
   props: {
     size: {
+      type: Number,
+      default: 12
+    },
+    mdSize: {
       type: Number,
       default: 6
     },

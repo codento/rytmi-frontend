@@ -77,11 +77,13 @@ export default {
   },
   created () {
     if (this.isAuthenticated) {
-      Promise.all([this.fetchProfiles(),
+      Promise.all([
+        this.fetchProfiles(),
         this.fetchAllFutureProfileProjects(),
         this.fetchSkills(),
         this.fetchProfileSkills(),
-        this.fetchProjects()])
+        this.fetchProjects()
+      ])
         .catch(error => {
           this.setAppInitializeError(error)
         })

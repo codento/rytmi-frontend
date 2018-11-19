@@ -1,11 +1,9 @@
 <template>
   <div>
-    <b-row>
-      <b-col>
-        <h2>Dashboard</h2>
-      </b-col>
-    </b-row>
-    <loading-spinner v-if="!appInitialized" />
+    <h1 class="text-primary">
+      <slot name="header" />
+    </h1>
+    <loading v-if="!appInitialized" />
     <div v-else>
       <div v-if="skillList.length === 0 || skillProfiles.length === 0">
         <span id="no-data-message">Sorry there is no data to display :(</span>
@@ -14,14 +12,17 @@
         <b-row class="no-gutters mt-1">
           <top-skill-chart
             :skill-info="skillInfo"
-            :size="5" />
+            :size="12"
+            :md-size="5" />
           <most-willingness-chart
             :skill-info="skillInfo"
-            :size="5" />
+            :size="12"
+            :md-size="5" />
         </b-row>
         <b-row class="no-gutters mt-1">
           <skill-chart
             v-if="appInitialized"
+            :md-size="12"
             :skills="skills"
             :skill-info="skillInfo"
             :profile-list="profileList"
@@ -34,15 +35,20 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import LoadingSpinner from '../helpers/LoadingSpinner'
 import ChartCard from './ChartCard'
 import SkillChart from './SkillChart'
 import TopSkillChart from './TopSkillChart'
 import MostWillingnessChart from './MostWillingnessChart'
 
+const calculateAverage = (arr) => {
+  if (arr && arr.length > 0) {
+    return Math.round((arr.reduce((accumulate, currentVal) => accumulate + currentVal) / arr.length) * 100) / 100
+  }
+  return 0
+}
+
 export default {
   components: {
-    LoadingSpinner,
     ChartCard,
     SkillChart,
     TopSkillChart,
@@ -62,19 +68,13 @@ export default {
       const skillProfienciesByGroup = this.groupSkillProfilesBySkill(this.skillList)
       Object.keys(skillProfienciesByGroup).forEach((skillId) => {
         const skill = skillProfienciesByGroup[skillId]
-        skill.proficiencyAverage = this.calculateAverage(skill.proficiencies)
-        skill.willingnessAverage = this.calculateAverage(skill.willingness)
+        skill.proficiencyAverage = calculateAverage(skill.proficiencies)
+        skill.willingnessAverage = calculateAverage(skill.willingness)
       })
       return skillProfienciesByGroup
     }
   },
   methods: {
-    calculateAverage (arr) {
-      if (arr && arr.length > 0) {
-        return Math.round((arr.reduce((accumulate, currentVal) => accumulate + currentVal) / arr.length) * 100) / 100
-      }
-      return 0
-    },
     createEmptySkillObject (skills) {
       const skillProfiencyBySkillId = {
       }

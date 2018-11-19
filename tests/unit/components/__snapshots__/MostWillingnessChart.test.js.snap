@@ -2,12 +2,13 @@
 
 exports[`MostWillingnessChart.vue Template is correct 1`] = `
 <chartcard-stub
-  class="ml-1"
-  size="6"
+  class="ml-md-1"
+  mdsize="6"
+  size="12"
 >
   <template>
     <div
-      class="h3"
+      class="h3 px-2"
     >
       
       What people wanna work with?

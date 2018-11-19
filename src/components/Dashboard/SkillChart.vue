@@ -1,8 +1,9 @@
 <template>
   <chart-card
-    :size="size">
+    :size="size"
+    :md-size="mdSize">
     <template slot="header">
-      <div class="h3">Skills <i
+      <div class="h3 px-2">Skills <i
         id="skill-explanations-icon"
         class="cui-info"/>
         <b-popover
@@ -22,13 +23,17 @@
         />
       </div>
     </template>
-    <b-col cols="6">
+    <b-col
+      cols="12"
+      md="6" >
       <bar-chart
         :chart-data="barChartData"
         :options="barChartOptions"
       />
     </b-col>
-    <b-col cols="6">
+    <b-col
+      cols="12"
+      md="6">
       <radar-chart
         :chart-data="radarChartData"
         :options="radarChartOptions"
@@ -57,6 +62,10 @@ export default {
     size: {
       type: Number,
       default: 12
+    },
+    mdSize: {
+      type: Number,
+      default: 6
     },
     skills: {
       type: Object,
