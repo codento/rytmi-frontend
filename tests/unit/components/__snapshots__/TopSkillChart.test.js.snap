@@ -1,10 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TopSkillChart.vue Should match the template 1`] = `
-<chartcard-stub
-  mdsize="6"
-  size="12"
->
+<chartcard-stub>
   <template>
     <div
       class="h3 px-2"

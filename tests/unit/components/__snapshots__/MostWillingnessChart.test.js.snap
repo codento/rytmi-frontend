@@ -3,8 +3,6 @@
 exports[`MostWillingnessChart.vue Template is correct 1`] = `
 <chartcard-stub
   class="ml-md-1"
-  mdsize="6"
-  size="12"
 >
   <template>
     <div

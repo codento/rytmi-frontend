@@ -10,23 +10,31 @@
       </div>
       <div v-else>
         <b-row class="no-gutters mt-1">
-          <top-skill-chart
-            :skill-info="skillInfo"
-            :size="12"
-            :md-size="5" />
-          <most-willingness-chart
-            :skill-info="skillInfo"
-            :size="12"
-            :md-size="5" />
+          <b-col
+            :cols="12"
+            :md="5">
+            <top-skill-chart
+              :skill-info="skillInfo"/>
+          </b-col>
+          <b-col
+            :cols="12"
+            :md="5">
+            <most-willingness-chart
+              :skill-info="skillInfo"/>
+          </b-col>
         </b-row>
         <b-row class="no-gutters mt-1">
-          <skill-chart
-            v-if="appInitialized"
-            :md-size="12"
-            :skills="skills"
-            :skill-info="skillInfo"
-            :profile-list="profileList"
-            class="pb-1"/>
+          <b-col
+            :cols="12"
+            :md="12">
+            <skill-chart
+              v-if="appInitialized"
+              :md-size="12"
+              :skills="skills"
+              :skill-info="skillInfo"
+              :profile-list="profileList"
+              class="pb-1"/>
+          </b-col>
         </b-row>
       </div>
     </div>

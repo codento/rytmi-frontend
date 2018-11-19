@@ -1,7 +1,5 @@
 <template>
-  <chart-card
-    :size="size"
-    :md-size="mdSize">
+  <chart-card>
     <template slot="header">
       <div class="h3 px-2">Skills <i
         id="skill-explanations-icon"
@@ -59,14 +57,6 @@ export default {
     SelectFilter
   },
   props: {
-    size: {
-      type: Number,
-      default: 12
-    },
-    mdSize: {
-      type: Number,
-      default: 6
-    },
     skills: {
       type: Object,
       required: true
