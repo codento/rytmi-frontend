@@ -21,16 +21,29 @@
       v-for="profile in orderedProfiles"
       :key="profile.id"
       :profile="profile"
-      :skill-highlight="filteredSkillIds"
+      :skill-highlight="mapIdsOfSkillFilters"
     />
   </div>
 </template>
 
 <script>
-import { isEmpty, sortBy, mean, difference } from 'lodash'
+import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
+
+const sortByName = (array) => sortBy(array, 'profile.firstName')
+
+const calculateSkillAverage = (skills, skillFilters, attribute) => {
+  return skills.filter((skill) => skillFilters.includes(skill.skillId))
+    .reduce((accumulator, current) => accumulator + current[attribute], 0) / skillFilters.length
+}
+
+const sortArrayBy = (sortAttribute, skillFilters) => (profileOne, profileTwo) => {
+  const profileOneAverage = calculateSkillAverage(profileOne.skills, skillFilters, sortAttribute)
+  const profileTwoAverage = calculateSkillAverage(profileTwo.skills, skillFilters, sortAttribute)
+  return profileTwoAverage - profileOneAverage
+}
 
 export default {
   name: 'Results',
@@ -55,30 +68,25 @@ export default {
       'profiles'
     ]),
     sortOptions () {
+      const { name, knows, wantsTo } = sortAttributeEnum
       const options = [
-        { text: 'Name', value: sortAttributeEnum.name }
+        { text: 'Name', value: name }
       ]
       if (!isEmpty(this.filterSkills)) {
         options.push(...[
-          { text: 'Proficiency', value: sortAttributeEnum.knows },
-          { text: 'Willingness', value: sortAttributeEnum.wantsTo }
+          { text: 'Proficiency', value: knows },
+          { text: 'Willingness', value: wantsTo }
         ])
       }
       return options
     },
-    filteredSkillIds () {
+    mapIdsOfSkillFilters () {
       return this.filterSkills.map(skill => skill.id)
     },
     orderedProfiles () {
-      // Every profile with skills, already filtered by name
       const profilesWithSkills = this.mapSkillsToProfiles()
-      let filteredProfilesWithSkills = this.getProfilesFilteredBySkills(profilesWithSkills, this.filteredSkillIds)
-
-      // Sort profiles
-      filteredProfilesWithSkills = this.sortProfiles(filteredProfilesWithSkills)
-
-      // Profiles' skills aren't needed anymore from this point on, return only profiles
-      return filteredProfilesWithSkills.map(profileWithSkills => profileWithSkills.profile)
+      let filteredProfilesWithSkills = this.getProfilesFilteredBySkills(profilesWithSkills, this.mapIdsOfSkillFilters)
+      return this.sortProfiles(filteredProfilesWithSkills).map(profileWithSkills => profileWithSkills.profile)
     }
   },
   methods: {
@@ -98,24 +106,16 @@ export default {
       )
     },
     sortProfiles (profilesWithSkills) {
-      if (this.sortAttribute === sortAttributeEnum.name) {
-        return sortBy(profilesWithSkills, ['profile.firstName'])
-      }
-      // When sorting by proficiency or willingness, base a person's position on the average value (avg. willingness or avg. proficiency) of the filtered skills
-      if (this.sortAttribute === sortAttributeEnum.wantsTo || this.sortAttribute === sortAttributeEnum.knows) {
-        if (this.filteredSkillIds.length < 1) {
+      const { name, wantsTo, knows } = sortAttributeEnum
+      switch (this.sortAttribute) {
+        case name:
+          return sortByName(profilesWithSkills)
+        case wantsTo:
+          return profilesWithSkills.sort(sortArrayBy('wantsTo', this.mapIdsOfSkillFilters))
+        case knows:
+          return profilesWithSkills.sort(sortArrayBy('knows', this.mapIdsOfSkillFilters))
+        default:
           return profilesWithSkills
-        }
-        const propertyToSortBy = (this.sortAttribute === sortAttributeEnum.wantsTo ? 'wantsTo' : 'knows')
-        return profilesWithSkills.sort((profile1, profile2) => {
-          const profile1AverageOfFilteredSkillLevels = profileProfilesAverageOfFilteredSkillLevels(profile1, this.filteredSkillIds, propertyToSortBy)
-          const profile2AverageOfFilteredSkillLevels = profileProfilesAverageOfFilteredSkillLevels(profile2, this.filteredSkillIds, propertyToSortBy)
-          return profile2AverageOfFilteredSkillLevels - profile1AverageOfFilteredSkillLevels
-        })
-      }
-
-      function profileProfilesAverageOfFilteredSkillLevels (profile, skillIds, propertyToReturn) {
-        return mean(profile.skills.filter(skill => skillIds.includes(skill.skillId)).map(skill => skill[propertyToReturn]))
       }
     }
   }
