@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
 import LandingPage from '@/views/LandingPage'
+import Dashboard from '@/components/Dashboard'
 import Vuex from 'vuex'
 
 const localVue = createLocalVue()
@@ -33,13 +34,13 @@ describe('LandingPage.vue', () => {
     expect(wrapper.text()).toContain('Please Sign in')
   })
 
-  it('Landing page shows authenticated view when user is signed in', () => {
+  it('Landing page shows dashboard view when user is signed in', () => {
     const store = createStore({
       getters: {
         isAuthenticated: jest.fn(() => true)
       }
     })
     const wrapper = createWrapper({ store })
-    expect(wrapper.text()).toContain('Ready to Rock ’n’ Roll')
+    expect(wrapper.find(Dashboard).isVisible()).toBeTruthy()
   })
 })

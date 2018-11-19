@@ -12,7 +12,7 @@ import router from './router'
 
 import store from './store'
 import Toasted from 'vue-toasted'
-import Loading from './components/lib/loading'
+import Loading from './components/helpers/LoadingSpinner'
 
 Vue.use(BootstrapVue)
 Vue.use(Toasted)

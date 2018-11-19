@@ -3,19 +3,22 @@ import * as types from '@/store/mutation-types'
 import { skill } from '@/store/schema'
 import { getSkills, newSkill } from '@/utils/api'
 
-
-export function fetchSkills({ commit, state }) {
+export function fetchSkills ({ commit, state }) {
   return new Promise((resolve, reject) => {
     getSkills()
       .then(response => {
         commit(types.FETCH_SKILLS, normalize(response.data, [skill]).entities.skills)
         resolve(response.data)
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        reject(err)
+      }
+      )
   })
 }
 
-export function addSkill({ commit, state }, data) {
+export function addSkill ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
     newSkill(data)
       .then(response => {
@@ -27,7 +30,7 @@ export function addSkill({ commit, state }, data) {
   })
 }
 
-export function deleteSkill({ commit, state }, data) {
+export function deleteSkill ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
     deleteSkill(data)
       .then(response => {
@@ -38,7 +41,3 @@ export function deleteSkill({ commit, state }, data) {
       })
   })
 }
-
-
-
-

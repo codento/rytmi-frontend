@@ -5,14 +5,20 @@ import profiles from './modules/profiles'
 import auth from './modules/auth'
 import projects from './modules/projects'
 import profileProjects from './modules/profileProjects'
+import getters from './getters'
+import mutations from './mutations'
 
 Vue.use(Vuex)
 const state = {
   loading: false,
-  token: null
+  token: null,
+  appInitialized: false,
+  appInitializeError: null
 }
 export default new Vuex.Store({
   state,
+  getters,
+  mutations,
   modules: {
     skills,
     profiles,
