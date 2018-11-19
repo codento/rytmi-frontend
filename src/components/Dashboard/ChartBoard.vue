@@ -12,13 +12,13 @@
         <b-row class="no-gutters mt-1">
           <b-col
             :cols="12"
-            :md="5">
+            :md="6">
             <top-skill-chart
               :skill-info="skillInfo"/>
           </b-col>
           <b-col
             :cols="12"
-            :md="5">
+            :md="6">
             <most-willingness-chart
               :skill-info="skillInfo"/>
           </b-col>

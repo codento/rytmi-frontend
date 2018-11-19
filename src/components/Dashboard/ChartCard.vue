@@ -13,6 +13,7 @@
 
 <style scoped>
   .draw-border {
+    height: 100%;
     border: 1px solid black;
   }
   .draw-border .header-container {
