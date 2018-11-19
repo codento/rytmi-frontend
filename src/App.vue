@@ -76,21 +76,7 @@ export default {
     }
   },
   created () {
-    if (this.isAuthenticated) {
-      Promise.all([
-        this.fetchProfiles(),
-        this.fetchAllFutureProfileProjects(),
-        this.fetchSkills(),
-        this.fetchProfileSkills(),
-        this.fetchProjects()
-      ])
-        .catch(error => {
-          this.setAppInitializeError(error)
-        })
-        .finally(() => {
-          this.setAppInitialized(true)
-        })
-    }
+    this.initializeApp()
   },
   methods: {
     ...mapActions([
@@ -103,7 +89,24 @@ export default {
     ...mapMutations({
       setAppInitialized: SET_APP_INITIALIZED,
       setAppInitializeError: SET_APP_INITIALIZE_ERROR
-    })
+    }),
+    initializeApp () {
+      if (this.isAuthenticated) {
+        Promise.all([
+          this.fetchProfiles(),
+          this.fetchAllFutureProfileProjects(),
+          this.fetchSkills(),
+          this.fetchProfileSkills(),
+          this.fetchProjects()
+        ])
+          .catch(error => {
+            this.setAppInitializeError(error)
+          })
+          .finally(() => {
+            this.setAppInitialized(true)
+          })
+      }
+    }
   }
 }
 </script>
