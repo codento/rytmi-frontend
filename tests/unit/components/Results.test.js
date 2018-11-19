@@ -1,12 +1,9 @@
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
-import { merge } from 'lodash'
+import _, { merge } from 'lodash'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import { Results, ProfileCard } from '@/components/Search'
-import flushPromises from 'flush-promises'
-import Loading from '@/components/lib/loading'
-import _ from 'lodash'
-
+import Loading from '@/components/helpers/LoadingSpinner'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -14,15 +11,15 @@ localVue.use(BootstrapVue)
 localVue.component('loading', Loading)
 
 const profilesMock = {
-  1: { id: 1, firstName: 'Joe'}, // Python(1,2), JavaScript(3,4)
-  2: { id: 2, firstName: 'Sarah'}, // Python(2,3), Scala(1,4)
-  3: { id: 3, firstName: 'Daisy'} // Python(5,4), JavaScript(3,3), Scala(2,2)
+  1: { id: 1, firstName: 'Joe' }, // Python(1,2), JavaScript(3,4)
+  2: { id: 2, firstName: 'Sarah' }, // Python(2,3), Scala(1,4)
+  3: { id: 3, firstName: 'Daisy' } // Python(5,4), JavaScript(3,3), Scala(2,2)
 }
 
 const skillsMock = {
-    1: { id: 1, name: 'Python' },
-    2: { id: 2, name: 'JavaScript' },
-    3: { id: 3, name: 'Scala' }
+  1: { id: 1, name: 'Python' },
+  2: { id: 2, name: 'JavaScript' },
+  3: { id: 3, name: 'Scala' }
 }
 
 const profileSkills = {
