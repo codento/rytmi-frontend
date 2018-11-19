@@ -123,7 +123,7 @@ export default {
         case knows:
           return profilesWithSkills.sort(sortArrayBy('knows', this.mapIdsOfSkillFilters))
         default:
-          return profilesWithSkills
+          return sortByName(profilesWithSkills)
       }
     }
   }
