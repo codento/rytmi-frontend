@@ -51,8 +51,8 @@ export default {
     ProfileCard
   },
   props: {
-    filterName: String,
-    filterSkills: Array
+    nameFilter: String,
+    skillFilters: Array
   },
   data () {
     return {
@@ -72,7 +72,7 @@ export default {
       const options = [
         { text: 'Name', value: name }
       ]
-      if (!isEmpty(this.filterSkills)) {
+      if (!isEmpty(this.skillFilters)) {
         options.push(...[
           { text: 'Proficiency', value: knows },
           { text: 'Willingness', value: wantsTo }
@@ -81,12 +81,20 @@ export default {
       return options
     },
     mapIdsOfSkillFilters () {
-      return this.filterSkills.map(skill => skill.id)
+      return this.skillFilters.map(skill => skill.id)
     },
     orderedProfiles () {
       const profilesWithSkills = this.mapSkillsToProfiles()
       let filteredProfilesWithSkills = this.getProfilesFilteredBySkills(profilesWithSkills, this.mapIdsOfSkillFilters)
-      return this.sortProfiles(filteredProfilesWithSkills).map(profileWithSkills => profileWithSkills.profile)
+      return this.getSortedProfiles(filteredProfilesWithSkills).map(profileWithSkills => profileWithSkills.profile)
+    }
+  },
+  watch: {
+    skillFilters: function () {
+      // Set sorting attribute to name when last skill has been removed from skill filters
+      if (this.skillFilters.length === 0) {
+        this.sortAttribute = sortAttributeEnum.name
+      }
     }
   },
   methods: {
@@ -96,7 +104,7 @@ export default {
     },
     mapSkillsToProfiles () {
       // First, get profiles, filtered by name
-      const profilesWithoutSkills = Object.values(this.profileFilter(this.filterName))
+      const profilesWithoutSkills = Object.values(this.profileFilter(this.nameFilter))
       // Then map skills for each profile
       return profilesWithoutSkills.map(profile => (
         {
@@ -105,7 +113,7 @@ export default {
         })
       )
     },
-    sortProfiles (profilesWithSkills) {
+    getSortedProfiles (profilesWithSkills) {
       const { name, wantsTo, knows } = sortAttributeEnum
       switch (this.sortAttribute) {
         case name:
