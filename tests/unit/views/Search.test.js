@@ -26,7 +26,7 @@ function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
       skills: () => skillsMock(),
-      skillName: () => (skillId) => skillsMock()[skillId],
+      skillName: () => (skillId) => skillsMock()[skillId]
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -65,8 +65,8 @@ describe('Search.vue', () => {
   it('should pass right attributes to Results component', () => {
     const wrapper = createWrapper()
     wrapper.vm.addToSearch(skillsMock()[1])
-    wrapper.vm.filterName = 'foo'
-    expect(wrapper.find(Results).props().filterSkills).toEqual([skillsMock()[1]])
-    expect(wrapper.find(Results).props().filterName).toBe('foo')
+    wrapper.vm.nameFilter = 'foo'
+    expect(wrapper.find(Results).props().skillFilters).toEqual([skillsMock()[1]])
+    expect(wrapper.find(Results).props().nameFilter).toBe('foo')
   })
 })

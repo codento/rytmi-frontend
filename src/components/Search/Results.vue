@@ -11,25 +11,39 @@
         <small>Sort profiles by: </small>
         <b-form-radio-group
           id="btnradios"
-          v-model="sortBy"
+          v-model="sortAttribute"
           :options="sortOptions"
           buttons
           name="radioBtnStacked" />
       </b-col>
     </b-row>
     <profile-card
-      v-for="profile in ordered"
+      v-for="profile in orderedProfiles"
       :key="profile.id"
       :profile="profile"
-      :skill-highlight="filteredSkillIds"
+      :skill-highlight="mapIdsOfSkillFilters"
     />
   </div>
 </template>
 
 <script>
-import { isEmpty, intersection, debounce, keyBy, max as _max } from 'lodash'
+import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
+const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
+
+const sortByName = (array) => sortBy(array, 'profile.firstName')
+
+const calculateSkillAverage = (skills, skillFilters, attribute) => {
+  return skills.filter((skill) => skillFilters.includes(skill.skillId))
+    .reduce((accumulator, current) => accumulator + current[attribute], 0) / skillFilters.length
+}
+
+const sortArrayBy = (sortAttribute, skillFilters) => (profileOne, profileTwo) => {
+  const profileOneAverage = calculateSkillAverage(profileOne.skills, skillFilters, sortAttribute)
+  const profileTwoAverage = calculateSkillAverage(profileTwo.skills, skillFilters, sortAttribute)
+  return profileTwoAverage - profileOneAverage
+}
 
 export default {
   name: 'Results',
@@ -37,13 +51,14 @@ export default {
     ProfileCard
   },
   props: {
-    filterName: String,
-    filterSkills: Array
+    nameFilter: String,
+    skillFilters: Array
   },
   data () {
     return {
       filteredProfiles: {},
-      sortBy: 'name'
+      sortAttribute: sortAttributeEnum.name,
+      profilesWithSkills: null
     }
   },
   computed: {
@@ -53,95 +68,63 @@ export default {
       'profiles'
     ]),
     sortOptions () {
+      const { name, knows, wantsTo } = sortAttributeEnum
       const options = [
-        { text: 'Name', value: 'name' }
+        { text: 'Name', value: name }
       ]
-      if (!isEmpty(this.filterSkills)) {
+      if (!isEmpty(this.skillFilters)) {
         options.push(...[
-          { text: 'Proficiency', value: 'knows' },
-          { text: 'Willingness', value: 'wantsTo' }
+          { text: 'Proficiency', value: knows },
+          { text: 'Willingness', value: wantsTo }
         ])
       }
       return options
     },
-    filteredSkillIds () {
-      return this.filterSkills.map(skill => skill.id)
+    mapIdsOfSkillFilters () {
+      return this.skillFilters.map(skill => skill.id)
     },
-    ordered () {
-      const sortBy = !isEmpty(this.filteredSkillIds) ? this.sortBy : 'name'
-      return this.orderMap[sortBy].map(sortItem => this.filteredProfiles[sortItem.profileId])
-    },
-    orderMap () {
-      const orderMap = {
-        knows: [],
-        wantsTo: [],
-        name: []
-      }
-      const skillFilterCount = this.filteredSkillIds.length
-      if (this.filteredProfiles) {
-        Object.values(this.filteredProfiles).forEach(profile => {
-          const knows = []
-          const wantsTo = []
-          let count = 0 // Count of skills. Does not count skills where wantsTo and knows are 0.
-          this.skillsByProfileId(profile.id).forEach(profileSkill => {
-            if (this.filteredSkillIds.includes(profileSkill.skillId) && (profileSkill.wantsTo > 0 || profileSkill.knows > 0)) {
-              knows.push(profileSkill.knows)
-              wantsTo.push(profileSkill.wantsTo)
-              count += 1
-            }
-          })
-          if (count === skillFilterCount) {
-            // add to orderMap only if profile has all selected skills.
-            orderMap.knows.push({ profileId: profile.id, value: _max(knows) })
-            orderMap.wantsTo.push({ profileId: profile.id, value: _max(wantsTo) })
-            orderMap.name.push({ profileId: profile.id, value: profile.firstName.toLowerCase() })
-          }
-        })
-        orderMap.knows.sort((a, b) => b.value - a.value)
-        orderMap.wantsTo.sort((a, b) => b.value - a.value)
-        orderMap.name.sort((a, b) => a.value > b.value ? 1 : -1)
-      }
-      return orderMap
+    orderedProfiles () {
+      const profilesWithSkills = this.mapSkillsToProfiles()
+      let filteredProfilesWithSkills = this.getProfilesFilteredBySkills(profilesWithSkills, this.mapIdsOfSkillFilters)
+      return this.getSortedProfiles(filteredProfilesWithSkills).map(profileWithSkills => profileWithSkills.profile)
     }
   },
   watch: {
-    filterName: function () {
-      this.delayedSearch()
-    },
-    profiles: function () {
-      this.search()
-    },
-    filterSkills (newValue, oldValue) {
-      if (isEmpty(newValue)) this.sortBy = 'name'
-      if (isEmpty(oldValue)) this.sortBy = 'knows'
+    skillFilters: function () {
+      // Set sorting attribute to name when last skill has been removed from skill filters
+      if (this.skillFilters.length === 0) {
+        this.sortAttribute = sortAttributeEnum.name
+      }
     }
   },
-  mounted () {
-    this.search()
-  },
   methods: {
-    delayedSearch: debounce(
-      function () {
-        this.search()
-      },
-      200 // Wait between searches can be changed here
-    ),
-    search () {
-      const results = this.profileFilter(this.filterName)
-        .filter(profile => {
-          if (!isEmpty(this.filteredSkillIds)) {
-            const profilesSkills = this.skillsByProfileId(profile.id)
-              .filter(profileSkill => {
-                return profileSkill.knows > 0 || profileSkill.wantsTo > 0
-              })
-              .map(profileSkill => profileSkill.skillId)
-            const common = intersection(profilesSkills, this.filteredSkillIds)
-            return !isEmpty(common)
-          }
-          return true
+    getProfilesFilteredBySkills (profilesToFilter, skillIds) {
+      // Return profiles that have all the skills we're filtering for
+      return profilesToFilter.filter(profile => difference(skillIds, profile.skills.map(skill => skill.skillId)).length === 0)
+    },
+    mapSkillsToProfiles () {
+      // First, get profiles, filtered by name
+      const profilesWithoutSkills = Object.values(this.profileFilter(this.nameFilter))
+      // Then map skills for each profile
+      return profilesWithoutSkills.map(profile => (
+        {
+          profile: profile,
+          skills: this.skillsByProfileId(profile.id)
         })
-
-      this.filteredProfiles = keyBy(results, 'id')
+      )
+    },
+    getSortedProfiles (profilesWithSkills) {
+      const { name, wantsTo, knows } = sortAttributeEnum
+      switch (this.sortAttribute) {
+        case name:
+          return sortByName(profilesWithSkills)
+        case wantsTo:
+          return profilesWithSkills.sort(sortArrayBy('wantsTo', this.mapIdsOfSkillFilters))
+        case knows:
+          return profilesWithSkills.sort(sortArrayBy('knows', this.mapIdsOfSkillFilters))
+        default:
+          return sortByName(profilesWithSkills)
+      }
     }
   }
 }

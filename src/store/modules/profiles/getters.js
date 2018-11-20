@@ -25,7 +25,7 @@ export const getters = {
   profileFilter: (state) => (nameFilter) => {
     const profiles = Object.values(state.profiles)
     if (_.isEmpty(nameFilter)) {
-      return profiles
+      return profiles.filter(profile => profile.active)
     } else {
       return profiles.filter(profile => {
         let name = profile.firstName + ' ' + profile.lastName
