@@ -3,7 +3,7 @@ import BootstrapVue from 'bootstrap-vue'
 import { merge, filter, isEmpty } from 'lodash'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import { Results, ProfileCard } from '@/components/Search'
-import Loading from '@/components/lib/loading'
+import Loading from '@/components/helpers/LoadingSpinner'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -60,8 +60,8 @@ describe('Results.vue', () => {
   it('should show all profiles sorted by name', (done) => {
     const mountOptions = {
       propsData: {
-        filterSkills: [],
-        filterName: ''
+        skillFilters: [],
+        nameFilter: ''
       }
     }
     const expectedOrder = Object.values(profilesMock).map(profile => profile.firstName).sort()
@@ -79,8 +79,8 @@ describe('Results.vue', () => {
   it('should show only filteres profiles when filtered by name', (done) => {
     const mountOptions = {
       propsData: {
-        filterSkills: [],
-        filterName: 'Joe'
+        skillFilters: [],
+        nameFilter: 'Joe'
       }
     }
     const wrapper = createWrapper(mountOptions)
@@ -95,8 +95,8 @@ describe('Results.vue', () => {
   it('should show only filtered profiles when filtered by skills', (done) => {
     const mountOptions = {
       propsData: {
-        filterSkills: [{ id: 1, name: 'Python' }, { id: 2, name: 'JavaScript' }],
-        filterName: ''
+        skillFilters: [{ id: 1, name: 'Python' }, { id: 2, name: 'JavaScript' }],
+        nameFilter: ''
       }
     }
     const expectedOrder = ['Daisy', 'Joe']
@@ -114,8 +114,8 @@ describe('Results.vue', () => {
   it('should show profiles ordered by willingness level for a skill', (done) => {
     const mountOptions = {
       propsData: {
-        filterSkills: [{ id: 3, name: 'Scala' }],
-        filterName: ''
+        skillFilters: [{ id: 3, name: 'Scala' }],
+        nameFilter: ''
       }
     }
     const expectedOrder = ['Sarah', 'Daisy']
@@ -134,8 +134,8 @@ describe('Results.vue', () => {
   it('should show profiles ordered by knowledge level for a skill', (done) => {
     const mountOptions = {
       propsData: {
-        filterSkills: [{ id: 3, name: 'Scala' }],
-        filterName: ''
+        skillFilters: [{ id: 3, name: 'Scala' }],
+        nameFilter: ''
       }
     }
     const expectedOrder = ['Daisy', 'Sarah']
