@@ -1,42 +1,45 @@
 <template>
   <div>
-      <h2>The skills</h2>
-      <b-table striped hover :items="mapSkillsToArray"></b-table>
+    <h2>The skills</h2>
+    <b-table
+      :items="mapSkillsToArray"
+      striped
+      hover/>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
-  name: "SkillsList",
-  data() {
+  name: 'SkillsList',
+  data () {
     return {
       fields: [
         {
-          key: "name",
+          key: 'name',
           sortable: true
         },
         {
-          key: "description",
+          key: 'description',
           sortable: true
         }
       ]
-    };
+    }
   },
   computed: {
-    ...mapGetters(["skills"]),
-    mapSkillsToArray() {
-      const objectKeys = Object.keys(this.skills);
-      const skillsArray = objectKeys.map(skillKey => this.skills[skillKey]);
-      return skillsArray;
+    ...mapGetters(['skills']),
+    mapSkillsToArray () {
+      const objectKeys = Object.keys(this.skills)
+      const skillsArray = objectKeys.map(skillKey => this.skills[skillKey])
+      return skillsArray
     }
   },
   methods: {
-    removeSkill(item) {}
+    removeSkill (item) {}
   }
-};
+}
 </script>
-<style>
+<style scoped>
 button {
   width: 5%;
   margin-top: 1em;

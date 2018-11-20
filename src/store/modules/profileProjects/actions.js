@@ -26,7 +26,7 @@ export default {
     }))
   },
   addProfileProject ({ commit, state }, profileProject) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       commit(types.ADD_PROFILEPROJECT, profileProject)
       commit(types.ADD_PPTOPROFILE, profileProject)
       commit(types.ADD_PPTOPROJECT, profileProject)

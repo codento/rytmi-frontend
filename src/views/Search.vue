@@ -6,7 +6,7 @@
         <b-row class="search-item">
           <b-col>
             <b-form-input
-              v-model="filterName"
+              v-model="nameFilter"
               type="text"
               placeholder="Filter by name"
             />
@@ -27,7 +27,7 @@
             </b-dropdown>
             <ul>
               <li
-                v-for="skill in filterSkills"
+                v-for="skill in skillFilters"
                 :key="skill.name"
                 class="skillFilter"
                 @click="removeFromSearch(skill)"
@@ -40,9 +40,8 @@
       </b-col>
     </b-row>
     <Results
-      :filter-name="filterName"
-      :filter-skills="filterSkills"
-    />
+      :name-filter="nameFilter"
+      :skill-filters="skillFilters" />
   </div>
 </template>
 
@@ -58,8 +57,8 @@ export default {
   },
   data () {
     return {
-      filterName: '',
-      filterSkills: []
+      nameFilter: '',
+      skillFilters: []
     }
   },
   computed: {
@@ -68,7 +67,7 @@ export default {
       'skillName'
     ]),
     selectableSkills () {
-      const currentSkills = this.filterSkills.map(skill => skill.id)
+      const currentSkills = this.skillFilters.map(skill => skill.id)
       return _(this.skills)
         .filter(skill => !currentSkills.includes(skill.id))
         .sortBy(skill => this.skillName(skill.id))
@@ -80,12 +79,12 @@ export default {
   },
   methods: {
     addToSearch: function (skill) {
-      const skills = this.filterSkills.slice(0)
+      const skills = this.skillFilters.slice(0)
       skills.push(skill)
-      this.filterSkills = skills
+      this.skillFilters = skills
     },
     removeFromSearch: function (skill) {
-      this.filterSkills = this.filterSkills.filter(el => (el.id !== skill.id))
+      this.skillFilters = this.skillFilters.filter(el => (el.id !== skill.id))
     }
   }
 }
@@ -108,7 +107,7 @@ ul {
   cursor: pointer;
 }
 .search-item {
-    width: 100%;
-    padding: 0.5em 0;
+  width: 100%;
+  padding: 0.5em 0;
 }
 </style>
