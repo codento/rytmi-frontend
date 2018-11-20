@@ -78,7 +78,9 @@ export default {
     },
     login () {
       handleLogin().then((response) => {
-        return this.requestAuth(response.Zi.id_token)
+        return this.requestAuth(response.Zi.id_token).then(() => {
+          this.$parent.initializeApp()
+        })
       }).then(() => {
         this.$router.push(this.$route.query.redirect || '/callback')
       }).catch((error) => {
