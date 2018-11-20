@@ -4,7 +4,7 @@ import { merge } from 'lodash'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Project from '@/views/Project.vue'
 import { ProjectProfileForm } from '@/components/Project'
-import Loading from '@/components/lib/loading'
+import Loading from '@/components/helpers/LoadingSpinner'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

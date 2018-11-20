@@ -16,8 +16,9 @@ export const actions = {
       getProfiles()
         .then(response => {
           commit(types.FETCH_PROFILES, normalize(response.data, [profile]).entities.profiles)
+          resolve()
         })
-        .catch(err => console.log(err))
+        .catch(err => reject(err))
     })
   },
   fetchProfileSkills ({ commit, state }) {
@@ -25,8 +26,9 @@ export const actions = {
       getProfileSkills()
         .then(response => {
           commit(types.FETCH_PROFILESKILLS, response.data)
+          resolve()
         })
-        .catch(err => console.log(err))
+        .catch(err => reject(err))
     })
   },
   updateProfile ({ commit, state }, data) {

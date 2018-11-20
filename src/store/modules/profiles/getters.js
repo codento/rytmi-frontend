@@ -8,8 +8,9 @@ export const getters = {
   },
   profileId: (state) => state.profileId,
   profiles: (state) => state.profiles,
+  profileList: (state) => state.profileList,
   profileById: (state) => (id) => state.profiles[id],
-  projectsOfProfile: (state, getters, rootState) => (profileId) => state.profileProjectList[profileId].map(id => rootState.profileProjects.profileProjects[id]),
+  skillProfiles: (state) => state.profileSkills,
   skillsByProfileId: (state, getters) => (profileId) => {
     return state.profileSkills
       .filter(skill => skill.profileId === profileId)

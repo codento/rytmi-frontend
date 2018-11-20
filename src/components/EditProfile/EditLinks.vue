@@ -3,7 +3,7 @@
     <br>
     <h5>Edit Links:</h5>
     <b-card id="editLinks">
-      <div v-show="profile.links.length > 0">
+      <div v-show="profileHasLinks">
         <ul>
           <li
             v-for="(link, idx) in profile.links"
@@ -63,6 +63,11 @@ export default {
       errorDetails: []
     }
   },
+  computed: {
+    profileHasLinks () {
+      return this.profile.links && this.profile.links.length > 0
+    }
+  },
   methods: {
     ...mapActions([
       'updateProfile'
@@ -76,8 +81,8 @@ export default {
     },
     addLink () {
       this.clearErrors()
-      if (this.linkInput && this.findLink(this.linkInput) === -1) {
-        const links = this.profile.links.slice()
+      if (this.linkInput && !this.linkExists(this.linkInput)) {
+        const links = this.profile.links ? this.profile.links.slice() : []
         links.push(this.linkInput)
         this.submitChanges(links)
       } else {
@@ -93,8 +98,11 @@ export default {
         this.errorDetails = error.details
       }
     },
-    findLink (link) {
-      return this.profile.links.findIndex(l => l === link)
+    linkExists (link) {
+      if (!this.profile.links) {
+        return false
+      }
+      return this.profile.links.includes(link)
     }
   }
 }

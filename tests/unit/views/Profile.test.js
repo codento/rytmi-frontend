@@ -15,7 +15,7 @@ import BootstrapVue from 'bootstrap-vue'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import View from '../../../src/views/Profile.vue'
 import lodash from 'lodash'
-import Loading from '../../../src/components/lib/loading'
+import Loading from '@/components/helpers/LoadingSpinner'
 import { skill } from './../../../src/store/schema';
 
 

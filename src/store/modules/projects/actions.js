@@ -12,9 +12,7 @@ export function createProject ({ commit, state }, data) {
       .then(response => {
         commit(types.UPDATE_PROJECT, response.data)
         resolve(response)
-      }).catch(error => {
-        reject(error)
-      })
+      }).catch(err => reject(err))
   })
 }
 
@@ -23,8 +21,9 @@ export function fetchProjects ({ commit, state }) {
     getProjects()
       .then(response => {
         commit(types.FETCH_PROJECTS, response.data)
+        resolve()
       })
-      .catch(err => console.log(err))
+      .catch(err => reject(err))
   })
 }
 
@@ -34,7 +33,7 @@ export function removeProject ({ commit, state }, data) {
       .then(response => {
         commit(types.DELETE_PROJECT, response.data)
       })
-      .catch(err => console.log(err))
+      .catch(err => reject(err))
   })
 }
 
