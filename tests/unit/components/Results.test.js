@@ -32,6 +32,13 @@ const profileSkills = {
   7: { id: 7, profileId: 3, skillId: 3, knows: 2, wantsTo: 2 }
 }
 
+const profileProjectsMock = {
+  1: { projectId: 1, profileId: 1, startDate: "2018-12-13T12:49:21.289Z", endDate: "2019-07-19T18:16:06.623Z", workPercentage: 20 },
+  2: { projectId: 1, profileId: 2, startDate: "2018-12-13T12:49:21.289Z", endDate: "2019-07-19T18:16:06.623Z", workPercentage: 20 },
+  3: { projectId: 2, profileId: 3, startDate: "2018-09-02T05:06:12.704Z", endDate: "2018-11-21T12:42:13.818Z", workPercentage: 50 },
+  4: { projectId: 3, profileId: 3, startDate: "2018-11-23", endDate: "2019-5-20", workPercentage: 20 }
+}
+
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
 
 function createStore (overrideConfig) {
@@ -40,7 +47,8 @@ function createStore (overrideConfig) {
       skills: () => skillsMock,
       profileFilter: () => (name) => !isEmpty(name) ? filter(profilesMock, profile => profile.firstName === name) : Object.values(profilesMock),
       skillsByProfileId: () => (profileId) => filter(profileSkills, ps => ps.profileId === profileId),
-      profiles: () => profilesMock
+      profiles: () => profilesMock,
+      futureProjectsOfProfile: () => (profileId) => filter(profileProjectsMock, project => project.profileId === profileId)
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -144,6 +152,86 @@ describe('Results.vue', () => {
       wrapper.setData({ sortAttribute: sortAttributeEnum.knows })
       const cards = wrapper.findAll(ProfileCard)
       expect(cards).toHaveLength(2)
+      cards.wrappers.forEach((wrapper, i) => {
+        expect(wrapper.props().profile.firstName).toBe(expectedOrder[i])
+      })
+      done()
+    })
+  })
+
+  it('should show profiles filtered by utilization date, sorted alphabetically (1)', (done) => {
+    const mountOptions = {
+      propsData: {
+        skillFilters: [],
+        nameFilter: '',
+        utilizationDateFilter: '2019-6-30'
+      }
+    }
+    const expectedOrder = ['Daisy']
+    const wrapper = createWrapper(mountOptions)
+    wrapper.vm.$nextTick(() => {
+      const cards = wrapper.findAll(ProfileCard)
+      expect(cards).toHaveLength(1)
+      cards.wrappers.forEach((wrapper, i) => {
+        expect(wrapper.props().profile.firstName).toBe(expectedOrder[i])
+      })
+      done()
+    })
+  })
+
+  it('should show profiles filtered by utilization date, sorted alphabetically (2)', (done) => {
+    const mountOptions = {
+      propsData: {
+        skillFilters: [],
+        nameFilter: '',
+        utilizationDateFilter: '2018-11-22'
+      }
+    }
+    const expectedOrder = ['Daisy', 'Joe', 'Sarah']
+    const wrapper = createWrapper(mountOptions)
+    wrapper.vm.$nextTick(() => {
+      const cards = wrapper.findAll(ProfileCard)
+      expect(cards).toHaveLength(3)
+      cards.wrappers.forEach((wrapper, i) => {
+        expect(wrapper.props().profile.firstName).toBe(expectedOrder[i])
+      })
+      done()
+    })
+  })
+
+  it('should show profiles filtered by utilization date, sorted alphabetically (3)', (done) => {
+    const mountOptions = {
+      propsData: {
+        skillFilters: [],
+        nameFilter: '',
+        utilizationDateFilter: '2018-12-13'
+      }
+    }
+    const expectedOrder = []
+    const wrapper = createWrapper(mountOptions)
+    wrapper.vm.$nextTick(() => {
+      const cards = wrapper.findAll(ProfileCard)
+      expect(cards).toHaveLength(0)
+      cards.wrappers.forEach((wrapper, i) => {
+        expect(wrapper.props().profile.firstName).toBe(expectedOrder[i])
+      })
+      done()
+    })
+  })
+
+  it('should show profiles filtered by skill and utilization date', (done) => {
+    const mountOptions = {
+      propsData: {
+        skillFilters: [{ id: 2, name: 'JavaScript' }],
+        nameFilter: '',
+        utilizationDateFilter: '2018-10-22'
+      }
+    }
+    const expectedOrder = ['Joe']
+    const wrapper = createWrapper(mountOptions)
+    wrapper.vm.$nextTick(() => {
+      const cards = wrapper.findAll(ProfileCard)
+      expect(cards).toHaveLength(1)
       cards.wrappers.forEach((wrapper, i) => {
         expect(wrapper.props().profile.firstName).toBe(expectedOrder[i])
       })

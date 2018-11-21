@@ -30,7 +30,7 @@
 import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
-import { parse, isValid } from 'date-fns'
+import { parse, isValid, format } from 'date-fns'
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
 
 const sortByName = (array) => sortBy(array, 'profile.firstName')
@@ -87,10 +87,10 @@ export default {
       return this.skillFilters.map(skill => skill.id)
     },
     orderedProfiles () {
-      const profilesWithSkills = this.mapSkillsAndProjectsToProfiles()
-      const profilesWithSkillsFilteredBySkills = this.getProfilesFilteredBySkills(profilesWithSkills, this.mapIdsOfSkillFilters)
-      const profilesWithSkillsFilteredBySkillsAndUtilization = this.getProfilesFilteredByUtilization(profilesWithSkillsFilteredBySkills, this.utilizationDateFilter)
-      return this.getSortedProfiles(profilesWithSkillsFilteredBySkillsAndUtilization).map(profileWithSkills => profileWithSkills.profile)
+      const profiles = this.mapSkillsAndProjectsToProfiles()
+      const profilesFilteredBySkills = this.getProfilesFilteredBySkills(profiles, this.mapIdsOfSkillFilters)
+      const profilesFilteredBySkillsAndUtilization = this.getProfilesFilteredByUtilization(profilesFilteredBySkills, this.utilizationDateFilter)
+      return this.getSortedProfiles(profilesFilteredBySkillsAndUtilization).map(profile => profile.profile)
     }
   },
   watch: {
@@ -107,14 +107,18 @@ export default {
       return profilesToFilter.filter(profile => difference(skillIds, profile.skills.map(skill => skill.skillId)).length === 0)
     },
     getProfilesFilteredByUtilization (profilesToFilter, utilizationDateFilter) {
-      const parsedDate = parse(utilizationDateFilter)
+      const parsedDate = getOnlyDateFromFullDate(utilizationDateFilter)
       if (isValid(parsedDate)) {
         return profilesToFilter.filter(profile => getProjectsAtGivenTime(profile.projects.filter(project => project.workPercentage > 0), parsedDate).length === 0)
       }
       return profilesToFilter
 
       function getProjectsAtGivenTime (projects, date) {
-        return projects.filter(project => parse(project.startDate) <= date && parse(project.endDate) >= date)
+        return projects.filter(project => getOnlyDateFromFullDate(project.startDate) <= date && getOnlyDateFromFullDate(project.endDate) >= date)
+      }
+
+      function getOnlyDateFromFullDate (date) {
+        return parse(format(parse(date), 'YYYY-MM-DD'))
       }
     },
     mapSkillsAndProjectsToProfiles () {
