@@ -30,6 +30,7 @@
 import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
+import { parse, isValid } from 'date-fns'
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
 
 const sortByName = (array) => sortBy(array, 'profile.firstName')
@@ -52,7 +53,8 @@ export default {
   },
   props: {
     nameFilter: String,
-    skillFilters: Array
+    skillFilters: Array,
+    utilizationDateFilter: String
   },
   data () {
     return {
@@ -65,7 +67,8 @@ export default {
     ...mapGetters([
       'profileFilter',
       'skillsByProfileId',
-      'profiles'
+      'profiles',
+      'futureProjectsOfProfile'
     ]),
     sortOptions () {
       const { name, knows, wantsTo } = sortAttributeEnum
@@ -84,9 +87,10 @@ export default {
       return this.skillFilters.map(skill => skill.id)
     },
     orderedProfiles () {
-      const profilesWithSkills = this.mapSkillsToProfiles()
-      let filteredProfilesWithSkills = this.getProfilesFilteredBySkills(profilesWithSkills, this.mapIdsOfSkillFilters)
-      return this.getSortedProfiles(filteredProfilesWithSkills).map(profileWithSkills => profileWithSkills.profile)
+      const profilesWithSkills = this.mapSkillsAndProjectsToProfiles()
+      const profilesWithSkillsFilteredBySkills = this.getProfilesFilteredBySkills(profilesWithSkills, this.mapIdsOfSkillFilters)
+      const profilesWithSkillsFilteredBySkillsAndUtilization = this.getProfilesFilteredByUtilization(profilesWithSkillsFilteredBySkills, this.utilizationDateFilter)
+      return this.getSortedProfiles(profilesWithSkillsFilteredBySkillsAndUtilization).map(profileWithSkills => profileWithSkills.profile)
     }
   },
   watch: {
@@ -102,14 +106,26 @@ export default {
       // Return profiles that have all the skills we're filtering for
       return profilesToFilter.filter(profile => difference(skillIds, profile.skills.map(skill => skill.skillId)).length === 0)
     },
-    mapSkillsToProfiles () {
+    getProfilesFilteredByUtilization (profilesToFilter, utilizationDateFilter) {
+      const parsedDate = parse(utilizationDateFilter)
+      if (isValid(parsedDate)) {
+        return profilesToFilter.filter(profile => getProjectsAtGivenTime(profile.projects.filter(project => project.workPercentage > 0), parsedDate).length === 0)
+      }
+      return profilesToFilter
+
+      function getProjectsAtGivenTime (projects, date) {
+        return projects.filter(project => parse(project.startDate) <= date && parse(project.endDate) >= date)
+      }
+    },
+    mapSkillsAndProjectsToProfiles () {
       // First, get profiles, filtered by name
       const profilesWithoutSkills = Object.values(this.profileFilter(this.nameFilter))
-      // Then map skills for each profile
+      // Then map skills and projects for each profile
       return profilesWithoutSkills.map(profile => (
         {
           profile: profile,
-          skills: this.skillsByProfileId(profile.id)
+          skills: this.skillsByProfileId(profile.id),
+          projects: this.futureProjectsOfProfile(profile.id)
         })
       )
     },
