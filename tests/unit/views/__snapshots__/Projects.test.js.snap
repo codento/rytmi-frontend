@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Profile.vue shallow Template is correct 1`] = `
+<div
+  class="animated fadeIn col-sm-12 col-md-8 project-list-container"
+>
+  <projectform-stub />
+   
+  <projectlist-stub />
+</div>
+`;

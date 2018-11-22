@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Profile.vue shallowMount Template is correct 1`] = `
+<bcontainer-stub
+  class="animated fadeIn profile"
+  tag="div"
+>
+  <brow-stub
+    tag="div"
+  >
+    <bcol-stub
+      class="col-md-6 col-sm-12 col-12"
+      tag="div"
+    >
+      <userprofilecard-stub
+        profile="[object Object]"
+      />
+    </bcol-stub>
+     
+    <bcol-stub
+      class="col-md-6 col-sm-12 col-12"
+      tag="div"
+    >
+      <bcard-stub
+        bodytag="div"
+        footertag="div"
+        headertag="div"
+        id="proficiency"
+        subtitletag="h6"
+        tag="div"
+        titletag="h4"
+      >
+        <h5
+          class="mb-0"
+          slot="header"
+        >
+          
+          Proficiency
+          
+          <span
+            style="float: right; cursor: pointer;"
+          >
+            
+            ⓘ
+          
+          </span>
+        </h5>
+         
+        <brow-stub
+          tag="div"
+        >
+          <bcol-stub
+            class="col mb-1"
+            tag="div"
+          >
+            <skillrow-stub
+              description="Python desc"
+              id="1"
+              name="Python"
+            />
+          </bcol-stub>
+        </brow-stub>
+      </bcard-stub>
+       
+      <bcard-stub
+        bodytag="div"
+        footertag="div"
+        header="Projects"
+        headertag="div"
+        subtitletag="h6"
+        tag="div"
+        titletag="h4"
+      >
+        <projectrow-stub
+          profileproject="[object Object]"
+        />
+      </bcard-stub>
+       
+      <bcard-stub
+        bodytag="div"
+        footertag="div"
+        header="Utilization"
+        headertag="div"
+        subtitletag="h6"
+        tag="div"
+        titletag="h4"
+      >
+        <utilizationchart-stub
+          backgroundcolor="rgba(251, 85, 85, 0.4)"
+          fillcolor="rgb(97, 176, 32)"
+          height="90px"
+          projects="[object Object]"
+        />
+      </bcard-stub>
+    </bcol-stub>
+  </brow-stub>
+</bcontainer-stub>
+`;

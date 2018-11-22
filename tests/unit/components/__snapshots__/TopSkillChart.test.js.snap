@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TopSkillChart.vue Should match the template 1`] = `
+<chartcard-stub>
+  <template>
+    <div
+      class="h3 px-2"
+    >
+      
+      Top skill
+    
+    </div>
+  </template>
+   
+  <bcol-stub
+    tag="div"
+  >
+    <p
+      class="lead px-2"
+    >
+      
+      Our top skill is
+      
+      <strong>
+        SkillTwo
+      </strong>
+      . 
+      <br />
+      
+      There are 
+      <strong>
+        1
+      </strong>
+      
+      who's skill level is 4 or 5 and the average is
+      
+      <strong>
+        3
+      </strong>
+    </p>
+  </bcol-stub>
+</chartcard-stub>
+`;

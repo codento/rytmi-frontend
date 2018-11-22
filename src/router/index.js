@@ -9,6 +9,8 @@ import store from '../store'
 import Callback from '@/components/helpers/Callback'
 import Projects from '@/views/Projects'
 import Project from '@/views/Project'
+import Skills from '@/views/Skills'
+
 Vue.use(Router)
 
 const requireAuth = (to, from, next) => {
@@ -24,7 +26,7 @@ const requireAuth = (to, from, next) => {
 
 export default new Router({
   mode: 'history',
-  linkActiveClass: 'open active',
+  linkExactActiveClass: 'open active',
   scrollBehavior: () => ({ y: 0 }),
   routes: [
     {
@@ -57,9 +59,15 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/edit/:profileId',
+      path: '/profile/:profileId/edit',
       name: 'editProfile',
       component: EditProfile,
+      props: true
+    },
+    {
+      path: '/skills',
+      name: 'Skills',
+      component: Skills,
       props: true
     },
     {

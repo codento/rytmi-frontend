@@ -1,143 +1,151 @@
 <template>
-  <ul class="search-results">
-    <li v-for='profile in results' :key="profile.userId">
-      <b-card>
-        <b-row>
-          <b-col class="col-12 col-md-3" style="text-align:center">
-            <span @click="openProfile(profile)" style="cursor: pointer">
-              <img :src='profile.photoPath' alt="">
-              <h3>{{profile.firstName}} {{profile.lastName}}</h3>
-            </span>
-            <b>{{profile.email}}</b><br>
-            <b>{{profile.phone}}</b>
-          </b-col>
-          <b-col class="col-12 col-md-4 align-self-center">
-            <UtilizationChart :projects="futureProjectsOfProfile(profile.id)" />
-          </b-col>
-          <b-col class="col-12 col-md-4 align-self-center" style="margin-top: 1em;">
-            <SkillRow v-for='skill in skillsByProfileId(profile.id)'
-              :name="skillName(skill.skillId)"
-              :skillId='skill.id'
-              :knows='skill.knows'
-              :wants='skill.wantsTo'
-              :desc='skill.description'
-              :key='skill.id'>
-            </SkillRow>
-          </b-col>
-          <b-col class="col-12 col-md-1 profile-open-button">
-              <b-button @click="openProfile(profile)">
-                <i style="font-size: 76px; color: gray;" class="fa fa-5x fa-angle-right"></i>
-              </b-button>
-          </b-col>
-        </b-row>
-      </b-card>
-    </li>
-  </ul>
+  <div>
+    <b-row
+      class="sortbar"
+      align-h="end"
+    >
+      <b-col
+        cols="12"
+        class="text-right"
+      >
+        <small>Sort profiles by: </small>
+        <b-form-radio-group
+          id="btnradios"
+          v-model="sortAttribute"
+          :options="sortOptions"
+          buttons
+          name="radioBtnStacked"
+        />
+      </b-col>
+    </b-row>
+    <profile-card
+      v-for="profile in orderedProfiles"
+      :key="profile.id"
+      :profile="profile"
+      :skill-highlight="mapIdsOfSkillFilters"
+    />
+  </div>
 </template>
 
 <script>
-import _ from 'lodash'
+import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
-import { SkillRow, UtilizationChart } from '../Profile'
+import ProfileCard from './ProfileCard'
+import { parse, isValid, startOfDay } from 'date-fns'
+const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
+
+const sortByName = (array) => sortBy(array, 'profile.firstName')
+
+const calculateSkillAverage = (skills, skillFilters, attribute) => {
+  return skills.filter((skill) => skillFilters.includes(skill.skillId))
+    .reduce((accumulator, current) => accumulator + current[attribute], 0) / skillFilters.length
+}
+
+const sortArrayBy = (sortAttribute, skillFilters) => (profileOne, profileTwo) => {
+  const profileOneAverage = calculateSkillAverage(profileOne.skills, skillFilters, sortAttribute)
+  const profileTwoAverage = calculateSkillAverage(profileTwo.skills, skillFilters, sortAttribute)
+  return profileTwoAverage - profileOneAverage
+}
 
 export default {
   name: 'Results',
+  components: {
+    ProfileCard
+  },
   props: {
-    param: String,
-    selected: String,
-    active: Array
+    nameFilter: String,
+    skillFilters: Array,
+    utilizationDateFilter: String
   },
   data () {
     return {
-      search: '',
-      sortable: []
+      filteredProfiles: {},
+      sortAttribute: sortAttributeEnum.name,
+      profilesWithSkills: null
     }
-  },
-  components: {
-    SkillRow,
-    UtilizationChart
   },
   computed: {
     ...mapGetters([
       'profileFilter',
       'skillsByProfileId',
-      'skillById',
+      'profiles',
       'futureProjectsOfProfile'
     ]),
-    results: function () {
-      let results = this.profileFilter(this.search)
-      if (this.active.length > 0) {
-        this.sortable = []
-        for (let i = 0; i < this.active.length; i++) {
-          results = results.filter((profile) => this.hasSkill(profile, this.active[i].id, i))
-        }
-        return this.sorted()
+    sortOptions () {
+      const { name, knows, wantsTo } = sortAttributeEnum
+      const options = [{ text: 'Name', value: name }]
+      if (!isEmpty(this.skillFilters)) {
+        options.push(...[
+          { text: 'Proficiency', value: knows },
+          { text: 'Willingness', value: wantsTo }
+        ])
       }
-      return results
+      return options
+    },
+    mapIdsOfSkillFilters () {
+      return this.skillFilters.map(skill => skill.id)
+    },
+    orderedProfiles () {
+      const profiles = this.mapSkillsAndProjectsToProfiles()
+      const profilesFilteredBySkills = this.getProfilesFilteredBySkills(profiles, this.mapIdsOfSkillFilters)
+      const profilesFilteredBySkillsAndUtilization = this.getProfilesFilteredByUtilization(profilesFilteredBySkills, this.utilizationDateFilter)
+      return this.getSortedProfiles(profilesFilteredBySkillsAndUtilization).map(profile => profile.profile)
     }
   },
   watch: {
-    param: function () {
-      this.delaySearch()
+    skillFilters: function () {
+      // Set sorting attribute to name when last skill has been removed from skill filters
+      if (this.skillFilters.length === 0) {
+        this.sortAttribute = sortAttributeEnum.name
+      }
     }
   },
   methods: {
-    openProfile (profile) {
-      this.$router.push({name: 'profile', params: { id: profile.id }})
+    getProfilesFilteredBySkills (profilesToFilter, skillIds) {
+      // Return profiles that have all the skills we're filtering for
+      return profilesToFilter.filter(profile => difference(skillIds, profile.skills.map(skill => skill.skillId)).length === 0)
     },
-    delaySearch: _.debounce(
-      function () {
-        this.search = this.param
-      },
-      200 // Wait between searches can be changed here
-    ),
-    skillName (skillId) {
-      return this.skillById(skillId).name
+    getProfilesFilteredByUtilization (profilesToFilter, utilizationDateFilter) {
+      const getProjectsAtGivenTime = (projects, date) => projects.filter(project => getOnlyDateFromFullDate(project.startDate) <= date && getOnlyDateFromFullDate(project.endDate) >= date)
+      const getOnlyDateFromFullDate = (date) => startOfDay(parse(date))
+      const parsedDate = getOnlyDateFromFullDate(utilizationDateFilter)
+
+      if (isValid(parsedDate)) {
+        return profilesToFilter.filter(profile => getProjectsAtGivenTime(profile.projects.filter(project => project.workPercentage > 0), parsedDate).length === 0)
+      }
+      return profilesToFilter
     },
-    hasSkill (profile, skillToSearch, multipleSkills) {
-      let skills = this.skillsByProfileId(profile.id)
-      for (let i = 0; i < skills.length; i++) {
-        if (skills[i].skillId === skillToSearch) {
-          if (multipleSkills) {
-            this.updateSortable(profile, skills[i][this.selected])
-          } else {
-            if (skills[i][this.selected] > 0) {
-              this.sortable.push([profile, skills[i][this.selected]])
-            } else {
-              return false
-            }
-          }
-          return true
-        }
-      }
-      if (multipleSkills) {
-        this.updateSortable(profile, 0)
-      }
-      return false
+    mapSkillsAndProjectsToProfiles () {
+      // First, get profiles, filtered by name
+      const profilesWithoutSkills = Object.values(this.profileFilter(this.nameFilter))
+      // Then map skills and projects for each profile
+      return profilesWithoutSkills.map(profile => (
+        {
+          profile: profile,
+          skills: this.skillsByProfileId(profile.id),
+          projects: this.futureProjectsOfProfile(profile.id)
+        })
+      )
     },
-    updateSortable: function (profile, value) {
-      for (let i = 0; i < this.sortable.length; i++) {
-        if (this.sortable[i][0].id === profile.id) {
-          if (value) {
-            this.sortable[i][1] = this.sortable[i][1] + value
-          } else {
-            this.sortable.splice(i, 1)
-          }
-        }
+    getSortedProfiles (profilesWithSkills) {
+      const { name, wantsTo, knows } = sortAttributeEnum
+      switch (this.sortAttribute) {
+        case name:
+          return sortByName(profilesWithSkills)
+        case wantsTo:
+          return profilesWithSkills.sort(sortArrayBy('wantsTo', this.mapIdsOfSkillFilters))
+        case knows:
+          return profilesWithSkills.sort(sortArrayBy('knows', this.mapIdsOfSkillFilters))
+        default:
+          return sortByName(profilesWithSkills)
       }
-    },
-    sorted: function () {
-      this.sortable.sort(function (a, b) {
-        return b[1] - a[1]
-      })
-      let sortedResults = []
-      for (let j = 0; j < this.sortable.length; j++) {
-        sortedResults.push(this.sortable[j][0])
-      }
-      return sortedResults
     }
   }
 }
 </script>
 
-<style lang="css" />
+<style scoped>
+.sortbar {
+  padding: 8px !important;
+}
+</style>

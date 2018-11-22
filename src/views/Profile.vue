@@ -1,45 +1,56 @@
 <template>
   <b-container class="animated fadeIn profile">
-    <loading v-if="!profile"></loading>
+    <loading v-if="!profile" />
     <b-row v-else>
       <b-col class="col-md-6 col-sm-12 col-12">
-        <UserProfileCard :profile="profile"/>
+        <UserProfileCard :profile="profile" />
       </b-col>
       <b-col class="col-md-6 col-sm-12 col-12">
         <b-card id="proficiency">
-          <h5 slot="header" class="mb-0">
+          <h5
+            slot="header"
+            class="mb-0"
+          >
             Proficiency
-            <span style="float:right; cursor:pointer" v-on:mouseenter="showExplanations(true)" v-on:mouseout="showExplanations(false)">
+            <span
+              style="float:right; cursor:pointer"
+              @mouseenter="showExplanations(true)"
+              @mouseout="showExplanations(false)"
+            >
               &#9432;
             </span>
           </h5>
-          <b-row v-if="this.showInfo">
-            <skillExplanations 
-              :knowDesc='knowDesc'
-              :wantDesc='wantDesc' />
+          <b-row v-if="showInfo">
+            <skillExplanations
+              :know-desc="knowDesc"
+              :want-desc="wantDesc"
+            />
           </b-row>
           <b-row v-else>
             <b-col class="col mb-1">
-              <SkillRow v-for='skill in skillsByProfileId(profile.id)'
-                :name="skillName(skill.skillId)"
-                :knows='skill.knows'
-                :wants='skill.wantsTo'
-                :desc='skill.description'
-                :key='skill.id'>
-              </SkillRow>
+              <SkillRow
+                v-for="skill in skillsByProfileId(profile.id)"
+                :key="skill.id"
+                v-bind="skill"
+              />
             </b-col>
           </b-row>
         </b-card>
-        <b-card header='Projects'>
-          <loading v-if="!profileProjects"></loading>
-          <ProjectRow v-else v-for='profileProject in profileProjects'
-            :profileProject="profileProject"
+        <b-card header="Projects">
+          <loading v-if="!profileProjects" />
+          <ProjectRow
+            v-for="profileProject in profileProjects"
+            v-else
             :key="profileProject.id"
+            :profile-project="profileProject"
           />
         </b-card>
-        <b-card header='Utilization'>
-          <loading v-if="!profileProjects"></loading>
-          <UtilizationChart v-else :projects="profileProjects" />
+        <b-card header="Utilization">
+          <loading v-if="!profileProjects" />
+          <UtilizationChart
+            v-else
+            :projects="profileProjects"
+          />
         </b-card>
       </b-col>
     </b-row>
@@ -47,7 +58,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import store from '../store'
 import proficiencyDesc from '../assets/proficiencyDesc'
 import {
@@ -60,6 +71,18 @@ import {
 
 export default {
   name: 'Profile',
+  components: {
+    SkillRow,
+    ProjectRow,
+    UserProfileCard,
+    SkillExplanations,
+    UtilizationChart
+  },
+  data () {
+    return {
+      showInfo: false
+    }
+  },
   computed: {
     ...mapGetters([
       'profileById',
@@ -80,16 +103,11 @@ export default {
       return this.profileProjectsByProfileId(this.profile.id)
     }
   },
-  components: {
-    SkillRow,
-    ProjectRow,
-    UserProfileCard,
-    SkillExplanations,
-    UtilizationChart
-  },
-  data () {
-    return {
-      showInfo: false
+  watch: {
+    profile: function (val, oldVal) {
+      if (val) {
+        document.title = `Rytmi - ${val.firstName} ${val.lastName}`
+      }
     }
   },
   methods: {
@@ -109,13 +127,6 @@ export default {
   beforeRouteEnter (to, from, next) {
     store.dispatch('fetchPPsOfProfile', to.params.id)
     next()
-  },
-  watch: {
-    profile: function (val, oldVal) {
-      if (val) {
-        document.title = `Rytmi - ${val.firstName} ${val.lastName}`
-      }
-    }
   }
 }
 </script>

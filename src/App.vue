@@ -1,46 +1,33 @@
 <template>
   <div class="app">
-    <AppHeader/>
+    <AppHeader />
     <div class="app-body">
-      <Sidebar :navItems="nav"/>
+      <Sidebar :nav-items="nav" />
       <main class="main">
         <div class="container-fluid">
-          <router-view></router-view>
+          <router-view />
         </div>
       </main>
-      <AppAside/>
     </div>
-    <AppFooter/>
+    <AppFooter />
   </div>
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { SET_APP_INITIALIZED, SET_APP_INITIALIZE_ERROR } from '@/store/mutation-types'
 import {
   Sidebar,
   Header as AppHeader,
-  Aside as AppAside,
-  Footer as AppFooter,
-  Breadcrumb
+  Footer as AppFooter
 } from './components/appStructures'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     AppHeader,
     Sidebar,
-    AppAside,
-    AppFooter,
-    Breadcrumb
-  },
-  methods: {
-    ...mapActions([
-      'fetchProfiles',
-      'fetchAllFutureProfileProjects',
-      'fetchSkills',
-      'fetchProfileSkills',
-      'fetchProjects'
-    ])
+    AppFooter
   },
   computed: {
     ...mapGetters([
@@ -48,31 +35,25 @@ export default {
       'profileId'
     ]),
     nav () {
-      return [
-        {
-          name: 'Search',
-          url: '/search',
-          icon: 'icon-magnifier'
-        },
-        {
-          name: 'Projects',
-          url: '/projects',
-          icon: 'icon-drawer'
-        },
-        {
-          divider: true
-        },
-        {
-          name: 'My Profile',
-          url: '/profile/' + this.profileId,
-          icon: 'icon-user'
-        },
-        {
-          name: 'Edit Profile',
-          url: '/edit/' + this.profileId,
-          icon: 'icon-pencil'
-        }
-      ]
+      return this.isAuthenticated
+        ? [
+          {
+            name: 'Profiles',
+            url: '/search',
+            icon: 'icon-user'
+          },
+          {
+            name: 'Projects',
+            url: '/projects',
+            icon: 'icon-drawer'
+          },
+          {
+            name: 'Skills',
+            url: '/skills',
+            icon: 'icon-plus'
+          }
+        ]
+        : []
     },
     name () {
       return this.$route.name
@@ -82,28 +63,54 @@ export default {
     }
   },
   created () {
-    if (this.isAuthenticated) {
-      this.fetchProfiles()
-      this.fetchAllFutureProfileProjects()
-      this.fetchSkills()
-      this.fetchProfileSkills()
-      this.fetchProjects()
+    this.initializeApp()
+  },
+  methods: {
+    ...mapActions([
+      'fetchProfiles',
+      'fetchAllFutureProfileProjects',
+      'fetchSkills',
+      'fetchProfileSkills',
+      'fetchProjects'
+    ]),
+    ...mapMutations({
+      setAppInitialized: SET_APP_INITIALIZED,
+      setAppInitializeError: SET_APP_INITIALIZE_ERROR
+    }),
+    initializeApp () {
+      if (this.isAuthenticated) {
+        Promise.all([
+          this.fetchProfiles(),
+          this.fetchAllFutureProfileProjects(),
+          this.fetchSkills(),
+          this.fetchProfileSkills(),
+          this.fetchProjects()
+        ])
+          .catch(error => {
+            this.setAppInitializeError(error)
+          })
+          .finally(() => {
+            this.setAppInitialized(true)
+          })
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
-  /* Import Font Awesome Icons Set */
-  $fa-font-path: '~font-awesome/fonts/';
-  @import '~font-awesome/css/font-awesome.min.css';
-  /* Import Simple Line Icons Set */
-  $simple-line-font-path: '~simple-line-icons/fonts/';
-  @import '~simple-line-icons/css/simple-line-icons.css';
-  /* Import Bootstrap Vue Styles */
-  @import '~bootstrap-vue/dist/bootstrap-vue.css';
-
-  // Import Main styles for this application
-  @import './scss/style';
+// CoreUI Icons Set
+@import '~@coreui/icons/css/coreui-icons.min.css';
+/* Import Font Awesome Icons Set */
+$fa-font-path: '~font-awesome/fonts/';
+@import '~font-awesome/scss/font-awesome.scss';
+/* Import Simple Line Icons Set */
+$simple-line-font-path: '~simple-line-icons/fonts/';
+@import '~simple-line-icons/scss/simple-line-icons.scss';
+/* Import Flag Icons Set */
+@import '~flag-icon-css/css/flag-icon.min.css';
+/* Import Bootstrap Vue Styles */
+@import '~bootstrap-vue/dist/bootstrap-vue.css';
+// Import Main styles for this application
+@import 'assets/scss/style';
 </style>
-

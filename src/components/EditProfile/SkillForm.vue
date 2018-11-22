@@ -1,76 +1,90 @@
 <template>
   <b-card
     class="addNew"
-    title="Add new">
+    title="Add new"
+  >
     <b-form @submit="onSubmit">
       <b-form-group
-        vertical
         id="skillLabel"
+        vertical
         label="Skill:"
-        label-for="skill">
+        label-for="skill"
+      >
         <b-form-select
           id="skill"
-          v-model="profileSkill.skillId" 
+          v-model="profileSkill.skillId"
           :options="availableSkills"
           value-field="id"
           text-field="name"
-          required  
+          required
         >
           <template slot="first">
-            <option :value="null" disabled>-- Select skill --</option>
+            <option
+              :value="null"
+              disabled
+            >-- Select skill --</option>
           </template>
         </b-form-select>
       </b-form-group>
-      <b-form-group 
-        id="description" 
+      <b-form-group
+        id="description"
         vertical
         label="Description:"
-        label-for="descriptionInput">
+        label-for="descriptionInput"
+      >
         <b-form-textarea
           id="descriptionInput"
+          v-model="profileSkill.description"
           :rows="3"
           type="text"
-          v-model="profileSkill.description"
-          placeholder="Short description">
-        </b-form-textarea>
+          placeholder="Short description"
+        />
       </b-form-group>
-      <b-form-group 
-        id="knowsLabel" 
+      <b-form-group
+        id="knowsLabel"
         label="Proficiency level:"
       >
-        <b-form-radio-group 
-          stacked
+        <b-form-radio-group
           id="knows"
           v-model="profileSkill.knows"
           :options="knowsOptions"
-          plain
-          >
-        </b-form-radio-group>
-      </b-form-group>
-      <b-form-group
-        id="wantsToLabel" 
-        label="Willingness level:"
-      >
-        <b-form-radio-group 
           stacked
-          id="wantsTo"
-          v-model="profileSkill.wantsTo"
-          name="wantsTo"
-          :options="wantsToOptions"
           plain
         />
       </b-form-group>
-      <b-form-group 
-        id="visibleInCVLabel" 
+      <b-form-group
+        id="wantsToLabel"
+        label="Willingness level:"
+      >
+        <b-form-radio-group
+          id="wantsTo"
+          v-model="profileSkill.wantsTo"
+          :options="wantsToOptions"
+          stacked
+          name="wantsTo"
+          plain
+        />
+      </b-form-group>
+      <b-form-group
+        id="visibleInCVLabel"
         vertical
         label="Show in CV:"
-        label-for="visibleInCV">
-        <input type="checkbox" 
+        label-for="visibleInCV"
+      >
+        <input
           id="visibleInCV"
-          v-model="profileSkill.visibleInCV">
+          v-model="profileSkill.visibleInCV"
+          type="checkbox"
+        >
       </b-form-group>
-      <b-button type="submit" variant="primary">Submit</b-button>
-      <b-button @click="onReset" variant="danger">Clear</b-button>
+      <b-button
+        type="submit"
+        variant="primary"
+      >Submit</b-button>
+      <b-button
+        variant="danger"
+        @click="onReset"
+      >Clear</b-button>
     </b-form>
   </b-card>
 </template>
@@ -78,6 +92,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import proficiencyDesc from '../../assets/proficiencyDesc'
+import { filter } from 'lodash'
 const skillTemplate = () => {
   return {
     skillId: null,
@@ -91,7 +106,10 @@ const skillTemplate = () => {
 export default {
   name: 'SkillForm',
   props: {
-    'profileId': Number
+    'profileId': {
+      type: Number,
+      required: true
+    }
   },
   data () {
     return {
@@ -106,17 +124,15 @@ export default {
       'skillsByProfileId'
     ]),
     availableSkills () {
-      const existingIds = this.skillsByProfileId(this.profileId)
+      const existingSkills = this.skillsByProfileId(this.profileId)
         .map(profileSkill => profileSkill.skillId)
-      return this.$lodash.filter(this.skills, (value, key) => {
-        return existingIds.indexOf(value.id) === -1
-      })
+      return filter(this.skills, (value, key) =>
+        existingSkills.indexOf(value.id) === -1
+      )
     }
   },
   methods: {
-    ...mapActions([
-      'addProfileSkill'
-    ]),
+    ...mapActions(['addProfileSkill']),
     onSubmit (evt) {
       evt.preventDefault()
       this.profileSkill.profileId = this.profileId

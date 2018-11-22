@@ -1,26 +1,32 @@
 <template>
   <div v-if="project">
-    <div class="row mb-1" v-on:click="show = !show">
+    <div
+      class="row mb-1"
+      @click="show = !show"
+    >
       <div class="col-sm-12">
-        <span class="project-header">{{project.name}} </span>
+        <span class="project-header">{{ project.name }} </span>
       </div>
-      <div class="col-sm-12 duration-container" >
+      <div class="col-sm-12 duration-container">
         <span class="duration-item">
-            <small>From</small><br />
-            <DateFormatter :date="profileProject.startDate" />
+          <small>From</small><br>
+          <DateFormatter :date="profileProject.startDate" />
         </span>
         <span class="duration-item">
-            <small>To</small><br />
-            <DateFormatter :date="profileProject.endDate" /> 
+          <small>To</small><br>
+          <DateFormatter :date="profileProject.endDate" />
         </span>
       </div>
       <transition name="fade">
-        <div class="col-sm-12" v-if="show">
-          {{project.description}}
+        <div
+          v-if="show"
+          class="col-sm-12"
+        >
+          {{ project.description }}
         </div>
       </transition>
     </div>
-  <hr />
+    <hr>
   </div>
 </template>
 
@@ -29,24 +35,22 @@ import { mapGetters } from 'vuex'
 import DateFormatter from '../helpers/DateFormatter.vue'
 export default {
   name: 'ProjectRow',
+  components: {
+    DateFormatter
+  },
+  props: {
+    profileProject: Object
+  },
   data () {
     return {
       show: false
     }
   },
   computed: {
-    ...mapGetters([
-      'projectById'
-    ]),
+    ...mapGetters(['projectById']),
     project () {
       return this.projectById(this.profileProject.projectId)
     }
-  },
-  props: {
-    profileProject: Object
-  },
-  components: {
-    DateFormatter
   }
 }
 </script>

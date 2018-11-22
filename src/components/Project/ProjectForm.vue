@@ -1,61 +1,75 @@
 <template>
   <div>
-      <h3 style="text-align: center">
-        {{editableProject ? 'Edit project' : 'Add a new project'}}
-        <span @click="showProjectForm = !showProjectForm">
-          <i v-if="!showProjectForm" class="fa fa-chevron-down" />
-          <i v-else class="fa fa-chevron-up" />
-        </span>
-      </h3>
-      <b-form class="animated fadeIn" v-if="showProjectForm" id="project_form" @submit="onSubmit">
-          <small>Project code</small>
-          <b-input
-            placeholder="Project code"
-            required
-            type="number"
-            min="0"
-            max="99999"
-            v-model="project.code"
-          />
-          <small>Project name</small>
-          <b-input 
-            placeholder="Project name"
-            required
-            type="text"
-            v-model="project.name"
-          />
-          <small>Start date</small>
-          <b-input 
-            class="form-control" 
-            required
-            type="date"
-            v-model="project.startDate"
-          />
-          <small>End date</small>
-          <b-input 
-            class="form-control" 
-            type="date"
-            v-model="project.endDate"
-          />
-          <small>Description</small>
-          <b-textarea 
-            class="form-control" 
-            placeholder="Project description" 
-            type="text"
-            rows="6"
-            v-model="project.description"
-          />
-          <b-button
-            class="form-control"
-            type="submit"
-            primary
-          >Submit
-          </b-button>
-      </b-form>
-      <div v-if="showError" class="project-creation-error">
-        Creating a project failed because:
-        <ApiErrorDetailsPanel :errorDetails="errorDetails" />
-      </div>
+    <h3 style="text-align: center">
+      {{ editableProject ? 'Edit project' : 'Add a new project' }}
+      <span @click="showProjectForm = !showProjectForm">
+        <i
+          v-if="!showProjectForm"
+          class="fa fa-chevron-down"
+        />
+        <i
+          v-else
+          class="fa fa-chevron-up"
+        />
+      </span>
+    </h3>
+    <b-form
+      v-if="showProjectForm"
+      id="project_form"
+      class="animated fadeIn"
+      @submit="onSubmit"
+    >
+      <small>Project code</small>
+      <b-input
+        v-model="project.code"
+        placeholder="Project code"
+        required
+        type="number"
+        min="0"
+        max="99999"
+      />
+      <small>Project name</small>
+      <b-input
+        v-model="project.name"
+        placeholder="Project name"
+        required
+        type="text"
+      />
+      <small>Start date</small>
+      <b-input
+        v-model="project.startDate"
+        class="form-control"
+        required
+        type="date"
+      />
+      <small>End date</small>
+      <b-input
+        v-model="project.endDate"
+        class="form-control"
+        type="date"
+      />
+      <small>Description</small>
+      <b-textarea
+        v-model="project.description"
+        class="form-control"
+        placeholder="Project description"
+        type="text"
+        rows="6"
+      />
+      <b-button
+        class="form-control"
+        type="submit"
+        primary
+      >Submit
+      </b-button>
+    </b-form>
+    <div
+      v-if="showError"
+      class="project-creation-error"
+    >
+      Creating a project failed because:
+      <ApiErrorDetailsPanel :error-details="errorDetails" />
+    </div>
   </div>
 </template>
 <script>
@@ -63,6 +77,12 @@ import { mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
 export default {
   name: 'ProjectForm',
+  components: {
+    ApiErrorDetailsPanel
+  },
+  props: {
+    editableProject: Object
+  },
   data () {
     return {
       showProjectForm: false,
@@ -71,8 +91,12 @@ export default {
       project: {}
     }
   },
-  props: {
-    editableProject: Object
+  mounted () {
+    if (this.editableProject) {
+      this.project = this.editableProject
+      this.project.endDate = new Date(this.editableProject.endDate).toISOString().substring(0, 10)
+      this.project.startDate = new Date(this.editableProject.startDate).toISOString().substring(0, 10)
+    }
   },
   methods: {
     ...mapActions([
@@ -110,16 +134,6 @@ export default {
           })
       }
     }
-  },
-  mounted () {
-    if (this.editableProject) {
-      this.project = this.editableProject
-      this.project.endDate = new Date(this.editableProject.endDate).toISOString().substring(0, 10)
-      this.project.startDate = new Date(this.editableProject.startDate).toISOString().substring(0, 10)
-    }
-  },
-  components: {
-    ApiErrorDetailsPanel
   }
 }
 </script>

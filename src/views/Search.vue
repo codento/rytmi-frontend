@@ -1,120 +1,141 @@
 <template>
-  <div class="animated fadeIn search-container">
-    <b-col class="col-md-13">
-      <div class="search-bar" id="search">
-        <h2>Find people</h2>
-        <input class="form-control" placeholder="Filter by name" v-model="param" />
-        <b-row class="search-options">
-          <b-col class="search-options-item search-tag-dropdown col-md-4 col-12">
-            <small>Filter:</small><br />
-            <b-dropdown id="ddown1" text="Add skill filters:">
-              <b-dropdown-item-button v-for="skill in skillsNotIn(active)" :key="skill.id" @click="addToSearch(skill)">
-                {{skill.name}}
-              </b-dropdown-item-button>
-            </b-dropdown>
-          </b-col>
-          <b-col class="search-options-item search-bar-sort col-md-4 col-12">
-            <small>Sort:</small><br />
-            <b-form-radio-group id="btnradios" buttons v-model='selected' :options='options' name='radioBtnStacked' />
+  <div class="animated fadeIn">
+    <h2>Profiles</h2>
+    <b-row id="search">
+      <b-col>
+        <b-row class="search-item">
+          <b-col>
+            <b-form-input
+              v-model="nameFilter"
+              type="text"
+              placeholder="Filter by name"
+            />
           </b-col>
         </b-row>
-        <div class="search-tag-container" id="active">
-          <ul>
-            <li @click="removeFromSearch(skill)" v-for='skill in active' class="active remove" :key="skill.name">
-              <a class="remove" >&times;</a> {{skill.name}}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </b-col>
-    <b-col class="col-md-12" style="float:right">
-      <Results :param='param' :selected='selected ' :active='active'></Results>
-    </b-col>
+        <b-row class="search-item">
+          <b-col>
+            <b-dropdown
+              text="Add skill filters:"
+            >
+              <b-dropdown-item-button
+                v-for="skill in selectableSkills"
+                :key="skill.id"
+                @click="addToSearch(skill)"
+              >
+                {{ skill.name }}
+              </b-dropdown-item-button>
+            </b-dropdown>
+            <ul>
+              <li
+                v-for="skill in skillFilters"
+                :key="skill.name"
+                class="skillFilter"
+                @click="removeFromSearch(skill)"
+              >
+                &times; {{ skill.name }}
+              </li>
+            </ul>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col class="col-sm-2">
+            <small>Not utilized on</small>
+            <b-input
+              id="utilization-filter-date"
+              v-model="utilizationDateFilter"
+              class="form-control"
+              type="date"
+            />
+          </b-col>
+          <b-col class="col-sm-10">
+            <b-button
+              variant="primary"
+              class="position-bottom"
+              @click="clearUtilizationDateFilter"
+            >Clear date</b-button>
+          </b-col>
+        </b-row>
+      </b-col>
+    </b-row>
+    <Results
+      :name-filter="nameFilter"
+      :skill-filters="skillFilters"
+      :utilization-date-filter="utilizationDateFilter"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { Results } from '../components/Search'
+import _ from 'lodash'
 
 export default {
   name: 'Search',
+  components: {
+    Results
+  },
   data () {
     return {
-      param: '',
-      selected: 'knows',
-      options: [
-        { text: 'Skills', value: 'knows' },
-        { text: 'Willingness', value: 'wantsTo' }
-      ],
-      active: []
+      nameFilter: '',
+      skillFilters: [],
+      utilizationDateFilter: ''
     }
   },
   computed: {
     ...mapGetters([
       'skills',
-      'skillsNotIn'
-    ])
-  },
-  methods: {
-    addToSearch: function (skill) {
-      this.active.push(skill)
-    },
-    removeFromSearch: function (skill) {
-      this.active = this.active.filter(el => (el.id !== skill.id))
+      'skillName'
+    ]),
+    selectableSkills () {
+      const currentSkills = this.skillFilters.map(skill => skill.id)
+      return _(this.skills)
+        .filter(skill => !currentSkills.includes(skill.id))
+        .sortBy(skill => this.skillName(skill.id))
+        .value()
     }
   },
   mounted () {
     document.title = 'Rytmi - Search'
   },
-  components: {
-    Results
+  methods: {
+    addToSearch: function (skill) {
+      const skills = this.skillFilters.slice(0)
+      skills.push(skill)
+      this.skillFilters = skills
+    },
+    removeFromSearch: function (skill) {
+      this.skillFilters = this.skillFilters.filter(el => (el.id !== skill.id))
+    },
+    clearUtilizationDateFilter () {
+      this.utilizationDateFilter = ''
+    }
   }
 }
 </script>
 
 <style scoped>
-input {
-  width: 100%;
+#search {
+    padding: 1em;
+    min-height: 10em;
 }
 ul {
   list-style-type: none;
 }
-.active {
+.skillFilter {
   display: inline-block;
   border-radius: 10px;
   padding: .5vw;
   margin: .1vw;
   background-color: orange;
-}
-#active {
-  margin-top: 1vw;
-}
-#active ul {
-  padding: 0;
-}
-.remove {
   cursor: pointer;
 }
-img {
-  object-fit: contain;
-  margin-left: 10px
+.search-item {
+  width: 100%;
+  padding: 0.5em 0;
 }
-.search-container {
-    min-height: 60vh;
-}
-.search-bar {
-    padding: 1em;
-    min-height: 15em;
-}
-.search-options {
-    width: 100%;
-    padding: 1em 0;
-    display: flex;
-    flex-wrap: wrap;
-}
-.search-tag-dropdown {
-    width: 100%;
-
+.position-bottom {
+  position: absolute;
+  bottom: 0;
 }
 </style>

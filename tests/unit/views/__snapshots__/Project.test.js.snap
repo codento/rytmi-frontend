@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Project.vue Template is correct 1`] = `
+<div>
+  <div
+    class="animated fadeIn project-container col-sm-12 col-md-7"
+  >
+    <brow-stub
+      tag="div"
+    >
+      <bcol-stub
+        class="project-details"
+        tag="div"
+      >
+        <b>
+          50
+        </b>
+         
+        <h1>
+          Project Foo
+        </h1>
+         
+        <div
+          class="detail-container"
+        >
+          <span
+            class="detail detail-start"
+          >
+            <small>
+              Start date
+            </small>
+            <br />
+             
+            <b>
+              <dateformatter-stub
+                date="2018-01-01"
+                format="DD.MM.YYYY"
+              />
+            </b>
+          </span>
+           
+          <span
+            class="detail detail-end"
+          >
+            <small>
+              End date
+            </small>
+            <br />
+             
+            <b>
+              <dateformatter-stub
+                date="2018-05-01"
+                format="DD.MM.YYYY"
+              />
+            </b>
+          </span>
+           
+          <span
+            class="detail members"
+          >
+            <small>
+              Consultants
+            </small>
+            <br />
+             
+            <b>
+              1
+            </b>
+          </span>
+        </div>
+         
+        <p>
+          <small>
+            Description
+          </small>
+          <br />
+          
+          Foo Bar
+        
+        </p>
+      </bcol-stub>
+    </brow-stub>
+     
+    <brow-stub
+      tag="div"
+    >
+      <bcol-stub
+        class="project-members"
+        tag="div"
+      >
+        <projectmembertable-stub
+          members="[object Object]"
+        />
+      </bcol-stub>
+    </brow-stub>
+     
+    <hr />
+     
+    <projectform-stub
+      editableproject="[object Object]"
+    />
+     
+    <hr />
+     
+    <div>
+      <h3
+        class="project-profile-form-header"
+      >
+        Add a consultant
+        
+        <i
+          class="fa fa-chevron-down"
+        />
+      </h3>
+       
+      <!---->
+    </div>
+  </div>
+</div>
+`;

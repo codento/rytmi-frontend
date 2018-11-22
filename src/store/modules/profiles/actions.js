@@ -16,8 +16,9 @@ export const actions = {
       getProfiles()
         .then(response => {
           commit(types.FETCH_PROFILES, normalize(response.data, [profile]).entities.profiles)
+          resolve()
         })
-        .catch(err => console.log(err))
+        .catch(err => reject(err))
     })
   },
   fetchProfileSkills ({ commit, state }) {
@@ -25,8 +26,9 @@ export const actions = {
       getProfileSkills()
         .then(response => {
           commit(types.FETCH_PROFILESKILLS, response.data)
+          resolve()
         })
-        .catch(err => console.log(err))
+        .catch(err => reject(err))
     })
   },
   updateProfile ({ commit, state }, data) {
@@ -34,12 +36,13 @@ export const actions = {
       alterProfile(data)
         .then(response => {
           commit(types.UPDATE_PROFILE, response.data)
-        }).catch(function (error) {
-          reject(error)
+          resolve(response.data)
+        }).catch(error => {
+          reject(error.response.data.error)
         })
     })
   },
-  addProfileSkill ({commit, state}, data) {
+  addProfileSkill ({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       newProfileSkill(data)
         .then(response => {
@@ -49,7 +52,7 @@ export const actions = {
         })
     })
   },
-  removeProfileSkill ({commit, state}, data) {
+  removeProfileSkill ({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       deleteProfileSkill(data)
         .then(response => {
@@ -59,7 +62,7 @@ export const actions = {
         })
     })
   },
-  updateProfileSkill ({commit, state}, data) {
+  updateProfileSkill ({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       alterProfileSkill(data)
         .then(response => {

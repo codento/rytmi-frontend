@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="members">
-      <b-table 
+      <b-table
         :items="members"
         :fields="fields"
         hover
@@ -12,44 +12,100 @@
         <template slot="table-caption">
           Consultants (click value to edit)
         </template>
-        <template slot="profileId" slot-scope="profileId">
-          <span class="clickable" @click.stop="openProfile(profileId.value)">
-            {{printMember(profileId.value)}}
+        <template
+          slot="profileId"
+          slot-scope="profileId"
+        >
+          <span
+            class="clickable"
+            @click.stop="openProfile(profileId.value)"
+          >
+            {{ printMember(profileId.value) }}
           </span>
         </template>
-        <template slot="startDate" slot-scope="element">
-          <span class="clickable" @click.stop="openEditModal(element)">
+        <template
+          slot="startDate"
+          slot-scope="element"
+        >
+          <span
+            class="clickable"
+            @click.stop="openEditModal(element)"
+          >
             <DateFormatter :date="element.value" />
           </span>
         </template>
-        <template slot="endDate" slot-scope="element">
-          <span class="clickable" @click.stop="openEditModal(element)">
+        <template
+          slot="endDate"
+          slot-scope="element"
+        >
+          <span
+            class="clickable"
+            @click.stop="openEditModal(element)"
+          >
             <DateFormatter :date="element.value" />
           </span>
         </template>
-        <template slot="workPercentage" slot-scope="element">
-          <span class="clickable" @click.stop="openEditModal(element)">
-            {{element.value}} %
+        <template
+          slot="workPercentage"
+          slot-scope="element"
+        >
+          <span
+            class="clickable"
+            @click.stop="openEditModal(element)"
+          >
+            {{ element.value }} %
           </span>
         </template>
-        <template slot="remove" slot-scope="remove">
-          <b-btn size="sm" class="mr-1" variant="danger" @click.stop="removeMember(remove.item)">Remove</b-btn>
+        <template
+          slot="remove"
+          slot-scope="remove"
+        >
+          <b-btn
+            size="sm"
+            class="mr-1"
+            variant="danger"
+            @click.stop="removeMember(remove.item)"
+          >Remove</b-btn>
         </template>
       </b-table>
     </div>
     <div v-else>
       No members added yet
     </div>
-    <b-modal ref="projectProfileEditModal" title="ASD" hide-footer hide-header>
-      <h3>{{printMember(editedProjectProfile.profileId)}}</h3>
+    <b-modal
+      ref="projectProfileEditModal"
+      title="ASD"
+      hide-footer
+      hide-header
+    >
+      <h3>{{ printMember(editedProjectProfile.profileId) }}</h3>
       <small>Start date</small>
-      <b-input type="date" v-model="editedProjectProfile.startDate" />
+      <b-input
+        v-model="editedProjectProfile.startDate"
+        type="date"
+      />
       <small>End date</small>
-      <b-input type="date" v-model="editedProjectProfile.endDate" />
+      <b-input
+        v-model="editedProjectProfile.endDate"
+        type="date"
+      />
       <small>Utilization %</small>
-      <b-input type="number" :min=0 :max=100 v-model="editedProjectProfile.workPercentage" />
-      <b-btn class="modal-btn" @click="callUpdateProfileProjectAction()">Save</b-btn>
-      <b-btn class="modal-btn" @click="closeEditModal()">Cancel</b-btn>
+      <b-input
+        v-model="editedProjectProfile.workPercentage"
+        :min="0"
+        :max="100"
+        type="number"
+      />
+      <b-btn
+        id="save"
+        class="modal-btn"
+        @click="callUpdateProfileProjectAction()"
+      >Save</b-btn>
+      <b-btn
+        id="cancel"
+        class="modal-btn"
+        @click="closeEditModal()"
+      >Cancel</b-btn>
     </b-modal>
   </div>
 </template>
@@ -58,6 +114,9 @@ import { mapGetters, mapActions } from 'vuex'
 import DateFormatter from '../helpers/DateFormatter.vue'
 export default {
   name: 'ProjectMemberTable',
+  components: {
+    DateFormatter
+  },
   props: {
     members: Array
   },
@@ -74,9 +133,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'profileById'
-    ])
+    ...mapGetters(['profileById'])
   },
   methods: {
     ...mapActions([
@@ -92,13 +149,13 @@ export default {
       }
     },
     openProfile (profileId) {
-      this.$router.push({name: 'profile', params: { id: profileId }})
+      this.$router.push({ name: 'profile', params: { id: profileId } })
     },
     removeMember (profileProject) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {
         this.removeProfileProject(profileProject)
-          .then((reponse) => {
+          .then(() => {
             this.$toasted.global.rytmi_success({
               message: 'Member removed!'
             })
@@ -133,9 +190,6 @@ export default {
           })
         })
     }
-  },
-  components: {
-    DateFormatter
   }
 }
 </script>
@@ -150,4 +204,3 @@ button {
   cursor: pointer;
 }
 </style>
-

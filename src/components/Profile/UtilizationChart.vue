@@ -1,7 +1,13 @@
 <template>
   <div>
-    <loading v-if="profileProjectsStatus !== 'success'"></loading>
-    <line-chart v-else class="utilizationChart" :style="style" :chartData="chartData" :options="chartOptions"></line-chart>
+    <loading v-if="profileProjectsStatus !== 'success'" />
+    <line-chart
+      v-else
+      :style="style"
+      :chart-data="chartData"
+      :options="chartOptions"
+      class="utilizationChart"
+    />
   </div>
 </template>
 
@@ -12,6 +18,9 @@ import moment from 'moment'
 
 export default {
   name: 'UtilizationChart',
+  components: {
+    LineChart
+  },
   props: {
     projects: Array,
     height: {
@@ -30,13 +39,8 @@ export default {
   data () {
     return {}
   },
-  components: {
-    LineChart
-  },
   computed: {
-    ...mapGetters([
-      'profileProjectsStatus'
-    ]),
+    ...mapGetters(['profileProjectsStatus']),
     minDate () {
       return moment()
     },
@@ -53,37 +57,41 @@ export default {
         },
         maintainAspectRatio: false,
         scales: {
-          xAxes: [{
-            type: 'time',
-            time: {
-              max: this.maxDate,
-              displayFormats: {
-                month: 'M'
+          xAxes: [
+            {
+              type: 'time',
+              time: {
+                max: this.maxDate,
+                displayFormats: {
+                  month: 'M'
+                },
+                unit: 'month',
+                stepSize: 1,
+                tooltipFormat: 'D.M.YY'
               },
-              unit: 'month',
-              stepSize: 1,
-              tooltipFormat: 'D.M.YY'
-            },
-            gridLines: {
-              display: true
-            },
-            ticks: {
+              gridLines: {
+                display: true
+              },
+              ticks: {
+                display: true
+              }
+            }
+          ],
+          yAxes: [
+            {
+              type: 'linear',
+              ticks: {
+                min: 0,
+                max: 100,
+                callback: (value) => {
+                  if (value === 0 || value === 100) {
+                    return `${value} %`
+                  }
+                }
+              },
               display: true
             }
-          }],
-          yAxes: [{
-            type: 'linear',
-            ticks: {
-              min: 0,
-              max: 100,
-              callback: (value) => {
-                if (value === 0 || value === 100) {
-                  return `${value} %`
-                }
-              }
-            },
-            display: true
-          }]
+          ]
         },
         legend: {
           display: false
@@ -108,12 +116,12 @@ export default {
         addDate(moment(project.startDate))
         addDate(moment(project.endDate).add(1, 'day'))
       })
-      const sortetDates = Array.from(dates).sort((a, b) => {
+      const sortedDates = Array.from(dates).sort((a, b) => {
         return a - b
       })
 
       const values = new Array(dates.size).fill(0)
-      sortetDates.map((date, index) => {
+      sortedDates.map((date, index) => {
         this.projects.forEach(project => {
           if (moment(project.startDate) <= date && (project.endDate == null || date < moment(project.endDate))) {
             values[index] += project.workPercentage
@@ -121,17 +129,19 @@ export default {
         })
       })
 
-      sortetDates.push(this.maxDate)
+      sortedDates.push(this.maxDate)
       values.push(values[values.length - 1])
 
       return {
-        labels: sortetDates,
-        datasets: [{
-          label: 'Utilization',
-          backgroundColor: this.fillColor,
-          steppedLine: true,
-          data: values
-        }]
+        labels: sortedDates,
+        datasets: [
+          {
+            label: 'Utilization',
+            backgroundColor: this.fillColor,
+            steppedLine: true,
+            data: values
+          }
+        ]
       }
     }
   }

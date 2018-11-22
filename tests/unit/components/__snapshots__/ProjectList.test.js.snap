@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProjectList.vue Template is correct 1`] = `
+<bcontainer-stub
+  tag="div"
+>
+  <h2>
+    Projects
+  </h2>
+   
+  <binput-stub
+    placeholder="Filter projects (by name or project code)"
+    type="text"
+    value=""
+  />
+   
+  <btable-stub
+    apiurl=""
+    currentpage="1"
+    emptyfilteredtext="There are no records matching your request"
+    emptytext="There are no records to show"
+    fields="[object Object],[object Object]"
+    fixed="true"
+    footvariant=""
+    headvariant=""
+    id="project-table"
+    items=""
+    labelsortasc="Click to sort Ascending"
+    labelsortdesc="Click to sort Descending"
+    perpage="0"
+    sortdirection="asc"
+    striped="true"
+    value=""
+  />
+</bcontainer-stub>
+`;

@@ -1,22 +1,38 @@
 <template>
-  <div class="animated fadeIn container" style="margin-top: 24px">
-    <b-jumbotron bg-variant="white" text-variant="primary" border-variant="dark">
+  <div
+    class="animated fadeIn container"
+    style="margin-top: 24px"
+  >
+    <b-jumbotron
+      v-if="!isAuthenticated"
+      bg-variant="white"
+      text-variant="primary"
+      border-variant="dark"
+    >
       <span slot="header">Codento Rytmi</span>
-      <template slot="lead" v-if="!isAuthenticated">
+      <template
+        slot="lead"
+      >
         Please Sign in
       </template>
-      <template slot="lead" v-else>
-         Ready to Rock ’n’ Roll
-      </template>
     </b-jumbotron>
+    <dashboard v-if="isAuthenticated">
+      <template slot="header">
+        Codento Rytmi
+      </template>
+    </dashboard>
   </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
+import Dashboard from '@/components/Dashboard'
 
 export default {
-  name: 'login',
+  name: 'Login',
+  components: {
+    Dashboard
+  },
   computed: {
     ...mapGetters(['isAuthenticated'])
   },

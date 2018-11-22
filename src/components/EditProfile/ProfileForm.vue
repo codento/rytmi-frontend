@@ -1,95 +1,113 @@
 <template>
-  <b-form @submit="onSubmit" @reset="onReset">
-    <div v-if='showError'>
-      <b-alert show variant="warning">Päivitys epäonnistui</b-alert>
+  <b-form
+    @submit="onSubmit"
+    @reset="onReset"
+  >
+    <div v-if="showError">
+      <b-alert
+        show
+        variant="warning"
+      >
+        Update failed
+        <ApiErrorDetailsPanel :error-details="errorDetails" />
+      </b-alert>
     </div>
     <b-form-group
-      horizontal
       id="firstNameLabel"
+      horizontal
       label="First name:"
-      label-for="firstName">
+      label-for="firstName"
+    >
       <b-form-input
         id="firstNameInput"
-        type="text"
         v-model="editedProfile.firstName"
+        type="text"
         required
-      >
-      </b-form-input>
+      />
     </b-form-group>
     <b-form-group
-      horizontal
       id="lastNameLabel"
+      horizontal
       label="Last name:"
-      label-for="lastNameInput">
+      label-for="lastNameInput"
+    >
       <b-form-input
         id="lastNameInput"
-        type="text"
         v-model="editedProfile.lastName"
+        type="text"
         required
-      >
-      </b-form-input>
+      />
     </b-form-group>
     <b-form-group
-      horizontal
       id="titleLabel"
+      horizontal
       label="Title:"
-      label-for="titleInput">
+      label-for="titleInput"
+    >
       <b-form-input
         id="titleInput"
-        type="text"
         v-model="editedProfile.title"
-        placeholder="Enter title">
-      </b-form-input>
+        type="text"
+        placeholder="Enter title"
+      />
     </b-form-group>
     <b-form-group
-      horizontal
       id="emailLabel"
+      horizontal
       label="Email:"
-      label-for="emailInput">
+      label-for="emailInput"
+    >
       <b-form-input
         id="emailInput"
-        type="email"
         v-model="editedProfile.email"
+        type="email"
         required
-      >
-      </b-form-input>
+      />
     </b-form-group>
     <b-form-group
       id="PhonenumberLabel"
       horizontal
       label="Phone number:"
-      label-for="PhonenumberInput">
+      label-for="PhonenumberInput"
+    >
       <b-form-input
         id="PhonenumberInput"
-        type='tel'
         v-model="editedProfile.phone"
+        type="tel"
         required
-      >
-      </b-form-input>
-    </b-form-group >
+      />
+    </b-form-group>
     <b-form-group
       id="description"
       horizontal
       label="Description:"
-      label-for="descriptionInput">
+      label-for="descriptionInput"
+    >
       <b-form-input
         id="descriptionInput"
+        v-model="editedProfile.description"
         :rows="3"
         type="text"
-        v-model="editedProfile.description"
-      >
-      </b-form-input>
+      />
     </b-form-group>
-    <b-button type="submit" variant="primary">Submit</b-button>
-    <b-button type="reset" variant="danger">Reset</b-button>
+    <b-button
+      type="submit"
+      variant="primary"
+    >Submit</b-button>
+    <b-button
+      type="reset"
+      variant="danger"
+    >Reset</b-button>
   </b-form>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 export default {
   name: 'ProfileForm',
+  components: { ApiErrorDetailsPanel },
   props: {
     'profile': Object
   },
@@ -97,34 +115,35 @@ export default {
     return {
       show: true,
       showError: false,
+      errorDetails: [],
       editedProfile: Object.assign({}, this.profile)
     }
   },
   methods: {
-    ...mapActions([
-      'createProfile',
-      'updateProfile'
-    ]),
-    onSubmit (evt) {
+    ...mapActions(['updateProfile']),
+    async onSubmit (evt) {
       evt.preventDefault()
+      this.errorDetails = []
       this.showError = false
-      this.updateProfile(this.editedProfile)
-        .then(err => {
-          this.error = !this.showError
-          console.log(err) // Error: "It broke"
-        })
-      this.redirect()
+      try {
+        await this.updateProfile(this.editedProfile)
+        this.redirect()
+      } catch (error) {
+        this.showError = true
+        this.errorDetails = error.details
+      }
     },
     onReset (evt) {
       evt.preventDefault()
       /* Trick to reset/clear native browser form validation state */
       this.show = false
       this.showError = false
+      this.errorDetails = []
       this.$nextTick(() => { this.show = true })
       this.redirect()
     },
     redirect () {
-      this.$router.push('/profile/' + this.$route.params.id)
+      this.$router.push('/profile/' + this.profile.id)
     }
   }
 }

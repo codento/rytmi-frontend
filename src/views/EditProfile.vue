@@ -1,14 +1,14 @@
 <template>
   <div class="animated fadeIn profile-editor col-sm-12 col-md-10">
     <h1>Edit Profile</h1>
-    <hr />
+    <hr>
     <h1>Basic Details</h1>
-    <hr />
+    <hr>
     <template v-if="profile">
       <ProfileForm :profile="profile" />
       <EditLinks :profile="profile" />
-      <edit-skills :profileId="profile.id" />
-      <edit-projects :profileId="profile.id" />
+      <edit-skills :profile-id="profile.id" />
+      <edit-projects :profile-id="profile.id" />
     </template>
   </div>
 </template>
@@ -25,19 +25,20 @@ import store from '../store'
 
 export default {
   name: 'EditProfile',
-  props: [
-    'profileId'
-  ],
   components: {
     ProfileForm,
     EditLinks,
     EditSkills,
     EditProjects
   },
+  props: {
+    profileId: {
+      type: String,
+      required: true
+    }
+  },
   computed: {
-    ...mapGetters([
-      'profileById'
-    ]),
+    ...mapGetters(['profileById']),
     profile () {
       return this.profileById(this.profileId)
     }

@@ -1,17 +1,11 @@
-<template />
+<template>
+  <div />
+</template>
 
 <script>
-import {mapActions} from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
-  methods: {
-    ...mapActions([
-      'fetchProfiles',
-      'fetchSkills',
-      'fetchProfileSkills',
-      'fetchProjects'
-    ])
-  },
   created () {
     this.$nextTick(() => {
       this.fetchProfiles()
@@ -20,6 +14,14 @@ export default {
       this.fetchProjects()
       this.$router.push(this.$route.query.redirect || '/')
     })
+  },
+  methods: {
+    ...mapActions([
+      'fetchProfiles',
+      'fetchSkills',
+      'fetchProfileSkills',
+      'fetchProjects'
+    ])
   }
 }
 </script>
