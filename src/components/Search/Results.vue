@@ -30,7 +30,7 @@
 import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
-import { parse, isValid, format } from 'date-fns'
+import { parse, isValid, startOfDay } from 'date-fns'
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
 
 const sortByName = (array) => sortBy(array, 'profile.firstName')
@@ -107,19 +107,14 @@ export default {
       return profilesToFilter.filter(profile => difference(skillIds, profile.skills.map(skill => skill.skillId)).length === 0)
     },
     getProfilesFilteredByUtilization (profilesToFilter, utilizationDateFilter) {
+      const getProjectsAtGivenTime = (projects, date) => projects.filter(project => getOnlyDateFromFullDate(project.startDate) <= date && getOnlyDateFromFullDate(project.endDate) >= date)
+      const getOnlyDateFromFullDate = (date) => startOfDay(parse(date))
       const parsedDate = getOnlyDateFromFullDate(utilizationDateFilter)
+
       if (isValid(parsedDate)) {
         return profilesToFilter.filter(profile => getProjectsAtGivenTime(profile.projects.filter(project => project.workPercentage > 0), parsedDate).length === 0)
       }
       return profilesToFilter
-
-      function getProjectsAtGivenTime (projects, date) {
-        return projects.filter(project => getOnlyDateFromFullDate(project.startDate) <= date && getOnlyDateFromFullDate(project.endDate) >= date)
-      }
-
-      function getOnlyDateFromFullDate (date) {
-        return parse(format(parse(date), 'YYYY-MM-DD'))
-      }
     },
     mapSkillsAndProjectsToProfiles () {
       // First, get profiles, filtered by name
