@@ -11,7 +11,8 @@
     >
       <span slot="header">Codento Rytmi</span>
       <template
-        slot="lead">
+        slot="lead"
+      >
         Please Sign in
       </template>
     </b-jumbotron>

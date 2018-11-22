@@ -1,13 +1,13 @@
 <template>
- <b-container>
-   <b-row>
-   <b-col><SkillForm /></b-col>
-   </b-row>
+  <b-container>
     <b-row>
-   <b-col>
-   <SkillsList /></b-col>
+      <b-col><SkillForm /></b-col>
     </b-row>
- </b-container>
+    <b-row>
+      <b-col>
+        <SkillsList /></b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>

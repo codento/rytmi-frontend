@@ -34,8 +34,8 @@
       >
         <b-form-textarea
           id="descriptionInput"
-          :rows="3"
           v-model="profileSkill.description"
+          :rows="3"
           type="text"
           placeholder="Short description"
         />
@@ -132,9 +132,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'addProfileSkill'
-    ]),
+    ...mapActions(['addProfileSkill']),
     onSubmit (evt) {
       evt.preventDefault()
       this.profileSkill.profileId = this.profileId

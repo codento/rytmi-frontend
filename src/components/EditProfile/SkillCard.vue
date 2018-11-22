@@ -31,7 +31,7 @@
       >
         <b>Knows</b>:
       </b-col>
-      <b-col class="col-mb-9" >
+      <b-col class="col-mb-9">
         <b-progress
           :value="skill.knows*20"
           height="0.9rem"

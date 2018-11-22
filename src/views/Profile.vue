@@ -1,9 +1,9 @@
 <template>
   <b-container class="animated fadeIn profile">
-    <loading v-if="!profile"/>
+    <loading v-if="!profile" />
     <b-row v-else>
       <b-col class="col-md-6 col-sm-12 col-12">
-        <UserProfileCard :profile="profile"/>
+        <UserProfileCard :profile="profile" />
       </b-col>
       <b-col class="col-md-6 col-sm-12 col-12">
         <b-card id="proficiency">
@@ -37,16 +37,16 @@
           </b-row>
         </b-card>
         <b-card header="Projects">
-          <loading v-if="!profileProjects"/>
+          <loading v-if="!profileProjects" />
           <ProjectRow
             v-for="profileProject in profileProjects"
             v-else
-            :profile-project="profileProject"
             :key="profileProject.id"
+            :profile-project="profileProject"
           />
         </b-card>
         <b-card header="Utilization">
-          <loading v-if="!profileProjects"/>
+          <loading v-if="!profileProjects" />
           <UtilizationChart
             v-else
             :projects="profileProjects"

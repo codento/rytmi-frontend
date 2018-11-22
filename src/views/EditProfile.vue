@@ -1,9 +1,9 @@
 <template>
   <div class="animated fadeIn profile-editor col-sm-12 col-md-10">
     <h1>Edit Profile</h1>
-    <hr >
+    <hr>
     <h1>Basic Details</h1>
-    <hr >
+    <hr>
     <template v-if="profile">
       <ProfileForm :profile="profile" />
       <EditLinks :profile="profile" />
@@ -38,9 +38,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'profileById'
-    ]),
+    ...mapGetters(['profileById']),
     profile () {
       return this.profileById(this.profileId)
     }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <loading v-if="profileProjectsStatus !== 'success'"/>
+    <loading v-if="profileProjectsStatus !== 'success'" />
     <line-chart
       v-else
       :style="style"
@@ -40,9 +40,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters([
-      'profileProjectsStatus'
-    ]),
+    ...mapGetters(['profileProjectsStatus']),
     minDate () {
       return moment()
     },
@@ -59,37 +57,41 @@ export default {
         },
         maintainAspectRatio: false,
         scales: {
-          xAxes: [{
-            type: 'time',
-            time: {
-              max: this.maxDate,
-              displayFormats: {
-                month: 'M'
+          xAxes: [
+            {
+              type: 'time',
+              time: {
+                max: this.maxDate,
+                displayFormats: {
+                  month: 'M'
+                },
+                unit: 'month',
+                stepSize: 1,
+                tooltipFormat: 'D.M.YY'
               },
-              unit: 'month',
-              stepSize: 1,
-              tooltipFormat: 'D.M.YY'
-            },
-            gridLines: {
-              display: true
-            },
-            ticks: {
+              gridLines: {
+                display: true
+              },
+              ticks: {
+                display: true
+              }
+            }
+          ],
+          yAxes: [
+            {
+              type: 'linear',
+              ticks: {
+                min: 0,
+                max: 100,
+                callback: (value) => {
+                  if (value === 0 || value === 100) {
+                    return `${value} %`
+                  }
+                }
+              },
               display: true
             }
-          }],
-          yAxes: [{
-            type: 'linear',
-            ticks: {
-              min: 0,
-              max: 100,
-              callback: (value) => {
-                if (value === 0 || value === 100) {
-                  return `${value} %`
-                }
-              }
-            },
-            display: true
-          }]
+          ]
         },
         legend: {
           display: false
@@ -132,12 +134,14 @@ export default {
 
       return {
         labels: sortedDates,
-        datasets: [{
-          label: 'Utilization',
-          backgroundColor: this.fillColor,
-          steppedLine: true,
-          data: values
-        }]
+        datasets: [
+          {
+            label: 'Utilization',
+            backgroundColor: this.fillColor,
+            steppedLine: true,
+            data: values
+          }
+        ]
       }
     }
   }

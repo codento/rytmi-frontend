@@ -4,11 +4,13 @@
       <b-dropdown-item
         v-for="option in options"
         :key="option.value"
-        @click="selectValue(option.value)">
+        @click="selectValue(option.value)"
+      >
         <span
           v-if="isSelected(option.value)"
           class="cui-check"
-          aria-hidden="true"/>
+          aria-hidden="true"
+        />
         {{ option.text }}
       </b-dropdown-item>
     </b-dropdown>

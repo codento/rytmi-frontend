@@ -38,9 +38,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'projectFilter'
-    ]),
+    ...mapGetters(['projectFilter']),
     results () {
       const r = this.projectFilter(this.projectFilterTerm)
       return Object.values(r)

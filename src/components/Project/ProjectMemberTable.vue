@@ -91,9 +91,9 @@
       />
       <small>Utilization %</small>
       <b-input
+        v-model="editedProjectProfile.workPercentage"
         :min="0"
         :max="100"
-        v-model="editedProjectProfile.workPercentage"
         type="number"
       />
       <b-btn
@@ -133,9 +133,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'profileById'
-    ])
+    ...mapGetters(['profileById'])
   },
   methods: {
     ...mapActions([

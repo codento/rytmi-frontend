@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <h1>Proficiencies</h1>
-    <hr >
+    <hr>
     <b-row>
       <b-col class="col-12 col-md-7">
         <b-table
@@ -110,13 +110,11 @@
 import { mapActions, mapGetters } from 'vuex'
 import proficiencyDesc from '../../assets/proficiencyDesc'
 import SkillForm from './SkillForm'
-import SkillCard from './SkillCard'
 
 export default {
   name: 'EditSkills',
   components: {
-    SkillForm,
-    SkillCard
+    SkillForm
   },
   props: {
     'profileId': Number

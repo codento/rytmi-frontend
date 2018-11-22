@@ -9,7 +9,7 @@
         </div>
       </main>
     </div>
-    <AppFooter/>
+    <AppFooter />
   </div>
 </template>
 

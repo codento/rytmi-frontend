@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <h1>Projects</h1>
-    <hr >
+    <hr>
     <b-row>
       <b-col class="col-12 projects-table">
         <b-table
@@ -107,9 +107,7 @@ export default {
     ])
   },
   methods: {
-    ...mapActions([
-      'removeProfileProject'
-    ]),
+    ...mapActions(['removeProfileProject']),
     removePP (item) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {

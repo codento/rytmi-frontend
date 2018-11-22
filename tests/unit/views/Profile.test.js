@@ -1,11 +1,13 @@
 jest.mock('lodash', () => ({
   orderBy: jest.fn(() => {
-    return [{
-      name: 'Vue.js',
-      knows: 0,
-      wantsTo: 2,
-      id: 7
-    }]
+    return [
+      {
+        name: 'Vue.js',
+        knows: 0,
+        wantsTo: 2,
+        id: 7
+      }
+    ]
   })
 }))
 

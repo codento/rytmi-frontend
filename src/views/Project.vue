@@ -1,6 +1,6 @@
 <template>
   <div>
-    <loading v-if="!project"/>
+    <loading v-if="!project" />
     <div
       v-else
       class="animated fadeIn project-container col-sm-12 col-md-7"
@@ -11,20 +11,20 @@
           <h1>{{ project.name }}</h1>
           <div class="detail-container">
             <span class="detail detail-start">
-              <small>Start date</small><br >
+              <small>Start date</small><br>
               <b><DateFormatter :date="project.startDate" /></b>
             </span>
             <span class="detail detail-end">
-              <small>End date</small><br >
+              <small>End date</small><br>
               <b><DateFormatter :date="project.endDate" /></b>
             </span>
             <span class="detail members">
-              <small>Consultants</small><br >
+              <small>Consultants</small><br>
               <b v-if="members">{{ members.length }}</b>
             </span>
           </div>
           <p>
-            <small>Description</small><br >
+            <small>Description</small><br>
             {{ project.description }}
           </p>
         </b-col>
@@ -34,9 +34,9 @@
           <ProjectMemberTable :members="members" />
         </b-col>
       </b-row>
-      <hr >
+      <hr>
       <ProjectForm :editable-project="project" />
-      <hr >
+      <hr>
       <div>
         <h3
           class="project-profile-form-header"

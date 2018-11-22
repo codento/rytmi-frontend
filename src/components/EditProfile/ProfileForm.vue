@@ -6,7 +6,8 @@
     <div v-if="showError">
       <b-alert
         show
-        variant="warning">
+        variant="warning"
+      >
         Update failed
         <ApiErrorDetailsPanel :error-details="errorDetails" />
       </b-alert>
@@ -75,7 +76,7 @@
         type="tel"
         required
       />
-    </b-form-group >
+    </b-form-group>
     <b-form-group
       id="description"
       horizontal
@@ -84,8 +85,8 @@
     >
       <b-form-input
         id="descriptionInput"
-        :rows="3"
         v-model="editedProfile.description"
+        :rows="3"
         type="text"
       />
     </b-form-group>
@@ -119,9 +120,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'updateProfile'
-    ]),
+    ...mapActions(['updateProfile']),
     async onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []

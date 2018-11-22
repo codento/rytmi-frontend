@@ -147,9 +147,7 @@ export default {
     this.profileVisible = this.profileId === null
   },
   methods: {
-    ...mapActions([
-      'newProjectProfile'
-    ]),
+    ...mapActions(['newProjectProfile']),
     onSubmit (evt) {
       evt.preventDefault()
       this.newProjectProfile(this.profileProject)

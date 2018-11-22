@@ -1,21 +1,21 @@
 <template>
-  <div class="profile-details" >
+  <div class="profile-details">
     <div style="text-align: center;">
-      <img :src="profile.photoPath" >
+      <img :src="profile.photoPath">
     </div>
     <div style="text-align: center; color:#869fac">
-      <span class="profile-name"> {{ getNames }}</span><br >
-      <span class="profile-title" >{{ profile.title }}</span>
+      <span class="profile-name"> {{ getNames }}</span><br>
+      <span class="profile-title">{{ profile.title }}</span>
       <a
         v-for="account in profile.accounts"
+        :key="account.address"
         :class="getFAClass(account)"
         :href="account.address"
-        :key="account.address"
         style="padding: 4px;"
         class="fa"
       />
     </div>
-    <div >
+    <div>
       <div class="profileCardDetails profile-card-detail-row">
         {{ profile.email }}
       </div>
