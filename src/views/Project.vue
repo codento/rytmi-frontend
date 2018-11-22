@@ -94,17 +94,17 @@ export default {
     store.dispatch('fetchPPsOfProject', to.params.id)
     next()
   },
-  methods: {
-    // TODO: scroll to bottom when opening form
-    toggleProfileForm () {
-      this.profileFormOpen = !this.profileFormOpen
-    }
-  },
-  wathc: {
+  watch: {
     project: function (val, oldVal) {
       if (val) {
         document.title = 'Rytmi - ' + val.name
       }
+    }
+  },
+  methods: {
+    // TODO: scroll to bottom when opening form
+    toggleProfileForm () {
+      this.profileFormOpen = !this.profileFormOpen
     }
   }
 }

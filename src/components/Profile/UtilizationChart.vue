@@ -114,12 +114,12 @@ export default {
         addDate(moment(project.startDate))
         addDate(moment(project.endDate).add(1, 'day'))
       })
-      const sortetDates = Array.from(dates).sort((a, b) => {
+      const sortedDates = Array.from(dates).sort((a, b) => {
         return a - b
       })
 
       const values = new Array(dates.size).fill(0)
-      sortetDates.map((date, index) => {
+      sortedDates.map((date, index) => {
         this.projects.forEach(project => {
           if (moment(project.startDate) <= date && (project.endDate == null || date < moment(project.endDate))) {
             values[index] += project.workPercentage
@@ -127,11 +127,11 @@ export default {
         })
       })
 
-      sortetDates.push(this.maxDate)
+      sortedDates.push(this.maxDate)
       values.push(values[values.length - 1])
 
       return {
-        labels: sortetDates,
+        labels: sortedDates,
         datasets: [{
           label: 'Utilization',
           backgroundColor: this.fillColor,
