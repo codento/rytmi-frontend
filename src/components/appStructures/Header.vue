@@ -35,7 +35,7 @@
         v-else
         class="px-3"
       >
-        <b-dropdown text="Account">
+        <b-dropdown variant="light" text="Account">
           <b-dropdown-item :to="{ name: 'profile', params: { id: profileId } }">
             <i class="fa fa-user" /> My Profile
           </b-dropdown-item>
