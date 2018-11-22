@@ -1,13 +1,15 @@
 <template>
   <b-card
     class="addNew"
-    title="Add new">
+    title="Add new"
+  >
     <b-form @submit="onSubmit">
       <b-form-group
         id="skillLabel"
         vertical
         label="Skill:"
-        label-for="skill">
+        label-for="skill"
+      >
         <b-form-select
           id="skill"
           v-model="profileSkill.skillId"
@@ -19,7 +21,8 @@
           <template slot="first">
             <option
               :value="null"
-              disabled>-- Select skill --</option>
+              disabled
+            >-- Select skill --</option>
           </template>
         </b-form-select>
       </b-form-group>
@@ -27,13 +30,15 @@
         id="description"
         vertical
         label="Description:"
-        label-for="descriptionInput">
+        label-for="descriptionInput"
+      >
         <b-form-textarea
           id="descriptionInput"
-          :rows="3"
           v-model="profileSkill.description"
+          :rows="3"
           type="text"
-          placeholder="Short description"/>
+          placeholder="Short description"
+        />
       </b-form-group>
       <b-form-group
         id="knowsLabel"
@@ -64,18 +69,22 @@
         id="visibleInCVLabel"
         vertical
         label="Show in CV:"
-        label-for="visibleInCV">
+        label-for="visibleInCV"
+      >
         <input
           id="visibleInCV"
           v-model="profileSkill.visibleInCV"
-          type="checkbox">
+          type="checkbox"
+        >
       </b-form-group>
       <b-button
         type="submit"
-        variant="primary">Submit</b-button>
+        variant="primary"
+      >Submit</b-button>
       <b-button
         variant="danger"
-        @click="onReset">Clear</b-button>
+        @click="onReset"
+      >Clear</b-button>
     </b-form>
   </b-card>
 </template>
@@ -123,9 +132,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'addProfileSkill'
-    ]),
+    ...mapActions(['addProfileSkill']),
     onSubmit (evt) {
       evt.preventDefault()
       this.profileSkill.profileId = this.profileId

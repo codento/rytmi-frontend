@@ -3,11 +3,13 @@
     <template slot="header">
       <div class="h3 px-2">Skills <i
         id="skill-explanations-icon"
-        class="cui-info"/>
+        class="cui-info"
+      />
         <b-popover
           target="skill-explanations-icon"
           title="Skill level descriptions"
-          triggers="hover focus">
+          triggers="hover focus"
+        >
           <skill-explanations
             :know-desc="proficiencyDescriptions.knows"
             :want-desc="proficiencyDescriptions.wants"
@@ -23,7 +25,8 @@
     </template>
     <b-col
       cols="12"
-      md="6" >
+      md="6"
+    >
       <bar-chart
         :chart-data="barChartData"
         :options="barChartOptions"
@@ -31,7 +34,8 @@
     </b-col>
     <b-col
       cols="12"
-      md="6">
+      md="6"
+    >
       <radar-chart
         :chart-data="radarChartData"
         :options="radarChartOptions"
@@ -125,12 +129,14 @@ export default {
           display: false
         },
         scales: {
-          yAxes: [{
-            ticks: {
-              suggestedMin: 0,
-              suggestedMax: this.profileList.length / 2
+          yAxes: [
+            {
+              ticks: {
+                suggestedMin: 0,
+                suggestedMax: this.profileList.length / 2
+              }
             }
-          }]
+          ]
         }
       }
     },
