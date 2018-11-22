@@ -35,11 +35,20 @@
         v-else
         class="px-3"
       >
-        <b-dropdown variant="light" text="Account">
-          <b-dropdown-item :to="{ name: 'profile', params: { id: profileId } }">
+        <b-dropdown
+          variant="light"
+          text="Account"
+        >
+          <b-dropdown-item
+            :to="{ name: 'profile', params: { id: profileId } }"
+            exact
+          >
             <i class="fa fa-user" /> My Profile
           </b-dropdown-item>
-          <b-dropdown-item :to="{ name: 'editProfile', params: { profileId: profileId } }">
+          <b-dropdown-item
+            :to="{ name: 'editProfile', params: { profileId: profileId } }"
+            exact
+          >
             <i class="fa fa-edit" /> Edit Profile
           </b-dropdown-item>
           <b-dropdown-divider />
