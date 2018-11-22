@@ -23,8 +23,8 @@
     <SidebarToggler
       class="d-md-down-none"
       display="lg" />
-
     <b-navbar-nav class="ml-auto">
+
       <b-nav-item
         v-if="!isAuthenticated"
         class="px-3"
@@ -32,10 +32,30 @@
         <i class="fa fa-unlock" />&nbsp; Sign in
       </b-nav-item>
       <b-nav-item
-        v-if="isAuthenticated"
+        v-else
         class="px-3"
-        @click="logout">
-        <i class="fa fa-lock" />&nbsp; Sign out
+      >
+        <b-dropdown
+          variant="light"
+          text="Account"
+        >
+          <b-dropdown-item
+            :to="{ name: 'profile', params: { id: profileId } }"
+            exact
+          >
+            <i class="fa fa-user" /> My Profile
+          </b-dropdown-item>
+          <b-dropdown-item
+            :to="{ name: 'editProfile', params: { profileId: profileId } }"
+            exact
+          >
+            <i class="fa fa-edit" /> Edit Profile
+          </b-dropdown-item>
+          <b-dropdown-divider />
+          <b-dropdown-item @click="logout">
+            <i class="fa fa-lock" /> Sign Out
+          </b-dropdown-item>
+        </b-dropdown>
       </b-nav-item>
     </b-navbar-nav>
   </AppHeader>
@@ -44,7 +64,6 @@
 <script>
 
 import { Header as AppHeader, SidebarToggler } from '@coreui/vue'
-
 import { mapGetters, mapActions } from 'vuex'
 import { loadAuthClient, handleLogin, handleLogout } from '../../utils/auth'
 
