@@ -33,11 +33,30 @@
             </ul>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col class="col-sm-2">
+            <small>Not utilized on</small>
+            <b-input
+              id="utilization-filter-date"
+              v-model="utilizationDateFilter"
+              class="form-control"
+              type="date"
+            />
+          </b-col>
+          <b-col class="col-sm-10">
+            <b-button
+              variant="primary"
+              class="position-bottom"
+              @click="clearUtilizationDateFilter">Clear date</b-button>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
     <Results
       :name-filter="nameFilter"
-      :skill-filters="skillFilters" />
+      :skill-filters="skillFilters"
+      :utilization-date-filter="utilizationDateFilter"
+    />
   </div>
 </template>
 
@@ -54,7 +73,8 @@ export default {
   data () {
     return {
       nameFilter: '',
-      skillFilters: []
+      skillFilters: [],
+      utilizationDateFilter: ''
     }
   },
   computed: {
@@ -81,6 +101,9 @@ export default {
     },
     removeFromSearch: function (skill) {
       this.skillFilters = this.skillFilters.filter(el => (el.id !== skill.id))
+    },
+    clearUtilizationDateFilter () {
+      this.utilizationDateFilter = ''
     }
   }
 }
@@ -105,5 +128,9 @@ ul {
 .search-item {
   width: 100%;
   padding: 0.5em 0;
+}
+.position-bottom {
+  position: absolute;
+  bottom: 0;
 }
 </style>
