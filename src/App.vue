@@ -9,7 +9,7 @@
         </div>
       </main>
     </div>
-    <AppFooter/>
+    <AppFooter />
   </div>
 </template>
 
@@ -38,9 +38,9 @@ export default {
       return this.isAuthenticated
         ? [
           {
-            name: 'Search',
+            name: 'Profiles',
             url: '/search',
-            icon: 'icon-magnifier'
+            icon: 'icon-user'
           },
           {
             name: 'Projects',
@@ -48,20 +48,7 @@ export default {
             icon: 'icon-drawer'
           },
           {
-            divider: true
-          },
-          {
-            name: 'My Profile',
-            url: '/profile/' + this.profileId,
-            icon: 'icon-user'
-          },
-          {
-            name: 'Edit Profile',
-            url: '/profile/' + this.profileId + '/edit',
-            icon: 'icon-pencil'
-          },
-          {
-            name: 'Add skill',
+            name: 'Skills',
             url: '/skills',
             icon: 'icon-plus'
           }

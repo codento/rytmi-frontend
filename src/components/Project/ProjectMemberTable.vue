@@ -14,48 +14,58 @@
         </template>
         <template
           slot="profileId"
-          slot-scope="profileId">
+          slot-scope="profileId"
+        >
           <span
             class="clickable"
-            @click.stop="openProfile(profileId.value)">
+            @click.stop="openProfile(profileId.value)"
+          >
             {{ printMember(profileId.value) }}
           </span>
         </template>
         <template
           slot="startDate"
-          slot-scope="element">
+          slot-scope="element"
+        >
           <span
             class="clickable"
-            @click.stop="openEditModal(element)">
+            @click.stop="openEditModal(element)"
+          >
             <DateFormatter :date="element.value" />
           </span>
         </template>
         <template
           slot="endDate"
-          slot-scope="element">
+          slot-scope="element"
+        >
           <span
             class="clickable"
-            @click.stop="openEditModal(element)">
+            @click.stop="openEditModal(element)"
+          >
             <DateFormatter :date="element.value" />
           </span>
         </template>
         <template
           slot="workPercentage"
-          slot-scope="element">
+          slot-scope="element"
+        >
           <span
             class="clickable"
-            @click.stop="openEditModal(element)">
+            @click.stop="openEditModal(element)"
+          >
             {{ element.value }} %
           </span>
         </template>
         <template
           slot="remove"
-          slot-scope="remove">
+          slot-scope="remove"
+        >
           <b-btn
             size="sm"
             class="mr-1"
             variant="danger"
-            @click.stop="removeMember(remove.item)">Remove</b-btn>
+            @click.stop="removeMember(remove.item)"
+          >Remove</b-btn>
         </template>
       </b-table>
     </div>
@@ -66,30 +76,36 @@
       ref="projectProfileEditModal"
       title="ASD"
       hide-footer
-      hide-header>
+      hide-header
+    >
       <h3>{{ printMember(editedProjectProfile.profileId) }}</h3>
       <small>Start date</small>
       <b-input
         v-model="editedProjectProfile.startDate"
-        type="date" />
+        type="date"
+      />
       <small>End date</small>
       <b-input
         v-model="editedProjectProfile.endDate"
-        type="date" />
+        type="date"
+      />
       <small>Utilization %</small>
       <b-input
+        v-model="editedProjectProfile.workPercentage"
         :min="0"
         :max="100"
-        v-model="editedProjectProfile.workPercentage"
-        type="number" />
+        type="number"
+      />
       <b-btn
         id="save"
         class="modal-btn"
-        @click="callUpdateProfileProjectAction()">Save</b-btn>
+        @click="callUpdateProfileProjectAction()"
+      >Save</b-btn>
       <b-btn
         id="cancel"
         class="modal-btn"
-        @click="closeEditModal()">Cancel</b-btn>
+        @click="closeEditModal()"
+      >Cancel</b-btn>
     </b-modal>
   </div>
 </template>
@@ -117,9 +133,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'profileById'
-    ])
+    ...mapGetters(['profileById'])
   },
   methods: {
     ...mapActions([

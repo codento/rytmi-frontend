@@ -1,15 +1,18 @@
 <template>
   <div
     class="animated fadeIn container"
-    style="margin-top: 24px">
+    style="margin-top: 24px"
+  >
     <b-jumbotron
       v-if="!isAuthenticated"
       bg-variant="white"
       text-variant="primary"
-      border-variant="dark">
+      border-variant="dark"
+    >
       <span slot="header">Codento Rytmi</span>
       <template
-        slot="lead">
+        slot="lead"
+      >
         Please Sign in
       </template>
     </b-jumbotron>

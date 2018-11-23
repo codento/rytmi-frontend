@@ -40,9 +40,11 @@ const mockSkills = {
   2: { id: 2, name: 'SkillTwo' }
 }
 
-const mockSkillProfiles = [{ skillId: 1, knows: 3, wantsTo: 4 },
+const mockSkillProfiles = [
+  { skillId: 1, knows: 3, wantsTo: 4 },
   { skillId: 2, knows: 1, wantsTo: 0 },
-  { skillId: 2, knows: 5, wantsTo: 5 }]
+  { skillId: 2, knows: 5, wantsTo: 5 }
+]
 
 describe('ChartBoard.vue', () => {
   it('should show loading spinner when app is loading', () => {

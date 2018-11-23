@@ -2,29 +2,31 @@
   <div v-if="project">
     <div
       class="row mb-1"
-      @click="show = !show">
+      @click="show = !show"
+    >
       <div class="col-sm-12">
         <span class="project-header">{{ project.name }} </span>
       </div>
-      <div class="col-sm-12 duration-container" >
+      <div class="col-sm-12 duration-container">
         <span class="duration-item">
-          <small>From</small><br >
+          <small>From</small><br>
           <DateFormatter :date="profileProject.startDate" />
         </span>
         <span class="duration-item">
-          <small>To</small><br >
+          <small>To</small><br>
           <DateFormatter :date="profileProject.endDate" />
         </span>
       </div>
       <transition name="fade">
         <div
           v-if="show"
-          class="col-sm-12">
+          class="col-sm-12"
+        >
           {{ project.description }}
         </div>
       </transition>
     </div>
-    <hr >
+    <hr>
   </div>
 </template>
 
@@ -45,9 +47,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'projectById'
-    ]),
+    ...mapGetters(['projectById']),
     project () {
       return this.projectById(this.profileProject.projectId)
     }

@@ -2,36 +2,39 @@
   <div>
     <b-form
       id="skills-add-form"
-      @submit="onSubmit">
-<h1>Add a new skill</h1>
-<br>
+      @submit="onSubmit"
+    >
+      <h1>Add a new skill</h1>
+      <br>
 
-  <label>Skill name</label>
-      <b-form-input v-model="skill.name"></b-form-input>
+      <label>Skill name</label>
+      <b-form-input v-model="skill.name" />
       <label>Skill description</label>
-      <b-form-input v-model="skill.description"></b-form-input>
+      <b-form-input v-model="skill.description" />
       <b-button
         primary
-        type="submit">Submit</b-button>
+        type="submit"
+      >Submit</b-button>
     </b-form>
     <div
       v-if="showError"
-      class="skill-creation-error">
+      class="skill-creation-error"
+    >
       <ApiErrorDetailsPanel :error-details="errorDetails" />
     </div>
   </div>
- 
+
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import ApiErrorDetailsPanel from "../helpers/ApiErrorDetailsPanel.vue";
+import { mapActions } from 'vuex'
+import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
 export default {
-  name: "SkillsForm",
+  name: 'SkillsForm',
   components: {
     ApiErrorDetailsPanel
   },
-  data() {
+  data () {
     return {
       showError: false,
       errorDetails: [],
@@ -39,29 +42,29 @@ export default {
         name: null,
         description: null
       }
-    };
+    }
   },
   methods: {
-    ...mapActions(["addSkill"]),
-    onSubmit(evt) {
-      evt.preventDefault();
+    ...mapActions(['addSkill']),
+    onSubmit (evt) {
+      evt.preventDefault()
       this.addSkill(this.skill)
         .then(reponse => {
           this.$toasted.global.rytmi_success({
-            message: "New skill added!"
-          });
-          document.getElementById("skills-add-form").reset();
+            message: 'New skill added!'
+          })
+          document.getElementById('skills-add-form').reset()
           if (this.toggleForm !== null) {
-            this.toggleForm();
+            this.toggleForm()
           }
         })
         .catch(err => {
-          this.errorDetails = err.response.data.error.details;
-          this.showError = true;
-        });
+          this.errorDetails = err.response.data.error.details
+          this.showError = true
+        })
     }
   }
-};
+}
 </script>
 <style scoped>
 button {
@@ -77,6 +80,6 @@ form{
  padding-bottom: 1%;
  padding-left: 1%;
  padding-right: 1%;
- background-color:#f0f3f5; 
+ background-color:#f0f3f5;
 }
 </style>

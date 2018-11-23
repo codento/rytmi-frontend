@@ -14,7 +14,8 @@
           v-model="sortAttribute"
           :options="sortOptions"
           buttons
-          name="radioBtnStacked" />
+          name="radioBtnStacked"
+        />
       </b-col>
     </b-row>
     <profile-card
@@ -72,9 +73,7 @@ export default {
     ]),
     sortOptions () {
       const { name, knows, wantsTo } = sortAttributeEnum
-      const options = [
-        { text: 'Name', value: name }
-      ]
+      const options = [{ text: 'Name', value: name }]
       if (!isEmpty(this.skillFilters)) {
         options.push(...[
           { text: 'Proficiency', value: knows },

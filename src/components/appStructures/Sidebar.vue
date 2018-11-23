@@ -1,10 +1,10 @@
 <template>
   <AppSidebar fixed>
-    <SidebarHeader/>
-    <SidebarForm/>
-    <SidebarNav :nav-items="navItems"/>
-    <SidebarFooter/>
-    <SidebarMinimizer/>
+    <SidebarHeader />
+    <SidebarForm />
+    <SidebarNav :nav-items="navItems" />
+    <SidebarFooter />
+    <SidebarMinimizer />
   </AppSidebar>
 </template>
 

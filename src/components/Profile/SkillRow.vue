@@ -18,10 +18,12 @@
       <b-progress
         :max="5"
         class="mb-6"
-        height="0.9rem">
+        height="0.9rem"
+      >
         <b-progress-bar
           :value="knows"
-          class="rytmi-progress-knowledge">
+          class="rytmi-progress-knowledge"
+        >
           <slot
             v-if="active !== id"
             name="label"
@@ -39,7 +41,8 @@
       <b-progress
         :max="5"
         class="mb-6"
-        height="0.9rem">
+        height="0.9rem"
+      >
         <b-progress-bar
           :value="wantsTo"
           class="rytmi-progress-wants"

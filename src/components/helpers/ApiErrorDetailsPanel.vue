@@ -1,12 +1,13 @@
 <template>
-  <div>
-    <div
+  <ul>
+    <li
       v-for="detail in errorDetails"
       :key="detail"
-      class="error-detail-row">
-      <li>{{ parseErrorDetail(detail) }}</li>
-    </div>
-  </div>
+      class="error-detail-row"
+    >
+      {{ parseErrorDetail(detail) }}
+    </li>
+  </ul>
 </template>
 <script>
 export default {

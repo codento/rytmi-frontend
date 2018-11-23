@@ -1,12 +1,13 @@
 <template>
   <div
-    class="draw-border">
+    class="draw-border"
+  >
     <div class="header-container">
-      <slot name="header"/>
+      <slot name="header" />
     </div>
     <hr>
     <b-row>
-      <slot/>
+      <slot />
     </b-row>
   </div>
 </template>

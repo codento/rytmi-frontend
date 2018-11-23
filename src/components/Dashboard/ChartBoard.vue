@@ -12,28 +12,34 @@
         <b-row class="no-gutters mt-1">
           <b-col
             :cols="12"
-            :md="6">
+            :md="6"
+          >
             <top-skill-chart
-              :skill-info="skillInfo"/>
+              :skill-info="skillInfo"
+            />
           </b-col>
           <b-col
             :cols="12"
-            :md="6">
+            :md="6"
+          >
             <most-willingness-chart
-              :skill-info="skillInfo"/>
+              :skill-info="skillInfo"
+            />
           </b-col>
         </b-row>
         <b-row class="no-gutters mt-1">
           <b-col
             :cols="12"
-            :md="12">
+            :md="12"
+          >
             <skill-chart
               v-if="appInitialized"
               :md-size="12"
               :skills="skills"
               :skill-info="skillInfo"
               :profile-list="profileList"
-              class="pb-1"/>
+              class="pb-1"
+            />
           </b-col>
         </b-row>
       </div>
@@ -43,7 +49,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ChartCard from './ChartCard'
 import SkillChart from './SkillChart'
 import TopSkillChart from './TopSkillChart'
 import MostWillingnessChart from './MostWillingnessChart'
@@ -57,7 +62,6 @@ const calculateAverage = (arr) => {
 
 export default {
   components: {
-    ChartCard,
     SkillChart,
     TopSkillChart,
     MostWillingnessChart

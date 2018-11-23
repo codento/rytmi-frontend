@@ -5,17 +5,20 @@
       <span @click="showProjectForm = !showProjectForm">
         <i
           v-if="!showProjectForm"
-          class="fa fa-chevron-down" />
+          class="fa fa-chevron-down"
+        />
         <i
           v-else
-          class="fa fa-chevron-up" />
+          class="fa fa-chevron-up"
+        />
       </span>
     </h3>
     <b-form
       v-if="showProjectForm"
       id="project_form"
       class="animated fadeIn"
-      @submit="onSubmit">
+      @submit="onSubmit"
+    >
       <small>Project code</small>
       <b-input
         v-model="project.code"
@@ -62,7 +65,8 @@
     </b-form>
     <div
       v-if="showError"
-      class="project-creation-error">
+      class="project-creation-error"
+    >
       Creating a project failed because:
       <ApiErrorDetailsPanel :error-details="errorDetails" />
     </div>
