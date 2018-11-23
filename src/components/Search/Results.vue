@@ -109,7 +109,7 @@ export default {
     getProfilesFilteredByUtilization (profilesToFilter, utilizationDateFilter) {
       const getProjectsAtGivenTime = (projects, date) => projects.filter(project =>
         getOnlyDateFromFullDate(project.startDate) <= date &&
-        ((typeof project.endDate === 'undefined') || (project.endDate === null) || getOnlyDateFromFullDate(project.endDate) >= date))
+        (isEmpty(project.endDate) || getOnlyDateFromFullDate(project.endDate) >= date))
       const getOnlyDateFromFullDate = (date) => startOfDay(parse(date))
       const parsedDate = getOnlyDateFromFullDate(utilizationDateFilter)
 
