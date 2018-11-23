@@ -16,6 +16,11 @@
     "test:unit:debug": "node --inspect-brk ./node_modules/@vue/cli-service/bin/vue-cli-service.js test:unit --runInBand",
     "test:e2e": "vue-cli-service test:e2e"
   },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint --no-fix && npm run test:unit"
+    }
+  },
   "dependencies": {
     "@coreui/coreui": "^2.0.14",
     "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.2.0",
@@ -59,6 +64,7 @@
     "flush-promises": "^1.0.0",
     "growl": "^1.10.5",
     "https-proxy-agent": "^2.2.1",
+    "husky": "^1.2.0",
     "node-sass": "^4.9.3",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.5.17"
