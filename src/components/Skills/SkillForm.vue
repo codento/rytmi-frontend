@@ -23,10 +23,10 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import ApiErrorDetailsPanel from "../helpers/ApiErrorDetailsPanel.vue";
+import { mapGetters, mapActions } from 'vuex';
+import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue';
 export default {
-  name: "SkillsForm",
+  name: 'SkillsForm',
   components: {
     ApiErrorDetailsPanel
   },
@@ -44,15 +44,15 @@ export default {
     ...mapGetters(['skills'])
   },
   methods: {
-    ...mapActions(["addSkill"]),
+    ...mapActions(['addSkill']),
     onSubmit(evt) {
       evt.preventDefault();
       this.addSkill(this.skill)
         .then(reponse => {
           this.$toasted.global.rytmi_success({
-            message: "New skill added!"
+            message: 'New skill added!'
           });
-          document.getElementById("skills-add-form").reset();
+          document.getElementById('skills-add-form').reset();
           if (this.toggleForm !== null) {
             this.toggleForm();
           }

@@ -75,8 +75,7 @@ export default {
     ]),
     mapSkillsForSkillFilter () {
       const skills = Object.values(this.skills).map(skill => ({ label: skill.name, id: skill.id }))
-      sortBy(skills, ['label'])
-      return skills
+      return sortBy(skills, ['label'])
     },
     mapSkillFilterForResultsComponent () {
       return this.selectedFilteringSkills.map(skill => ({ name: skill.label, id: skill.id }))
@@ -97,17 +96,6 @@ export default {
 #search {
   padding: 1em;
   min-height: 15em;
-}
-ul {
-  list-style-type: none;
-}
-.skillFilter {
-  display: inline-block;
-  border-radius: 10px;
-  padding: .5vw;
-  margin: .1vw;
-  background-color: orange;
-  cursor: pointer;
 }
 .search-item {
   width: 100%;
