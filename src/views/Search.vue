@@ -11,30 +11,19 @@
               placeholder="Filter by name" />
           </b-col>
         </b-row>
-        <b-row class="search-item">
-          <b-col>
-            <b-dropdown
-              text="Add skill filters:">
-              <b-dropdown-item-button
-                v-for="skill in selectableSkills"
-                :key="skill.id"
-                @click="addToSearch(skill)">
-                {{ skill.name }}
-              </b-dropdown-item-button>
-            </b-dropdown>
-            <ul>
-              <li
-                v-for="skill in skillFilters"
-                :key="skill.name"
-                class="skillFilter"
-                @click="removeFromSearch(skill)">
-                &times; {{ skill.name }}
-              </li>
-            </ul>
+        <b-row>
+          <b-col class="col-sm-3">
+            <small>Add skill filters:</small>
+            <v-select
+              multiple
+              v-model="selectedFilteringSkills"
+              :options="mapSkillsForSkillFilter"
+            >
+            </v-select>
           </b-col>
         </b-row>
         <b-row>
-          <b-col class="col-sm-2">
+          <b-col class="col-sm-3">
             <small>Not utilized on</small>
             <b-input
               id="utilization-filter-date"
@@ -43,7 +32,7 @@
               type="date"
             />
           </b-col>
-          <b-col class="col-sm-10">
+          <b-col class="col-sm-9">
             <b-button
               variant="primary"
               class="position-bottom"
@@ -54,7 +43,7 @@
     </b-row>
     <Results
       :name-filter="nameFilter"
-      :skill-filters="skillFilters"
+      :skill-filters="mapSkillFilterForResultsComponent"
       :utilization-date-filter="utilizationDateFilter"
     />
   </div>
@@ -63,18 +52,20 @@
 <script>
 import { mapGetters } from 'vuex'
 import { Results } from '../components/Search'
-import _ from 'lodash'
+import { sortBy } from 'lodash'
+import vSelect from "vue-select"
 
 export default {
   name: 'Search',
   components: {
-    Results
+    Results,
+    vSelect
   },
   data () {
     return {
       nameFilter: '',
-      skillFilters: [],
-      utilizationDateFilter: ''
+      utilizationDateFilter: '',
+      selectedFilteringSkills: []
     }
   },
   computed: {
@@ -82,26 +73,19 @@ export default {
       'skills',
       'skillName'
     ]),
-    selectableSkills () {
-      const currentSkills = this.skillFilters.map(skill => skill.id)
-      return _(this.skills)
-        .filter(skill => !currentSkills.includes(skill.id))
-        .sortBy(skill => this.skillName(skill.id))
-        .value()
+    mapSkillsForSkillFilter () {
+      const skills = Object.values(this.skills).map(skill => ({ label: skill.name, id: skill.id }))
+      sortBy(skills, ['label'])
+      return skills
+    },
+    mapSkillFilterForResultsComponent () {
+      return this.selectedFilteringSkills.map(skill => ({ name: skill.label, id: skill.id }))
     }
   },
   mounted () {
     document.title = 'Rytmi - Search'
   },
   methods: {
-    addToSearch: function (skill) {
-      const skills = this.skillFilters.slice(0)
-      skills.push(skill)
-      this.skillFilters = skills
-    },
-    removeFromSearch: function (skill) {
-      this.skillFilters = this.skillFilters.filter(el => (el.id !== skill.id))
-    },
     clearUtilizationDateFilter () {
       this.utilizationDateFilter = ''
     }

@@ -5,13 +5,13 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Search from '@/views/Search.vue'
 import { Results } from '@/components/Search'
 import Loading from '@/components/helpers/LoadingSpinner'
+import vSelect from "vue-select"
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(BootstrapVue)
 localVue.component('loading', Loading)
-
-const bDropdownItemButton = localVue.options.components.bDropdownItemButton
+localVue.component('vSelect', vSelect)
 
 function skillsMock () {
   return {
@@ -43,28 +43,15 @@ function createWrapper (overrideMountingOptions) {
 }
 
 describe('Search.vue', () => {
-  it('shows all skills in dropdown', () => {
+  it('should have all skills in the skill filter select', () => {
     const wrapper = createWrapper()
-    expect(wrapper.findAll(bDropdownItemButton).length).toBe(Object.keys(skillsMock()).length)
-  })
-
-  it('should only show remaining skills after selection', () => {
-    const wrapper = createWrapper()
-    wrapper.vm.addToSearch(skillsMock()[1])
-    expect(wrapper.findAll(bDropdownItemButton).length).toBe(Object.keys(skillsMock()).length - 1)
-  })
-
-  it('should only show remaining skills after removing selected skill', () => {
-    const wrapper = createWrapper()
-    wrapper.vm.addToSearch(skillsMock()[1])
-    wrapper.vm.addToSearch(skillsMock()[2])
-    wrapper.vm.removeFromSearch(skillsMock()[1])
-    expect(wrapper.findAll(bDropdownItemButton).length).toBe(Object.keys(skillsMock()).length - 1)
+    expect(wrapper.find(vSelect).props().options.length).toBe(Object.keys(skillsMock()).length)
   })
 
   it('should pass right attributes to Results component', () => {
     const wrapper = createWrapper()
-    wrapper.vm.addToSearch(skillsMock()[1])
+    const skill = skillsMock()[1]
+    wrapper.vm.selectedFilteringSkills = [{ label: skill.name, id: skill.id }]
     wrapper.vm.nameFilter = 'foo'
     expect(wrapper.find(Results).props().skillFilters).toEqual([skillsMock()[1]])
     expect(wrapper.find(Results).props().nameFilter).toBe('foo')

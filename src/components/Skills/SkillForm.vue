@@ -5,10 +5,6 @@
       @submit="onSubmit">
       <h1>Add a new skill</h1>
       <br>
-      <v-select
-        :value="selected"
-        :options="mapSkillNamesToArray">
-      </v-select>
       <label>Skill name</label>
       <b-form-input v-model="skill.name"></b-form-input>
       <label>Skill description</label>
@@ -29,12 +25,10 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import ApiErrorDetailsPanel from "../helpers/ApiErrorDetailsPanel.vue";
-import vSelect from "vue-select"
 export default {
   name: "SkillsForm",
   components: {
-    ApiErrorDetailsPanel,
-    vSelect
+    ApiErrorDetailsPanel
   },
   data() {
     return {
@@ -47,12 +41,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['skills']),
-    mapSkillNamesToArray () {
-      const skillNames = Object.values(this.skills).map(skill => skill.name)
-      skillNames.sort()
-      return skillNames
-    }
+    ...mapGetters(['skills'])
   },
   methods: {
     ...mapActions(["addSkill"]),

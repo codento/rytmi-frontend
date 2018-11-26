@@ -14,7 +14,8 @@
           v-model="sortAttribute"
           :options="sortOptions"
           buttons
-          name="radioBtnStacked" />
+          name="radioBtnStacked"
+        />
       </b-col>
     </b-row>
     <profile-card
@@ -72,9 +73,7 @@ export default {
     ]),
     sortOptions () {
       const { name, knows, wantsTo } = sortAttributeEnum
-      const options = [
-        { text: 'Name', value: name }
-      ]
+      const options = [{ text: 'Name', value: name }]
       if (!isEmpty(this.skillFilters)) {
         options.push(...[
           { text: 'Proficiency', value: knows },
@@ -107,7 +106,9 @@ export default {
       return profilesToFilter.filter(profile => difference(skillIds, profile.skills.map(skill => skill.skillId)).length === 0)
     },
     getProfilesFilteredByUtilization (profilesToFilter, utilizationDateFilter) {
-      const getProjectsAtGivenTime = (projects, date) => projects.filter(project => getOnlyDateFromFullDate(project.startDate) <= date && getOnlyDateFromFullDate(project.endDate) >= date)
+      const getProjectsAtGivenTime = (projects, date) => projects.filter(project =>
+        getOnlyDateFromFullDate(project.startDate) <= date &&
+        (isEmpty(project.endDate) || getOnlyDateFromFullDate(project.endDate) >= date))
       const getOnlyDateFromFullDate = (date) => startOfDay(parse(date))
       const parsedDate = getOnlyDateFromFullDate(utilizationDateFilter)
 
