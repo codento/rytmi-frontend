@@ -36,7 +36,7 @@ const profileProjectsMock = {
   1: { projectId: 1, profileId: 1, startDate: '2018-12-13T12:49:21.289Z', endDate: '2019-07-19T18:16:06.623Z', workPercentage: 20 },
   2: { projectId: 1, profileId: 2, startDate: '2018-12-13T12:49:21.289Z', endDate: '2019-07-19T18:16:06.623Z', workPercentage: 20 },
   3: { projectId: 2, profileId: 3, startDate: '2018-09-02T05:06:12.704Z', endDate: '2018-11-21T12:42:13.818Z', workPercentage: 50 },
-  4: { projectId: 3, profileId: 3, startDate: '2018-11-23', endDate: '2019-5-20', workPercentage: 20 }
+  4: { projectId: 3, profileId: 3, startDate: '2018-11-23', endDate: null, workPercentage: 20 } // No endDate, continues indefinitely
 }
 
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
@@ -164,14 +164,14 @@ describe('Results.vue', () => {
       propsData: {
         skillFilters: [],
         nameFilter: '',
-        utilizationDateFilter: '2019-6-30'
+        utilizationDateFilter: '2019-10-30'
       }
     }
-    const expectedOrder = ['Daisy']
+    const expectedOrder = ['Joe', 'Sarah']
     const wrapper = createWrapper(mountOptions)
     wrapper.vm.$nextTick(() => {
       const cards = wrapper.findAll(ProfileCard)
-      expect(cards).toHaveLength(1)
+      expect(cards).toHaveLength(2)
       cards.wrappers.forEach((wrapper, i) => {
         expect(wrapper.props().profile.firstName).toBe(expectedOrder[i])
       })
