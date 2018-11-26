@@ -11,6 +11,11 @@
       <b-form-input v-model="skill.name" />
       <label>Skill description</label>
       <b-form-input v-model="skill.description" />
+      <label>Skill category</label>
+      <b-form-select
+        v-model="skill.SkillCategoryId"
+        :options="getSkillCategoryTitles"
+      />
       <b-button
         primary
         type="submit"
@@ -27,7 +32,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
 export default {
   name: 'SkillsForm',
@@ -40,23 +45,30 @@ export default {
       errorDetails: [],
       skill: {
         name: null,
-        description: null
+        description: null,
+        SkillCategoryId: null
       }
     }
   },
+  computed: {
+    ...mapGetters(['skillCategories']),
+    getSkillCategoryTitles () {
+      const categoryKeys = Object.keys(this.skillCategories)
+      return categoryKeys.map(key => {
+        return { value: this.skillCategories[key].id, text: this.skillCategories[key].title }
+      })
+    }
+  },
   methods: {
-    ...mapActions(['addSkill']),
+    ...mapActions(['addSkill', 'getSkillCategories']),
     onSubmit (evt) {
       evt.preventDefault()
       this.addSkill(this.skill)
-        .then(reponse => {
+        .then(response => {
           this.$toasted.global.rytmi_success({
             message: 'New skill added!'
           })
           document.getElementById('skills-add-form').reset()
-          if (this.toggleForm !== null) {
-            this.toggleForm()
-          }
         })
         .catch(err => {
           this.errorDetails = err.response.data.error.details
