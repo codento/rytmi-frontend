@@ -11,6 +11,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { orderBy } from 'lodash'
 export default {
   name: 'SkillsList',
   data () {
@@ -32,16 +33,7 @@ export default {
     mapSkillsToArray () {
       const objectKeys = Object.keys(this.skills)
       const skillsArray = objectKeys.map(skillKey => this.skills[skillKey])
-      skillsArray.sort((a, b) => {
-        if (a.name.toUpperCase() > b.name.toUpperCase()) {
-          return 1
-        }
-        if (a.name.toUpperCase() < b.name.toUpperCase()) {
-          return -1
-        }
-        return 0
-      })
-      return skillsArray
+      return orderBy(skillsArray, [skill => skill.name.toLowerCase()], ['asc'])
     }
   },
   methods: {
