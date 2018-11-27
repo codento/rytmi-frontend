@@ -42,6 +42,15 @@
             />
           </b-col>
         </b-row>
+        <b-row>
+          <b-col
+            :cols="12"
+            :md="7"
+          >
+            <utilization-chart />
+
+          </b-col>
+        </b-row>
       </div>
     </div>
   </div>
@@ -52,6 +61,7 @@ import { mapGetters } from 'vuex'
 import SkillChart from './SkillChart'
 import TopSkillChart from './TopSkillChart'
 import MostWillingnessChart from './MostWillingnessChart'
+import UtilizationChart from './UtilizationChart'
 
 const calculateAverage = (arr) => {
   if (arr && arr.length > 0) {
@@ -64,7 +74,8 @@ export default {
   components: {
     SkillChart,
     TopSkillChart,
-    MostWillingnessChart
+    MostWillingnessChart,
+    UtilizationChart
   },
   computed: {
     ...mapGetters([
