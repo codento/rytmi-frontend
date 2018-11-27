@@ -15,11 +15,10 @@
           <b-col class="col-sm-3">
             <small>Add skill filters:</small>
             <v-select
-              multiple
               v-model="selectedFilteringSkills"
+              multiple
               :options="mapSkillsForSkillFilter"
-            >
-            </v-select>
+            />
           </b-col>
         </b-row>
         <b-row>
@@ -53,7 +52,7 @@
 import { mapGetters } from 'vuex'
 import { Results } from '../components/Search'
 import { sortBy } from 'lodash'
-import vSelect from "vue-select"
+import vSelect from 'vue-select'
 
 export default {
   name: 'Search',
@@ -75,7 +74,8 @@ export default {
     ]),
     mapSkillsForSkillFilter () {
       const skills = Object.values(this.skills).map(skill => ({ label: skill.name, id: skill.id }))
-      return sortBy(skills, ['label'])
+      const unselectedSkills = skills.filter(selectableSkill => !(this.selectedFilteringSkills.map(skill => skill.id)).includes(selectableSkill.id))
+      return sortBy(unselectedSkills, ['label'])
     },
     mapSkillFilterForResultsComponent () {
       return this.selectedFilteringSkills.map(skill => ({ name: skill.label, id: skill.id }))

@@ -11,7 +11,6 @@ td > button {
     .dropdown-toggle {
         border: 1px solid $input-border-color !important;
         border-radius: 0 !important;
-        height: calc(2.0625rem + 2px);
     }
     .selected-tag {
         background-color: theme-color('primary') !important;

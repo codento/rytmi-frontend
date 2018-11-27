@@ -13,13 +13,14 @@
             :want-desc="proficiencyDescriptions.wants"
           />
         </b-popover>
-        <select-filter
-          :selected="selectedSkills"
-          :options="selectFilterOptions"
-          heading="Skills"
-          @item-clicked="filterChanged"
-        />
       </div>
+      <b-col>
+        <v-select
+          v-model="selectedSkills"
+          multiple
+          :options="selectFilterOptions"
+        />
+      </b-col>
     </template>
     <b-col
       cols="12"
@@ -47,6 +48,8 @@ import BarChart from '../Charts/BarChart'
 import { SkillExplanations } from '@/components/Profile'
 import SelectFilter from '../helpers/SelectFilter'
 import proficiencyDescriptions from '@/assets/proficiencyDesc'
+import { sortBy } from 'lodash'
+import vSelect from 'vue-select'
 
 export default {
   components: {
@@ -54,7 +57,8 @@ export default {
     RadarChart,
     BarChart,
     SkillExplanations,
-    SelectFilter
+    SelectFilter,
+    vSelect
   },
   props: {
     skills: {
@@ -87,21 +91,11 @@ export default {
       return Object.keys(this.skills).length
     },
     skillLabels () {
-      return this.selectedSkills.map((skillId) => this.skills[skillId].name)
+      return this.selectedSkills.map(skill => skill.label)
     },
     selectFilterOptions () {
-      const options = Object.keys(this.skills).map((key) => (
-        { text: this.skills[key].name, value: this.skills[key].id }
-      ))
-      options.sort((a, b) => {
-        const aIncluded = this.selectedSkills.includes(a.value)
-        const bIncluded = this.selectedSkills.includes(b.value)
-        if (aIncluded === bIncluded) {
-          return 0
-        }
-        return aIncluded ? -1 : 1
-      })
-      return options
+      const unselectedSkills = this.mapSkillsForSkillFilter().filter(selectableSkill => !(this.selectedSkills.map(skill => skill.id)).includes(selectableSkill.id))
+      return sortBy(unselectedSkills, ['label'])
     },
     barChartData () {
       return {
@@ -135,8 +129,8 @@ export default {
       }
     },
     radarChartData () {
-      const proficiencyAverages = this.selectedSkills.map((skillId) => this.skillInfo[skillId].proficiencyAverage)
-      const willingnessAverages = this.selectedSkills.map((skillId) => this.skillInfo[skillId].willingnessAverage)
+      const proficiencyAverages = this.selectedSkills.map(skill => this.skillInfo[skill.id].proficiencyAverage)
+      const willingnessAverages = this.selectedSkills.map(skill => this.skillInfo[skill.id].willingnessAverage)
       return {
         labels: this.skillLabels,
         datasets: [
@@ -177,11 +171,11 @@ export default {
   },
   methods: {
     getNumberOfPeopleWithSelectedSkills () {
-      return this.selectedSkills.map(skillId => this.skillInfo[skillId].proficiencies.length)
+      return this.selectedSkills.map(skill => this.skillInfo[skill.id].proficiencies.length)
     },
     filterChanged (val) {
       if (this.selectedSkills.includes(val)) {
-        this.selectedSkills = this.selectedSkills.filter((skillId) => val !== skillId)
+        this.selectedSkills = this.selectedSkills.filter((skill) => val !== skill.id)
       } else {
         this.selectedSkills.push(val)
       }
@@ -201,7 +195,11 @@ export default {
     pickThreeMostKnownSkills () {
       const skillIds = Object.keys(this.skillInfo)
       skillIds.sort((a, b) => this.skillInfo[b].proficiencies.length - this.skillInfo[a].proficiencies.length)
-      this.selectedSkills = skillIds.slice(0, 3).map(id => Number(id))
+      const top3SkillIds = skillIds.slice(0, 3).map(id => Number(id))
+      this.selectedSkills = this.mapSkillsForSkillFilter().filter(skill => top3SkillIds.includes(skill.id))
+    },
+    mapSkillsForSkillFilter () {
+      return Object.values(this.skills).map(skill => ({ label: skill.name, id: skill.id }))
     }
   }
 }
