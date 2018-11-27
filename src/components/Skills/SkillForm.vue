@@ -2,23 +2,25 @@
   <div>
     <b-form
       id="skills-add-form"
-      @submit="onSubmit">
+      @submit="onSubmit"
+    >
       <h1>Add a new skill</h1>
       <br>
       <label>Skill name</label>
-      <b-form-input v-model="skill.name"/>
+      <b-form-input v-model="skill.name" />
       <small v-if="getSimilarSkillNames.length > 0">
         Existing skills with a similar name
       </small>
       <ul>
         <li
           v-for="skillName in getSimilarSkillNames"
-          :key="skillName">
+          :key="skillName"
+        >
           {{ skillName }}
         </li>
       </ul>
       <label>Skill description</label>
-      <b-form-input v-model="skill.description"/>
+      <b-form-input v-model="skill.description" />
       <b-button
         primary
         type="submit"
