@@ -15,9 +15,9 @@
           <b-col class="col-sm-3">
             <small>Add skill filters:</small>
             <v-select
-              v-model="selectedFilteringSkills"
+              v-model="selectedSkills"
               multiple
-              :options="mapSkillsForSkillFilter"
+              :options="selectFilterOptions"
             />
           </b-col>
         </b-row>
@@ -64,7 +64,7 @@ export default {
     return {
       nameFilter: '',
       utilizationDateFilter: '',
-      selectedFilteringSkills: []
+      selectedSkills: []
     }
   },
   computed: {
@@ -72,13 +72,13 @@ export default {
       'skills',
       'skillName'
     ]),
-    mapSkillsForSkillFilter () {
+    selectFilterOptions () {
       const skills = Object.values(this.skills).map(skill => ({ label: skill.name, id: skill.id }))
-      const unselectedSkills = skills.filter(selectableSkill => !(this.selectedFilteringSkills.map(skill => skill.id)).includes(selectableSkill.id))
+      const unselectedSkills = skills.filter(selectableSkill => !(this.selectedSkills.map(skill => skill.id)).includes(selectableSkill.id))
       return sortBy(unselectedSkills, ['label'])
     },
     mapSkillFilterForResultsComponent () {
-      return this.selectedFilteringSkills.map(skill => ({ name: skill.label, id: skill.id }))
+      return this.selectedSkills.map(skill => ({ name: skill.label, id: skill.id }))
     }
   },
   mounted () {
