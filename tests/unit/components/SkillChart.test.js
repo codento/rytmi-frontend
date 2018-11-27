@@ -5,7 +5,6 @@ import { merge } from 'lodash'
 import SkillChart from '@/components/Dashboard/SkillChart'
 import RadarChart from '@/components/Charts/RadarChart'
 import BarChart from '@/components/Charts/BarChart'
-import SelectFilter from '@/components/helpers/SelectFilter'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)

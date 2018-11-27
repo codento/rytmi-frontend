@@ -7,11 +7,13 @@
       <br>
       <label>Skill name</label>
       <b-form-input v-model="skill.name"/>
-      <small v-if="this.getSimilarSkillNames.length > 0">
+      <small v-if="getSimilarSkillNames.length > 0">
         Existing skills with a similar name
       </small>
       <ul>
-        <li v-for="skillName in this.getSimilarSkillNames">
+        <li
+          v-for="skillName in getSimilarSkillNames"
+          :key="skillName">
           {{ skillName }}
         </li>
       </ul>
