@@ -17,8 +17,8 @@
       <b-col>
         <v-select
           v-model="selectedSkills"
-          multiple
           :options="selectFilterOptions"
+          multiple
         />
       </b-col>
     </template>
@@ -46,7 +46,6 @@ import ChartCard from './ChartCard'
 import RadarChart from '../Charts/RadarChart'
 import BarChart from '../Charts/BarChart'
 import { SkillExplanations } from '@/components/Profile'
-import SelectFilter from '../helpers/SelectFilter'
 import proficiencyDescriptions from '@/assets/proficiencyDesc'
 import { sortBy } from 'lodash'
 import vSelect from 'vue-select'
@@ -57,7 +56,6 @@ export default {
     RadarChart,
     BarChart,
     SkillExplanations,
-    SelectFilter,
     vSelect
   },
   props: {

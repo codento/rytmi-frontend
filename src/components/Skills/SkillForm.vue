@@ -6,7 +6,7 @@
       <h1>Add a new skill</h1>
       <br>
       <label>Skill name</label>
-      <b-form-input v-model="skill.name"></b-form-input>
+      <b-form-input v-model="skill.name"/>
       <small v-if="this.getSimilarSkillNames.length > 0">
         Existing skills with a similar name
       </small>
@@ -16,7 +16,7 @@
         </li>
       </ul>
       <label>Skill description</label>
-      <b-form-input v-model="skill.description"></b-form-input>
+      <b-form-input v-model="skill.description"/>
       <b-button
         primary
         type="submit">Submit</b-button>
@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue';
+import { mapGetters, mapActions } from 'vuex'
+import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
 import { isEmpty } from 'lodash'
 
 export default {
@@ -40,7 +40,7 @@ export default {
   components: {
     ApiErrorDetailsPanel
   },
-  data() {
+  data () {
     return {
       showError: false,
       errorDetails: [],
@@ -48,7 +48,7 @@ export default {
         name: null,
         description: null
       }
-    };
+    }
   },
   computed: {
     ...mapGetters(['skills']),
@@ -62,25 +62,25 @@ export default {
   },
   methods: {
     ...mapActions(['addSkill']),
-    onSubmit(evt) {
-      evt.preventDefault();
+    onSubmit (evt) {
+      evt.preventDefault()
       this.addSkill(this.skill)
         .then(reponse => {
           this.$toasted.global.rytmi_success({
             message: 'New skill added!'
-          });
-          document.getElementById('skills-add-form').reset();
+          })
+          document.getElementById('skills-add-form').reset()
           if (this.toggleForm !== null) {
-            this.toggleForm();
+            this.toggleForm()
           }
         })
         .catch(err => {
-          this.errorDetails = err.response.data.error.details;
-          this.showError = true;
-        });
+          this.errorDetails = err.response.data.error.details
+          this.showError = true
+        })
     }
   }
-};
+}
 </script>
 <style scoped>
 button {

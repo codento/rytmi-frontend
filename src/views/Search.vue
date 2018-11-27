@@ -16,8 +16,8 @@
             <small>Add skill filters:</small>
             <v-select
               v-model="selectedSkills"
-              multiple
               :options="selectFilterOptions"
+              multiple
             />
           </b-col>
         </b-row>

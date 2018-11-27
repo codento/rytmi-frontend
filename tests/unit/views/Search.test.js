@@ -5,7 +5,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Search from '@/views/Search.vue'
 import { Results } from '@/components/Search'
 import Loading from '@/components/helpers/LoadingSpinner'
-import vSelect from "vue-select"
+import vSelect from 'vue-select'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
