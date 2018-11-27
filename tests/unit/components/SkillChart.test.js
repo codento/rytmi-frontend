@@ -82,24 +82,12 @@ describe('SkillChart.vue', () => {
   })
 
   it('Should choose 3 most widely known skills as selected skills when mounted', () => {
-    const expected = [3, 2, 4]
+    const expected = [
+      { 'id': 2, 'label': 'SkillTwo' },
+      { 'id': 3, 'label': 'SkillThree' },
+      { 'id': 4, 'label': 'SkillFour' }
+    ]
     const wrapper = createWrapper()
-    expect(wrapper.vm.selectedSkills).toEqual(expected)
-  })
-
-  it(`Should remove value from selected skills when @item-clicked event
-     is emitted with value in selected skills`, () => {
-    const expected = [3, 2]
-    const wrapper = createWrapper()
-    wrapper.find(SelectFilter).vm.$emit('item-clicked', 4)
-    expect(wrapper.vm.selectedSkills).toEqual(expected)
-  })
-
-  it(`Should add value to selected skills when @item-clicked event
-  is emitted with value not in selected skills`, () => {
-    const expected = [3, 2, 4, 1]
-    const wrapper = createWrapper()
-    wrapper.find(SelectFilter).vm.$emit('item-clicked', 1)
     expect(wrapper.vm.selectedSkills).toEqual(expected)
   })
 })

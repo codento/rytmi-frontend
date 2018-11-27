@@ -51,7 +51,7 @@ describe('Search.vue', () => {
   it('should pass right attributes to Results component', () => {
     const wrapper = createWrapper()
     const skill = skillsMock()[1]
-    wrapper.vm.selectedFilteringSkills = [{ label: skill.name, id: skill.id }]
+    wrapper.vm.selectedSkills = [{ label: skill.name, id: skill.id }]
     wrapper.vm.nameFilter = 'foo'
     expect(wrapper.find(Results).props().skillFilters).toEqual([skillsMock()[1]])
     expect(wrapper.find(Results).props().nameFilter).toBe('foo')
