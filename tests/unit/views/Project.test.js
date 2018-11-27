@@ -20,13 +20,15 @@ const projectMock = (projectId) => ({
   endDate: '2018-05-01'
 })
 
-const profileProjectMock = (projectId) => ([{
-  id: 1,
-  profile: 1,
-  projectId: projectId,
-  startDate: '2018-01-01',
-  endDate: '2018-02-01'
-}])
+const profileProjectMock = (projectId) => ([
+  {
+    id: 1,
+    profile: 1,
+    projectId: projectId,
+    startDate: '2018-01-01',
+    endDate: '2018-02-01'
+  }
+])
 
 function createStore (overrideConfig) {
   const defaultStoreConfig = {

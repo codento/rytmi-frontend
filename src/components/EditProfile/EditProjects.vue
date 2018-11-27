@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <h1>Projects</h1>
-    <hr >
+    <hr>
     <b-row>
       <b-col class="col-12 projects-table">
         <b-table
@@ -17,47 +17,56 @@
 
           <template
             slot="projectId"
-            slot-scope="data">
+            slot-scope="data"
+          >
             {{ projectById(data.item.projectId).code }}
           </template>
 
           <template
             slot="project"
-            slot-scope="data">
+            slot-scope="data"
+          >
             {{ projectById(data.item.projectId).name }}
           </template>
 
           <template
             slot="startDate"
-            slot-scope="data">
+            slot-scope="data"
+          >
             <date-formatter
               :date="data.value"
-              format="D.M.YY"/>
+              format="D.M.YY"
+            />
           </template>
 
           <template
             slot="endDate"
-            slot-scope="data">
+            slot-scope="data"
+          >
             <date-formatter
               :date="data.value"
-              format="D.M.YY"/>
+              format="D.M.YY"
+            />
           </template>
 
           <template
             slot="remove"
-            slot-scope="data">
+            slot-scope="data"
+          >
             <b-btn
               size="sm"
               class="mr-1"
               variant="danger"
-              @click.stop="removePP(data.item)">Remove</b-btn>
+              @click.stop="removePP(data.item)"
+            >Remove</b-btn>
           </template>
         </b-table>
       </b-col>
       <b-col class="col-12 projects-form">
         <b-card
           class="newProject"
-          title="Add a new Project">
+          title="Add a new Project"
+        >
           <ProjectProfileForm :profile-id="profileId" />
         </b-card>
       </b-col>
@@ -98,9 +107,7 @@ export default {
     ])
   },
   methods: {
-    ...mapActions([
-      'removeProfileProject'
-    ]),
+    ...mapActions(['removeProfileProject']),
     removePP (item) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {

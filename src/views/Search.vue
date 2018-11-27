@@ -8,7 +8,8 @@
             <b-form-input
               v-model="nameFilter"
               type="text"
-              placeholder="Filter by name" />
+              placeholder="Filter by name"
+            />
           </b-col>
         </b-row>
         <b-row>
@@ -35,7 +36,8 @@
             <b-button
               variant="primary"
               class="position-bottom"
-              @click="clearUtilizationDateFilter">Clear date</b-button>
+              @click="clearUtilizationDateFilter"
+            >Clear date</b-button>
           </b-col>
         </b-row>
       </b-col>
@@ -94,8 +96,8 @@ export default {
 
 <style scoped>
 #search {
-  padding: 1em;
-  min-height: 15em;
+    padding: 1em;
+    min-height: 10em;
 }
 .search-item {
   width: 100%;

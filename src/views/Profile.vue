@@ -1,27 +1,30 @@
 <template>
   <b-container class="animated fadeIn profile">
-    <loading v-if="!profile"/>
+    <loading v-if="!profile" />
     <b-row v-else>
       <b-col class="col-md-6 col-sm-12 col-12">
-        <UserProfileCard :profile="profile"/>
+        <UserProfileCard :profile="profile" />
       </b-col>
       <b-col class="col-md-6 col-sm-12 col-12">
         <b-card id="proficiency">
           <h5
             slot="header"
-            class="mb-0">
+            class="mb-0"
+          >
             Proficiency
             <span
               style="float:right; cursor:pointer"
               @mouseenter="showExplanations(true)"
-              @mouseout="showExplanations(false)">
+              @mouseout="showExplanations(false)"
+            >
               &#9432;
             </span>
           </h5>
           <b-row v-if="showInfo">
             <skillExplanations
               :know-desc="knowDesc"
-              :want-desc="wantDesc" />
+              :want-desc="wantDesc"
+            />
           </b-row>
           <b-row v-else>
             <b-col class="col mb-1">
@@ -34,19 +37,20 @@
           </b-row>
         </b-card>
         <b-card header="Projects">
-          <loading v-if="!profileProjects"/>
+          <loading v-if="!profileProjects" />
           <ProjectRow
             v-for="profileProject in profileProjects"
             v-else
-            :profile-project="profileProject"
             :key="profileProject.id"
+            :profile-project="profileProject"
           />
         </b-card>
         <b-card header="Utilization">
-          <loading v-if="!profileProjects"/>
+          <loading v-if="!profileProjects" />
           <UtilizationChart
             v-else
-            :projects="profileProjects" />
+            :projects="profileProjects"
+          />
         </b-card>
       </b-col>
     </b-row>

@@ -2,13 +2,15 @@
   <div>
     <b-form
       id="project-profile-form"
-      @submit="onSubmit">
+      @submit="onSubmit"
+    >
 
       <b-form-group
         v-show="profileVisible"
         id="consultantLabel"
         label="Consultant:"
-        label-for="consultant">
+        label-for="consultant"
+      >
         <b-form-select
           id="consultant"
           v-model="profileProject.profileId"
@@ -20,7 +22,8 @@
           <template slot="first">
             <option
               :value="null"
-              disabled>-- Select Consultant --</option>
+              disabled
+            >-- Select Consultant --</option>
           </template>
           <option
             v-for="profile in profiles"
@@ -35,7 +38,8 @@
         v-show="projectVisible"
         id="ProjectLabel"
         label="Project:"
-        label-for="project">
+        label-for="project"
+      >
         <b-form-select
           id="project"
           v-model="profileProject.projectId"
@@ -47,7 +51,8 @@
           <template slot="first">
             <option
               :value="null"
-              disabled>-- Select Project --</option>
+              disabled
+            >-- Select Project --</option>
           </template>
           <option
             v-for="project in projects"
@@ -62,12 +67,14 @@
       <b-input
         v-model="profileProject.startDate"
         type="date"
-        required/>
+        required
+      />
 
       <span>End date</span>
       <b-input
         v-model="profileProject.endDate"
-        type="date"/>
+        type="date"
+      />
 
       <span>Utilization percentage</span>
       <b-input
@@ -75,19 +82,23 @@
         type="number"
         required
         min="0"
-        max="100"/>
+        max="100"
+      />
 
       <b-button
         primary
-        type="submit">Submit</b-button>
+        type="submit"
+      >Submit</b-button>
 
     </b-form>
     <div
       v-if="showError"
-      class="profile-form-errors">
+      class="profile-form-errors"
+    >
       <div
         v-for="detail in errorDetails"
-        :key="detail">
+        :key="detail"
+      >
         {{ detail }}
       </div>
     </div>
@@ -136,9 +147,7 @@ export default {
     this.profileVisible = this.profileId === null
   },
   methods: {
-    ...mapActions([
-      'newProjectProfile'
-    ]),
+    ...mapActions(['newProjectProfile']),
     onSubmit (evt) {
       evt.preventDefault()
       this.newProjectProfile(this.profileProject)

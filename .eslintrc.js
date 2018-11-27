@@ -11,7 +11,8 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'vue/require-default-prop': 'off'
+    'vue/require-default-prop': 'off',
+    'array-bracket-newline': ['error', { 'multiline': true }]
   },
   parserOptions: {
     parser: 'babel-eslint'

@@ -8,12 +8,15 @@
           <li
             v-for="(link, idx) in profile.links"
             :key="idx"
-            style="padding-right:20px"><span
-              style="color:red; padding-right:10px; cursor:pointer"
-              @click="removeLink(link)">X</span>
+            style="padding-right:20px"
+          ><span
+            style="color:red; padding-right:10px; cursor:pointer"
+            @click="removeLink(link)"
+          >X</span>
             <a
               :href="link"
-              target="_blank">{{ link }}</a>
+              target="_blank"
+            >{{ link }}</a>
           </li>
         </ul>
       </div>
@@ -22,7 +25,8 @@
           id="addLinks"
           horizontal
           label="Add Links:"
-          label-for="linkInput">
+          label-for="linkInput"
+        >
           <b-form-input
             id="linkInput"
             v-model="linkInput"
@@ -32,14 +36,16 @@
           />
           <div
             v-if="errorDetails.length > 0"
-            class="alert alert-warning">
+            class="alert alert-warning"
+          >
             <ApiErrorDetailsPanel :error-details="errorDetails" />
           </div>
         </b-form-group>
         <b-button
           id="add"
           variant="primary"
-          type="submit">Add</b-button>
+          type="submit"
+        >Add</b-button>
       </b-form>
     </b-card>
   </div>
@@ -69,9 +75,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'updateProfile'
-    ]),
+    ...mapActions(['updateProfile']),
     removeLink: function (link) {
       const links = this.profile.links.filter(l => link !== l)
       this.submitChanges(links)

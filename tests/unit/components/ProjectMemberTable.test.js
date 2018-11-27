@@ -128,13 +128,15 @@ describe('ProjectMemberTable.vue', () => {
 })
 function getMembersList () {
   return {
-    members: [{
-      id: 1,
-      profileId: 1,
-      projectId: 2,
-      startDate: '2018-01-01',
-      endDate: '2018-02-01',
-      workPercentage: 45
-    }]
+    members: [
+      {
+        id: 1,
+        profileId: 1,
+        projectId: 2,
+        startDate: '2018-01-01',
+        endDate: '2018-02-01',
+        workPercentage: 45
+      }
+    ]
   }
 }

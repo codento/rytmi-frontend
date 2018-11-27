@@ -21,11 +21,13 @@
       <b-form-input v-model="skill.description"/>
       <b-button
         primary
-        type="submit">Submit</b-button>
+        type="submit"
+      >Submit</b-button>
     </b-form>
     <div
       v-if="showError"
-      class="skill-creation-error">
+      class="skill-creation-error"
+    >
       <ApiErrorDetailsPanel :error-details="errorDetails" />
     </div>
   </div>

@@ -4,7 +4,8 @@
     <b-table
       :items="mapSkillsToArray"
       striped
-      hover/>
+      hover
+    />
   </div>
 </template>
 
