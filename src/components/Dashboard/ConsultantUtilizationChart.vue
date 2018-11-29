@@ -1,5 +1,5 @@
 <template>
-  <chart-card class="mt-1">
+  <chart-card>
     <template slot="header">
       <div class="h3 px-2">
         Utilization
@@ -16,24 +16,32 @@
     </b-col>
     <b-col
       :cols="12"
-      :md="10"
-      :offset-md="1"
+      :md="12"
     >
-      <div class="pr-2">
-        <line-chart
-          :chart-data="lineChartData"
-          :options="lineChartOptions"
-        />
-      </div>
+      <line-chart
+        :chart-data="lineChartData"
+        :options="lineChartOptions"
+      />
     </b-col>
   </chart-card>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { isWithinRange, isBefore, isAfter, addMonths, addDays, format } from 'date-fns'
+import { isWithinRange, isBefore, isAfter, addMonths, addWeeks, format } from 'date-fns'
 import ChartCard from './ChartCard'
 import LineChart from '../Charts/LineChart'
+
+const createLabel = (date) => format(date, 'DD/MM/YYYY')
+const sortByDate = (dateOne, dateTwo) => {
+  if (isBefore(dateOne, dateTwo)) {
+    return -1
+  }
+  if (isAfter(dateOne, dateTwo)) {
+    return 1
+  }
+  return 0
+}
 
 export default {
   components: {
@@ -46,6 +54,7 @@ export default {
       endDate: addMonths(Date.now(), 6),
       utilized: 0,
       notUtilized: 0,
+      activeProfiles: [],
       chartTitleFontSize: '16',
       chartColor: 'rgb(66, 244, 92, 0.4)',
       chartBorderColor: 'rgb(66, 244, 92)'
@@ -82,6 +91,8 @@ export default {
         legend: {
           display: false
         },
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
           yAxes: [
             {
@@ -96,7 +107,8 @@ export default {
     }
   },
   created () {
-    Object.keys(this.profileFilter()).forEach((profile) => {
+    this.activeProfiles = Object.keys(this.profileFilter())
+    this.activeProfiles.forEach((profile) => {
       const projectProfiles = this.futureProjectsOfProfile(profile)
       this.consultantHasProjectOnDate(projectProfiles, this.today)
         ? this.utilized += 1
@@ -105,41 +117,30 @@ export default {
   },
   methods: {
     consultantHasProjectOnDate (projectProfiles, date) {
-      projectProfiles.sort((a, b) => {
-        if (isBefore(a.startDate, b.startDate)) {
-          return -1
-        }
-        if (isAfter(a.startDate, b.startDate)) {
-          return 1
-        }
-        return 0
-      })
+      projectProfiles.sort((a, b) => sortByDate(a.startDate, b.startDate))
       if (projectProfiles.length > 0) {
-        if (isWithinRange(date, projectProfiles[0].startDate, projectProfiles[0].endDate)) {
-          return true
-        } else {
-          return false
-        }
+        return isWithinRange(date, projectProfiles[0].startDate, projectProfiles[0].endDate)
       }
       return false
     },
-    mapUtilizationOnTimeFrame (start, end) {
-      let idx = 0
+    countUtilizedConsultantsOnDate (currentDate) {
+      let count = 0
+      this.activeProfiles.forEach(profile => {
+        const profileProjects = this.futureProjectsOfProfile(profile)
+        if (this.consultantHasProjectOnDate(profileProjects, currentDate)) {
+          count += 1
+        }
+      })
+      return count
+    },
+    mapUtilizationOnTimeFrame (startDate, endDate) {
       const utilization = []
       const labels = []
-      let currentDate = start
-      const profiles = Object.keys(this.profileFilter())
-      while (isBefore(currentDate, end)) {
-        utilization.push(0)
-        profiles.forEach(profile => {
-          const profileProjects = this.futureProjectsOfProfile(profile)
-          if (this.consultantHasProjectOnDate(profileProjects, currentDate)) {
-            utilization[idx] += 1
-          }
-        })
-        idx += 1
-        labels.push(format(currentDate, 'DD/MM/YYYY'))
-        currentDate = addDays(currentDate, 7)
+      let currentDate = startDate
+      for (let i = 0; isBefore(currentDate, endDate); i += 1) {
+        utilization.push(this.countUtilizedConsultantsOnDate(currentDate))
+        currentDate = addWeeks(currentDate, 1)
+        labels.push(createLabel(currentDate))
       }
       return { data: utilization, labels }
     }

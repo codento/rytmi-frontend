@@ -12,20 +12,33 @@
         <b-row class="no-gutters mt-1">
           <b-col
             :cols="12"
-            :md="6"
+            :md="8"
           >
-            <top-skill-chart
-              :skill-info="skillInfo"
-            />
+            <consultant-utilization-chart />
           </b-col>
           <b-col
             :cols="12"
-            :md="6"
+            :md="4"
           >
-            <most-willingness-chart
-              :skill-info="skillInfo"
-            />
+            <b-row class="ml-md-1">
+              <b-col
+                :cols="12"
+              >
+                <top-skill-chart
+                  :skill-info="skillInfo"
+                />
+              </b-col>
+              <b-col
+                class="mt-2"
+                :cols="12"
+              >
+                <most-willingness-chart
+                  :skill-info="skillInfo"
+                />
+              </b-col>
+            </b-row>
           </b-col>
+
         </b-row>
         <b-row class="no-gutters mt-1">
           <b-col
@@ -42,15 +55,6 @@
             />
           </b-col>
         </b-row>
-        <b-row>
-          <b-col
-            :cols="12"
-            :md="7"
-          >
-            <utilization-chart />
-
-          </b-col>
-        </b-row>
       </div>
     </div>
   </div>
@@ -61,7 +65,7 @@ import { mapGetters } from 'vuex'
 import SkillChart from './SkillChart'
 import TopSkillChart from './TopSkillChart'
 import MostWillingnessChart from './MostWillingnessChart'
-import UtilizationChart from './UtilizationChart'
+import ConsultantUtilizationChart from './ConsultantUtilizationChart'
 
 const calculateAverage = (arr) => {
   if (arr && arr.length > 0) {
@@ -75,7 +79,7 @@ export default {
     SkillChart,
     TopSkillChart,
     MostWillingnessChart,
-    UtilizationChart
+    ConsultantUtilizationChart
   },
   computed: {
     ...mapGetters([
@@ -133,4 +137,5 @@ export default {
   font-size: 24px;
   color: grey;
 }
+
 </style>
