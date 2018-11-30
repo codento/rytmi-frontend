@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MostWillingnessChart.vue Template is correct 1`] = `
-<chartcard-stub
-  class="ml-md-1"
->
+<chartcard-stub>
   <template>
     <div
       class="h3 px-2"

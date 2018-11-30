@@ -28,20 +28,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { isWithinRange, isBefore, isAfter, addMonths, addWeeks, format } from 'date-fns'
+import { isWithinRange, isBefore, addMonths, addWeeks, format } from 'date-fns'
 import ChartCard from './ChartCard'
 import LineChart from '../Charts/LineChart'
 
 const createLabel = (date) => format(date, 'DD/MM/YYYY')
-const sortByDate = (dateOne, dateTwo) => {
-  if (isBefore(dateOne, dateTwo)) {
-    return -1
-  }
-  if (isAfter(dateOne, dateTwo)) {
-    return 1
-  }
-  return 0
-}
 
 export default {
   components: {
@@ -65,9 +56,6 @@ export default {
       'profileFilter',
       'futureProjectsOfProfile'
     ]),
-    getProjects (id) {
-      return this.futureProjectsOfProfile(id)
-    },
     lineChartData () {
       const utilization = this.mapUtilizationOnTimeFrame(this.today, this.endDate)
       return {
@@ -107,19 +95,22 @@ export default {
     }
   },
   created () {
-    this.activeProfiles = Object.keys(this.profileFilter())
+    const profiles = this.profileFilter()
+    this.activeProfiles = Object.keys(profiles).map((key) => profiles[key].id)
     this.activeProfiles.forEach((profile) => {
       const projectProfiles = this.futureProjectsOfProfile(profile)
-      this.consultantHasProjectOnDate(projectProfiles, this.today)
+      this.consultantHasOngoingProject(projectProfiles, this.today)
         ? this.utilized += 1
         : this.notUtilized += 1
     })
   },
   methods: {
-    consultantHasProjectOnDate (projectProfiles, date) {
-      projectProfiles.sort((a, b) => sortByDate(a.startDate, b.startDate))
+    consultantHasOngoingProject (projectProfiles, date) {
       if (projectProfiles.length > 0) {
-        return isWithinRange(date, projectProfiles[0].startDate, projectProfiles[0].endDate)
+        const onGoingProjects = projectProfiles.filter(
+          pp => (isWithinRange(date, pp.startDate, pp.endDate))
+        )
+        return onGoingProjects.length > 0
       }
       return false
     },
@@ -127,7 +118,7 @@ export default {
       let count = 0
       this.activeProfiles.forEach(profile => {
         const profileProjects = this.futureProjectsOfProfile(profile)
-        if (this.consultantHasProjectOnDate(profileProjects, currentDate)) {
+        if (this.consultantHasOngoingProject(profileProjects, currentDate)) {
           count += 1
         }
       })
@@ -139,8 +130,8 @@ export default {
       let currentDate = startDate
       for (let i = 0; isBefore(currentDate, endDate); i += 1) {
         utilization.push(this.countUtilizedConsultantsOnDate(currentDate))
-        currentDate = addWeeks(currentDate, 1)
         labels.push(createLabel(currentDate))
+        currentDate = addWeeks(currentDate, 1)
       }
       return { data: utilization, labels }
     }
