@@ -29,8 +29,8 @@
                 />
               </b-col>
               <b-col
-                class="mt-2"
                 :cols="12"
+                class="mt-2"
               >
                 <most-willingness-chart
                   :skill-info="skillInfo"
