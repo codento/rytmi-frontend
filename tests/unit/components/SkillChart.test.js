@@ -82,8 +82,8 @@ describe('SkillChart.vue', () => {
 
   it('Should choose 3 most widely known skills as selected skills when mounted', () => {
     const expected = [
-      { 'id': 2, 'label': 'SkillTwo' },
       { 'id': 3, 'label': 'SkillThree' },
+      { 'id': 2, 'label': 'SkillTwo' },
       { 'id': 4, 'label': 'SkillFour' }
     ]
     const wrapper = createWrapper()
