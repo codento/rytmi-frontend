@@ -71,7 +71,8 @@ export default {
       'fetchAllFutureProfileProjects',
       'fetchSkills',
       'fetchProfileSkills',
-      'fetchProjects'
+      'fetchProjects',
+      'fetchSkillCategories'
     ]),
     ...mapMutations({
       setAppInitialized: SET_APP_INITIALIZED,
@@ -84,7 +85,8 @@ export default {
           this.fetchAllFutureProfileProjects(),
           this.fetchSkills(),
           this.fetchProfileSkills(),
-          this.fetchProjects()
+          this.fetchProjects(),
+          this.fetchSkillCategories()
         ])
           .catch(error => {
             this.setAppInitializeError(error)
