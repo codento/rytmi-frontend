@@ -63,7 +63,9 @@ export default {
         return []
       }
       const skillNames = Object.values(this.skills).map(skill => skill.name)
-      return skillNames.filter(skillName => skillName.toLowerCase().includes(this.skill.name.toLowerCase()))
+      const matchingSkillNames = skillNames.filter(skillName => skillName.toLowerCase().includes(this.skill.name.toLowerCase()))
+      matchingSkillNames.sort()
+      return matchingSkillNames
     }
   },
   methods: {
