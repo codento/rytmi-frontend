@@ -26,16 +26,31 @@ export function getSkills () {
   return axios.get(API_URL + PATH_SKILLS, getAuthHeaders()).catch(handleError)
 }
 
-export function getSkillCategories () {
-  return axios.get(API_URL + PATH_SKILL_CATEGORIES, getAuthHeaders()).catch(handleError)
-}
-
 export function newSkill (data) {
   return axios.post(
     API_URL + PATH_SKILLS,
     denormalize(data, [skill]),
     getAuthHeaders())
     .catch(handleError)
+}
+
+export function alterSkill (data) {
+  return axios.put(
+    API_URL + PATH_SKILLS + '/' + data.id,
+    denormalize(data, [skill]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function deleteSkill (id) {
+  return axios.delete(
+    API_URL + PATH_SKILLS + '/' + id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getSkillCategories () {
+  return axios.get(API_URL + PATH_SKILL_CATEGORIES, getAuthHeaders()).catch(handleError)
 }
 
 export function getProfiles () {
