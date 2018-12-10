@@ -11,6 +11,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { sortBy } from 'lodash'
 export default {
   name: 'SkillsList',
   data () {
@@ -32,7 +33,7 @@ export default {
     mapSkillsToArray () {
       const objectKeys = Object.keys(this.skills)
       const skillsArray = objectKeys.map(skillKey => this.skills[skillKey])
-      return skillsArray
+      return sortBy(skillsArray, ['name'])
     }
   },
   methods: {

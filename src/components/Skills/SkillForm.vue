@@ -6,9 +6,19 @@
     >
       <h1>Add a new skill</h1>
       <br>
-
       <label>Skill name</label>
       <b-form-input v-model="skill.name" />
+      <small v-if="getSimilarSkillNames.length > 0">
+        Existing skills with a similar name
+      </small>
+      <ul>
+        <li
+          v-for="skillName in getSimilarSkillNames"
+          :key="skillName"
+        >
+          {{ skillName }}
+        </li>
+      </ul>
       <label>Skill description</label>
       <b-form-input v-model="skill.description" />
       <b-button
@@ -27,8 +37,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
+import { isEmpty } from 'lodash'
+
 export default {
   name: 'SkillsForm',
   components: {
@@ -42,6 +54,18 @@ export default {
         name: null,
         description: null
       }
+    }
+  },
+  computed: {
+    ...mapGetters(['skills']),
+    getSimilarSkillNames () {
+      if (isEmpty(this.skill.name)) {
+        return []
+      }
+      const skillNames = Object.values(this.skills).map(skill => skill.name)
+      const matchingSkillNames = skillNames.filter(skillName => skillName.toLowerCase().includes(this.skill.name.toLowerCase()))
+      matchingSkillNames.sort()
+      return matchingSkillNames
     }
   },
   methods: {
