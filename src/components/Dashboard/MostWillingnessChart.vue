@@ -1,7 +1,5 @@
 <template>
-  <chart-card
-    class="ml-md-1"
-  >
+  <chart-card>
     <template slot="header">
       <div class="h3 px-2">
         What people wanna work with?

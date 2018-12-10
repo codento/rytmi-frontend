@@ -15,13 +15,14 @@
             :want-desc="proficiencyDescriptions.wants"
           />
         </b-popover>
-        <select-filter
-          :selected="selectedSkills"
-          :options="selectFilterOptions"
-          heading="Skills"
-          @item-clicked="filterChanged"
-        />
       </div>
+      <b-col>
+        <v-select
+          v-model="selectedSkills"
+          :options="unselectedSkills"
+          multiple
+        />
+      </b-col>
     </template>
     <b-col
       cols="12"
@@ -49,8 +50,32 @@ import ChartCard from './ChartCard'
 import RadarChart from '../Charts/RadarChart'
 import BarChart from '../Charts/BarChart'
 import { SkillExplanations } from '@/components/Profile'
-import SelectFilter from '../helpers/SelectFilter'
 import proficiencyDescriptions from '@/assets/proficiencyDesc'
+import { sortBy } from 'lodash'
+import vSelect from 'vue-select'
+
+const colors = {
+  skillLevelColor: 'rgb(253, 167, 8, 0.4)',
+  skillLevelBorderColor: 'rgb(253, 167, 8)',
+  willingnessColor: 'rgb(66, 244, 92, 0.4)',
+  willingnessBorderColor: 'rgb(66, 244, 92)',
+  barChartColors: ['#ff3333', '#ff9234', '#ffcd3c', '#fefed5', '#35d0ba']
+}
+
+const mapColorsForDatasets = (labels, colors) => {
+  let i = 0
+  const dataSetColors = labels.map(label => {
+    const color = colors[i]
+    i++
+    if (i >= colors.length) {
+      i = 0
+    }
+    return color
+  })
+  return dataSetColors
+}
+
+const chartTitleFontSize = '16'
 
 export default {
   components: {
@@ -58,7 +83,7 @@ export default {
     RadarChart,
     BarChart,
     SkillExplanations,
-    SelectFilter
+    vSelect
   },
   props: {
     skills: {
@@ -77,13 +102,7 @@ export default {
   data () {
     return {
       selectedSkills: [],
-      chartTitleFontSize: '16',
-      proficiencyDescriptions,
-      skillLevelColor: 'rgb(253, 167, 8, 0.4)',
-      skillLevelBorderColor: 'rgb(253, 167, 8)',
-      willingnessColor: 'rgb(66, 244, 92, 0.4)',
-      willingnessBorderColor: 'rgb(66, 244, 92)',
-      barChartColors: ['#ff3333', '#ff9234', '#ffcd3c', '#fefed5', '#35d0ba']
+      proficiencyDescriptions
     }
   },
   computed: {
@@ -91,29 +110,24 @@ export default {
       return Object.keys(this.skills).length
     },
     skillLabels () {
-      return this.selectedSkills.map((skillId) => this.skills[skillId].name)
+      return this.selectedSkills.map(skill => skill.label)
     },
-    selectFilterOptions () {
-      const options = Object.keys(this.skills).map((key) => (
-        { text: this.skills[key].name, value: this.skills[key].id }
-      ))
-      options.sort((a, b) => {
-        const aIncluded = this.selectedSkills.includes(a.value)
-        const bIncluded = this.selectedSkills.includes(b.value)
-        if (aIncluded === bIncluded) {
-          return 0
-        }
-        return aIncluded ? -1 : 1
-      })
-      return options
+    unselectedSkills () {
+      const skills = Object.values(this.skills)
+      const selectedSkillIds = this.selectedSkills.map(s => s.id)
+      const unselectedSkills = sortBy(skills.filter(skill => !selectedSkillIds.includes(skill.id)), 'name')
+      return this.formatForVueSelect(unselectedSkills)
+    },
+    numberOfPeopleWithSelectedSkills () {
+      return this.selectedSkills.map(skill => this.skillInfo[skill.id].proficiencies.length)
     },
     barChartData () {
       return {
         labels: this.skillLabels,
         datasets: [
           {
-            data: this.getNumberOfPeopleWithSelectedSkills(),
-            backgroundColor: this.mapColors()
+            data: this.numberOfPeopleWithSelectedSkills,
+            backgroundColor: mapColorsForDatasets(this.skillLabels, colors.barChartColors)
           }
         ]
       }
@@ -122,7 +136,7 @@ export default {
       return {
         title: {
           display: true,
-          fontSize: this.chartTitleFontSize,
+          fontSize: chartTitleFontSize,
           text: 'Number of consultants with given skill'
         },
         legend: {
@@ -141,21 +155,21 @@ export default {
       }
     },
     radarChartData () {
-      const proficiencyAverages = this.selectedSkills.map((skillId) => this.skillInfo[skillId].proficiencyAverage)
-      const willingnessAverages = this.selectedSkills.map((skillId) => this.skillInfo[skillId].willingnessAverage)
+      const proficiencyAverages = this.selectedSkills.map(skill => this.skillInfo[skill.id].proficiencyAverage)
+      const willingnessAverages = this.selectedSkills.map(skill => this.skillInfo[skill.id].willingnessAverage)
       return {
         labels: this.skillLabels,
         datasets: [
           {
             label: 'Skill level',
-            backgroundColor: this.skillLevelColor,
-            borderColor: this.skillLevelBorderColor,
+            backgroundColor: colors.skillLevelColor,
+            borderColor: colors.skillLevelBorderColor,
             data: proficiencyAverages
           },
           {
             label: 'Willingness to work with',
-            backgroundColor: this.willingnessColor,
-            borderColor: this.willingnessBorderColor,
+            backgroundColor: colors.willingnessColor,
+            borderColor: colors.willingnessBorderColor,
             data: willingnessAverages
           }
         ]
@@ -166,7 +180,7 @@ export default {
         title: {
           display: true,
           text: 'Skill knowledge & willingness average',
-          fontSize: this.chartTitleFontSize
+          fontSize: chartTitleFontSize
         },
         scale: {
           ticks: {
@@ -179,35 +193,17 @@ export default {
     }
   },
   mounted () {
-    this.pickThreeMostKnownSkills()
+    this.pickThreeMostKnownSkills(this.skillInfo)
   },
   methods: {
-    getNumberOfPeopleWithSelectedSkills () {
-      return this.selectedSkills.map(skillId => this.skillInfo[skillId].proficiencies.length)
+    pickThreeMostKnownSkills (skillInfo) {
+      const skillIds = Object.keys(skillInfo)
+      skillIds.sort((a, b) => skillInfo[b].proficiencies.length - skillInfo[a].proficiencies.length)
+      const top3Skills = skillIds.slice(0, 3).map(id => Number(id)).map(id => this.skills[id])
+      this.selectedSkills = this.formatForVueSelect(top3Skills)
     },
-    filterChanged (val) {
-      if (this.selectedSkills.includes(val)) {
-        this.selectedSkills = this.selectedSkills.filter((skillId) => val !== skillId)
-      } else {
-        this.selectedSkills.push(val)
-      }
-    },
-    mapColors () {
-      let i = 0
-      const dataSetColors = this.skillLabels.map(label => {
-        const color = this.barChartColors[i]
-        i++
-        if (i >= this.barChartColors.length) {
-          i = 0
-        }
-        return color
-      })
-      return dataSetColors
-    },
-    pickThreeMostKnownSkills () {
-      const skillIds = Object.keys(this.skillInfo)
-      skillIds.sort((a, b) => this.skillInfo[b].proficiencies.length - this.skillInfo[a].proficiencies.length)
-      this.selectedSkills = skillIds.slice(0, 3).map(id => Number(id))
+    formatForVueSelect (skills) {
+      return skills.map(skill => ({ label: skill.name, id: skill.id }))
     }
   }
 }

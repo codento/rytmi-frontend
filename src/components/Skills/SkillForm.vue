@@ -6,9 +6,19 @@
     >
       <h1>Add a new skill</h1>
       <br>
-
       <label>Skill name</label>
       <b-form-input v-model="skill.name" />
+      <small v-if="getSimilarSkillNames.length > 0">
+        Existing skills with a similar name
+      </small>
+      <ul>
+        <li
+          v-for="skillName in getSimilarSkillNames"
+          :key="skillName"
+        >
+          {{ skillName }}
+        </li>
+      </ul>
       <label>Skill description</label>
       <b-form-input v-model="skill.description" />
       <label>Skill category</label>
@@ -23,7 +33,7 @@
     </b-form>
     <div
       v-if="showError"
-      class="skill-creation-error"
+      class="text-danger"
     >
       <ApiErrorDetailsPanel :error-details="errorDetails" />
     </div>
@@ -34,6 +44,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
+import { isEmpty } from 'lodash'
+
 export default {
   name: 'SkillsForm',
   components: {
@@ -51,12 +63,21 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['skillCategories']),
+    ...mapGetters(['skillCategories', 'skills']),
     getSkillCategoryTitles () {
       const categoryKeys = Object.keys(this.skillCategories)
       return categoryKeys.map(key => {
         return { value: this.skillCategories[key].id, text: this.skillCategories[key].title }
       })
+    },
+    getSimilarSkillNames () {
+      if (isEmpty(this.skill.name)) {
+        return []
+      }
+      const skillNames = Object.values(this.skills).map(skill => skill.name)
+      const matchingSkillNames = skillNames.filter(skillName => skillName.toLowerCase().includes(this.skill.name.toLowerCase()))
+      matchingSkillNames.sort()
+      return matchingSkillNames
     }
   },
   methods: {
@@ -68,12 +89,17 @@ export default {
           this.$toasted.global.rytmi_success({
             message: 'New skill added!'
           })
-          document.getElementById('skills-add-form').reset()
+          this.resetForm()
         })
         .catch(err => {
           this.errorDetails = err.response.data.error.details
           this.showError = true
         })
+    },
+    resetForm () {
+      this.showError = false
+      this.errorDetails = []
+      this.skill = { name: null, description: null, SkillCategoryId: null }
     }
   }
 }
@@ -83,9 +109,7 @@ button {
   width: 50%;
   margin-top: 1em;
 }
-.skill-creation-error {
-  color: red;
-}
+
 form{
  width: 50%;
  padding-top: 1%;
