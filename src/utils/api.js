@@ -12,6 +12,8 @@ const PATH_PROFILES = '/profiles'
 const PATH_PROFILESKILLS = '/profileskills'
 const PATH_PROJECTS = '/projects'
 const PATH_PROFILEPROJECTS = '/profileprojects'
+const PATH_SKILLCATEGORIES = '/skillcategories'
+const PATH_SKILLGROUPS = '/skillgroups'
 
 export function login (token) {
   return axios.post(API_URL + PATH_AUTH, { id_token: token })
@@ -178,6 +180,36 @@ function getAuthHeaders () {
       'Authorization': 'Bearer ' + token
     }
   }
+}
+
+export function getSkillCategories () {
+  return axios.get(
+    process.env.VUE_APP_API_URL + PATH_SKILLCATEGORIES,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function newSkillCategory (data) {
+  return axios.post(
+    process.env.VUE_APP_API_URL + PATH_SKILLCATEGORIES,
+    data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getSkillGroups () {
+  return axios.get(
+    process.env.VUE_APP_API_URL + PATH_SKILLGROUPS,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function newSkillGroup (data) {
+  return axios.post(
+    process.env.VUE_APP_API_URL + PATH_SKILLGROUPS,
+    data,
+    getAuthHeaders())
+    .catch(handleError)
 }
 
 function handleError (error) {

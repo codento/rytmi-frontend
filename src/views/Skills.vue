@@ -5,7 +5,8 @@
     </b-row>
     <b-row>
       <b-col>
-        <SkillList /></b-col>
+        <SkillList />
+      </b-col>
     </b-row>
   </b-container>
 </template>
