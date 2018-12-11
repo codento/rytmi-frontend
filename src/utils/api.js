@@ -7,7 +7,6 @@ import * as types from '../store/mutation-types'
 const API_URL = process.env.VUE_APP_API_URL
 const PATH_AUTH = '/auth'
 const PATH_SKILLS = '/skills'
-const PATH_SKILL_CATEGORIES = '/skillcategories'
 const PATH_PROFILES = '/profiles'
 const PATH_PROFILESKILLS = '/profileskills'
 const PATH_PROJECTS = '/projects'
@@ -49,10 +48,6 @@ export function deleteSkill (id) {
     API_URL + PATH_SKILLS + '/' + id,
     getAuthHeaders())
     .catch(handleError)
-}
-
-export function getSkillCategories () {
-  return axios.get(API_URL + PATH_SKILL_CATEGORIES, getAuthHeaders()).catch(handleError)
 }
 
 export function getProfiles () {
@@ -184,14 +179,14 @@ function getAuthHeaders () {
 
 export function getSkillCategories () {
   return axios.get(
-    process.env.VUE_APP_API_URL + PATH_SKILLCATEGORIES,
+    API_URL + PATH_SKILLCATEGORIES,
     getAuthHeaders())
     .catch(handleError)
 }
 
 export function newSkillCategory (data) {
   return axios.post(
-    process.env.VUE_APP_API_URL + PATH_SKILLCATEGORIES,
+    API_URL + PATH_SKILLCATEGORIES,
     data,
     getAuthHeaders())
     .catch(handleError)
@@ -199,14 +194,14 @@ export function newSkillCategory (data) {
 
 export function getSkillGroups () {
   return axios.get(
-    process.env.VUE_APP_API_URL + PATH_SKILLGROUPS,
+    API_URL + PATH_SKILLGROUPS,
     getAuthHeaders())
     .catch(handleError)
 }
 
 export function newSkillGroup (data) {
   return axios.post(
-    process.env.VUE_APP_API_URL + PATH_SKILLGROUPS,
+    API_URL + PATH_SKILLGROUPS,
     data,
     getAuthHeaders())
     .catch(handleError)

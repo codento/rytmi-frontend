@@ -29,7 +29,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { format } from 'date-fns'
-import { sortBy } from 'lodash'
+import { orderBy } from 'lodash'
 import EditSkill from './EditSkill'
 
 const mapSkillRow = (skill, skillCategories) => ({
@@ -79,7 +79,7 @@ export default {
     mapSkillsToArray () {
       const objectKeys = Object.keys(this.skills)
       const skillsArray = objectKeys.map(skillKey => mapSkillRow(this.skills[skillKey], this.skillCategories))
-      return sortBy(skillsArray, ['name'])
+      return orderBy(skillsArray, [skill => skill.name.toLowerCase()], ['asc'])
     },
     calculatePeopleWithSelectedSkill () {
       if (this.selectedSkill) {
@@ -101,9 +101,8 @@ export default {
       this.$refs.editSkillModal.hide()
     },
     getSkillCategoryTitle (id) {
-      return this.skillCategories && id ? this.skillCategories[id].title : ''
-    },
-    removeSkill (item) {}
+      return Object.keys(this.skillCategories).length > 0 && id ? this.skillCategories[id].title : ''
+    }
   }
 }
 </script>
