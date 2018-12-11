@@ -2,15 +2,15 @@
   <chart-card>
     <template slot="header">
       <div class="h3 px-2">
-        What people wanna work with?
+        Preferred skills
       </div>
     </template>
     <b-col>
       <p class="lead px-2">
-        Most enthusiastic people are about
+        Employees are most enthusiastic about
         <strong>{{ mostWillingnessToWorkWith.name }}</strong>. <br>
         There are <strong>{{ mostWillingnessToWorkWith.numberOfPeople }}</strong>
-        who really wanna learn the tech
+        who would prefer working with the tech
         and our current skill level average is
         <strong>{{ mostWillingnessToWorkWith.currentKnowledgeAverage }}</strong>
       </p>

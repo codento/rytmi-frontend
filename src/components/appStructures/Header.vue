@@ -72,7 +72,7 @@
 
 import { Header as AppHeader, SidebarToggler } from '@coreui/vue'
 import { mapGetters, mapActions } from 'vuex'
-import { loadAuthClient, handleLogin, handleLogout } from '../../utils/auth'
+import { handleLogout } from '../../utils/auth'
 
 export default {
   name: 'CHeader',
@@ -81,21 +81,9 @@ export default {
     SidebarToggler
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'profileId', 'getToken']),
-    isDev () {
-      return process.env.NODE_ENV === 'development'
-    }
-  },
-  created () {
-    /* eslint-disable */
-    loadAuthClient()
+    ...mapGetters(['isAuthenticated', 'profileId', 'getToken'])
   },
   methods: {
-    checkStatus () {
-      this.$toasted.global.rytmi_success({
-        message: 'Authenticated: ' + this.isAuthenticated
-      })
-    },
     logout () {
       handleLogout().then(() => {
         this.logoutAuth()
@@ -103,20 +91,9 @@ export default {
       })
     },
     login () {
-      handleLogin().then((response) => {
-        return this.requestAuth(response.Zi.id_token).then(() => {
-          this.$parent.initializeApp()
-        })
-      }).then(() => {
-        this.$router.push(this.$route.query.redirect || '/callback')
-      }).catch((error) => {
-        console.log(error)
-        this.$toasted.global.rytmi_error({
-          message: 'Login failed'
-        })
-      })
+      this.handleLogin()
     },
-    ...mapActions(['requestAuth', 'logoutAuth', 'createUser'])
+    ...mapActions(['requestAuth', 'logoutAuth', 'createUser', 'handleLogin'])
   }
 }
 </script>

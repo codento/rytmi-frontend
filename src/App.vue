@@ -32,7 +32,8 @@ export default {
   computed: {
     ...mapGetters([
       'isAuthenticated',
-      'profileId'
+      'profileId',
+      'validAuth'
     ]),
     nav () {
       return this.isAuthenticated
@@ -63,7 +64,7 @@ export default {
     }
   },
   created () {
-    this.initializeApp()
+    this.initialAuth()
   },
   methods: {
     ...mapActions([
@@ -73,12 +74,29 @@ export default {
       'fetchProfileSkills',
       'fetchProjects',
       'fetchSkillCategories',
-      'fetchSkillGroups'
+      'fetchSkillGroups',
+      'requestAuth',
+      'logoutAuth'
     ]),
     ...mapMutations({
       setAppInitialized: SET_APP_INITIALIZED,
       setAppInitializeError: SET_APP_INITIALIZE_ERROR
     }),
+    async initialAuth () {
+      /* eslint-disable no-undef */
+      const authInstance = await gapi.auth2.getAuthInstance()
+      const validToken = this.validAuth > Math.round(Date.now() / 1000)
+
+      if (!validToken && authInstance.isSignedIn.get()) {
+        await this.requestAuth(authInstance.currentUser.Ab.Zi.id_token)
+      }
+      if (!authInstance.isSignedIn.get() && this.validAuth) {
+        await this.logoutAuth()
+      }
+      /* eslint-enable no-undef */
+
+      this.initializeApp()
+    },
     initializeApp () {
       if (this.isAuthenticated) {
         Promise.all([

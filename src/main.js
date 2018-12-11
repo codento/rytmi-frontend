@@ -44,13 +44,23 @@ Vue.toasted.register('rytmi_error', (payload) => {
   ...options
 })
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  store,
-  router,
-  components: {
-    App
-  },
-  template: '<App/>'
-})
+function gapiInit () {
+  return gapi.auth2.init({ // eslint-disable-line no-undef
+    client_id: process.env.VUE_APP_CLIENT_ID,
+    cookiepolicy: 'single_host_origin',
+    scope: 'profile'
+  }).then(() => {
+    /* eslint-disable no-new */
+    new Vue({
+      el: '#app',
+      store,
+      router,
+      components: {
+        App
+      },
+      template: '<App/>'
+    })
+  })
+}
+
+gapi.load('auth2', gapiInit) // eslint-disable-line no-undef

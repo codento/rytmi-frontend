@@ -3,6 +3,7 @@ import * as actions from './actions'
 
 const state = {
   token: window.localStorage ? window.localStorage.getItem('user-token') || '' : '',
+  tokenExpirationTime: window.localStorage ? window.localStorage.getItem('user-token-expiration') || '' : '',
   profileId: window.localStorage ? window.localStorage.getItem('profile-id') || '' : '',
   status: '',
   hasLoadedOnce: false,
@@ -11,6 +12,7 @@ const state = {
 
 const getters = {
   isAuthenticated: state => state.token,
+  validAuth: state => state.tokenExpirationTime,
   authStatus: state => state.status,
   getUserId: state => state.userId
 }
@@ -34,6 +36,9 @@ const mutations = {
   },
   [types.SET_USERID]: (state, userId) => {
     state.userId = userId
+  },
+  [types.SET_TOKEN_EXPIRATION]: (state, expires) => {
+    state.tokenExpirationTime = expires
   }
 }
 
