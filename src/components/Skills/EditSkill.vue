@@ -27,8 +27,8 @@
         >
           <v-select
             v-model="selectedSkillCategory"
-            label="title"
             :options="skillCategoryOptions"
+            label="title"
             required
           />
           <div class="text-danger">{{ categoryRequired }}</div>
@@ -36,8 +36,8 @@
         <b-form-group label="Description:">
           <b-form-textarea
             v-model="description"
-            placeholder="Enter description"
             :rows="4"
+            placeholder="Enter description"
           />
         </b-form-group>
         <b-form-row v-if="!deleteDialogOpen">
@@ -56,6 +56,7 @@
             offset-md="6"
           >
             <b-button
+              id="delete-dialog-btn"
               variant="danger"
               @click="openDeleteConfirmation"
             >
@@ -91,15 +92,20 @@
             md="8"
             class="pr-md-2"
           >
-            There are currently {{ peopleWithSkill }} persons that have this skill in their CV.
-            Are you sure you want to delete the skill?
+            <span id="confirm-message">
+              There are currently {{ peopleWithSkill }} persons that have this skill in their CV.
+              Are you sure you want to delete the skill?
+            </span>
           </b-col>
           <b-col md="4">
             <b-row class="no-gutters mt-md-3">
               <b-col
                 cols="6"
               >
-                <b-button @click="closeConfirmDialog">
+                <b-button
+                  id="cancel-confirm-delete-btn"
+                  @click="closeConfirmDialog"
+                >
                   Cancel
                 </b-button>
               </b-col>
@@ -107,6 +113,7 @@
                 cols="6"
               >
                 <b-button
+                  id="confirm-delete-btn"
                   variant="danger"
                   @click="confirmDelete"
                 >
@@ -117,7 +124,10 @@
           </b-col>
         </b-row>
       </div>
-      <div class="text-danger">
+      <div
+        id="error-message"
+        class="text-danger"
+      >
         {{ errorMessage }}
       </div>
     </div>
