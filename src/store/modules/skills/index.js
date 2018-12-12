@@ -4,8 +4,7 @@ import { mutations } from './mutations'
 
 const initialState = {
   skills: {},
-  skillList: [],
-  skillCategories: null
+  skillList: []
 }
 
 export default {
