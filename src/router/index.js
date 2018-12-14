@@ -4,12 +4,12 @@ import LandingPage from '@/views/LandingPage'
 import Profile from '@/views/Profile'
 import EditProfile from '@/views/EditProfile'
 import Search from '@/views/Search'
-import PageNotFound from '@/views/PageNotFound'
 import store from '../store'
 import Callback from '@/components/helpers/Callback'
 import Projects from '@/views/Projects'
 import Project from '@/views/Project'
 import Skills from '@/views/Skills'
+import ErrorPage from '../views/ErrorPage'
 
 Vue.use(Router)
 
@@ -84,7 +84,8 @@ export default new Router({
     },
     {
       path: '/*',
-      component: PageNotFound
+      component: ErrorPage,
+      props: { errorType: '404' }
     }
   ]
 })

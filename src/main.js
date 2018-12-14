@@ -10,6 +10,8 @@ import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router'
 
+import ErrorPage from '@/views/ErrorPage'
+
 import store from './store'
 import Toasted from 'vue-toasted'
 import Loading from './components/helpers/LoadingSpinner'
@@ -44,13 +46,40 @@ Vue.toasted.register('rytmi_error', (payload) => {
   ...options
 })
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  store,
-  router,
-  components: {
-    App
-  },
-  template: '<App/>'
-})
+function renderWithError () {
+  new Vue({ // eslint-disable-line no-new
+    el: '#app',
+    components: {
+      ErrorPage
+    },
+    template: '<ErrorPage/>'
+  })
+}
+
+function gapiInit () {
+  return gapi.auth2.init({
+    client_id: process.env.VUE_APP_CLIENT_ID,
+    cookiepolicy: 'single_host_origin',
+    scope: 'profile'
+  }).then((response) => {
+    if (response && !response.hasOwnProperty('error')) {
+      new Vue({ // eslint-disable-line no-new
+        el: '#app',
+        store,
+        router,
+        components: {
+          App
+        },
+        template: '<App/>'
+      })
+    } else {
+      renderWithError()
+    }
+  })
+}
+
+if (typeof gapi === 'object') {
+  gapi.load('auth2', gapiInit)
+} else {
+  renderWithError()
+}
