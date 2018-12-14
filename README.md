@@ -6,9 +6,8 @@
 Make first sure env variables are all set. See next sub section.
 
 ```
-yarn install
-
-yarn serve
+npm install
+npm run serve
 ```
 
 ### Environment variables
@@ -68,12 +67,6 @@ Add to User/Workspace settings
 "vetur.format.defaultFormatter.js": "vscode-typescript",
 "javascript.format.insertSpaceBeforeFunctionParenthesis": true
 ```
-
-If you are using Yarn add also
-```
-"eslint.packageManager": "yarn"
-```
-
 
 
 ## Git Workflow
