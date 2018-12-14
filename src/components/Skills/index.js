@@ -1,7 +1,9 @@
 import SkillForm from './SkillForm.vue'
-import SkillsList from './SkillsList.vue'
+import SkillList from './SkillList.vue'
+import EditSkill from './EditSkill.vue'
 
 export {
   SkillForm,
-  SkillsList
+  SkillList,
+  EditSkill
 }

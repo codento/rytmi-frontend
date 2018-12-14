@@ -5,7 +5,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <SkillsList />
+        <SkillList />
       </b-col>
     </b-row>
   </b-container>
@@ -14,14 +14,14 @@
 <script>
 import {
   SkillForm,
-  SkillsList
+  SkillList
 } from '../components/Skills'
 
 export default {
   name: 'Skills',
   components: {
     SkillForm,
-    SkillsList
+    SkillList
   }
 }
 </script>

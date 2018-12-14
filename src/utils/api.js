@@ -4,6 +4,7 @@ import { profile, skill, project } from '../store/schema'
 import store from '../store'
 import * as types from '../store/mutation-types'
 
+const API_URL = process.env.VUE_APP_API_URL
 const PATH_AUTH = '/auth'
 const PATH_SKILLS = '/skills'
 const PATH_PROFILES = '/profiles'
@@ -14,7 +15,7 @@ const PATH_SKILLCATEGORIES = '/skillcategories'
 const PATH_SKILLGROUPS = '/skillgroups'
 
 export function login (token) {
-  return axios.post(process.env.VUE_APP_API_URL + PATH_AUTH, { id_token: token })
+  return axios.post(API_URL + PATH_AUTH, { id_token: token })
     .then(response => {
       return response
     }).catch(response => {
@@ -23,28 +24,43 @@ export function login (token) {
 }
 
 export function getSkills () {
-  return axios.get(process.env.VUE_APP_API_URL + PATH_SKILLS, getAuthHeaders()).catch(handleError)
+  return axios.get(API_URL + PATH_SKILLS, getAuthHeaders()).catch(handleError)
 }
 
 export function newSkill (data) {
   return axios.post(
-    process.env.VUE_APP_API_URL + PATH_SKILLS,
+    API_URL + PATH_SKILLS,
     denormalize(data, [skill]),
     getAuthHeaders())
     .catch(handleError)
 }
 
+export function alterSkill (data) {
+  return axios.put(
+    API_URL + PATH_SKILLS + '/' + data.id,
+    denormalize(data, [skill]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function deleteSkill (id) {
+  return axios.delete(
+    API_URL + PATH_SKILLS + '/' + id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function getProfiles () {
-  return axios.get(process.env.VUE_APP_API_URL + PATH_PROFILES + '/all', getAuthHeaders()).catch(handleError)
+  return axios.get(API_URL + PATH_PROFILES + '/all', getAuthHeaders()).catch(handleError)
 }
 
 export function getProfileSkills () {
-  return axios.get(process.env.VUE_APP_API_URL + PATH_PROFILESKILLS, getAuthHeaders()).catch(handleError)
+  return axios.get(API_URL + PATH_PROFILESKILLS, getAuthHeaders()).catch(handleError)
 }
 
 export function alterProfile (data) {
   return axios.put(
-    process.env.VUE_APP_API_URL + PATH_PROFILES + '/' + data.id,
+    API_URL + PATH_PROFILES + '/' + data.id,
     denormalize(data, [profile]),
     getAuthHeaders())
     .catch(handleError)
@@ -52,7 +68,7 @@ export function alterProfile (data) {
 
 export function newProfileSkill (data) {
   return axios.post(
-    process.env.VUE_APP_API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS,
+    API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS,
     denormalize(data, [skill]),
     getAuthHeaders())
     .catch(handleError)
@@ -60,7 +76,7 @@ export function newProfileSkill (data) {
 
 export function alterProfileSkill (data) {
   return axios.put(
-    process.env.VUE_APP_API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id,
+    API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id,
     denormalize(data, [skill]),
     getAuthHeaders())
     .catch(handleError)
@@ -68,14 +84,14 @@ export function alterProfileSkill (data) {
 
 export function deleteProfileSkill (data) {
   return axios.delete(
-    process.env.VUE_APP_API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id,
+    API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id,
     getAuthHeaders())
     .catch(handleError)
 }
 
 export function newProject (data) {
   return axios.post(
-    process.env.VUE_APP_API_URL + PATH_PROJECTS,
+    API_URL + PATH_PROJECTS,
     denormalize(data, [project]),
     getAuthHeaders())
     .catch(handleError)
@@ -83,7 +99,7 @@ export function newProject (data) {
 
 export function alterProject (data) {
   return axios.put(
-    process.env.VUE_APP_API_URL + PATH_PROJECTS + '/' + data.id,
+    API_URL + PATH_PROJECTS + '/' + data.id,
     denormalize(data, [project]),
     getAuthHeaders())
     .catch(handleError)
@@ -91,14 +107,14 @@ export function alterProject (data) {
 
 export function deleteProject (data) {
   return axios.delete(
-    process.env.VUE_APP_API_URL + PATH_PROJECTS + '/' + data.id,
+    API_URL + PATH_PROJECTS + '/' + data.id,
     getAuthHeaders())
     .catch(handleError)
 }
 
 export function getProjects () {
   return axios.get(
-    process.env.VUE_APP_API_URL + PATH_PROJECTS,
+    API_URL + PATH_PROJECTS,
     getAuthHeaders())
     .catch(handleError)
 }
@@ -106,7 +122,7 @@ export function getProjects () {
 export function getProfilesOfProject (projectId) {
   return function () {
     return axios.get(
-      process.env.VUE_APP_API_URL + PATH_PROJECTS + '/' + projectId + '/profiles',
+      API_URL + PATH_PROJECTS + '/' + projectId + '/profiles',
       getAuthHeaders())
       .catch(handleError)
   }
@@ -114,7 +130,7 @@ export function getProfilesOfProject (projectId) {
 
 export function createProjectProfile (data) {
   return axios.post(
-    process.env.VUE_APP_API_URL + PATH_PROJECTS + '/' + data.projectId + '/profiles/' + data.profileId,
+    API_URL + PATH_PROJECTS + '/' + data.projectId + '/profiles/' + data.profileId,
     data,
     getAuthHeaders())
     .catch(handleError)
@@ -122,7 +138,7 @@ export function createProjectProfile (data) {
 
 export function alterProjectProfile (data) {
   return axios.put(
-    process.env.VUE_APP_API_URL + PATH_PROFILEPROJECTS + '/' + data.id,
+    API_URL + PATH_PROFILEPROJECTS + '/' + data.id,
     data,
     getAuthHeaders())
     .catch(handleError)
@@ -130,7 +146,7 @@ export function alterProjectProfile (data) {
 
 export function deleteProjectProfile (data) {
   return axios.delete(
-    process.env.VUE_APP_API_URL + PATH_PROFILEPROJECTS + '/' + data.id,
+    API_URL + PATH_PROFILEPROJECTS + '/' + data.id,
     getAuthHeaders())
     .catch(handleError)
 }
@@ -138,7 +154,7 @@ export function deleteProjectProfile (data) {
 export function getProjectsOfProfile (profileId) {
   return function () {
     return axios.get(
-      process.env.VUE_APP_API_URL + PATH_PROFILES + '/' + profileId + '/projects',
+      API_URL + PATH_PROFILES + '/' + profileId + '/projects',
       getAuthHeaders())
       .catch(handleError)
   }
@@ -146,7 +162,7 @@ export function getProjectsOfProfile (profileId) {
 
 export function getAllFutureProfileProjects () {
   return axios.get(
-    process.env.VUE_APP_API_URL + PATH_PROFILEPROJECTS + '?infuture=true',
+    API_URL + PATH_PROFILEPROJECTS + '?infuture=true',
     getAuthHeaders())
     .catch(handleError)
 }
@@ -163,14 +179,14 @@ function getAuthHeaders () {
 
 export function getSkillCategories () {
   return axios.get(
-    process.env.VUE_APP_API_URL + PATH_SKILLCATEGORIES,
+    API_URL + PATH_SKILLCATEGORIES,
     getAuthHeaders())
     .catch(handleError)
 }
 
 export function newSkillCategory (data) {
   return axios.post(
-    process.env.VUE_APP_API_URL + PATH_SKILLCATEGORIES,
+    API_URL + PATH_SKILLCATEGORIES,
     data,
     getAuthHeaders())
     .catch(handleError)
@@ -178,14 +194,14 @@ export function newSkillCategory (data) {
 
 export function getSkillGroups () {
   return axios.get(
-    process.env.VUE_APP_API_URL + PATH_SKILLGROUPS,
+    API_URL + PATH_SKILLGROUPS,
     getAuthHeaders())
     .catch(handleError)
 }
 
 export function newSkillGroup (data) {
   return axios.post(
-    process.env.VUE_APP_API_URL + PATH_SKILLGROUPS,
+    API_URL + PATH_SKILLGROUPS,
     data,
     getAuthHeaders())
     .catch(handleError)

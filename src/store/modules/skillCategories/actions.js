@@ -1,11 +1,14 @@
 import * as types from '@/store/mutation-types'
+import { normalize } from 'normalizr'
+import { skillCategory } from '@/store/schema'
 import { getSkillCategories, newSkillCategory } from '@/utils/api'
 
 export function fetchSkillCategories ({ commit, state }) {
   return new Promise((resolve, reject) => {
     getSkillCategories()
       .then(response => {
-        commit(types.FETCH_SKILLCATEGORIES, response.data)
+        commit(types.FETCH_SKILLCATEGORIES,
+          normalize(response.data, [skillCategory]).entities.skillCategories)
         resolve(response.data)
       })
       .catch(error => {

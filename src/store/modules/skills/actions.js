@@ -1,7 +1,7 @@
 import { normalize } from 'normalizr'
 import * as types from '@/store/mutation-types'
 import { skill } from '@/store/schema'
-import { getSkills, newSkill } from '@/utils/api'
+import { getSkills, newSkill, alterSkill, deleteSkill as apiDeleteSkill } from '@/utils/api'
 
 export function fetchSkills ({ commit, state }) {
   return new Promise((resolve, reject) => {
@@ -30,14 +30,26 @@ export function addSkill ({ commit, state }, data) {
   })
 }
 
-export function deleteSkill ({ commit, state }, data) {
+export function updateSkill ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
-    deleteSkill(data)
+    alterSkill(data)
       .then(response => {
-        commit(types.DELETE_SKILL, response.data)
+        commit(types.UPDATE_SKILL, response.data)
         resolve(response.data)
       }).catch(error => {
-        reject(error)
+        reject(error.response.data.error)
+      })
+  })
+}
+
+export function deleteSkill ({ commit, state }, id) {
+  return new Promise((resolve, reject) => {
+    apiDeleteSkill(id)
+      .then(response => {
+        commit(types.DELETE_SKILL, id)
+        resolve(response.data)
+      }).catch(error => {
+        reject(error.response.data.error)
       })
   })
 }
