@@ -46,6 +46,16 @@ Vue.toasted.register('rytmi_error', (payload) => {
   ...options
 })
 
+function renderWithError () {
+  new Vue({ // eslint-disable-line no-new
+    el: '#app',
+    components: {
+      ErrorPage
+    },
+    template: '<ErrorPage/>'
+  })
+}
+
 function gapiInit () {
   return gapi.auth2.init({
     client_id: process.env.VUE_APP_CLIENT_ID,
@@ -53,8 +63,7 @@ function gapiInit () {
     scope: 'profile'
   }).then((response) => {
     if (response && !response.hasOwnProperty('error')) {
-      /* eslint-disable no-new */
-      new Vue({
+      new Vue({ // eslint-disable-line no-new
         el: '#app',
         store,
         router,
@@ -63,19 +72,14 @@ function gapiInit () {
         },
         template: '<App/>'
       })
+    } else {
+      renderWithError()
     }
   })
 }
+
 if (typeof gapi === 'object') {
   gapi.load('auth2', gapiInit)
 } else {
-  new Vue({
-    el: '#app',
-    store,
-    router,
-    components: {
-      ErrorPage
-    },
-    template: '<ErrorPage/>'
-  })
+  renderWithError()
 }

@@ -22,14 +22,14 @@ export default {
     header: function () {
       switch (this.errorType) {
         case '404':
-          return '404 sivua ei löytynyt'
+          return '404 page not found'
         default:
-          return 'Jokin meni vikaan...'
+          return 'Something went wrong...'
       }
     }
   },
   mounted () {
-    document.title = 'Rytmi - Virhe'
+    document.title = 'Rytmi - Error'
   }
 }
 </script>
