@@ -13,18 +13,18 @@ const mockSkill = {
   id: 1,
   name: 'JavaScript',
   description: 'Jäsää',
-  SkillCategoryId: 1
+  skillCategoryId: 1
 }
 
 const mockSkillCategories = {
   1: {
     id: 1,
-    SkillGroupId: 1,
+    skillGroupId: 1,
     title: 'New stuff'
   },
   2: {
     id: 2,
-    SkillGroupId: 1,
+    skillGroupId: 1,
     title: 'Old stuff'
   }
 }
@@ -75,7 +75,7 @@ describe('EditSkill.vue', () => {
       id: 1,
       name: 'TypeScript',
       description: 'TypeScript is betterer',
-      SkillCategoryId: 1
+      skillCategoryId: 1
     }
     const store = createStore({ actions })
     const wrapper = createWrapper({ store, propsData })

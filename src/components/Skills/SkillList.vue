@@ -34,7 +34,7 @@ import EditSkill from './EditSkill'
 
 const mapSkillRow = (skill, skillCategories) => ({
   id: skill.id,
-  skillCategoryId: skill.SkillCategoryId,
+  skillCategoryId: skill.skillCategoryId,
   name: skill.name,
   description: skill.description,
   created: format(skill.createdAt, 'DD.MM.YYYY'),
@@ -56,6 +56,7 @@ export default {
         },
         {
           key: 'skillCategoryId',
+          label: 'Skill Category',
           sortable: true,
           formatter: 'getSkillCategoryTitle'
         },

@@ -23,7 +23,7 @@
       <b-form-input v-model="skill.description" />
       <label>Skill category</label>
       <b-form-select
-        v-model="skill.SkillCategoryId"
+        v-model="skill.skillCategoryId"
         :options="getSkillCategoryTitles"
       />
       <b-button
@@ -58,7 +58,7 @@ export default {
       skill: {
         name: null,
         description: null,
-        SkillCategoryId: null
+        skillCategoryId: null
       }
     }
   },
@@ -99,7 +99,7 @@ export default {
     resetForm () {
       this.showError = false
       this.errorDetails = []
-      this.skill = { name: null, description: null, SkillCategoryId: null }
+      this.skill = { name: null, description: null, skillCategoryId: null }
     }
   }
 }

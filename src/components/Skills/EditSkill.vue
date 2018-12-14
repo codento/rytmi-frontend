@@ -157,7 +157,7 @@ export default {
     return {
       name: this.skill.name,
       description: this.skill.description,
-      selectedSkillCategory: this.skillCategories[this.skill.SkillCategoryId],
+      selectedSkillCategory: this.skillCategories[this.skill.skillCategoryId],
       deleteDialogOpen: false,
       loading: false,
       categoryNotSelected: false,
@@ -181,7 +181,7 @@ export default {
           id: this.skill.id,
           name: this.name,
           description: this.description,
-          SkillCategoryId: this.selectedSkillCategory.id
+          skillCategoryId: this.selectedSkillCategory.id
         }
         this.submitUpdatedSkill(skill)
       } else {
