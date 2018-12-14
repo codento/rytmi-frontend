@@ -33,7 +33,7 @@ export default {
     ...mapGetters([
       'isAuthenticated',
       'profileId',
-      'validAuth'
+      'isTokenValid'
     ]),
     nav () {
       return this.isAuthenticated
@@ -76,28 +76,26 @@ export default {
       'fetchSkillCategories',
       'fetchSkillGroups',
       'requestAuth',
-      'logoutAuth'
+      'clearLoginData'
     ]),
     ...mapMutations({
       setAppInitialized: SET_APP_INITIALIZED,
       setAppInitializeError: SET_APP_INITIALIZE_ERROR
     }),
     async initialAuth () {
-      /* eslint-disable no-undef */
-      const authInstance = await gapi.auth2.getAuthInstance()
-      const validToken = this.validAuth > Math.round(Date.now() / 1000)
+      const isSignedInToGoogle = await gapi.auth2.getAuthInstance().isSignedIn.get()
+      let googleUserToken = isSignedInToGoogle ? await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token : false
 
-      if (!validToken && authInstance.isSignedIn.get()) {
-        await this.requestAuth(authInstance.currentUser.Ab.Zi.id_token)
+      if (!this.isTokenValid && isSignedInToGoogle) {
+        await this.requestAuth(googleUserToken)
+        googleUserToken = await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token
+      } else if (await !isSignedInToGoogle || !this.isTokenValid) {
+        await this.clearLoginData()
       }
-      if (!authInstance.isSignedIn.get() && this.validAuth) {
-        await this.logoutAuth()
-      }
-      /* eslint-enable no-undef */
 
-      this.initializeApp()
+      this.initializeApp(isSignedInToGoogle)
     },
-    initializeApp () {
+    initializeApp (isSignedInToGoogle) {
       if (this.isAuthenticated) {
         Promise.all([
           this.fetchProfiles(),
@@ -112,7 +110,7 @@ export default {
             this.setAppInitializeError(error)
           })
           .finally(() => {
-            this.setAppInitialized(true)
+            this.setAppInitialized(this.isTokenValid && isSignedInToGoogle)
           })
       }
     }

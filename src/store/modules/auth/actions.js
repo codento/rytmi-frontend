@@ -2,9 +2,8 @@ import * as types from '../../mutation-types'
 import { login } from '../../../utils/api'
 
 export async function handleLogin ({ commit, dispatch }) {
-  console.log(process.env.VUE_APP_CLIENT_AUTH_REDIRECT_URI)
   const options = { ux_mode: 'redirect', redirect_uri: process.env.VUE_APP_CLIENT_AUTH_REDIRECT_URI }
-  const auth2 = await gapi.auth2.getAuthInstance().signIn(options) // eslint-disable-line no-undef
+  const auth2 = await gapi.auth2.getAuthInstance().signIn(options)
   return requestAuth({ commit, dispatch }, auth2.Zi.id_token)
 }
 
@@ -31,7 +30,7 @@ export function requestAuth ({ commit, dispatch }, token) {
   })
 }
 
-export function logoutAuth ({ commit, dispatch }) {
+export function clearLoginData ({ commit, dispatch }) {
   return new Promise((resolve, reject) => {
     commit(types.AUTH_LOGOUT)
     commit(types.CLEAR_PROFILEID)

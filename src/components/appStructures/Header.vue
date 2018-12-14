@@ -72,7 +72,6 @@
 
 import { Header as AppHeader, SidebarToggler } from '@coreui/vue'
 import { mapGetters, mapActions } from 'vuex'
-import { handleLogout } from '../../utils/auth'
 
 export default {
   name: 'CHeader',
@@ -85,15 +84,15 @@ export default {
   },
   methods: {
     logout () {
-      handleLogout().then(() => {
-        this.logoutAuth()
+      gapi.auth2.getAuthInstance().signOut().then(() => {
+        this.clearLoginData()
         this.$router.push(this.$route.query.redirect || '/home')
       })
     },
     login () {
       this.handleLogin()
     },
-    ...mapActions(['requestAuth', 'logoutAuth', 'createUser', 'handleLogin'])
+    ...mapActions(['clearLoginData', 'handleLogin'])
   }
 }
 </script>

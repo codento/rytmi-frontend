@@ -6,13 +6,14 @@ const state = {
   tokenExpirationTime: window.localStorage ? window.localStorage.getItem('user-token-expiration') || '' : '',
   profileId: window.localStorage ? window.localStorage.getItem('profile-id') || '' : '',
   status: '',
+  isTokenValid: false,
   hasLoadedOnce: false,
   userId: ''
 }
 
 const getters = {
   isAuthenticated: state => state.token,
-  validAuth: state => state.tokenExpirationTime,
+  isTokenValid: state => state.tokenExpirationTime > Math.round(Date.now() / 1000),
   authStatus: state => state.status,
   getUserId: state => state.userId
 }
