@@ -19,7 +19,7 @@ before_deploy:
 - chmod 600 $TRAVIS_BUILD_DIR/deploy_rsa
 - ssh-add $TRAVIS_BUILD_DIR/deploy_rsa
 - if [ "$TRAVIS_BRANCH" == "dev" ]; then
-    npm run build --mode staging;
+    npm run build -- --mode staging;
   else
     npm run build;
   fi
