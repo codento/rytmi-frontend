@@ -31,6 +31,7 @@
             id="linkInput"
             v-model="linkInput"
             type="url"
+            pattern="(https?)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?$"
             required
             @keydown.native="clearErrors"
           />
