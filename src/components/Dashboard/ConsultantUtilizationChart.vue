@@ -28,7 +28,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { isWithinRange, isBefore, addMonths, addWeeks, format } from 'date-fns'
+import { isWithinRange, isBefore, addMonths, addWeeks, format, isAfter } from 'date-fns'
 import ChartCard from './ChartCard'
 import LineChart from '../Charts/LineChart'
 
@@ -108,7 +108,7 @@ export default {
     consultantHasOngoingProject (projectProfiles, date) {
       if (projectProfiles.length > 0) {
         const onGoingProjects = projectProfiles.filter(
-          pp => (isWithinRange(date, pp.startDate, pp.endDate))
+          pp => (pp.endDate ? isWithinRange(date, pp.startDate, pp.endDate) : isAfter(date, pp.startDate))
         )
         return onGoingProjects.length > 0
       }
