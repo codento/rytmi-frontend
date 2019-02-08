@@ -5,7 +5,8 @@
     </b-row>
     <b-row>
       <b-col>
-        <SkillsList /></b-col>
+        <SkillList />
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -13,14 +14,14 @@
 <script>
 import {
   SkillForm,
-  SkillsList
+  SkillList
 } from '../components/Skills'
 
 export default {
   name: 'Skills',
   components: {
     SkillForm,
-    SkillsList
+    SkillList
   }
 }
 </script>

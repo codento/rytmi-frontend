@@ -6,9 +6,8 @@
 Make first sure env variables are all set. See next sub section.
 
 ```
-yarn install
-
-yarn serve
+npm install
+npm run serve
 ```
 
 ### Environment variables
@@ -25,11 +24,13 @@ Vue only loads ENV variables that have VUE_APP prefix.
 ```
 
 **Editing Environment variables**  
-If you modify the secret files those must be encrypted first. See https://docs.travis-ci.com/user/encrypting-files/ for more information.  
+If you modify the secret files those must be encrypted first. See https://docs.travis-ci.com/user/encrypting-files/ for more information. Use the --org paramater for travis login!    
 Travis CLI must be installed first. https://github.com/travis-ci/travis.rb#installation
 
+Add deploy_rsa to the packet. Travis uses it for deployment purposes.
+
 ```bash
-tar cvf secrets.tar .env.local .env.*.local
+tar cvf secrets.tar .env.local .env.*.local deploy_rsa
 travis encrypt-file secrets.tar
 
 # copy decryption command from the previous command output to the .travis.yml
@@ -68,12 +69,6 @@ Add to User/Workspace settings
 "vetur.format.defaultFormatter.js": "vscode-typescript",
 "javascript.format.insertSpaceBeforeFunctionParenthesis": true
 ```
-
-If you are using Yarn add also
-```
-"eslint.packageManager": "yarn"
-```
-
 
 
 ## Git Workflow

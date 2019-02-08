@@ -32,7 +32,8 @@ export default {
   computed: {
     ...mapGetters([
       'isAuthenticated',
-      'profileId'
+      'profileId',
+      'isTokenValid'
     ]),
     nav () {
       return this.isAuthenticated
@@ -63,7 +64,7 @@ export default {
     }
   },
   created () {
-    this.initializeApp()
+    this.initialAuth()
   },
   methods: {
     ...mapActions([
@@ -71,26 +72,45 @@ export default {
       'fetchAllFutureProfileProjects',
       'fetchSkills',
       'fetchProfileSkills',
-      'fetchProjects'
+      'fetchProjects',
+      'fetchSkillCategories',
+      'fetchSkillGroups',
+      'requestAuth',
+      'clearLoginData'
     ]),
     ...mapMutations({
       setAppInitialized: SET_APP_INITIALIZED,
       setAppInitializeError: SET_APP_INITIALIZE_ERROR
     }),
-    initializeApp () {
+    async initialAuth () {
+      const isSignedInToGoogle = await gapi.auth2.getAuthInstance().isSignedIn.get()
+      let googleUserToken = isSignedInToGoogle ? await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token : false
+
+      if (!this.isTokenValid && isSignedInToGoogle) {
+        await this.requestAuth(googleUserToken)
+        googleUserToken = await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token
+      } else if (await !isSignedInToGoogle || !this.isTokenValid) {
+        await this.clearLoginData()
+      }
+
+      this.initializeApp(isSignedInToGoogle)
+    },
+    initializeApp (isSignedInToGoogle) {
       if (this.isAuthenticated) {
         Promise.all([
           this.fetchProfiles(),
           this.fetchAllFutureProfileProjects(),
           this.fetchSkills(),
           this.fetchProfileSkills(),
-          this.fetchProjects()
+          this.fetchProjects(),
+          this.fetchSkillCategories(),
+          this.fetchSkillGroups()
         ])
           .catch(error => {
             this.setAppInitializeError(error)
           })
           .finally(() => {
-            this.setAppInitialized(true)
+            this.setAppInitialized(this.isTokenValid && isSignedInToGoogle)
           })
       }
     }

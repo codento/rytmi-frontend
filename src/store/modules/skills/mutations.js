@@ -9,7 +9,10 @@ export const mutations = {
   [types.ADD_SKILL] (state, skill) {
     Vue.set(state.skills, skill.id, skill)
   },
-  [types.DELETE_SKILL] (state, skill) {
-    state.skills[skill.id] = null
+  [types.UPDATE_SKILL] (state, skill) {
+    Vue.set(state.skills, skill.id, skill)
+  },
+  [types.DELETE_SKILL] (state, id) {
+    Vue.delete(state.skills, id)
   }
 }

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import * as api from '../../../src/utils/api'
-
+process.env = { VUE_APP_API_URL: 'http://localhost:8081/api' }
+const api = require('../../../src/utils/api')
 const API_URL = 'http://localhost:8081/api'
 const PATH_AUTH = '/auth'
 const PATH_SKILLS = '/skills'
@@ -10,12 +10,8 @@ const PATH_PROFILESKILLS = '/profileskills'
 const token = 'kargfayj63trfcjshgerfkjhsaghfy'
 
 describe('API Calls', () => {
-  beforeEach(() => {
-    process.env = { VUE_APP_API_URL: API_URL }
-  })
   it('GET skills', () => {
     let mockAdapter = new MockAdapter(axios)
-
     mockAdapter.onGet(API_URL + PATH_SKILLS).reply(200, {
       skills: ['My skills', 'Second skills']
     })

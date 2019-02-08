@@ -5,6 +5,8 @@ import profiles from './modules/profiles'
 import auth from './modules/auth'
 import projects from './modules/projects'
 import profileProjects from './modules/profileProjects'
+import skillCategories from './modules/skillCategories'
+import skillGroups from './modules/skillGroups'
 import getters from './getters'
 import mutations from './mutations'
 
@@ -24,6 +26,8 @@ export default new Vuex.Store({
     profiles,
     auth,
     projects,
-    profileProjects
+    profileProjects,
+    skillCategories,
+    skillGroups
   }
 })

@@ -1,15 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MostWillingnessChart.vue Template is correct 1`] = `
-<chartcard-stub
-  class="ml-md-1"
->
+<chartcard-stub>
   <template>
     <div
       class="h3 px-2"
     >
       
-      What people wanna work with?
+      Preferred skills
     
     </div>
   </template>
@@ -21,7 +19,7 @@ exports[`MostWillingnessChart.vue Template is correct 1`] = `
       class="lead px-2"
     >
       
-      Most enthusiastic people are about
+      Employees are most enthusiastic about
       
       <strong>
         SkillTwo
@@ -34,7 +32,7 @@ exports[`MostWillingnessChart.vue Template is correct 1`] = `
         2
       </strong>
       
-      who really wanna learn the tech
+      who would prefer working with the tech
       and our current skill level average is
       
       <strong>

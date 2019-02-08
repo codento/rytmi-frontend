@@ -16,7 +16,10 @@
         Please Sign in
       </template>
     </b-jumbotron>
-    <dashboard v-if="isAuthenticated">
+    <dashboard
+      v-if="isAuthenticated"
+      class="mb-2"
+    >
       <template slot="header">
         Codento Rytmi
       </template>
