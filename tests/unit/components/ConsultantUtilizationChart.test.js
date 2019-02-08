@@ -45,6 +45,12 @@ const mockProjectProfiles = [
     endDate: new Date('2018-12-31')
   },
   {
+    projectId: 5,
+    profileId: '3',
+    startDate: new Date('2018-12-01'),
+    endDate: null
+  },
+  {
     projectId: 2,
     profileId: '4',
     startDate: new Date('2018-12-01'),
@@ -107,7 +113,7 @@ describe('ConsultantUtilizationChart.vue', () => {
       '27/12/2018',
       '03/01/2019'
     ]
-    const expectedUtilization = [2, 2, 2, 2, 3, 4, 4, 5, 5, 0]
+    const expectedUtilization = [2, 2, 2, 2, 3, 4, 4, 5, 5, 1]
     const result = wrapper.vm.mapUtilizationOnTimeFrame(firstOfNovember, new Date('2019-01-07'))
     expect(result.data.length).toBe(result.labels.length)
     expect(result.data).toEqual(expectedUtilization)
