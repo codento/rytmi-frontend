@@ -23,6 +23,10 @@ export function login (token) {
     })
 }
 
+export function getVersion () {
+  return axios.get(API_URL).catch(handleError)
+}
+
 export function getSkills () {
   return axios.get(API_URL + PATH_SKILLS, getAuthHeaders()).catch(handleError)
 }
