@@ -4,10 +4,10 @@
     style="margin-top: 24px"
   >
     <b-jumbotron
+      :header="header"
       bg-variant="info"
       text-variant="white"
       border-variant="dark"
-      :header="header"
     />
   </div>
 </template>
