@@ -32,7 +32,7 @@ import { isWithinRange, isBefore, addMonths, addWeeks, format, isAfter } from 'd
 import ChartCard from './ChartCard'
 import LineChart from '../Charts/LineChart'
 
-const createLabel = (date) => format(date, 'DD/MM/YYYY')
+const createLabel = (date) => format(date, 'D.M.YYYY')
 
 export default {
   components: {

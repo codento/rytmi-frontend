@@ -41,6 +41,7 @@
     "lodash": "^4.17.11",
     "normalizr": "^3.3.0",
     "perfect-scrollbar": "^1.4.0",
+    "pikaday": "^1.8.0",
     "simple-line-icons": "^2.4.1",
     "vue": "^2.5.17",
     "vue-chartjs": "^3.4.0",
@@ -48,6 +49,7 @@
     "vue-router": "^3.0.1",
     "vue-select": "^2.5.1",
     "vue-toasted": "^1.1.25",
+    "vuejs-datepicker": "^1.5.4",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

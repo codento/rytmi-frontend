@@ -17,7 +17,7 @@ export default {
     date: String,
     format: {
       type: String,
-      default: 'DD.MM.YYYY'
+      default: 'D.M.YYYY'
     }
   },
   computed: {

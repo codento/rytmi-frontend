@@ -37,8 +37,8 @@ const mapSkillRow = (skill, skillCategories) => ({
   skillCategoryId: skill.skillCategoryId,
   name: skill.name,
   description: skill.description,
-  created: format(skill.createdAt, 'DD.MM.YYYY'),
-  lastUpdate: format(skill.createdAt, 'DD.MM.YYYY')
+  created: format(skill.createdAt, 'D.M.YYYY'),
+  lastUpdate: format(skill.createdAt, 'D.M.YYYY')
 })
 
 export default {

@@ -25,11 +25,15 @@
         <b-row>
           <b-col class="col-sm-3">
             <small>Not utilized on</small>
-            <b-input
+            <Datepicker name="testi" />
+            <input
               id="utilization-filter-date"
               v-model="utilizationDateFilter"
+              data-date-format="d/m/yyyy"
+              date-format="d/m/yyyy"
               class="form-control"
               type="date"
+              lang="fi"
             />
           </b-col>
           <b-col class="col-sm-9">
@@ -51,6 +55,7 @@
 </template>
 
 <script>
+import Datepicker from '../components/helpers/Datepicker'
 import { mapGetters } from 'vuex'
 import { Results } from '../components/Search'
 import { sortBy } from 'lodash'
@@ -60,7 +65,8 @@ export default {
   name: 'Search',
   components: {
     Results,
-    vSelect
+    vSelect,
+    Datepicker
   },
   data () {
     return {
