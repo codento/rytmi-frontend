@@ -34,7 +34,7 @@
               class="form-control"
               type="date"
               lang="fi"
-            />
+            >
           </b-col>
           <b-col class="col-sm-9">
             <b-button

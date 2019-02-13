@@ -28,14 +28,14 @@ export default {
     }
   },
   created () {
-    const datepicker = this.createDatePicker(this.name)
+    const datepicker = this.createDatePicker(this.name) // eslint-disable-line
   },
   methods: {
     createDatePicker (name) {
-      require(['pikaday'], function(Pikaday) {
-        var picker = new Pikaday({ field: document.getElementById('datepicker') });
+      require(['pikaday'], function (Pikaday) {
+        var picker = new Pikaday({ field: document.getElementById('datepicker') })
         console.log('require', picker)
-      });
+      })
       const pikkeri = new Pikaday({ field: document.getElementById(`${name}-datepicker`) })
       console.log(`${name}-datepicker`)
       console.log('import', pikkeri)
