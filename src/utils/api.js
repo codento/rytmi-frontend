@@ -55,7 +55,7 @@ export function deleteSkill (id) {
 }
 
 export function getProfiles () {
-  return axios.get(API_URL + PATH_PROFILES + '/all', getAuthHeaders()).catch(handleError)
+  return axios.get(API_URL + PATH_PROFILES, getAuthHeaders()).catch(handleError)
 }
 
 export function getProfileSkills () {
