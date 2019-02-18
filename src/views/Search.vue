@@ -25,16 +25,10 @@
         <b-row>
           <b-col class="col-sm-3">
             <small>Not utilized on</small>
-            <Datepicker name="testi" />
-            <input
-              id="utilization-filter-date"
+            <Datepicker
               v-model="utilizationDateFilter"
-              data-date-format="d/m/yyyy"
-              date-format="d/m/yyyy"
-              class="form-control"
-              type="date"
-              lang="fi"
-            >
+              name="utilization-date-filter"
+            />
           </b-col>
           <b-col class="col-sm-9">
             <b-button
@@ -71,7 +65,7 @@ export default {
   data () {
     return {
       nameFilter: '',
-      utilizationDateFilter: '',
+      utilizationDateFilter: undefined,
       selectedSkills: []
     }
   },
@@ -94,7 +88,7 @@ export default {
   },
   methods: {
     clearUtilizationDateFilter () {
-      this.utilizationDateFilter = ''
+      this.utilizationDateFilter = undefined
     }
   }
 }

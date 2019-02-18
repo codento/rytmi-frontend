@@ -28,18 +28,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { format } from 'date-fns'
 import { orderBy } from 'lodash'
 import EditSkill from './EditSkill'
-
-const mapSkillRow = (skill, skillCategories) => ({
-  id: skill.id,
-  skillCategoryId: skill.skillCategoryId,
-  name: skill.name,
-  description: skill.description,
-  created: format(skill.createdAt, 'D.M.YYYY'),
-  lastUpdate: format(skill.createdAt, 'D.M.YYYY')
-})
 
 export default {
   name: 'SkillsList',
@@ -79,7 +69,7 @@ export default {
     ...mapGetters(['skills', 'skillCategories', 'skillProfiles']),
     mapSkillsToArray () {
       const objectKeys = Object.keys(this.skills)
-      const skillsArray = objectKeys.map(skillKey => mapSkillRow(this.skills[skillKey], this.skillCategories))
+      const skillsArray = objectKeys.map(skillKey => this.mapSkillRow(this.skills[skillKey], this.skillCategories))
       return orderBy(skillsArray, [skill => skill.name.toLowerCase()], ['asc'])
     },
     calculatePeopleWithSelectedSkill () {
@@ -103,6 +93,16 @@ export default {
     },
     getSkillCategoryTitle (id) {
       return Object.keys(this.skillCategories).length > 0 && id ? this.skillCategories[id].title : ''
+    },
+    mapSkillRow: function (skill, skillCategories) {
+      return {
+        id: skill.id,
+        skillCategoryId: skill.skillCategoryId,
+        name: skill.name,
+        description: skill.description,
+        created: this.$options.filters.dateFilter(skill.createdAt),
+        lastUpdate: this.$options.filters.dateFilter(skill.updatedAt)
+      }
     }
   }
 }

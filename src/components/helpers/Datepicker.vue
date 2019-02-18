@@ -1,46 +1,53 @@
 <template>
   <div>
-    <label :for="element">Date:</label>
     <input
       :id="element"
+      v-model="formattedValue"
       type="text"
-    >
-    <label for="datepicker">Date:</label>
-    <input
-      id="datepicker"
-      type="text"
+      class="form-control"
+      autocomplete="off"
     >
   </div>
 </template>
 
 <script>
-import '../../../node_modules/pikaday/css/pikaday.css'
 import Pikaday from 'pikaday'
+import { format } from 'date-fns'
+import '../../assets/scss/vendors/pikaday/pikaday.css'
 
 export default {
-  name: 'DateFormatter',
+  name: 'Datepicker',
   props: {
-    name: String
+    name: String,
+    value: Date
   },
   computed: {
     element: function () {
       return `${this.name}-datepicker`
+    },
+    formattedValue: {
+      get: function () {
+        return this.value ? format(this.value, 'D.M.YYYY') : undefined
+      },
+      set: function () {
+        return undefined
+      }
     }
   },
-  created () {
-    const datepicker = this.createDatePicker(this.name) // eslint-disable-line
+  mounted () {
+    this.createDatePicker()
   },
   methods: {
-    createDatePicker (name) {
-      require(['pikaday'], function (Pikaday) {
-        var picker = new Pikaday({ field: document.getElementById('datepicker') })
-        console.log('require', picker)
+    createDatePicker () {
+      this.pikaday = new Pikaday({
+        field: document.getElementById(this.element),
+        format: 'D.M.YYYY',
+        keyboardInput: false,
+        onSelect: this.onSelect
       })
-      const pikkeri = new Pikaday({ field: document.getElementById(`${name}-datepicker`) })
-      console.log(`${name}-datepicker`)
-      console.log('import', pikkeri)
-      pikkeri.setDate('2015-01-01')
-      return pikkeri
+    },
+    onSelect () {
+      this.$emit('input', this.pikaday.getDate())
     }
   }
 }

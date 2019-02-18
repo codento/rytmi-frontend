@@ -33,20 +33,14 @@
             slot="startDate"
             slot-scope="data"
           >
-            <date-formatter
-              :date="data.value"
-              format="D.M.YY"
-            />
+            {{ data.value | dateFilter }}
           </template>
 
           <template
             slot="endDate"
             slot-scope="data"
           >
-            <date-formatter
-              :date="data.value"
-              format="D.M.YY"
-            />
+            {{ data.value | dateFilter }}
           </template>
 
           <template
@@ -76,13 +70,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import DateFormatter from '../helpers/DateFormatter'
 import { ProjectProfileForm } from '../Project'
 
 export default {
   name: 'EditProjects',
   components: {
-    DateFormatter,
     ProjectProfileForm
   },
   props: {

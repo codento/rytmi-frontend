@@ -31,11 +31,10 @@ exports[`Project.vue Template is correct 1`] = `
             </small>
             <br />
              
-            <b>
-              <dateformatter-stub
-                date="2018-01-01"
-                format="DD.MM.YYYY"
-              />
+            <b
+              class="project-start-date"
+            >
+              1.1.2018
             </b>
           </span>
            
@@ -47,11 +46,10 @@ exports[`Project.vue Template is correct 1`] = `
             </small>
             <br />
              
-            <b>
-              <dateformatter-stub
-                date="2018-05-01"
-                format="DD.MM.YYYY"
-              />
+            <b
+              class="project-end-date"
+            >
+              1.5.2018
             </b>
           </span>
            

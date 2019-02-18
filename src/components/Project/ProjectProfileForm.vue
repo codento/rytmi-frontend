@@ -64,18 +64,15 @@
       </b-form-group>
 
       <span>Start date</span>
-      <b-input
+      <Datepicker
         v-model="profileProject.startDate"
-        type="date"
-        required
+        name="profile-project-start-date"
       />
-
       <span>End date</span>
-      <b-input
+      <Datepicker
         v-model="profileProject.endDate"
-        type="date"
+        name="profile-project-end-date"
       />
-
       <span>Utilization percentage</span>
       <b-input
         v-model="profileProject.workPercentage"
@@ -106,10 +103,12 @@
 </template>
 
 <script>
+import Datepicker from '../helpers/Datepicker'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ProjectProfileForm',
+  components: { Datepicker },
   props: {
     projectId: {
       type: Number,
@@ -151,7 +150,7 @@ export default {
     onSubmit (evt) {
       evt.preventDefault()
       this.newProjectProfile(this.profileProject)
-        .then((reponse) => {
+        .then((response) => {
           this.$toasted.global.rytmi_success({
             message: 'Profile added to the project!'
           })

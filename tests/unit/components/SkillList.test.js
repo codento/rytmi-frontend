@@ -3,10 +3,14 @@ import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
 import { mount, createLocalVue } from '@vue/test-utils'
 import { SkillList, EditSkill } from '@/components/Skills/'
+import { format } from 'date-fns'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(BootstrapVue)
+localVue.filter('dateFilter', value => {
+  return value ? format(value, 'D.M.YYYY') : undefined
+})
 
 const mockSkills = {
   1: {
@@ -71,7 +75,14 @@ function createStore (overrideConfig) {
 function createWrapper (overrideMountingOptions) {
   const defaultMountingOptions = {
     localVue,
-    store: createStore()
+    store: createStore(),
+    $options: {
+      filters: {
+        dateFilter: function (value) {
+          return value ? format(value, 'D.M.YYYY') : undefined
+        }
+      }
+    }
   }
   const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
   return mount(SkillList, mergedMountingOptions)
