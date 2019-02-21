@@ -1,20 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ProjectList.vue Template is correct 1`] = `
-<bcontainer-stub
+<b-container-stub
   tag="div"
 >
   <h2>
     Projects
   </h2>
    
-  <binput-stub
+  <b-input-stub
     placeholder="Filter projects (by name or project code)"
     type="text"
     value=""
   />
    
-  <btable-stub
+  <b-table-stub
     apiurl=""
     currentpage="1"
     emptyfilteredtext="There are no records matching your request"
@@ -28,9 +28,11 @@ exports[`ProjectList.vue Template is correct 1`] = `
     labelsortasc="Click to sort Ascending"
     labelsortdesc="Click to sort Descending"
     perpage="0"
+    selectedvariant="primary"
+    selectmode="multi"
     sortdirection="asc"
     striped="true"
     value=""
   />
-</bcontainer-stub>
+</b-container-stub>
 `;

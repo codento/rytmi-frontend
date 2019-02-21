@@ -37,7 +37,9 @@
               variant="primary"
               class="position-bottom"
               @click="clearUtilizationDateFilter"
-            >Clear date</b-button>
+            >
+              Clear date
+            </b-button>
           </b-col>
         </b-row>
       </b-col>

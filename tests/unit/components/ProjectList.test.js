@@ -25,7 +25,7 @@ function createWrapper (overrideMountingOptions) {
   }
   const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
   return shallowMount(ProjectList, mergedMountingOptions)
-};
+}
 
 describe('ProjectList.vue', () => {
   it('Calls openProject when btable emits row-clicked', () => {
@@ -35,7 +35,7 @@ describe('ProjectList.vue', () => {
       }
     }
     const wrapper = createWrapper({ mocks })
-    const table = wrapper.find({ name: 'bTable' })
+    const table = wrapper.find({ name: 'BTable' })
     table.vm.$emit('row-clicked', { id: 1 })
     expect(table.emitted).toHaveLength(1)
     expect(mocks.$router.push).toHaveBeenCalled()

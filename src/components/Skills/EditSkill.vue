@@ -31,7 +31,9 @@
             label="title"
             required
           />
-          <div class="text-danger">{{ categoryRequired }}</div>
+          <div class="text-danger">
+            {{ categoryRequired }}
+          </div>
         </b-form-group>
         <b-form-group label="Description:">
           <b-form-textarea

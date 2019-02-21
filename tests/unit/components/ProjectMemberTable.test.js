@@ -51,7 +51,7 @@ describe('ProjectMemberTable.vue', () => {
   it('shows btable with correct size when there are members', () => {
     const propsData = getMembersList()
     const wrapper = createWrapper({ propsData })
-    expect(wrapper.find({ name: 'bTable' }).exists()).toBe(true)
+    expect(wrapper.find({ name: 'BTable' }).exists()).toBe(true)
     expect(wrapper.find('tbody').findAll('tr')).toHaveLength(propsData.members.length)
   })
 

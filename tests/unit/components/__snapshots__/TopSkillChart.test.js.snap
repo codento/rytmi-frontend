@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TopSkillChart.vue Should match the template 1`] = `
-<chartcard-stub>
+<chart-card-stub>
   <template>
     <div
       class="h3 px-2"
@@ -12,7 +12,7 @@ exports[`TopSkillChart.vue Should match the template 1`] = `
     </div>
   </template>
    
-  <bcol-stub
+  <b-col-stub
     tag="div"
   >
     <p
@@ -38,6 +38,6 @@ exports[`TopSkillChart.vue Should match the template 1`] = `
         3
       </strong>
     </p>
-  </bcol-stub>
-</chartcard-stub>
+  </b-col-stub>
+</chart-card-stub>
 `;

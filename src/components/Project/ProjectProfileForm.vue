@@ -4,7 +4,6 @@
       id="project-profile-form"
       @submit="onSubmit"
     >
-
       <b-form-group
         v-show="profileVisible"
         id="consultantLabel"
@@ -23,13 +22,16 @@
             <option
               :value="null"
               disabled
-            >-- Select Consultant --</option>
+            >
+              -- Select Consultant --
+            </option>
           </template>
           <option
             v-for="profile in profiles"
             :key="profile.id"
             :value="profile.id"
-          >{{ profile.firstName + ' ' + profile.lastName }}
+          >
+            {{ profile.firstName + ' ' + profile.lastName }}
           </option>
         </b-form-select>
       </b-form-group>
@@ -52,13 +54,16 @@
             <option
               :value="null"
               disabled
-            >-- Select Project --</option>
+            >
+              -- Select Project --
+            </option>
           </template>
           <option
             v-for="project in projects"
             :key="project.id"
             :value="project.id"
-          >{{ project.code }} - {{ project.name }}
+          >
+            {{ project.code }} - {{ project.name }}
           </option>
         </b-form-select>
       </b-form-group>
@@ -88,8 +93,9 @@
       <b-button
         primary
         type="submit"
-      >Submit</b-button>
-
+      >
+        Submit
+      </b-button>
     </b-form>
     <div
       v-if="showError"
