@@ -8,9 +8,7 @@ import ConsultantUtilizationChart from '@/components/Dashboard/ConsultantUtiliza
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(BootstrapVue)
-const dateNow = jest.spyOn(Date, 'now')
 const firstOfNovember = new Date('2018-11-01')
-dateNow.mockImplementation(() => firstOfNovember)
 
 const mockProfiles = {
   1: { id: '1' },
@@ -91,11 +89,14 @@ describe('ConsultantUtilizationChart.vue', () => {
     expect(wrapper.find(LineChart).isVisible()).toBeTruthy()
   })
 
-  // TODO fix and enable this test
-  xit('Should show correct amount of consultants utilized', () => {
+  it('Should show correct amount of consultants utilized', () => {
     const wrapper = createWrapper()
     const utilized = 2
     const notUtilized = 3
+    wrapper.vm.today = firstOfNovember
+    wrapper.vm.utilized = 0
+    wrapper.vm.notUtilized = 0
+    wrapper.vm.countUtilizedActiveProfiles()
     expect(wrapper.vm.utilized).toEqual(utilized)
     expect(wrapper.vm.notUtilized).toEqual(notUtilized)
   })
