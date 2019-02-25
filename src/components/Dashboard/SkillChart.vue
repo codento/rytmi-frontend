@@ -1,10 +1,11 @@
 <template>
   <chart-card>
     <template slot="header">
-      <div class="h3 px-2">Skills <i
-        id="skill-explanations-icon"
-        class="cui-info"
-      />
+      <div class="h3 px-2">
+        Skills <i
+          id="skill-explanations-icon"
+          class="cui-info"
+        />
         <b-popover
           target="skill-explanations-icon"
           title="Skill level descriptions"

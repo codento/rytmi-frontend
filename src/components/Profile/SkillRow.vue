@@ -50,7 +50,9 @@
           <slot
             v-if="active !== id"
             name="label"
-          >{{ wantsTo ? wantsTo.toString() : '' }}</slot>
+          >
+            {{ wantsTo ? wantsTo.toString() : '' }}
+          </slot>
         </b-progress-bar>
         <span
           v-show="active === id"
@@ -130,6 +132,6 @@ export default {
 }
 .skillname-highlight {
   color: black;
-  font-weight: 750;
+  font-weight: 700;
 }
 </style>

@@ -41,7 +41,8 @@
         <h3
           class="project-profile-form-header"
           @click="toggleProfileForm"
-        >Add a consultant
+        >
+          Add a consultant
           <i class="fa fa-chevron-down" />
         </h3>
         <div v-if="profileFormOpen">

@@ -5,10 +5,10 @@ exports[`Project.vue Template is correct 1`] = `
   <div
     class="animated fadeIn project-container col-sm-12 col-md-7"
   >
-    <brow-stub
+    <b-row-stub
       tag="div"
     >
-      <bcol-stub
+      <b-col-stub
         class="project-details"
         tag="div"
       >
@@ -78,21 +78,21 @@ exports[`Project.vue Template is correct 1`] = `
           Foo Bar
         
         </p>
-      </bcol-stub>
-    </brow-stub>
+      </b-col-stub>
+    </b-row-stub>
      
-    <brow-stub
+    <b-row-stub
       tag="div"
     >
-      <bcol-stub
+      <b-col-stub
         class="project-members"
         tag="div"
       >
         <projectmembertable-stub
           members="[object Object]"
         />
-      </bcol-stub>
-    </brow-stub>
+      </b-col-stub>
+    </b-row-stub>
      
     <hr />
      
@@ -106,6 +106,7 @@ exports[`Project.vue Template is correct 1`] = `
       <h3
         class="project-profile-form-header"
       >
+        
         Add a consultant
         
         <i

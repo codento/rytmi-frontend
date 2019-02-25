@@ -60,7 +60,8 @@
         class="form-control"
         type="submit"
         primary
-      >Submit
+      >
+        Submit
       </b-button>
     </b-form>
     <div

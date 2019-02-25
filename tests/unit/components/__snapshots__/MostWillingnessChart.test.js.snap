@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MostWillingnessChart.vue Template is correct 1`] = `
-<chartcard-stub>
+<chart-card-stub>
   <template>
     <div
       class="h3 px-2"
@@ -12,7 +12,7 @@ exports[`MostWillingnessChart.vue Template is correct 1`] = `
     </div>
   </template>
    
-  <bcol-stub
+  <b-col-stub
     tag="div"
   >
     <p
@@ -39,6 +39,6 @@ exports[`MostWillingnessChart.vue Template is correct 1`] = `
         4
       </strong>
     </p>
-  </bcol-stub>
-</chartcard-stub>
+  </b-col-stub>
+</chart-card-stub>
 `;

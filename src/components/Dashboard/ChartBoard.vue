@@ -38,7 +38,6 @@
               </b-col>
             </b-row>
           </b-col>
-
         </b-row>
         <b-row class="no-gutters mt-1">
           <b-col

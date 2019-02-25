@@ -65,7 +65,9 @@
             class="mr-1"
             variant="danger"
             @click.stop="removeMember(remove.item)"
-          >Remove</b-btn>
+          >
+            Remove
+          </b-btn>
         </template>
       </b-table>
     </div>
@@ -100,12 +102,16 @@
         id="save"
         class="modal-btn"
         @click="callUpdateProfileProjectAction()"
-      >Save</b-btn>
+      >
+        Save
+      </b-btn>
       <b-btn
         id="cancel"
         class="modal-btn"
         @click="closeEditModal()"
-      >Cancel</b-btn>
+      >
+        Cancel
+      </b-btn>
     </b-modal>
   </div>
 </template>
