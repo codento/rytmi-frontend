@@ -238,4 +238,44 @@ describe('Results.vue', () => {
       done()
     })
   })
+
+  it('should show profiles ordered by selected attribute (utilization)', (done) => {
+    const mountOptions = {
+      propsData: {
+        skillFilters: [],
+        nameFilter: '',
+        utilizationDateFilter: ''
+      }
+    }
+    const expectedOrder = ['Joe', 'Sarah', 'Daisy']
+    const wrapper = createWrapper(mountOptions)
+    wrapper.vm.sortAttribute = 4
+    wrapper.vm.$nextTick(() => {
+      const cards = wrapper.findAll(ProfileCard)
+      expect(cards).toHaveLength(3)
+      cards.wrappers.forEach((wrapper, i) => {
+        expect(wrapper.props().profile.firstName).toBe(expectedOrder[i])
+      })
+      done()
+    })
+  })
+
+  it('should show profiles reversed when reverse is selected', (done) => {
+    const mountOptions = {
+      propsData: {
+        skillFilters: [],
+        nameFilter: '',
+        utilizationDateFilter: ''
+      }
+    }
+    let expectedOrder = ['Sarah', 'Joe', 'Daisy']
+    const wrapper = createWrapper(mountOptions)
+    wrapper.setData({ reversedOrder: true })
+    const cards = wrapper.findAll(ProfileCard)
+    expect(cards).toHaveLength(3)
+    cards.wrappers.forEach((wrapper, i) => {
+      expect(wrapper.props().profile.firstName).toBe(expectedOrder[i])
+    })
+    done()
+  })
 })

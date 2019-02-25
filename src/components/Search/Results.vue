@@ -31,7 +31,6 @@
           />
         </b-btn>
       </b-col>
-
     </b-row>
     <profile-card
       v-for="profile in orderedProfiles"
