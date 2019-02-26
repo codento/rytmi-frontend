@@ -34,7 +34,6 @@
     "core-js": "^2.5.7",
     "css-vars-ponyfill": "^1.11.1",
     "date-fns": "^1.29.0",
-    "date-input-polyfill": "^2.14.0",
     "flag-icon-css": "^3.2.0",
     "font-awesome": "^4.7.0",
     "husky": "^1.2.0",
@@ -49,7 +48,6 @@
     "vue-router": "^3.0.1",
     "vue-select": "^2.5.1",
     "vue-toasted": "^1.1.25",
-    "vuejs-datepicker": "^1.5.4",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
