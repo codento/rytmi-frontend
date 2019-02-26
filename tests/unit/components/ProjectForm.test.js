@@ -77,8 +77,8 @@ describe('ProjectForm.test.js', () => {
       editableProject: {
         id: 1,
         code: '1234',
-        startDate: '2018-01-01',
-        endDate: '2018-02-01'
+        startDate: new Date('2018-01-01T00:00:00.000Z'),
+        endDate: new Date('2018-02-01T00:00:00.000Z')
       }
     }
     const actions = {
@@ -121,8 +121,8 @@ describe('ProjectForm.test.js', () => {
       editableProject: {
         id: 1,
         code: '1234',
-        startDate: '2018-01-01',
-        endDate: '2018-02-01'
+        startDate: new Date('2018-01-01T00:00:00.000Z'),
+        endDate: new Date('2018-02-01T00:00:00.000Z')
       }
     }
     const wrapper = createWrapper({ store, propsData })

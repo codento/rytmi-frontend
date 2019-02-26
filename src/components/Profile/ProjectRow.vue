@@ -10,11 +10,11 @@
       <div class="col-sm-12 duration-container">
         <span class="duration-item">
           <small>From</small><br>
-          <DateFormatter :date="profileProject.startDate" />
+          {{ profileProject.startDate | dateFilter }}
         </span>
         <span class="duration-item">
           <small>To</small><br>
-          <DateFormatter :date="profileProject.endDate" />
+          {{ profileProject.endDate | dateFilter }}
         </span>
       </div>
       <transition name="fade">
@@ -32,12 +32,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import DateFormatter from '../helpers/DateFormatter.vue'
 export default {
   name: 'ProjectRow',
-  components: {
-    DateFormatter
-  },
   props: {
     profileProject: Object
   },

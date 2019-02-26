@@ -104,16 +104,16 @@ describe('ConsultantUtilizationChart.vue', () => {
   it('Should calculate consultant utilization on frequency of one week', () => {
     const wrapper = createWrapper()
     const expectedLabels = [
-      '01/11/2018',
-      '08/11/2018',
-      '15/11/2018',
-      '22/11/2018',
-      '29/11/2018',
-      '06/12/2018',
-      '13/12/2018',
-      '20/12/2018',
-      '27/12/2018',
-      '03/01/2019'
+      '1.11.2018',
+      '8.11.2018',
+      '15.11.2018',
+      '22.11.2018',
+      '29.11.2018',
+      '6.12.2018',
+      '13.12.2018',
+      '20.12.2018',
+      '27.12.2018',
+      '3.1.2019'
     ]
     const expectedUtilization = [2, 2, 2, 2, 3, 4, 4, 5, 5, 1]
     const result = wrapper.vm.mapUtilizationOnTimeFrame(firstOfNovember, new Date('2019-01-07'))
