@@ -41,7 +41,7 @@ export default {
   },
   data () {
     return {
-      today: Date.now(),
+      today: new Date(),
       endDate: addMonths(Date.now(), 6),
       utilized: 0,
       notUtilized: 0,
@@ -97,14 +97,17 @@ export default {
   created () {
     const profiles = this.profileFilter()
     this.activeProfiles = Object.keys(profiles).map((key) => profiles[key].id)
-    this.activeProfiles.forEach((profile) => {
-      const projectProfiles = this.futureProjectsOfProfile(profile)
-      this.consultantHasOngoingProject(projectProfiles, this.today)
-        ? this.utilized += 1
-        : this.notUtilized += 1
-    })
+    this.countUtilizedActiveProfiles()
   },
   methods: {
+    countUtilizedActiveProfiles () {
+      this.activeProfiles.forEach((profile) => {
+        const projectProfiles = this.futureProjectsOfProfile(profile)
+        this.consultantHasOngoingProject(projectProfiles, this.today)
+          ? this.utilized += 1
+          : this.notUtilized += 1
+      })
+    },
     consultantHasOngoingProject (projectProfiles, date) {
       if (projectProfiles.length > 0) {
         const onGoingProjects = projectProfiles.filter(

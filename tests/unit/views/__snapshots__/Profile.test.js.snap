@@ -1,33 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Profile.vue shallowMount Template is correct 1`] = `
-<bcontainer-stub
+<b-container-stub
   class="animated fadeIn profile"
   tag="div"
 >
-  <brow-stub
+  <b-row-stub
     tag="div"
   >
-    <bcol-stub
+    <b-col-stub
       class="col-md-6 col-sm-12 col-12"
       tag="div"
     >
       <userprofilecard-stub
         profile="[object Object]"
       />
-    </bcol-stub>
+    </b-col-stub>
      
-    <bcol-stub
+    <b-col-stub
       class="col-md-6 col-sm-12 col-12"
       tag="div"
     >
-      <bcard-stub
+      <b-card-stub
         bodytag="div"
         footertag="div"
         headertag="div"
         id="proficiency"
+        subtitle=""
         subtitletag="h6"
+        subtitletextvariant="muted"
         tag="div"
+        title=""
         titletag="h4"
       >
         <h5
@@ -46,10 +49,10 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
           </span>
         </h5>
          
-        <brow-stub
+        <b-row-stub
           tag="div"
         >
-          <bcol-stub
+          <b-col-stub
             class="col mb-1"
             tag="div"
           >
@@ -58,31 +61,37 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
               id="1"
               name="Python"
             />
-          </bcol-stub>
-        </brow-stub>
-      </bcard-stub>
+          </b-col-stub>
+        </b-row-stub>
+      </b-card-stub>
        
-      <bcard-stub
+      <b-card-stub
         bodytag="div"
         footertag="div"
         header="Projects"
         headertag="div"
+        subtitle=""
         subtitletag="h6"
+        subtitletextvariant="muted"
         tag="div"
+        title=""
         titletag="h4"
       >
         <projectrow-stub
           profileproject="[object Object]"
         />
-      </bcard-stub>
+      </b-card-stub>
        
-      <bcard-stub
+      <b-card-stub
         bodytag="div"
         footertag="div"
         header="Utilization"
         headertag="div"
+        subtitle=""
         subtitletag="h6"
+        subtitletextvariant="muted"
         tag="div"
+        title=""
         titletag="h4"
       >
         <utilizationchart-stub
@@ -91,8 +100,8 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
           height="90px"
           projects="[object Object]"
         />
-      </bcard-stub>
-    </bcol-stub>
-  </brow-stub>
-</bcontainer-stub>
+      </b-card-stub>
+    </b-col-stub>
+  </b-row-stub>
+</b-container-stub>
 `;

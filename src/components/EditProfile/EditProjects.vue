@@ -52,7 +52,9 @@
               class="mr-1"
               variant="danger"
               @click.stop="removePP(data.item)"
-            >Remove</b-btn>
+            >
+              Remove
+            </b-btn>
           </template>
         </b-table>
       </b-col>

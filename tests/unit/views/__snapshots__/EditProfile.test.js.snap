@@ -24,11 +24,11 @@ exports[`EditProfile.vue Should show correct components when profileId is not nu
     profile="[object Object]"
   />
    
-  <editskills-stub
+  <edit-skills-stub
     profileid="5"
   />
    
-  <editprojects-stub
+  <edit-projects-stub
     profileid="5"
   />
 </div>

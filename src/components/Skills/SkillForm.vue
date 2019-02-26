@@ -29,7 +29,9 @@
       <b-button
         primary
         type="submit"
-      >Submit</b-button>
+      >
+        Submit
+      </b-button>
     </b-form>
     <div
       v-if="showError"
@@ -38,7 +40,6 @@
       <ApiErrorDetailsPanel :error-details="errorDetails" />
     </div>
   </div>
-
 </template>
 
 <script>

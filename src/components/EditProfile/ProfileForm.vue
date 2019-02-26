@@ -14,8 +14,8 @@
     </div>
     <b-form-group
       id="firstNameLabel"
-      horizontal
       label="First name:"
+      label-cols-sm="3"
       label-for="firstName"
     >
       <b-form-input
@@ -27,7 +27,7 @@
     </b-form-group>
     <b-form-group
       id="lastNameLabel"
-      horizontal
+      label-cols-sm="3"
       label="Last name:"
       label-for="lastNameInput"
     >
@@ -40,7 +40,7 @@
     </b-form-group>
     <b-form-group
       id="titleLabel"
-      horizontal
+      label-cols-sm="3"
       label="Title:"
       label-for="titleInput"
     >
@@ -53,7 +53,7 @@
     </b-form-group>
     <b-form-group
       id="emailLabel"
-      horizontal
+      label-cols-sm="3"
       label="Email:"
       label-for="emailInput"
     >
@@ -66,7 +66,7 @@
     </b-form-group>
     <b-form-group
       id="PhonenumberLabel"
-      horizontal
+      label-cols-sm="3"
       label="Phone number:"
       label-for="PhonenumberInput"
     >
@@ -79,7 +79,7 @@
     </b-form-group>
     <b-form-group
       id="description"
-      horizontal
+      label-cols-sm="3"
       label="Description:"
       label-for="descriptionInput"
     >
@@ -93,11 +93,15 @@
     <b-button
       type="submit"
       variant="primary"
-    >Submit</b-button>
+    >
+      Submit
+    </b-button>
     <b-button
       type="reset"
       variant="danger"
-    >Reset</b-button>
+    >
+      Reset
+    </b-button>
   </b-form>
 </template>
 
