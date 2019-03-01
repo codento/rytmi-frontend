@@ -14,7 +14,16 @@
         </b-row>
         <b-row>
           <b-col class="col-sm-3">
-            <small>Add skill filters:</small>
+            <small>Employee role</small>
+            <v-select
+              v-model="selectedRole"
+              :options="employeeRoles"
+            />
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col class="col-sm-3">
+            <small>Add skill filters</small>
             <v-select
               v-model="selectedSkills"
               :options="selectFilterOptions"
@@ -46,6 +55,7 @@
       :name-filter="nameFilter"
       :skill-filters="mapSkillFilterForResultsComponent"
       :utilization-date-filter="utilizationDateFilter"
+      :employee-role-filter="selectedRole"
     />
   </div>
 </template>
@@ -68,13 +78,15 @@ export default {
     return {
       nameFilter: '',
       utilizationDateFilter: undefined,
-      selectedSkills: []
+      selectedSkills: [],
+      selectedRole: undefined
     }
   },
   computed: {
     ...mapGetters([
       'skills',
-      'skillName'
+      'skillName',
+      'profiles'
     ]),
     selectFilterOptions () {
       const skills = Object.values(this.skills).map(skill => ({ label: skill.name, id: skill.id }))
@@ -83,6 +95,11 @@ export default {
     },
     mapSkillFilterForResultsComponent () {
       return this.selectedSkills.map(skill => ({ name: skill.label, id: skill.id }))
+    },
+    employeeRoles () {
+      const profiles = Object.values(this.profiles)
+      const roles = new Set(profiles.map(profile => profile.role))
+      return [...roles]
     }
   },
   mounted () {
