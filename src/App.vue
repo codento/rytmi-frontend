@@ -52,6 +52,11 @@ export default {
             name: 'Skills',
             url: '/skills',
             icon: 'icon-plus'
+          },
+          {
+            name: 'Admin',
+            url: '/admin',
+            icon: 'cui-cog'
           }
         ]
         : []
