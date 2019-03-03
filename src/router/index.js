@@ -10,6 +10,7 @@ import Projects from '@/views/Projects'
 import Project from '@/views/Project'
 import Skills from '@/views/Skills'
 import ErrorPage from '../views/ErrorPage'
+import Admin from '@/views/Admin'
 
 Vue.use(Router)
 
@@ -80,6 +81,12 @@ export default new Router({
       path: '/callback',
       name: 'callback',
       component: Callback,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin,
       beforeEnter: requireAuth
     },
     {
