@@ -12,11 +12,11 @@
           <div class="detail-container">
             <span class="detail detail-start">
               <small>Start date</small><br>
-              <b><DateFormatter :date="project.startDate" /></b>
+              <b class="project-start-date">{{ project.startDate | dateFilter }}</b>
             </span>
             <span class="detail detail-end">
               <small>End date</small><br>
-              <b><DateFormatter :date="project.endDate" /></b>
+              <b class="project-end-date">{{ project.endDate | dateFilter }}</b>
             </span>
             <span class="detail members">
               <small>Consultants</small><br>
@@ -64,15 +64,13 @@ import {
   ProjectMemberTable,
   ProjectForm
 } from '../components/Project'
-import DateFormatter from '../components/helpers/DateFormatter.vue'
 
 export default {
   name: 'Project',
   components: {
     ProjectProfileForm,
     ProjectMemberTable,
-    ProjectForm,
-    DateFormatter
+    ProjectForm
   },
   data () {
     return {

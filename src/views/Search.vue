@@ -25,11 +25,9 @@
         <b-row>
           <b-col class="col-sm-3">
             <small>Available on</small>
-            <b-input
-              id="utilization-filter-date"
+            <Datepicker
               v-model="utilizationDateFilter"
-              class="form-control"
-              type="date"
+              name="utilization-date-filter"
             />
           </b-col>
           <b-col class="col-sm-9">
@@ -53,6 +51,7 @@
 </template>
 
 <script>
+import Datepicker from '../components/helpers/Datepicker'
 import { mapGetters } from 'vuex'
 import { Results } from '../components/Search'
 import { sortBy } from 'lodash'
@@ -62,12 +61,13 @@ export default {
   name: 'Search',
   components: {
     Results,
-    vSelect
+    vSelect,
+    Datepicker
   },
   data () {
     return {
       nameFilter: '',
-      utilizationDateFilter: '',
+      utilizationDateFilter: undefined,
       selectedSkills: []
     }
   },
@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     clearUtilizationDateFilter () {
-      this.utilizationDateFilter = ''
+      this.utilizationDateFilter = undefined
     }
   }
 }

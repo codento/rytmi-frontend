@@ -164,7 +164,7 @@ describe('Results.vue', () => {
       propsData: {
         skillFilters: [],
         nameFilter: '',
-        utilizationDateFilter: '2019-10-30'
+        utilizationDateFilter: new Date('2019-10-30')
       }
     }
     const expectedOrder = ['Joe', 'Sarah']
@@ -184,7 +184,7 @@ describe('Results.vue', () => {
       propsData: {
         skillFilters: [],
         nameFilter: '',
-        utilizationDateFilter: '2018-11-22'
+        utilizationDateFilter: new Date('2018-11-22')
       }
     }
     const expectedOrder = ['Daisy', 'Joe', 'Sarah']
@@ -204,7 +204,7 @@ describe('Results.vue', () => {
       propsData: {
         skillFilters: [],
         nameFilter: '',
-        utilizationDateFilter: '2018-12-13'
+        utilizationDateFilter: new Date('2018-12-13')
       }
     }
     const expectedOrder = []
@@ -224,7 +224,7 @@ describe('Results.vue', () => {
       propsData: {
         skillFilters: [{ id: 2, name: 'JavaScript' }],
         nameFilter: '',
-        utilizationDateFilter: '2018-10-22'
+        utilizationDateFilter: new Date('2018-10-22')
       }
     }
     const expectedOrder = ['Joe']

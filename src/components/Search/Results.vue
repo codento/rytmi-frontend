@@ -45,7 +45,7 @@
 import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
-import { parse, isValid, startOfDay } from 'date-fns'
+import { isValid, startOfDay } from 'date-fns'
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3, utilization: 4 })
 
 const sortArrayBy = (array, key) => sortBy(array, key)
@@ -69,7 +69,7 @@ export default {
   props: {
     nameFilter: String,
     skillFilters: Array,
-    utilizationDateFilter: String
+    utilizationDateFilter: Date
   },
   data () {
     return {
@@ -128,7 +128,7 @@ export default {
       const getProjectsAtGivenTime = (projects, date) => projects.filter(project =>
         getOnlyDateFromFullDate(project.startDate) <= date &&
         (isEmpty(project.endDate) || getOnlyDateFromFullDate(project.endDate) >= date))
-      const getOnlyDateFromFullDate = (date) => startOfDay(parse(date))
+      const getOnlyDateFromFullDate = (date) => startOfDay(date)
       const parsedDate = getOnlyDateFromFullDate(utilizationDateFilter)
 
       if (isValid(parsedDate)) {

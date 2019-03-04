@@ -5,19 +5,23 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Project from '@/views/Project.vue'
 import { ProjectProfileForm } from '@/components/Project'
 import Loading from '@/components/helpers/LoadingSpinner'
+import { format } from 'date-fns'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(BootstrapVue)
 localVue.component('loading', Loading)
+localVue.filter('dateFilter', value => {
+  return value ? format(value, 'D.M.YYYY') : undefined
+})
 
 const projectMock = (projectId) => ({
   id: projectId,
   name: 'Project Foo',
   code: 50,
   description: 'Foo Bar',
-  startDate: '2018-01-01',
-  endDate: '2018-05-01'
+  startDate: new Date('2018-01-01'),
+  endDate: new Date('2018-05-01')
 })
 
 const profileProjectMock = (projectId) => ([
@@ -54,7 +58,7 @@ function createWrapper (overrideMountingOptions) {
   }
   const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
   return shallowMount(Project, mergedMountingOptions)
-};
+}
 
 describe('Project.vue', () => {
   it('shows loading icon when project is being fetched', () => {
@@ -73,12 +77,12 @@ describe('Project.vue', () => {
     expect(wrapper.find('h1').text()).toContain('Project Foo')
     const bElements = wrapper.findAll('b')
     const projectCode = bElements.at(0)
-    const startDate = bElements.at(1).find({ name: 'DateFormatter' })
-    const endDate = bElements.at(2).find({ name: 'DateFormatter' })
+    const startDate = wrapper.find('.project-start-date')
+    const endDate = wrapper.find('.project-end-date')
     const numOfMembers = bElements.at(3)
     expect(projectCode.text()).toContain(projectMock().code)
-    expect(startDate.attributes('date')).toBe(projectMock().startDate)
-    expect(endDate.attributes('date')).toBe(projectMock().endDate)
+    expect(startDate.text()).toBe(format(projectMock().startDate, 'D.M.YYYY'))
+    expect(endDate.text()).toBe(format(projectMock().endDate, 'D.M.YYYY'))
     expect(numOfMembers.text()).toBe(profileProjectMock().length.toString())
     expect(wrapper.find('p').text()).toContain(projectMock().description)
   })

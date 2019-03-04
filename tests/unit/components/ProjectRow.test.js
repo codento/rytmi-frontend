@@ -1,10 +1,14 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import { ProjectRow } from '@/components/Profile'
 import Vuex from 'vuex'
+import { format } from 'date-fns'
 
 describe('ProjectRow.test.js', () => {
   let localVue = createLocalVue()
   localVue.use(Vuex)
+  localVue.filter('dateFilter', value => {
+    return value ? format(value, 'D.M.YYYY') : undefined
+  })
   let getters, store
   beforeEach(() => {
     getters = {
