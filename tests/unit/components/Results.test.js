@@ -244,7 +244,7 @@ describe('Results.vue', () => {
       propsData: {
         skillFilters: [],
         nameFilter: '',
-        utilizationDateFilter: ''
+        utilizationDateFilter: undefined
       }
     }
     const expectedOrder = ['Joe', 'Sarah', 'Daisy']
