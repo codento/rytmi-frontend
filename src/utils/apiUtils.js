@@ -13,9 +13,8 @@ function getAuthHeaders () {
 function handleError (error) {
   if (error.response.status === 401) {
     store.commit(AUTH_LOGOUT)
-  } else {
-    throw error
   }
+  return error
 }
 
 export const get = (path, queryParams = null) => {
@@ -49,6 +48,7 @@ export const del = (path) => {
   return new Promise((resolve, reject) => {
     const headers = getAuthHeaders()
     axios.delete(path, { headers })
-      .then(response => resolve(response.data))
+      .then(response => resolve(response))
+      .catch(error => reject(handleError(error)))
   })
 }
