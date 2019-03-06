@@ -25,6 +25,16 @@ const requireAuth = (to, from, next) => {
   }
 }
 
+const isAdmin = (to, from, next) => {
+  if (!store.getters.isAdmin || !store.getters.isAuthenticated) {
+    next({
+      path: '/'
+    })
+  } else {
+    next()
+  }
+}
+
 export default new Router({
   mode: 'history',
   linkExactActiveClass: 'open active',
@@ -87,7 +97,7 @@ export default new Router({
       path: '/admin',
       name: 'admin',
       component: Admin,
-      beforeEnter: requireAuth
+      beforeEnter: isAdmin
     },
     {
       path: '/*',
