@@ -3,9 +3,12 @@
     <b-form-group
       label="Filter by name"
     >
-    <b-form-input v-model="filterValue" />
+      <b-form-input v-model="filterValue" />
     </b-form-group>
-
+    <div>
+      Active User<span class="cui-check" />
+      Admin User<span class="cui-cog" />
+    </div>
     <b-list-group
       v-for="(user, idx) in usersAsList"
       :key="idx"
@@ -15,6 +18,14 @@
         @click="selectUser(user.id)"
       >
         {{ user.firstName + ' ' + user.lastName }}
+        <span
+          v-if="user.active"
+          class="cui-check"
+        />
+        <span
+          v-if="user.admin"
+          class="cui-cog"
+        />
       </b-list-group-item>
     </b-list-group>
   </div>
@@ -32,7 +43,7 @@ export default {
   data () {
     return {
       filterValue: '',
-      selectedUserId: 50
+      selectedUserId: null
     }
   },
   computed: {
@@ -55,3 +66,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .cui-check {
+    color: green
+  }
+</style>
