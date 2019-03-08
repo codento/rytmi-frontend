@@ -3,7 +3,8 @@
     <AppHeader />
     <div class="app-body">
       <Sidebar :nav-items="nav" />
-      <main class="main">
+      <loading v-if="!appInitialized" />
+      <main v-else class="main">
         <div class="container-fluid">
           <router-view />
         </div>
@@ -33,7 +34,8 @@ export default {
     ...mapGetters([
       'isAuthenticated',
       'profileId',
-      'isTokenValid'
+      'isTokenValid',
+      'appInitialized'
     ]),
     nav () {
       return this.isAuthenticated
@@ -75,6 +77,7 @@ export default {
       'fetchProjects',
       'fetchSkillCategories',
       'fetchSkillGroups',
+      'fetchEmployeeRoles',
       'requestAuth',
       'clearLoginData'
     ]),
@@ -104,7 +107,8 @@ export default {
           this.fetchProfileSkills(),
           this.fetchProjects(),
           this.fetchSkillCategories(),
-          this.fetchSkillGroups()
+          this.fetchSkillGroups(),
+          this.fetchEmployeeRoles()
         ])
           .catch(error => {
             this.setAppInitializeError(error)
