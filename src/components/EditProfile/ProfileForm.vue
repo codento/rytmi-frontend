@@ -39,6 +39,20 @@
       />
     </b-form-group>
     <b-form-group
+      id="roleLabel"
+      label-cols-sm="3"
+      label="Role:"
+      label-for="roleInput"
+    >
+      <v-select
+        id="roleInput"
+        :options="employeeRoleList"
+        label="title"
+        :value="activeEmployeeRole"
+        @input="setEmployeeRole"
+      />
+    </b-form-group>
+    <b-form-group
       id="titleLabel"
       label-cols-sm="3"
       label="Title:"
@@ -106,12 +120,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import vSelect from 'vue-select'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 export default {
   name: 'ProfileForm',
-  components: { ApiErrorDetailsPanel },
+  components: { ApiErrorDetailsPanel, vSelect },
   props: {
     'profile': Object
   },
@@ -123,8 +138,25 @@ export default {
       editedProfile: Object.assign({}, this.profile)
     }
   },
+  computed: {
+    employeeRoleList () {
+      return this.employeeRoles().map(item => {
+        return {
+          title: item.title,
+          id: item.id
+        }
+      })
+    },
+    activeEmployeeRole () {
+      const activeEmployeeRole = this.employeeRoles().filter(item => {
+        return item.id === this.editedProfile.employeeRoleId
+      })
+      return activeEmployeeRole[0]
+    }
+  },
   methods: {
-    ...mapActions(['updateProfile']),
+    ...mapActions(['updateProfile', 'fetchEmployeeRoles']),
+    ...mapGetters(['employeeRoles', 'employeeRoleById']),
     async onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []
@@ -148,6 +180,9 @@ export default {
     },
     redirect () {
       this.$router.push('/profile/' + this.profile.id)
+    },
+    setEmployeeRole (value) {
+      this.editedProfile.employeeRoleId = value.id
     }
   }
 }
