@@ -10,6 +10,7 @@ import Projects from '@/views/Projects'
 import Project from '@/views/Project'
 import Skills from '@/views/Skills'
 import ErrorPage from '../views/ErrorPage'
+import Admin from '@/views/Admin'
 
 Vue.use(Router)
 
@@ -18,6 +19,16 @@ const requireAuth = (to, from, next) => {
     next({
       path: '/unauth',
       query: { redirect: to.fullPath }
+    })
+  } else {
+    next()
+  }
+}
+
+const isAdmin = (to, from, next) => {
+  if (!store.getters.isAdmin || !store.getters.isAuthenticated) {
+    next({
+      path: '/'
     })
   } else {
     next()
@@ -81,6 +92,12 @@ export default new Router({
       name: 'callback',
       component: Callback,
       beforeEnter: requireAuth
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin,
+      beforeEnter: isAdmin
     },
     {
       path: '/*',

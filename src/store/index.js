@@ -8,6 +8,7 @@ import profileProjects from './modules/profileProjects'
 import skillCategories from './modules/skillCategories'
 import skillGroups from './modules/skillGroups'
 import employeeRoles from './modules/employeeRoles'
+import users from './modules/users'
 import getters from './getters'
 import mutations from './mutations'
 
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     profileProjects,
     skillCategories,
     skillGroups,
-    employeeRoles
+    employeeRoles,
+    users
   }
 })
