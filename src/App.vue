@@ -116,7 +116,7 @@ export default {
           this.fetchProjects(),
           this.fetchSkillCategories(),
           this.fetchSkillGroups(),
-          this.fetchEmployeeRoles()
+          this.fetchEmployeeRoles(),
           this.fetchUsers()
         ])
           .catch(error => {
