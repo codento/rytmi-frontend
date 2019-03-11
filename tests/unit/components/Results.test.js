@@ -268,7 +268,7 @@ describe('Results.vue', () => {
         utilizationDateFilter: ''
       }
     }
-    let expectedOrder = ['Sarah', 'Joe', 'Daisy']
+    const expectedOrder = ['Sarah', 'Joe', 'Daisy']
     const wrapper = createWrapper(mountOptions)
     wrapper.setData({ reversedOrder: true })
     const cards = wrapper.findAll(ProfileCard)

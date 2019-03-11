@@ -22,12 +22,8 @@
           @click="reversedOrder = !reversedOrder"
         >
           <i
-            v-if="!reversedOrder"
-            class="fa fa-chevron-down"
-          />
-          <i
-            v-else
-            class="fa fa-chevron-up"
+            :class="reversedOrder ? 'fa-chevron-up' : 'fa-chevron-down'"
+            class="fa"
           />
         </b-btn>
       </b-col>
