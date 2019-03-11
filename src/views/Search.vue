@@ -24,7 +24,7 @@
         </b-row>
         <b-row>
           <b-col class="col-sm-3">
-            <small>Not utilized on</small>
+            <small>Available on</small>
             <Datepicker
               v-model="utilizationDateFilter"
               name="utilization-date-filter"

@@ -16,6 +16,16 @@
           buttons
           name="radioBtnStacked"
         />
+        <b-btn
+          id="reverse-order-btn"
+          title="Reverse order"
+          @click="reversedOrder = !reversedOrder"
+        >
+          <i
+            :class="reversedOrder ? 'fa-chevron-up' : 'fa-chevron-down'"
+            class="fa"
+          />
+        </b-btn>
       </b-col>
     </b-row>
     <profile-card
@@ -32,16 +42,16 @@ import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
 import { isValid, startOfDay } from 'date-fns'
-const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
+const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3, utilization: 4 })
 
-const sortByName = (array) => sortBy(array, 'profile.firstName')
+const sortArrayBy = (array, key) => sortBy(array, key)
 
 const calculateSkillAverage = (skills, skillFilters, attribute) => {
   return skills.filter((skill) => skillFilters.includes(skill.skillId))
     .reduce((accumulator, current) => accumulator + current[attribute], 0) / skillFilters.length
 }
 
-const sortArrayBy = (sortAttribute, skillFilters) => (profileOne, profileTwo) => {
+const sortBySkills = (sortAttribute, skillFilters) => (profileOne, profileTwo) => {
   const profileOneAverage = calculateSkillAverage(profileOne.skills, skillFilters, sortAttribute)
   const profileTwoAverage = calculateSkillAverage(profileTwo.skills, skillFilters, sortAttribute)
   return profileTwoAverage - profileOneAverage
@@ -61,7 +71,8 @@ export default {
     return {
       filteredProfiles: {},
       sortAttribute: sortAttributeEnum.name,
-      profilesWithSkills: null
+      profilesWithSkills: null,
+      reversedOrder: false
     }
   },
   computed: {
@@ -69,11 +80,15 @@ export default {
       'profileFilter',
       'skillsByProfileId',
       'profiles',
-      'futureProjectsOfProfile'
+      'futureProjectsOfProfile',
+      'profileProjectsByProfileId'
     ]),
     sortOptions () {
-      const { name, knows, wantsTo } = sortAttributeEnum
-      const options = [{ text: 'Name', value: name }]
+      const { name, knows, wantsTo, utilization } = sortAttributeEnum
+      const options = [
+        { text: 'Name', value: name },
+        { text: 'Utilization', value: utilization }
+      ]
       if (!isEmpty(this.skillFilters)) {
         options.push(...[
           { text: 'Proficiency', value: knows },
@@ -121,26 +136,40 @@ export default {
       // First, get profiles, filtered by name
       const profilesWithoutSkills = Object.values(this.profileFilter(this.nameFilter))
       // Then map skills and projects for each profile
-      return profilesWithoutSkills.map(profile => (
-        {
+      return profilesWithoutSkills.map(profile => {
+        let utilizationOnSelectedDate = 0
+        this.futureProjectsOfProfile(profile.id).map(project => {
+          utilizationOnSelectedDate += project.workPercentage
+        })
+        return {
           profile: profile,
           skills: this.skillsByProfileId(profile.id),
-          projects: this.futureProjectsOfProfile(profile.id)
-        })
-      )
+          projects: this.futureProjectsOfProfile(profile.id),
+          utilization: utilizationOnSelectedDate
+        }
+      })
     },
     getSortedProfiles (profilesWithSkills) {
-      const { name, wantsTo, knows } = sortAttributeEnum
+      const { name, wantsTo, knows, utilization } = sortAttributeEnum
+      let profiles = []
       switch (this.sortAttribute) {
         case name:
-          return sortByName(profilesWithSkills)
+          profiles = sortArrayBy(profilesWithSkills, 'profile.firstName')
+          break
         case wantsTo:
-          return profilesWithSkills.sort(sortArrayBy('wantsTo', this.mapIdsOfSkillFilters))
+          profiles = profilesWithSkills.sort(sortBySkills('wantsTo', this.mapIdsOfSkillFilters))
+          break
         case knows:
-          return profilesWithSkills.sort(sortArrayBy('knows', this.mapIdsOfSkillFilters))
+          profiles = profilesWithSkills.sort(sortBySkills('knows', this.mapIdsOfSkillFilters))
+          break
+        case utilization:
+          profiles = sortArrayBy(profilesWithSkills, 'utilization')
+          break
         default:
-          return sortByName(profilesWithSkills)
+          profiles = sortArrayBy(profilesWithSkills, 'profile.firstName')
+          break
       }
+      return this.reversedOrder ? profiles.reverse() : profiles
     }
   }
 }
