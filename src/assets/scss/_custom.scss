@@ -16,3 +16,8 @@ td > button {
         background-color: theme-color('primary') !important;
     }
 }
+
+.list-group-item.active {
+  background-color: theme-color('primary');
+  border-color: theme-color('primary');
+}

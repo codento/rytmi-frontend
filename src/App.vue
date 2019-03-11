@@ -1,15 +1,15 @@
 <template>
   <div class="app">
-    <AppHeader />
+    <AppHeader/>
     <div class="app-body">
-      <Sidebar :nav-items="nav" />
+      <Sidebar :nav-items="nav"/>
       <main class="main">
         <div class="container-fluid">
-          <router-view />
+          <router-view/>
         </div>
       </main>
     </div>
-    <AppFooter />
+    <AppFooter/>
   </div>
 </template>
 
@@ -32,29 +32,36 @@ export default {
   computed: {
     ...mapGetters([
       'isAuthenticated',
+      'isAdmin',
       'profileId',
       'isTokenValid'
     ]),
     nav () {
-      return this.isAuthenticated
-        ? [
-          {
-            name: 'Profiles',
-            url: '/search',
-            icon: 'icon-user'
-          },
-          {
-            name: 'Projects',
-            url: '/projects',
-            icon: 'icon-drawer'
-          },
-          {
-            name: 'Skills',
-            url: '/skills',
-            icon: 'icon-plus'
-          }
-        ]
-        : []
+      const navItems = [
+        {
+          name: 'Profiles',
+          url: '/search',
+          icon: 'icon-user'
+        },
+        {
+          name: 'Projects',
+          url: '/projects',
+          icon: 'icon-drawer'
+        },
+        {
+          name: 'Skills',
+          url: '/skills',
+          icon: 'icon-plus'
+        }
+      ]
+      if (this.isAdmin) {
+        navItems.push({
+          name: 'Admin',
+          url: '/admin',
+          icon: 'cui-cog'
+        })
+      }
+      return this.isAuthenticated ? navItems : []
     },
     name () {
       return this.$route.name
@@ -76,7 +83,8 @@ export default {
       'fetchSkillCategories',
       'fetchSkillGroups',
       'requestAuth',
-      'clearLoginData'
+      'clearLoginData',
+      'fetchUsers'
     ]),
     ...mapMutations({
       setAppInitialized: SET_APP_INITIALIZED,
@@ -104,7 +112,8 @@ export default {
           this.fetchProfileSkills(),
           this.fetchProjects(),
           this.fetchSkillCategories(),
-          this.fetchSkillGroups()
+          this.fetchSkillGroups(),
+          this.fetchUsers()
         ])
           .catch(error => {
             this.setAppInitializeError(error)
@@ -120,17 +129,17 @@ export default {
 
 <style lang="scss">
 // CoreUI Icons Set
-@import '~@coreui/icons/css/coreui-icons.min.css';
+@import "~@coreui/icons/css/coreui-icons.min.css";
 /* Import Font Awesome Icons Set */
-$fa-font-path: '~font-awesome/fonts/';
-@import '~font-awesome/scss/font-awesome.scss';
+$fa-font-path: "~font-awesome/fonts/";
+@import "~font-awesome/scss/font-awesome.scss";
 /* Import Simple Line Icons Set */
-$simple-line-font-path: '~simple-line-icons/fonts/';
-@import '~simple-line-icons/scss/simple-line-icons.scss';
+$simple-line-font-path: "~simple-line-icons/fonts/";
+@import "~simple-line-icons/scss/simple-line-icons.scss";
 /* Import Flag Icons Set */
-@import '~flag-icon-css/css/flag-icon.min.css';
+@import "~flag-icon-css/css/flag-icon.min.css";
 /* Import Bootstrap Vue Styles */
-@import '~bootstrap-vue/dist/bootstrap-vue.css';
+@import "~bootstrap-vue/dist/bootstrap-vue.css";
 // Import Main styles for this application
-@import 'assets/scss/style';
+@import "assets/scss/style";
 </style>
