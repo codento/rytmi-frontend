@@ -49,14 +49,15 @@ export default {
     ...mapGetters(['users'])
   },
   methods: {
-    ...mapActions(['updateUser', 'deleteUser']),
+    ...mapActions(['updateUser', 'deleteUser', 'updateProfile']),
     setUser (id) {
       this.selectedUser = this.users[id]
     },
-    async updateUserDetails (attributes) {
+    async updateUserDetails (userAttributes, profileAttributes) {
       try {
         this.updating = true
-        const { id } = await this.updateUser(attributes)
+        const { id } = await this.updateUser(userAttributes)
+        await this.updateProfile(profileAttributes)
         this.updating = false
         this.setUser(id)
       } catch (error) {

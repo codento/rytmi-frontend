@@ -10,10 +10,18 @@ const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 localVue.use(Vuex)
 
+const mockEmployeeRoles = [
+  { id: 1, title: 'somethinger' },
+  { id: 2, title: 'dunno lol' }
+]
+
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     actions: {
       updateProfile: jest.fn(() => [])
+    },
+    getters: {
+      employeeRoles: jest.fn(() => mockEmployeeRoles)
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)

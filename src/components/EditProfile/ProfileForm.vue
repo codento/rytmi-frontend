@@ -155,7 +155,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateProfile', 'fetchEmployeeRoles']),
+    ...mapActions(['updateProfile']),
     ...mapGetters(['employeeRoles', 'employeeRoleById']),
     async onSubmit (evt) {
       evt.preventDefault()
@@ -182,7 +182,7 @@ export default {
       this.$router.push('/profile/' + this.profile.id)
     },
     setEmployeeRole (value) {
-      this.editedProfile.employeeRoleId = value.id
+      this.editedProfile.employeeRoleId = value ? value.id : null
     }
   }
 }

@@ -11,7 +11,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "jest --clearCache && vue-cli-service test:unit --watch --coverage",
     "test:unit:jest": "node_modules/jest/bin/jest --no-cache --config ./jest.config.js",
     "test:unit:debug": "node --inspect-brk ./node_modules/@vue/cli-service/bin/vue-cli-service.js test:unit --runInBand",
     "test:e2e": "vue-cli-service test:e2e"

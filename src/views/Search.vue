@@ -17,7 +17,8 @@
             <small>Employee role</small>
             <v-select
               v-model="selectedRole"
-              :options="employeeRoles"
+              :options="employeeRoleList"
+              multiple
             />
           </b-col>
         </b-row>
@@ -79,14 +80,15 @@ export default {
       nameFilter: '',
       utilizationDateFilter: undefined,
       selectedSkills: [],
-      selectedRole: undefined
+      selectedRole: []
     }
   },
   computed: {
     ...mapGetters([
       'skills',
       'skillName',
-      'profiles'
+      'profiles',
+      'employeeRoles'
     ]),
     selectFilterOptions () {
       const skills = Object.values(this.skills).map(skill => ({ label: skill.name, id: skill.id }))
@@ -96,10 +98,9 @@ export default {
     mapSkillFilterForResultsComponent () {
       return this.selectedSkills.map(skill => ({ name: skill.label, id: skill.id }))
     },
-    employeeRoles () {
-      const profiles = Object.values(this.profiles)
-      const roles = new Set(profiles.map(profile => profile.role))
-      return [...roles]
+    employeeRoleList () {
+      const roles = Object.values(this.employeeRoles).map(role => ({ label: role.title, id: role.id }))
+      return roles.filter(selectableRole => !(this.selectedRole.map(role => role.id)).includes(selectableRole.id))
     }
   },
   mounted () {

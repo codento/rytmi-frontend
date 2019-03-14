@@ -66,7 +66,7 @@ export default {
     nameFilter: String,
     skillFilters: Array,
     utilizationDateFilter: Date,
-    employeeRoleFilter: String
+    employeeRoleFilter: Array
   },
   data () {
     return {
@@ -136,7 +136,9 @@ export default {
     },
     getProfilesFilteredByEmployeeRole (profilesToFilter) {
       const filteredProfiles = profilesToFilter.filter(profile => {
-        return profile.profile.role === this.employeeRoleFilter
+        return isEmpty(this.employeeRoleFilter)
+          ? true
+          : this.employeeRoleFilter.some(filter => filter.id === profile.profile.employeeRoleId)
       })
       return this.employeeRoleFilter
         ? filteredProfiles

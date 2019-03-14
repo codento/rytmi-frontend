@@ -16,6 +16,20 @@
             Is active?
           </b-form-checkbox>
         </b-form-group>
+        <b-form-group
+          id="roleLabel"
+          label-cols-sm="2"
+          label="Role:"
+          label-for="roleInput"
+        >
+          <v-select
+            id="roleInput"
+            :options="employeeRoleList"
+            label="title"
+            :value="activeEmployeeRole"
+            @input="setEmployeeRole"
+          />
+        </b-form-group>
         <b-form-group>
           <b-row>
             <b-col sm="3">
@@ -45,7 +59,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import vSelect from 'vue-select'
+
 export default {
+  components: { vSelect },
   props: {
     user: {
       type: Object,
@@ -63,24 +81,44 @@ export default {
   data () {
     return {
       isAdmin: this.user.admin,
-      isActive: this.user.active
+      isActive: this.user.active,
+      profile: this.activeEmployeeProfile,
+      activeEmployeeRole: []
     }
   },
   computed: {
+    ...mapGetters(['employeeRoles', 'profileById', 'profileByUserId']),
     fullName () {
       const { firstName, lastName } = this.user
       return `${firstName} ${lastName}`
+    },
+    employeeRoleList () {
+      return this.employeeRoles.map(item => {
+        return {
+          title: item.title,
+          id: item.id
+        }
+      })
+    },
+    activeEmployeeProfile () {
+      return this.profileByUserId(this.user.id)
     }
   },
   watch: {
     user (newUser) {
       this.isAdmin = newUser.admin
       this.isActive = newUser.active
+      this.activeEmployeeRole = this.setActiveEmployeeRole()
+      this.profile = this.activeEmployeeProfile
     }
+  },
+  created () {
+    this.activeEmployeeRole = this.setActiveEmployeeRole()
+    this.profile = this.activeEmployeeProfile
   },
   methods: {
     submit () {
-      this.update({ id: this.user.id, active: this.isActive, admin: this.isAdmin })
+      this.update({ id: this.user.id, active: this.isActive, admin: this.isAdmin }, this.profile)
     },
     del () {
       const promptMessage = `
@@ -91,6 +129,18 @@ export default {
       if (deletePrompt === 'DELETE') {
         this.delete()
       }
+    },
+    setEmployeeRole (value) {
+      if (value) {
+        this.activeEmployeeRole = value
+        this.profile.employeeRoleId = value.id
+      }
+    },
+    setActiveEmployeeRole () {
+      const activeEmployeeRole = this.employeeRoles.filter(item => {
+        return item.id === this.profileByUserId(this.user.id).employeeRoleId
+      })
+      return activeEmployeeRole[0]
     }
   }
 }
