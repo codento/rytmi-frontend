@@ -12,7 +12,7 @@ export function createProject ({ commit, state }, data) {
       .then(response => {
         commit(types.UPDATE_PROJECT, response.data)
         resolve(response)
-      }).catch(err => reject(err))
+      }).catch(err => reject(err.response))
   })
 }
 

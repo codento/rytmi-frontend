@@ -105,6 +105,7 @@ export default {
     ]),
     onSubmit (evt) {
       evt.preventDefault()
+      this.errorDetails = []
       // If the project has an ID, update; otherwise create a new project
       if (this.project.id) {
         this.updateProject(this.project)
@@ -129,7 +130,11 @@ export default {
             this.showError = false
             this.showProjectForm = false
           }).catch(err => {
-            this.errorDetails = err.response.data.error.details
+            if (Array.isArray(err.data.error.details)) {
+              this.errorDetails = err.data.error.details
+            } else {
+              this.errorDetails.push(err.data.error.message)
+            }
             this.showError = true
           })
       }

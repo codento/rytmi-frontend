@@ -99,7 +99,6 @@ export function newProject (data) {
     API_URL + PATH_PROJECTS,
     denormalize(data, [project]),
     getAuthHeaders())
-    .catch(handleError)
 }
 
 export function alterProject (data) {
