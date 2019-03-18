@@ -23,11 +23,8 @@
           label-for="roleInput"
         >
           <v-select
-            id="roleInput"
+            v-model="selectedEmployeeRole"
             :options="employeeRoleList"
-            label="title"
-            :value="activeEmployeeRole"
-            @input="setEmployeeRole"
           />
         </b-form-group>
         <b-form-group>
@@ -82,8 +79,8 @@ export default {
     return {
       isAdmin: this.user.admin,
       isActive: this.user.active,
-      profile: this.activeEmployeeProfile,
-      activeEmployeeRole: []
+      profile: null,
+      selectedEmployeeRole: null
     }
   },
   computed: {
@@ -95,26 +92,26 @@ export default {
     employeeRoleList () {
       return this.employeeRoles.map(item => {
         return {
-          title: item.title,
+          label: item.title,
           id: item.id
         }
       })
-    },
-    activeEmployeeProfile () {
-      return this.profileByUserId(this.user.id)
     }
   },
   watch: {
     user (newUser) {
       this.isAdmin = newUser.admin
       this.isActive = newUser.active
-      this.activeEmployeeRole = this.setActiveEmployeeRole()
-      this.profile = this.activeEmployeeProfile
+      this.profile = this.getActiveEmployeeProfile()
+      this.selectedEmployeeRole = this.employeeRoleList.find(role => role.id === this.profile.employeeRoleId)
+    },
+    selectedEmployeeRole (newRole) {
+      this.profile.employeeRoleId = newRole.id
     }
   },
   created () {
-    this.activeEmployeeRole = this.setActiveEmployeeRole()
-    this.profile = this.activeEmployeeProfile
+    this.profile = this.getActiveEmployeeProfile()
+    this.selectedEmployeeRole = this.employeeRoleList.find(role => role.id === this.profile.employeeRoleId)
   },
   methods: {
     submit () {
@@ -130,17 +127,8 @@ export default {
         this.delete()
       }
     },
-    setEmployeeRole (value) {
-      if (value) {
-        this.activeEmployeeRole = value
-        this.profile.employeeRoleId = value.id
-      }
-    },
-    setActiveEmployeeRole () {
-      const activeEmployeeRole = this.employeeRoles.filter(item => {
-        return item.id === this.profileByUserId(this.user.id).employeeRoleId
-      })
-      return activeEmployeeRole[0]
+    getActiveEmployeeProfile () {
+      return this.profileByUserId(this.user.id)
     }
   }
 }
