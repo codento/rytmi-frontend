@@ -11,11 +11,11 @@ localVue.use(BootstrapVue)
 const firstOfNovember = new Date('2018-11-01')
 
 const mockProfiles = {
-  1: { id: '1' },
-  2: { id: '2' },
-  3: { id: '3' },
-  4: { id: '4' },
-  5: { id: '5' }
+  1: { id: '1', employeeRoleId: 1 },
+  2: { id: '2', employeeRoleId: 1 },
+  3: { id: '3', employeeRoleId: 1 },
+  4: { id: '4', employeeRoleId: 1 },
+  5: { id: '5', employeeRoleId: 1 }
 }
 const mockProjectProfiles = [
   {
@@ -67,7 +67,51 @@ function createStore (overrideConfig) {
       profileFilter: () => () => mockProfiles,
       futureProjectsOfProfile: () => (id) => mockProjectProfiles.filter(pp => {
         return pp.profileId === id
-      })
+      }),
+      profileByUserId: () => (arg) => {
+        return {
+          id: 1,
+          userId: 2,
+          firstName: 'Bar',
+          lastName: 'Foo',
+          photoPath: '',
+          employeeRoleId: 1,
+          title: 'software developer',
+          accounts: [
+            {
+              address: 'twitter.com/foo'
+            },
+            {
+              address: 'github.com/bar'
+            }
+          ],
+          email: 'foo.bar@foo.com',
+          phone: '1354',
+          description: 'fdas'
+        }
+      },
+      profileById: () => (arg) => {
+        return {
+          id: 1,
+          userId: 2,
+          firstName: 'Bar',
+          lastName: 'Foo',
+          photoPath: '',
+          employeeRoleId: 1,
+          title: 'software developer',
+          accounts: [
+            {
+              address: 'twitter.com/foo'
+            },
+            {
+              address: 'github.com/bar'
+            }
+          ],
+          email: 'foo.bar@foo.com',
+          phone: '1354',
+          description: 'fdas'
+        }
+      }
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -75,7 +119,11 @@ function createStore (overrideConfig) {
 }
 
 function createWrapper (overrideMountingOptions) {
+  const propsData = {
+    activeRoleSelection: [{ id: 1, title: 'Active role' }]
+  }
   const defaultMountingOptions = {
+    propsData,
     localVue,
     store: createStore()
   }

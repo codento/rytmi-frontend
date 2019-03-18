@@ -16,6 +16,18 @@
             Is active?
           </b-form-checkbox>
         </b-form-group>
+        <b-form-group
+          id="roleLabel"
+          label-cols-sm="2"
+          label="Role:"
+          label-for="roleInput"
+        >
+          <v-select
+            id="roleInput"
+            v-model="selectedEmployeeRole"
+            :options="employeeRoleList"
+          />
+        </b-form-group>
         <b-form-group>
           <b-row>
             <b-col sm="3">
@@ -45,7 +57,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import vSelect from 'vue-select'
+
 export default {
+  components: { vSelect },
   props: {
     user: {
       type: Object,
@@ -63,24 +79,46 @@ export default {
   data () {
     return {
       isAdmin: this.user.admin,
-      isActive: this.user.active
+      isActive: this.user.active,
+      profile: null,
+      selectedEmployeeRole: null
     }
   },
   computed: {
+    ...mapGetters(['employeeRoles', 'profileById', 'profileByUserId']),
     fullName () {
       const { firstName, lastName } = this.user
       return `${firstName} ${lastName}`
+    },
+    employeeRoleList () {
+      return this.employeeRoles.map(item => {
+        return {
+          label: item.title,
+          id: item.id
+        }
+      })
     }
   },
   watch: {
     user (newUser) {
       this.isAdmin = newUser.admin
       this.isActive = newUser.active
+      this.profile = this.getActiveEmployeeProfile()
+      this.selectedEmployeeRole = this.employeeRoleList.find(role => role.id === this.profile.employeeRoleId)
+    },
+    selectedEmployeeRole (newRole) {
+      if (newRole && newRole.id) {
+        this.profile.employeeRoleId = newRole.id
+      }
     }
+  },
+  created () {
+    this.profile = this.getActiveEmployeeProfile()
+    this.selectedEmployeeRole = this.employeeRoleList.find(role => role.id === this.profile.employeeRoleId)
   },
   methods: {
     submit () {
-      this.update({ id: this.user.id, active: this.isActive, admin: this.isAdmin })
+      this.update({ id: this.user.id, active: this.isActive, admin: this.isAdmin }, this.profile)
     },
     del () {
       const promptMessage = `
@@ -91,6 +129,9 @@ export default {
       if (deletePrompt === 'DELETE') {
         this.delete()
       }
+    },
+    getActiveEmployeeProfile () {
+      return this.profileByUserId(this.user.id)
     }
   }
 }

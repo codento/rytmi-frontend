@@ -10,6 +10,7 @@ export const getters = {
   profiles: (state) => state.profiles,
   profileList: (state) => state.profileList,
   profileById: (state) => (id) => state.profiles[id],
+  profileByUserId: (state) => (userId) => state.profiles[userId],
   skillProfiles: (state) => state.profileSkills,
   skillsByProfileId: (state, getters) => (profileId) => {
     return state.profileSkills

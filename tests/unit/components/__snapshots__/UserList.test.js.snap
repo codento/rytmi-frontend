@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserList.vue Template is correct 1`] = `
+<div>
+  <fieldset
+    aria-labelledby="__BVID__10__BV_label_"
+    class="form-group"
+    id="__BVID__10"
+  >
+    <legend
+      class="col-form-label pt-0"
+      id="__BVID__10__BV_label_"
+      tabindex="-1"
+    >
+      Filter by name
+    </legend>
+    <div
+      aria-labelledby="__BVID__10__BV_label_"
+      role="group"
+      tabindex="-1"
+    >
+      <input
+        class="form-control"
+        id="__BVID__11"
+        type="text"
+      />
+      <!---->
+      <!---->
+      <!---->
+    </div>
+  </fieldset>
+   
+  <div>
+    
+    Active User
+    <span
+      class="cui-check"
+    />
+    
+    Admin User
+    <span
+      class="cui-cog"
+    />
+  </div>
+   
+  <div
+    class="list-group"
+  >
+    <div
+      class="list-group-item"
+    >
+      
+      Aaa Foo
+      
+      <span
+        class="cui-check"
+      />
+       
+      <span
+        class="cui-cog"
+      />
+    </div>
+  </div>
+  <div
+    class="list-group"
+  >
+    <div
+      class="list-group-item"
+    >
+      
+      Bbb Rab
+      
+      <span
+        class="cui-check"
+      />
+       
+      <span
+        class="cui-cog"
+      />
+    </div>
+  </div>
+  <div
+    class="list-group"
+  >
+    <div
+      class="list-group-item"
+    >
+      
+      Ccc Foo
+      
+      <!---->
+       
+      <span
+        class="cui-cog"
+      />
+    </div>
+  </div>
+  <div
+    class="list-group"
+  >
+    <div
+      class="list-group-item"
+    >
+      
+      Ddd Baru
+      
+      <span
+        class="cui-check"
+      />
+       
+      <!---->
+    </div>
+  </div>
+</div>
+`;

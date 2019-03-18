@@ -1,15 +1,19 @@
 <template>
   <div class="app">
-    <AppHeader/>
+    <AppHeader />
     <div class="app-body">
-      <Sidebar :nav-items="nav"/>
-      <main class="main">
+      <Sidebar :nav-items="nav" />
+      <loading v-if="!appInitialized" />
+      <main
+        v-else
+        class="main"
+      >
         <div class="container-fluid">
-          <router-view/>
+          <router-view />
         </div>
       </main>
     </div>
-    <AppFooter/>
+    <AppFooter />
   </div>
 </template>
 
@@ -34,7 +38,8 @@ export default {
       'isAuthenticated',
       'isAdmin',
       'profileId',
-      'isTokenValid'
+      'isTokenValid',
+      'appInitialized'
     ]),
     nav () {
       const navItems = [
@@ -82,6 +87,7 @@ export default {
       'fetchProjects',
       'fetchSkillCategories',
       'fetchSkillGroups',
+      'fetchEmployeeRoles',
       'requestAuth',
       'clearLoginData',
       'fetchUsers'
@@ -113,6 +119,7 @@ export default {
           this.fetchProjects(),
           this.fetchSkillCategories(),
           this.fetchSkillGroups(),
+          this.fetchEmployeeRoles(),
           this.fetchUsers()
         ])
           .catch(error => {

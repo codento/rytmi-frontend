@@ -65,7 +65,8 @@ export default {
   props: {
     nameFilter: String,
     skillFilters: Array,
-    utilizationDateFilter: Date
+    utilizationDateFilter: Date,
+    employeeRoleFilter: Array
   },
   data () {
     return {
@@ -104,7 +105,8 @@ export default {
       const profiles = this.mapSkillsAndProjectsToProfiles()
       const profilesFilteredBySkills = this.getProfilesFilteredBySkills(profiles, this.mapIdsOfSkillFilters)
       const profilesFilteredBySkillsAndUtilization = this.getProfilesFilteredByUtilization(profilesFilteredBySkills, this.utilizationDateFilter)
-      return this.getSortedProfiles(profilesFilteredBySkillsAndUtilization).map(profile => profile.profile)
+      const profilesFilteredBySkillsUtilizationAndEmployeeRole = this.getProfilesFilteredByEmployeeRole(profilesFilteredBySkillsAndUtilization)
+      return this.getSortedProfiles(profilesFilteredBySkillsUtilizationAndEmployeeRole).map(profile => profile.profile)
     }
   },
   watch: {
@@ -131,6 +133,16 @@ export default {
         return profilesToFilter.filter(profile => getProjectsAtGivenTime(profile.projects.filter(project => project.workPercentage > 0), parsedDate).length === 0)
       }
       return profilesToFilter
+    },
+    getProfilesFilteredByEmployeeRole (profilesToFilter) {
+      const filteredProfiles = profilesToFilter.filter(profile => {
+        return isEmpty(this.employeeRoleFilter)
+          ? true
+          : this.employeeRoleFilter.some(filter => filter.id === profile.profile.employeeRoleId)
+      })
+      return this.employeeRoleFilter
+        ? filteredProfiles
+        : profilesToFilter
     },
     mapSkillsAndProjectsToProfiles () {
       // First, get profiles, filtered by name

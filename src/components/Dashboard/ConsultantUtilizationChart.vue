@@ -39,6 +39,9 @@ export default {
     ChartCard,
     LineChart
   },
+  props: {
+    activeRoleSelection: Array
+  },
   data () {
     return {
       today: new Date(),
@@ -54,7 +57,8 @@ export default {
   computed: {
     ...mapGetters([
       'profileFilter',
-      'futureProjectsOfProfile'
+      'futureProjectsOfProfile',
+      'profileById'
     ]),
     lineChartData () {
       const utilization = this.mapUtilizationOnTimeFrame(this.today, this.endDate)
@@ -94,14 +98,32 @@ export default {
       }
     }
   },
+  watch: {
+    activeRoleSelection: {
+      handler: function (after, before) {
+        this.countUtilizedActiveProfiles()
+      },
+      deep: true
+    }
+  },
   created () {
     const profiles = this.profileFilter()
     this.activeProfiles = Object.keys(profiles).map((key) => profiles[key].id)
     this.countUtilizedActiveProfiles()
   },
+  beforeUpdate () {
+    this.countUtilizedActiveProfiles()
+  },
   methods: {
     countUtilizedActiveProfiles () {
-      this.activeProfiles.forEach((profile) => {
+      this.utilized = 0
+      this.notUtilized = 0
+      const consultantProfiles = this.activeProfiles.filter(profile => {
+        return this.activeRoleSelection.some(role => {
+          return role.id === this.profileById(profile).employeeRoleId
+        })
+      })
+      consultantProfiles.forEach((profile) => {
         const projectProfiles = this.futureProjectsOfProfile(profile)
         this.consultantHasOngoingProject(projectProfiles, this.today)
           ? this.utilized += 1
@@ -120,9 +142,11 @@ export default {
     countUtilizedConsultantsOnDate (currentDate) {
       let count = 0
       this.activeProfiles.forEach(profile => {
-        const profileProjects = this.futureProjectsOfProfile(profile)
-        if (this.consultantHasOngoingProject(profileProjects, currentDate)) {
-          count += 1
+        if (this.activeRoleSelection.some(role => role.id === this.profileById(profile).employeeRoleId)) {
+          const profileProjects = this.futureProjectsOfProfile(profile)
+          if (this.consultantHasOngoingProject(profileProjects, currentDate)) {
+            count += 1
+          }
         }
       })
       return count
