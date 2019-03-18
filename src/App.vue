@@ -1,16 +1,19 @@
 <template>
   <div class="app">
-    <AppHeader/>
+    <AppHeader />
     <div class="app-body">
-      <Sidebar :nav-items="nav"/>
+      <Sidebar :nav-items="nav" />
       <loading v-if="!appInitialized" />
-      <main v-else class="main">
+      <main
+        v-else
+        class="main"
+      >
         <div class="container-fluid">
-          <router-view/>
+          <router-view />
         </div>
       </main>
     </div>
-    <AppFooter/>
+    <AppFooter />
   </div>
 </template>
 

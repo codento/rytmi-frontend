@@ -23,6 +23,7 @@
           label-for="roleInput"
         >
           <v-select
+            id="roleInput"
             v-model="selectedEmployeeRole"
             :options="employeeRoleList"
           />
@@ -106,7 +107,9 @@ export default {
       this.selectedEmployeeRole = this.employeeRoleList.find(role => role.id === this.profile.employeeRoleId)
     },
     selectedEmployeeRole (newRole) {
-      this.profile.employeeRoleId = newRole.id
+      if (newRole && newRole.id) {
+        this.profile.employeeRoleId = newRole.id
+      }
     }
   },
   created () {
