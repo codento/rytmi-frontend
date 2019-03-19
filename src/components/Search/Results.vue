@@ -138,7 +138,7 @@ export default {
       const filteredProfiles = profilesToFilter.filter(profile => {
         return isEmpty(this.employeeRoleFilter)
           ? true
-          : this.employeeRoleFilter.some(filter => filter.id === profile.profile.employeeRoleId)
+          : this.employeeRoleFilter.some(filter => profile.profile.employeeRoles.includes(filter.id))
       })
       return this.employeeRoleFilter
         ? filteredProfiles

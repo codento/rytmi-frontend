@@ -45,7 +45,8 @@ const mockProfile = {
   title: 'Title',
   phone: 1234,
   description: 'Description about me Foo',
-  email: 'foo.bar@barfoo.com'
+  email: 'foo.bar@barfoo.com',
+  employeeRoles: [1]
 }
 
 describe('ProfileForm.vue', () => {

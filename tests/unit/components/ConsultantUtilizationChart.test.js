@@ -11,11 +11,11 @@ localVue.use(BootstrapVue)
 const firstOfNovember = new Date('2018-11-01')
 
 const mockProfiles = {
-  1: { id: '1', employeeRoleId: 1 },
-  2: { id: '2', employeeRoleId: 1 },
-  3: { id: '3', employeeRoleId: 1 },
-  4: { id: '4', employeeRoleId: 1 },
-  5: { id: '5', employeeRoleId: 1 }
+  1: { id: '1', employeeRoles: [1] },
+  2: { id: '2', employeeRoles: [1] },
+  3: { id: '3', employeeRoles: [1] },
+  4: { id: '4', employeeRoles: [1] },
+  5: { id: '5', employeeRoles: [1] }
 }
 const mockProjectProfiles = [
   {
@@ -75,7 +75,7 @@ function createStore (overrideConfig) {
           firstName: 'Bar',
           lastName: 'Foo',
           photoPath: '',
-          employeeRoleId: 1,
+          employeeRoles: [1],
           title: 'software developer',
           accounts: [
             {
@@ -97,7 +97,7 @@ function createStore (overrideConfig) {
           firstName: 'Bar',
           lastName: 'Foo',
           photoPath: '',
-          employeeRoleId: 1,
+          employeeRoles: [1],
           title: 'software developer',
           accounts: [
             {

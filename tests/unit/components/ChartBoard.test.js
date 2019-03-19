@@ -33,7 +33,7 @@ function createStore (overrideConfig) {
           firstName: 'Bar',
           lastName: 'Foo',
           photoPath: '',
-          employeeRoleId: 2,
+          employeeRoles: [2],
           title: 'software developer',
           accounts: [
             {

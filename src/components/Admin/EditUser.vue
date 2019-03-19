@@ -26,6 +26,7 @@
             id="roleInput"
             v-model="selectedEmployeeRole"
             :options="employeeRoleList"
+            multiple
           />
         </b-form-group>
         <b-form-group>
@@ -81,7 +82,7 @@ export default {
       isAdmin: this.user.admin,
       isActive: this.user.active,
       profile: null,
-      selectedEmployeeRole: null
+      selectedEmployeeRole: []
     }
   },
   computed: {
@@ -91,12 +92,13 @@ export default {
       return `${firstName} ${lastName}`
     },
     employeeRoleList () {
-      return this.employeeRoles.map(item => {
+      const roles = this.employeeRoles.map(item => {
         return {
           label: item.title,
           id: item.id
         }
       })
+      return roles.filter(role => !this.selectedEmployeeRole.some(selectedRole => selectedRole.id === role.id))
     }
   },
   watch: {
@@ -104,17 +106,15 @@ export default {
       this.isAdmin = newUser.admin
       this.isActive = newUser.active
       this.profile = this.getActiveEmployeeProfile()
-      this.selectedEmployeeRole = this.employeeRoleList.find(role => role.id === this.profile.employeeRoleId)
+      this.selectedEmployeeRole = this.employeeRoleList.filter(role => this.profile.employeeRoles.includes(role.id))
     },
-    selectedEmployeeRole (newRole) {
-      if (newRole && newRole.id) {
-        this.profile.employeeRoleId = newRole.id
-      }
+    selectedEmployeeRole (newRoles) {
+      this.profile.employeeRoles = newRoles.map(role => role.id)
     }
   },
   created () {
     this.profile = this.getActiveEmployeeProfile()
-    this.selectedEmployeeRole = this.employeeRoleList.find(role => role.id === this.profile.employeeRoleId)
+    this.selectedEmployeeRole = this.employeeRoleList.filter(role => this.profile.employeeRoles.includes(role.id))
   },
   methods: {
     submit () {

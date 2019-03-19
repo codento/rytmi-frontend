@@ -151,7 +151,7 @@ export default {
     groupSkillProfilesBySkill (skills) {
       const skillObject = this.createEmptySkillObject(skills)
       this.skillProfiles.forEach((skillProfile) => {
-        if (this.selectedEmployeeRoles.some(role => { return role.id === this.profileById(skillProfile.profileId).employeeRoleId })) {
+        if (this.selectedEmployeeRoles.some(role => { return this.profileById(skillProfile.profileId).employeeRoles.includes(role.id) })) {
           skillObject[skillProfile.skillId].proficiencies.push(skillProfile.knows)
           skillObject[skillProfile.skillId].willingness.push(skillProfile.wantsTo)
         }
