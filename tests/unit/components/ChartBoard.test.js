@@ -3,7 +3,6 @@ import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
 import { merge } from 'lodash'
 import ChartBoard from '@/components/Dashboard/ChartBoard'
-import LoadingSpinner from '@/components/helpers/LoadingSpinner'
 import SkillChart from '@/components/Dashboard/SkillChart'
 import TopSkillChart from '@/components/Dashboard/TopSkillChart'
 import MostWillingnessChart from '@/components/Dashboard/MostWillingnessChart'
@@ -19,7 +18,36 @@ function createStore (overrideConfig) {
     },
     getters: {
       appInitialized: () => true,
-      profileList: () => [{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }]
+      profileList: () => [{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }],
+      employeeRoles: () => {
+        return [
+          { id: 1, title: 'administrative' },
+          { id: 2, title: 'hardcore soft engineer' },
+          { id: 3, title: 'software destroyer' }
+        ]
+      },
+      profileById: () => (arg) => {
+        return {
+          id: arg,
+          userId: 2,
+          firstName: 'Bar',
+          lastName: 'Foo',
+          photoPath: '',
+          employeeRoles: [2],
+          title: 'software developer',
+          accounts: [
+            {
+              address: 'twitter.com/foo'
+            },
+            {
+              address: 'github.com/bar'
+            }
+          ],
+          email: 'foo.bar@foo.com',
+          phone: '1354',
+          description: 'fdas'
+        }
+      }
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -47,15 +75,6 @@ const mockSkillProfiles = [
 ]
 
 describe('ChartBoard.vue', () => {
-  it('should show loading spinner when app is loading', () => {
-    const getters = {
-      appInitialized: () => false
-    }
-    const store = createStore({ getters })
-    const wrapper = createWrapper({ store })
-    expect(wrapper.find(LoadingSpinner)).toBeTruthy()
-  })
-
   it('should not show any charts when skills array is empty and loading has been done', () => {
     const getters = {
       skills: () => ({}),

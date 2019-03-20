@@ -23,7 +23,7 @@ describe('API Calls', () => {
   it('GET profiles', () => {
     let mockAdapter = new MockAdapter(axios)
 
-    mockAdapter.onGet(API_URL + PATH_PROFILES + '/all').reply(200, {
+    mockAdapter.onGet(API_URL + PATH_PROFILES).reply(200, {
       skills: ['My profile', 'Second profile']
     })
     expect.assertions(1)

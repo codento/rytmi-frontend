@@ -14,8 +14,8 @@
     </div>
     <b-form-group
       id="firstNameLabel"
-      horizontal
       label="First name:"
+      label-cols-sm="3"
       label-for="firstName"
     >
       <b-form-input
@@ -27,7 +27,7 @@
     </b-form-group>
     <b-form-group
       id="lastNameLabel"
-      horizontal
+      label-cols-sm="3"
       label="Last name:"
       label-for="lastNameInput"
     >
@@ -39,8 +39,21 @@
       />
     </b-form-group>
     <b-form-group
+      id="roleLabel"
+      label-cols-sm="3"
+      label="Role:"
+      label-for="roleInput"
+    >
+      <v-select
+        id="roleInput"
+        v-model="selectedEmployeeRoles"
+        :options="employeeRoleList"
+        multiple
+      />
+    </b-form-group>
+    <b-form-group
       id="titleLabel"
-      horizontal
+      label-cols-sm="3"
       label="Title:"
       label-for="titleInput"
     >
@@ -53,7 +66,7 @@
     </b-form-group>
     <b-form-group
       id="emailLabel"
-      horizontal
+      label-cols-sm="3"
       label="Email:"
       label-for="emailInput"
     >
@@ -66,7 +79,7 @@
     </b-form-group>
     <b-form-group
       id="PhonenumberLabel"
-      horizontal
+      label-cols-sm="3"
       label="Phone number:"
       label-for="PhonenumberInput"
     >
@@ -79,7 +92,7 @@
     </b-form-group>
     <b-form-group
       id="description"
-      horizontal
+      label-cols-sm="3"
       label="Description:"
       label-for="descriptionInput"
     >
@@ -93,21 +106,26 @@
     <b-button
       type="submit"
       variant="primary"
-    >Submit</b-button>
+    >
+      Submit
+    </b-button>
     <b-button
       type="reset"
       variant="danger"
-    >Reset</b-button>
+    >
+      Reset
+    </b-button>
   </b-form>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import vSelect from 'vue-select'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 export default {
   name: 'ProfileForm',
-  components: { ApiErrorDetailsPanel },
+  components: { ApiErrorDetailsPanel, vSelect },
   props: {
     'profile': Object
   },
@@ -116,11 +134,34 @@ export default {
       show: true,
       showError: false,
       errorDetails: [],
-      editedProfile: Object.assign({}, this.profile)
+      editedProfile: Object.assign({}, this.profile),
+      selectedEmployeeRoles: []
     }
+  },
+  computed: {
+    employeeRoleList () {
+      const roles = this.employeeRoles().map(item => {
+        return {
+          label: item.title,
+          id: item.id
+        }
+      })
+      return roles.filter(role => !this.selectedEmployeeRoles.some(selectedRole => selectedRole.id === role.id))
+    }
+  },
+  watch: {
+    selectedEmployeeRoles (newRoles) {
+      this.editedProfile.employeeRoles = newRoles.map(role => role.id)
+    }
+  },
+  created () {
+    this.selectedEmployeeRoles = this.employeeRoleList.filter(role => {
+      return this.editedProfile.employeeRoles.includes(role.id)
+    })
   },
   methods: {
     ...mapActions(['updateProfile']),
+    ...mapGetters(['employeeRoles', 'employeeRoleById']),
     async onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []

@@ -8,16 +8,14 @@ import ConsultantUtilizationChart from '@/components/Dashboard/ConsultantUtiliza
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(BootstrapVue)
-const dateNow = jest.spyOn(Date, 'now')
 const firstOfNovember = new Date('2018-11-01')
-dateNow.mockImplementation(() => firstOfNovember)
 
 const mockProfiles = {
-  1: { id: '1' },
-  2: { id: '2' },
-  3: { id: '3' },
-  4: { id: '4' },
-  5: { id: '5' }
+  1: { id: '1', employeeRoles: [1] },
+  2: { id: '2', employeeRoles: [1] },
+  3: { id: '3', employeeRoles: [1] },
+  4: { id: '4', employeeRoles: [1] },
+  5: { id: '5', employeeRoles: [1] }
 }
 const mockProjectProfiles = [
   {
@@ -69,7 +67,51 @@ function createStore (overrideConfig) {
       profileFilter: () => () => mockProfiles,
       futureProjectsOfProfile: () => (id) => mockProjectProfiles.filter(pp => {
         return pp.profileId === id
-      })
+      }),
+      profileByUserId: () => (arg) => {
+        return {
+          id: 1,
+          userId: 2,
+          firstName: 'Bar',
+          lastName: 'Foo',
+          photoPath: '',
+          employeeRoles: [1],
+          title: 'software developer',
+          accounts: [
+            {
+              address: 'twitter.com/foo'
+            },
+            {
+              address: 'github.com/bar'
+            }
+          ],
+          email: 'foo.bar@foo.com',
+          phone: '1354',
+          description: 'fdas'
+        }
+      },
+      profileById: () => (arg) => {
+        return {
+          id: 1,
+          userId: 2,
+          firstName: 'Bar',
+          lastName: 'Foo',
+          photoPath: '',
+          employeeRoles: [1],
+          title: 'software developer',
+          accounts: [
+            {
+              address: 'twitter.com/foo'
+            },
+            {
+              address: 'github.com/bar'
+            }
+          ],
+          email: 'foo.bar@foo.com',
+          phone: '1354',
+          description: 'fdas'
+        }
+      }
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -77,7 +119,11 @@ function createStore (overrideConfig) {
 }
 
 function createWrapper (overrideMountingOptions) {
+  const propsData = {
+    activeRoleSelection: [{ id: 1, title: 'Active role' }]
+  }
   const defaultMountingOptions = {
+    propsData,
     localVue,
     store: createStore()
   }
@@ -95,6 +141,10 @@ describe('ConsultantUtilizationChart.vue', () => {
     const wrapper = createWrapper()
     const utilized = 2
     const notUtilized = 3
+    wrapper.vm.today = firstOfNovember
+    wrapper.vm.utilized = 0
+    wrapper.vm.notUtilized = 0
+    wrapper.vm.countUtilizedActiveProfiles()
     expect(wrapper.vm.utilized).toEqual(utilized)
     expect(wrapper.vm.notUtilized).toEqual(notUtilized)
   })
@@ -102,16 +152,16 @@ describe('ConsultantUtilizationChart.vue', () => {
   it('Should calculate consultant utilization on frequency of one week', () => {
     const wrapper = createWrapper()
     const expectedLabels = [
-      '01/11/2018',
-      '08/11/2018',
-      '15/11/2018',
-      '22/11/2018',
-      '29/11/2018',
-      '06/12/2018',
-      '13/12/2018',
-      '20/12/2018',
-      '27/12/2018',
-      '03/01/2019'
+      '1.11.2018',
+      '8.11.2018',
+      '15.11.2018',
+      '22.11.2018',
+      '29.11.2018',
+      '6.12.2018',
+      '13.12.2018',
+      '20.12.2018',
+      '27.12.2018',
+      '3.1.2019'
     ]
     const expectedUtilization = [2, 2, 2, 2, 3, 4, 4, 5, 5, 1]
     const result = wrapper.vm.mapUtilizationOnTimeFrame(firstOfNovember, new Date('2019-01-07'))

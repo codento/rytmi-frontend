@@ -33,20 +33,14 @@
             slot="startDate"
             slot-scope="data"
           >
-            <date-formatter
-              :date="data.value"
-              format="D.M.YY"
-            />
+            {{ data.value | dateFilter }}
           </template>
 
           <template
             slot="endDate"
             slot-scope="data"
           >
-            <date-formatter
-              :date="data.value"
-              format="D.M.YY"
-            />
+            {{ data.value | dateFilter }}
           </template>
 
           <template
@@ -58,7 +52,9 @@
               class="mr-1"
               variant="danger"
               @click.stop="removePP(data.item)"
-            >Remove</b-btn>
+            >
+              Remove
+            </b-btn>
           </template>
         </b-table>
       </b-col>
@@ -76,13 +72,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import DateFormatter from '../helpers/DateFormatter'
 import { ProjectProfileForm } from '../Project'
 
 export default {
   name: 'EditProjects',
   components: {
-    DateFormatter,
     ProjectProfileForm
   },
   props: {

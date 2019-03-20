@@ -26,7 +26,13 @@ function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
       skills: () => skillsMock(),
-      skillName: () => (skillId) => skillsMock()[skillId]
+      skillName: () => (skillId) => skillsMock()[skillId],
+      employeeRoles: () => {
+        return [
+          { id: 1, title: 'soft engineer' },
+          { id: 2, title: 'hardcore soft engineer' }
+        ]
+      }
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -45,7 +51,7 @@ function createWrapper (overrideMountingOptions) {
 describe('Search.vue', () => {
   it('should have all skills in the skill filter select', () => {
     const wrapper = createWrapper()
-    expect(wrapper.find(vSelect).props().options.length).toBe(Object.keys(skillsMock()).length)
+    expect(wrapper.findAll(vSelect).at(1).props().options.length).toBe(Object.keys(skillsMock()).length)
   })
 
   it('should pass right attributes to Results component', () => {

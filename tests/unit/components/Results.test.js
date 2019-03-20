@@ -164,7 +164,7 @@ describe('Results.vue', () => {
       propsData: {
         skillFilters: [],
         nameFilter: '',
-        utilizationDateFilter: '2019-10-30'
+        utilizationDateFilter: new Date('2019-10-30')
       }
     }
     const expectedOrder = ['Joe', 'Sarah']
@@ -184,7 +184,7 @@ describe('Results.vue', () => {
       propsData: {
         skillFilters: [],
         nameFilter: '',
-        utilizationDateFilter: '2018-11-22'
+        utilizationDateFilter: new Date('2018-11-22')
       }
     }
     const expectedOrder = ['Daisy', 'Joe', 'Sarah']
@@ -204,7 +204,7 @@ describe('Results.vue', () => {
       propsData: {
         skillFilters: [],
         nameFilter: '',
-        utilizationDateFilter: '2018-12-13'
+        utilizationDateFilter: new Date('2018-12-13')
       }
     }
     const expectedOrder = []
@@ -224,7 +224,7 @@ describe('Results.vue', () => {
       propsData: {
         skillFilters: [{ id: 2, name: 'JavaScript' }],
         nameFilter: '',
-        utilizationDateFilter: '2018-10-22'
+        utilizationDateFilter: new Date('2018-10-22')
       }
     }
     const expectedOrder = ['Joe']
@@ -237,5 +237,45 @@ describe('Results.vue', () => {
       })
       done()
     })
+  })
+
+  it('should show profiles ordered by selected attribute (utilization)', (done) => {
+    const mountOptions = {
+      propsData: {
+        skillFilters: [],
+        nameFilter: '',
+        utilizationDateFilter: undefined
+      }
+    }
+    const expectedOrder = ['Joe', 'Sarah', 'Daisy']
+    const wrapper = createWrapper(mountOptions)
+    wrapper.vm.sortAttribute = 4
+    wrapper.vm.$nextTick(() => {
+      const cards = wrapper.findAll(ProfileCard)
+      expect(cards).toHaveLength(3)
+      cards.wrappers.forEach((wrapper, i) => {
+        expect(wrapper.props().profile.firstName).toBe(expectedOrder[i])
+      })
+      done()
+    })
+  })
+
+  it('should show profiles reversed when reverse is selected', (done) => {
+    const mountOptions = {
+      propsData: {
+        skillFilters: [],
+        nameFilter: '',
+        utilizationDateFilter: ''
+      }
+    }
+    const expectedOrder = ['Sarah', 'Joe', 'Daisy']
+    const wrapper = createWrapper(mountOptions)
+    wrapper.setData({ reversedOrder: true })
+    const cards = wrapper.findAll(ProfileCard)
+    expect(cards).toHaveLength(3)
+    cards.wrappers.forEach((wrapper, i) => {
+      expect(wrapper.props().profile.firstName).toBe(expectedOrder[i])
+    })
+    done()
   })
 })

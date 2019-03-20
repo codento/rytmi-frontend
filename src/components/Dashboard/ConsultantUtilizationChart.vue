@@ -32,16 +32,19 @@ import { isWithinRange, isBefore, addMonths, addWeeks, format, isAfter } from 'd
 import ChartCard from './ChartCard'
 import LineChart from '../Charts/LineChart'
 
-const createLabel = (date) => format(date, 'DD/MM/YYYY')
+const createLabel = (date) => format(date, 'D.M.YYYY')
 
 export default {
   components: {
     ChartCard,
     LineChart
   },
+  props: {
+    activeRoleSelection: Array
+  },
   data () {
     return {
-      today: Date.now(),
+      today: new Date(),
       endDate: addMonths(Date.now(), 6),
       utilized: 0,
       notUtilized: 0,
@@ -54,7 +57,8 @@ export default {
   computed: {
     ...mapGetters([
       'profileFilter',
-      'futureProjectsOfProfile'
+      'futureProjectsOfProfile',
+      'profileById'
     ]),
     lineChartData () {
       const utilization = this.mapUtilizationOnTimeFrame(this.today, this.endDate)
@@ -94,17 +98,38 @@ export default {
       }
     }
   },
+  watch: {
+    activeRoleSelection: {
+      handler: function (after, before) {
+        this.countUtilizedActiveProfiles()
+      },
+      deep: true
+    }
+  },
   created () {
     const profiles = this.profileFilter()
     this.activeProfiles = Object.keys(profiles).map((key) => profiles[key].id)
-    this.activeProfiles.forEach((profile) => {
-      const projectProfiles = this.futureProjectsOfProfile(profile)
-      this.consultantHasOngoingProject(projectProfiles, this.today)
-        ? this.utilized += 1
-        : this.notUtilized += 1
-    })
+    this.countUtilizedActiveProfiles()
+  },
+  beforeUpdate () {
+    this.countUtilizedActiveProfiles()
   },
   methods: {
+    countUtilizedActiveProfiles () {
+      this.utilized = 0
+      this.notUtilized = 0
+      const consultantProfiles = this.activeProfiles.filter(profile => {
+        return this.activeRoleSelection.some(role => {
+          return this.profileById(profile).employeeRoles.includes(role.id)
+        })
+      })
+      consultantProfiles.forEach((profile) => {
+        const projectProfiles = this.futureProjectsOfProfile(profile)
+        this.consultantHasOngoingProject(projectProfiles, this.today)
+          ? this.utilized += 1
+          : this.notUtilized += 1
+      })
+    },
     consultantHasOngoingProject (projectProfiles, date) {
       if (projectProfiles.length > 0) {
         const onGoingProjects = projectProfiles.filter(
@@ -117,9 +142,11 @@ export default {
     countUtilizedConsultantsOnDate (currentDate) {
       let count = 0
       this.activeProfiles.forEach(profile => {
-        const profileProjects = this.futureProjectsOfProfile(profile)
-        if (this.consultantHasOngoingProject(profileProjects, currentDate)) {
-          count += 1
+        if (this.activeRoleSelection.some(role => this.profileById(profile).employeeRoles.includes(role.id))) {
+          const profileProjects = this.futureProjectsOfProfile(profile)
+          if (this.consultantHasOngoingProject(profileProjects, currentDate)) {
+            count += 1
+          }
         }
       })
       return count

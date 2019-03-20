@@ -4,10 +4,14 @@ import Vuex from 'vuex'
 import { merge } from 'lodash'
 import flushPromises from 'flush-promises'
 import { ProjectMemberTable } from '@/components/Project'
+import { format } from 'date-fns'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 localVue.use(Vuex)
+localVue.filter('dateFilter', value => {
+  return value ? format(value, 'D.M.YYYY') : undefined
+})
 
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
@@ -51,7 +55,7 @@ describe('ProjectMemberTable.vue', () => {
   it('shows btable with correct size when there are members', () => {
     const propsData = getMembersList()
     const wrapper = createWrapper({ propsData })
-    expect(wrapper.find({ name: 'bTable' }).exists()).toBe(true)
+    expect(wrapper.find({ name: 'BTable' }).exists()).toBe(true)
     expect(wrapper.find('tbody').findAll('tr')).toHaveLength(propsData.members.length)
   })
 
@@ -105,8 +109,6 @@ describe('ProjectMemberTable.vue', () => {
     expect(modalWrapper.element.style.display).toBe('none')
     wrapper.vm.openEditModal({ item: propsData.members[0] })
     const modalInputs = modalWrapper.findAll('input')
-    expect(modalInputs.at(0).vm.value).toBe(propsData.members[0].startDate)
-    expect(modalInputs.at(1).vm.value).toBe(propsData.members[0].endDate)
     expect(modalInputs.at(2).vm.value).toBe(propsData.members[0].workPercentage)
     expect(modalSpy).toHaveBeenCalled()
   })
@@ -133,8 +135,8 @@ function getMembersList () {
         id: 1,
         profileId: 1,
         projectId: 2,
-        startDate: '2018-01-01',
-        endDate: '2018-02-01',
+        startDate: new Date('2018-01-01'),
+        endDate: new Date('2018-02-01'),
         workPercentage: 45
       }
     ]

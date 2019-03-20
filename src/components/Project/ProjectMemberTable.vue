@@ -31,7 +31,7 @@
             class="clickable"
             @click.stop="openEditModal(element)"
           >
-            <DateFormatter :date="element.value" />
+            {{ element.value | dateFilter }}
           </span>
         </template>
         <template
@@ -42,7 +42,7 @@
             class="clickable"
             @click.stop="openEditModal(element)"
           >
-            <DateFormatter :date="element.value" />
+            {{ element.value | dateFilter }}
           </span>
         </template>
         <template
@@ -65,7 +65,9 @@
             class="mr-1"
             variant="danger"
             @click.stop="removeMember(remove.item)"
-          >Remove</b-btn>
+          >
+            Remove
+          </b-btn>
         </template>
       </b-table>
     </div>
@@ -80,18 +82,19 @@
     >
       <h3>{{ printMember(editedProjectProfile.profileId) }}</h3>
       <small>Start date</small>
-      <b-input
+      <Datepicker
         v-model="editedProjectProfile.startDate"
-        type="date"
+        name="edited-project-profile-start-date"
       />
       <small>End date</small>
-      <b-input
+      <Datepicker
         v-model="editedProjectProfile.endDate"
-        type="date"
+        name="edited-project-profile-end-date"
       />
       <small>Utilization %</small>
       <b-input
         v-model="editedProjectProfile.workPercentage"
+        class="utilization-input"
         :min="0"
         :max="100"
         type="number"
@@ -100,23 +103,25 @@
         id="save"
         class="modal-btn"
         @click="callUpdateProfileProjectAction()"
-      >Save</b-btn>
+      >
+        Save
+      </b-btn>
       <b-btn
         id="cancel"
         class="modal-btn"
         @click="closeEditModal()"
-      >Cancel</b-btn>
+      >
+        Cancel
+      </b-btn>
     </b-modal>
   </div>
 </template>
 <script>
+import Datepicker from '../helpers/Datepicker'
 import { mapGetters, mapActions } from 'vuex'
-import DateFormatter from '../helpers/DateFormatter.vue'
 export default {
   name: 'ProjectMemberTable',
-  components: {
-    DateFormatter
-  },
+  components: { Datepicker },
   props: {
     members: Array
   },
@@ -168,8 +173,8 @@ export default {
     },
     openEditModal (item) {
       this.editedProjectProfile = Object.assign({}, item.item)
-      this.editedProjectProfile.startDate = new Date(this.editedProjectProfile.startDate).toISOString().substring(0, 10)
-      this.editedProjectProfile.endDate = new Date(this.editedProjectProfile.endDate).toISOString().substring(0, 10)
+      this.editedProjectProfile.startDate = new Date(this.editedProjectProfile.startDate)
+      this.editedProjectProfile.endDate = new Date(this.editedProjectProfile.endDate)
       this.editedProjectProfile.index = item.index
       this.$refs.projectProfileEditModal.show()
     },

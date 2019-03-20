@@ -30,7 +30,6 @@
     />
 
     <b-navbar-nav class="ml-auto">
-
       <b-nav-item
         v-if="!isAuthenticated"
         class="px-3"

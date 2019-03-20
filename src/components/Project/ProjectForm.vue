@@ -36,17 +36,14 @@
         type="text"
       />
       <small>Start date</small>
-      <b-input
+      <datepicker
         v-model="project.startDate"
-        class="form-control"
-        required
-        type="date"
+        name="project-start-date"
       />
       <small>End date</small>
-      <b-input
+      <datepicker
         v-model="project.endDate"
-        class="form-control"
-        type="date"
+        name="project-end-date"
       />
       <small>Description</small>
       <b-textarea
@@ -60,7 +57,8 @@
         class="form-control"
         type="submit"
         primary
-      >Submit
+      >
+        Submit
       </b-button>
     </b-form>
     <div
@@ -75,9 +73,11 @@
 <script>
 import { mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
+import Datepicker from '../helpers/Datepicker'
 export default {
   name: 'ProjectForm',
   components: {
+    Datepicker,
     ApiErrorDetailsPanel
   },
   props: {
@@ -94,8 +94,8 @@ export default {
   mounted () {
     if (this.editableProject) {
       this.project = this.editableProject
-      this.project.endDate = new Date(this.editableProject.endDate).toISOString().substring(0, 10)
-      this.project.startDate = new Date(this.editableProject.startDate).toISOString().substring(0, 10)
+      this.project.endDate = new Date(this.editableProject.endDate)
+      this.project.startDate = new Date(this.editableProject.startDate)
     }
   },
   methods: {
@@ -105,6 +105,7 @@ export default {
     ]),
     onSubmit (evt) {
       evt.preventDefault()
+      this.errorDetails = []
       // If the project has an ID, update; otherwise create a new project
       if (this.project.id) {
         this.updateProject(this.project)
@@ -129,7 +130,11 @@ export default {
             this.showError = false
             this.showProjectForm = false
           }).catch(err => {
-            this.errorDetails = err.response.data.error.details
+            if (Array.isArray(err.data.error.details)) {
+              this.errorDetails = err.data.error.details
+            } else {
+              this.errorDetails.push(err.data.error.message)
+            }
             this.showError = true
           })
       }

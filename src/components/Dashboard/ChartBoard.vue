@@ -1,10 +1,25 @@
 <template>
   <div>
-    <h1 class="text-primary">
-      <slot name="header" />
-    </h1>
-    <loading v-if="!appInitialized" />
-    <div v-else>
+    <b-row>
+      <b-col
+        :cols="6"
+      >
+        <h1 class="text-primary">
+          <slot name="header" />
+        </h1>
+      </b-col>
+      <b-col
+        :cols="6"
+      >
+        <v-select
+          v-model="selectedEmployeeRoles"
+          :options="employeeRoleOptions"
+          label="title"
+          multiple
+        />
+      </b-col>
+    </b-row>
+    <div>
       <div v-if="skillList.length === 0 || skillProfiles.length === 0">
         <span id="no-data-message">Sorry there is no data to display :(</span>
       </div>
@@ -14,7 +29,9 @@
             :cols="12"
             :md="8"
           >
-            <consultant-utilization-chart />
+            <consultant-utilization-chart
+              :active-role-selection="selectedEmployeeRoles"
+            />
           </b-col>
           <b-col
             :cols="12"
@@ -38,7 +55,6 @@
               </b-col>
             </b-row>
           </b-col>
-
         </b-row>
         <b-row class="no-gutters mt-1">
           <b-col
@@ -62,6 +78,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import vSelect from 'vue-select'
 import SkillChart from './SkillChart'
 import TopSkillChart from './TopSkillChart'
 import MostWillingnessChart from './MostWillingnessChart'
@@ -79,14 +96,22 @@ export default {
     SkillChart,
     TopSkillChart,
     MostWillingnessChart,
-    ConsultantUtilizationChart
+    ConsultantUtilizationChart,
+    vSelect
+  },
+  data () {
+    return {
+      selectedEmployeeRoles: []
+    }
   },
   computed: {
     ...mapGetters([
       'appInitialized',
       'skills',
       'skillProfiles',
-      'profileList'
+      'profileList',
+      'employeeRoles',
+      'profileById'
     ]),
     skillList () {
       return Object.keys(this.skills).map(key => this.skills[key])
@@ -99,7 +124,16 @@ export default {
         skill.willingnessAverage = calculateAverage(skill.willingness)
       })
       return skillProfienciesByGroup
+    },
+    employeeRoleOptions () {
+      const allEmployeeRoleOptions = Object.values(this.employeeRoles).filter(role => {
+        return role.title !== 'administrative'
+      })
+      return allEmployeeRoleOptions.filter(option => !(this.selectedEmployeeRoles.map(role => role.id)).includes(option.id))
     }
+  },
+  mounted () {
+    this.selectedEmployeeRoles = this.employeeRoleOptions
   },
   methods: {
     createEmptySkillObject (skills) {
@@ -117,8 +151,10 @@ export default {
     groupSkillProfilesBySkill (skills) {
       const skillObject = this.createEmptySkillObject(skills)
       this.skillProfiles.forEach((skillProfile) => {
-        skillObject[skillProfile.skillId].proficiencies.push(skillProfile.knows)
-        skillObject[skillProfile.skillId].willingness.push(skillProfile.wantsTo)
+        if (this.selectedEmployeeRoles.some(role => { return this.profileById(skillProfile.profileId).employeeRoles.includes(role.id) })) {
+          skillObject[skillProfile.skillId].proficiencies.push(skillProfile.knows)
+          skillObject[skillProfile.skillId].willingness.push(skillProfile.wantsTo)
+        }
       })
       return skillObject
     }

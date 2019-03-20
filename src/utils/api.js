@@ -13,6 +13,7 @@ const PATH_PROJECTS = '/projects'
 const PATH_PROFILEPROJECTS = '/profileprojects'
 const PATH_SKILLCATEGORIES = '/skillcategories'
 const PATH_SKILLGROUPS = '/skillgroups'
+const PATH_EMPLOYEEROLES = '/employeeroles'
 
 export function login (token) {
   return axios.post(API_URL + PATH_AUTH, { id_token: token })
@@ -21,6 +22,10 @@ export function login (token) {
     }).catch(response => {
       console.log('Backend error' + response)
     })
+}
+
+export function getVersion () {
+  return axios.get(API_URL).catch(handleError)
 }
 
 export function getSkills () {
@@ -51,7 +56,7 @@ export function deleteSkill (id) {
 }
 
 export function getProfiles () {
-  return axios.get(API_URL + PATH_PROFILES + '/all', getAuthHeaders()).catch(handleError)
+  return axios.get(API_URL + PATH_PROFILES, getAuthHeaders()).catch(handleError)
 }
 
 export function getProfileSkills () {
@@ -94,7 +99,6 @@ export function newProject (data) {
     API_URL + PATH_PROJECTS,
     denormalize(data, [project]),
     getAuthHeaders())
-    .catch(handleError)
 }
 
 export function alterProject (data) {
@@ -203,6 +207,28 @@ export function newSkillGroup (data) {
   return axios.post(
     API_URL + PATH_SKILLGROUPS,
     data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getEmployeeRoles () {
+  return axios.get(
+    API_URL + PATH_EMPLOYEEROLES,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function newEmployeeRole (data) {
+  return axios.post(
+    API_URL + PATH_EMPLOYEEROLES,
+    data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function deleteEmployeeRole (id) {
+  return axios.delete(
+    API_URL + PATH_EMPLOYEEROLES + '/' + id,
     getAuthHeaders())
     .catch(handleError)
 }

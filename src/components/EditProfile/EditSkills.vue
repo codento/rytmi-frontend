@@ -55,7 +55,9 @@
               class="mr-1"
               variant="danger"
               @click.stop="removeSkillFromProfile(remove.item.id)"
-            >Remove</b-btn>
+            >
+              Remove
+            </b-btn>
           </template>
         </b-table>
       </b-col>
@@ -77,11 +79,15 @@
       <b-btn
         class="modal-btn"
         @click="updateSkill()"
-      >Save</b-btn>
+      >
+        Save
+      </b-btn>
       <b-btn
         class="modal-btn"
         @click="hideModals()"
-      >Cancel</b-btn>
+      >
+        Cancel
+      </b-btn>
     </b-modal>
     <b-modal
       ref="knowsModal"
@@ -97,11 +103,15 @@
       <b-btn
         class="modal-btn"
         @click="updateSkill()"
-      >Save</b-btn>
+      >
+        Save
+      </b-btn>
       <b-btn
         class="modal-btn"
         @click="hideModals()"
-      >Cancel</b-btn>
+      >
+        Cancel
+      </b-btn>
     </b-modal>
   </div>
 </template>

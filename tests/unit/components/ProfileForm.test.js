@@ -10,10 +10,18 @@ const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 localVue.use(Vuex)
 
+const mockEmployeeRoles = [
+  { id: 1, title: 'somethinger' },
+  { id: 2, title: 'dunno lol' }
+]
+
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     actions: {
       updateProfile: jest.fn(() => [])
+    },
+    getters: {
+      employeeRoles: jest.fn(() => mockEmployeeRoles)
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -33,10 +41,12 @@ const mockProfile = {
   id: 2,
   firstName: 'Foo',
   lastName: 'Bar',
+  role: 'Employee role',
   title: 'Title',
   phone: 1234,
   description: 'Description about me Foo',
-  email: 'foo.bar@barfoo.com'
+  email: 'foo.bar@barfoo.com',
+  employeeRoles: [1]
 }
 
 describe('ProfileForm.vue', () => {
@@ -49,10 +59,10 @@ describe('ProfileForm.vue', () => {
     const inputWrappers = wrapper.findAll('input')
     expect(inputWrappers.at(0).vm.value).toBe(mockProfile.firstName)
     expect(inputWrappers.at(1).vm.value).toBe(mockProfile.lastName)
-    expect(inputWrappers.at(2).vm.value).toBe(mockProfile.title)
-    expect(inputWrappers.at(3).vm.value).toBe(mockProfile.email)
-    expect(inputWrappers.at(4).vm.value).toBe(mockProfile.phone)
-    expect(inputWrappers.at(5).vm.value).toBe(mockProfile.description)
+    expect(inputWrappers.at(3).vm.value).toBe(mockProfile.title)
+    expect(inputWrappers.at(4).vm.value).toBe(mockProfile.email)
+    expect(inputWrappers.at(5).vm.value).toBe(mockProfile.phone)
+    expect(inputWrappers.at(6).vm.value).toBe(mockProfile.description)
   })
 
   it('should submit entered details when submit is clicked', async () => {

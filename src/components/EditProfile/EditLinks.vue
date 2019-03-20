@@ -9,10 +9,11 @@
             v-for="(link, idx) in profile.links"
             :key="idx"
             style="padding-right:20px"
-          ><span
-            style="color:red; padding-right:10px; cursor:pointer"
-            @click="removeLink(link)"
-          >X</span>
+          >
+            <span
+              style="color:red; padding-right:10px; cursor:pointer"
+              @click="removeLink(link)"
+            >X</span>
             <a
               :href="link"
               target="_blank"
@@ -23,7 +24,7 @@
       <b-form @submit.prevent="addLink">
         <b-form-group
           id="addLinks"
-          horizontal
+          label-cols-sm="3"
           label="Add Links:"
           label-for="linkInput"
         >
@@ -46,7 +47,9 @@
           id="add"
           variant="primary"
           type="submit"
-        >Add</b-button>
+        >
+          Add
+        </b-button>
       </b-form>
     </b-card>
   </div>
