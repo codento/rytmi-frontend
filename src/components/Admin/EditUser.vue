@@ -25,7 +25,7 @@
           <v-select
             id="roleInput"
             v-model="selectedEmployeeRoles"
-            :options="employeeRoleList"
+            :options="employeeRoleList(selectedEmployeeRoles)"
             multiple
           />
         </b-form-group>
@@ -90,15 +90,6 @@ export default {
     fullName () {
       const { firstName, lastName } = this.user
       return `${firstName} ${lastName}`
-    },
-    employeeRoleList () {
-      const roles = this.employeeRoles.map(item => {
-        return {
-          label: item.title,
-          id: item.id
-        }
-      })
-      return roles.filter(role => !this.selectedEmployeeRoles.some(selectedRole => selectedRole.id === role.id))
     }
   },
   watch: {
@@ -106,7 +97,7 @@ export default {
       this.isAdmin = newUser.admin
       this.isActive = newUser.active
       this.profile = this.getActiveEmployeeProfile()
-      this.selectedEmployeeRoles = this.employeeRoleList.filter(role => this.profile.employeeRoles.includes(role.id))
+      this.selectedEmployeeRoles = this.employeeRoleList([]).filter(role => this.profile.employeeRoles.includes(role.id))
     },
     selectedEmployeeRoles (newRoles) {
       this.profile.employeeRoles = newRoles.map(role => role.id)
@@ -114,9 +105,18 @@ export default {
   },
   created () {
     this.profile = this.getActiveEmployeeProfile()
-    this.selectedEmployeeRoles = this.employeeRoleList.filter(role => this.profile.employeeRoles.includes(role.id))
+    this.selectedEmployeeRoles = this.employeeRoleList([]).filter(role => this.profile.employeeRoles.includes(role.id))
   },
   methods: {
+    employeeRoleList (selectedRoles) {
+      const roles = this.employeeRoles.map(item => {
+        return {
+          label: item.title,
+          id: item.id
+        }
+      })
+      return roles.filter(role => !selectedRoles.some(selectedRole => selectedRole.id === role.id))
+    },
     submit () {
       this.update({ id: this.user.id, active: this.isActive, admin: this.isAdmin }, this.profile)
     },
