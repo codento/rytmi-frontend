@@ -24,7 +24,7 @@
         >
           <v-select
             id="roleInput"
-            v-model="selectedEmployeeRole"
+            v-model="selectedEmployeeRoles"
             :options="employeeRoleList"
             multiple
           />
@@ -82,7 +82,7 @@ export default {
       isAdmin: this.user.admin,
       isActive: this.user.active,
       profile: null,
-      selectedEmployeeRole: []
+      selectedEmployeeRoles: []
     }
   },
   computed: {
@@ -98,7 +98,7 @@ export default {
           id: item.id
         }
       })
-      return roles.filter(role => !this.selectedEmployeeRole.some(selectedRole => selectedRole.id === role.id))
+      return roles.filter(role => !this.selectedEmployeeRoles.some(selectedRole => selectedRole.id === role.id))
     }
   },
   watch: {
@@ -114,7 +114,7 @@ export default {
   },
   created () {
     this.profile = this.getActiveEmployeeProfile()
-    this.selectedEmployeeRole = this.employeeRoleList.filter(role => this.profile.employeeRoles.includes(role.id))
+    this.selectedEmployeeRoles = this.employeeRoleList.filter(role => this.profile.employeeRoles.includes(role.id))
   },
   methods: {
     submit () {
