@@ -88,7 +88,7 @@ exports[`EditUser.vue Template is correct 1`] = `
             class="col"
           >
             <div
-              class="dropdown v-select single searchable"
+              class="dropdown v-select searchable"
               dir="auto"
               id="roleInput"
             >
@@ -98,6 +98,24 @@ exports[`EditUser.vue Template is correct 1`] = `
                 <div
                   class="vs__selected-options"
                 >
+                  <span
+                    class="selected-tag"
+                  >
+                    
+            soft mengineer
+           
+                    <button
+                      aria-label="Remove option"
+                      class="close"
+                      type="button"
+                    >
+                      <span
+                        aria-hidden="true"
+                      >
+                        ×
+                      </span>
+                    </button>
+                  </span>
                    
                   <input
                     aria-label="Search for option"

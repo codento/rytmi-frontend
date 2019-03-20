@@ -120,7 +120,7 @@ export default {
       this.notUtilized = 0
       const consultantProfiles = this.activeProfiles.filter(profile => {
         return this.activeRoleSelection.some(role => {
-          return role.id === this.profileById(profile).employeeRoleId
+          return this.profileById(profile).employeeRoles.includes(role.id)
         })
       })
       consultantProfiles.forEach((profile) => {
@@ -142,7 +142,7 @@ export default {
     countUtilizedConsultantsOnDate (currentDate) {
       let count = 0
       this.activeProfiles.forEach(profile => {
-        if (this.activeRoleSelection.some(role => role.id === this.profileById(profile).employeeRoleId)) {
+        if (this.activeRoleSelection.some(role => this.profileById(profile).employeeRoles.includes(role.id))) {
           const profileProjects = this.futureProjectsOfProfile(profile)
           if (this.consultantHasOngoingProject(profileProjects, currentDate)) {
             count += 1

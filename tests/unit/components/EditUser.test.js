@@ -16,7 +16,7 @@ describe('EditUser.vue', () => {
         firstName: 'Bar',
         lastName: 'Foo',
         photoPath: '',
-        employeeRole: 1,
+        employeeRoles: [1],
         title: 'software developer',
         accounts: [
           {

@@ -46,10 +46,9 @@
     >
       <v-select
         id="roleInput"
+        v-model="selectedEmployeeRoles"
         :options="employeeRoleList"
-        label="title"
-        :value="activeEmployeeRole"
-        @input="setEmployeeRole"
+        multiple
       />
     </b-form-group>
     <b-form-group
@@ -135,24 +134,30 @@ export default {
       show: true,
       showError: false,
       errorDetails: [],
-      editedProfile: Object.assign({}, this.profile)
+      editedProfile: Object.assign({}, this.profile),
+      selectedEmployeeRoles: []
     }
   },
   computed: {
     employeeRoleList () {
-      return this.employeeRoles().map(item => {
+      const roles = this.employeeRoles().map(item => {
         return {
-          title: item.title,
+          label: item.title,
           id: item.id
         }
       })
-    },
-    activeEmployeeRole () {
-      const activeEmployeeRole = this.employeeRoles().filter(item => {
-        return item.id === this.editedProfile.employeeRoleId
-      })
-      return activeEmployeeRole[0]
+      return roles.filter(role => !this.selectedEmployeeRoles.some(selectedRole => selectedRole.id === role.id))
     }
+  },
+  watch: {
+    selectedEmployeeRoles (newRoles) {
+      this.editedProfile.employeeRoles = newRoles.map(role => role.id)
+    }
+  },
+  created () {
+    this.selectedEmployeeRoles = this.employeeRoleList.filter(role => {
+      return this.editedProfile.employeeRoles.includes(role.id)
+    })
   },
   methods: {
     ...mapActions(['updateProfile']),
@@ -180,9 +185,6 @@ export default {
     },
     redirect () {
       this.$router.push('/profile/' + this.profile.id)
-    },
-    setEmployeeRole (value) {
-      this.editedProfile.employeeRoleId = value ? value.id : null
     }
   }
 }

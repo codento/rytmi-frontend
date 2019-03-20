@@ -31,6 +31,7 @@ function createWrapper (overrideMountingOptions) {
 
 const mockProfile = {
   id: 1,
+  employeeRoles: [],
   links: ['http://test.fi']
 }
 
