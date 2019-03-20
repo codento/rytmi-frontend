@@ -106,9 +106,9 @@ export default {
       this.isAdmin = newUser.admin
       this.isActive = newUser.active
       this.profile = this.getActiveEmployeeProfile()
-      this.selectedEmployeeRole = this.employeeRoleList.filter(role => this.profile.employeeRoles.includes(role.id))
+      this.selectedEmployeeRoles = this.employeeRoleList.filter(role => this.profile.employeeRoles.includes(role.id))
     },
-    selectedEmployeeRole (newRoles) {
+    selectedEmployeeRoles (newRoles) {
       this.profile.employeeRoles = newRoles.map(role => role.id)
     }
   },
