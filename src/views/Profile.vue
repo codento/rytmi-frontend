@@ -1,58 +1,80 @@
 <template>
   <b-container class="animated fadeIn profile">
-    <loading v-if="!profile" />
-    <b-row v-else>
-      <b-col class="col-md-6 col-sm-12 col-12">
-        <UserProfileCard :profile="profile" />
-      </b-col>
-      <b-col class="col-md-6 col-sm-12 col-12">
-        <b-card id="proficiency">
-          <h5
-            slot="header"
-            class="mb-0"
-          >
-            Proficiency
-            <span
-              style="float:right; cursor:pointer"
-              @mouseenter="showExplanations(true)"
-              @mouseout="showExplanations(false)"
-            >
+    <b-row>
+      <b-tabs content-class="mt-3">
+        <b-tab
+          no-body
+          title="Profile"
+        >
+          <b-row>
+            <b-col class="col-md-6 col-sm-12 col-12">
+              <UserProfileCard :profile="profile" />
+            </b-col>
+            <b-col class="col-md-6 col-sm-12 col-12">
+              <b-card id="proficiency">
+                <h5
+                  slot="header"
+                  class="mb-0"
+                >
+                  Proficiency
+                  <span
+                    style="float:right; cursor:pointer"
+                    @mouseenter="showExplanations(true)"
+                    @mouseout="showExplanations(false)"
+                  >
               &#9432;
             </span>
-          </h5>
-          <b-row v-if="showInfo">
-            <skillExplanations
-              :know-desc="knowDesc"
-              :want-desc="wantDesc"
-            />
-          </b-row>
-          <b-row v-else>
-            <b-col class="col mb-1">
-              <SkillRow
-                v-for="skill in skillsByProfileId(profile.id)"
-                :key="skill.id"
-                v-bind="skill"
-              />
+                </h5>
+                <b-row v-if="showInfo">
+                  <skillExplanations
+                    :know-desc="knowDesc"
+                    :want-desc="wantDesc"
+                  />
+                </b-row>
+                <b-row v-else>
+                  <b-col class="col mb-1">
+                    <SkillRow
+                      v-for="skill in skillsByProfileId(profile.id)"
+                      :key="skill.id"
+                      v-bind="skill"
+                    />
+                  </b-col>
+                </b-row>
+              </b-card>
+              <b-card header="Projects">
+                <loading v-if="!profileProjects" />
+                <ProjectRow
+                  v-for="profileProject in profileProjects"
+                  v-else
+                  :key="profileProject.id"
+                  :profile-project="profileProject"
+                />
+              </b-card>
+              <b-card header="Utilization">
+                <loading v-if="!profileProjects" />
+                <UtilizationChart
+                  v-else
+                  :projects="profileProjects"
+                />
+              </b-card>
             </b-col>
           </b-row>
-        </b-card>
-        <b-card header="Projects">
-          <loading v-if="!profileProjects" />
-          <ProjectRow
-            v-for="profileProject in profileProjects"
-            v-else
-            :key="profileProject.id"
-            :profile-project="profileProject"
+        </b-tab>
+        <b-tab title="CV tool">
+          <CvTool
+            :profile="profile"
           />
-        </b-card>
-        <b-card header="Utilization">
-          <loading v-if="!profileProjects" />
-          <UtilizationChart
-            v-else
-            :projects="profileProjects"
-          />
-        </b-card>
-      </b-col>
+        </b-tab>
+        <!--<h3>-->
+        <!--{{ showCvTool ? "Show cv tool" : "Show profile" }}-->
+        <!--<span @click="showCvTool = !showCvTool">-->
+        <!--<i-->
+        <!--:class="showCvTool ? 'fa-chevron-down' : 'fa-chevron-up'"-->
+        <!--class="fa"-->
+        <!--/>-->
+        <!--</span>-->
+        <!--</h3>-->
+      </b-tabs>
     </b-row>
   </b-container>
 </template>
@@ -62,6 +84,7 @@ import { mapGetters } from 'vuex'
 import store from '../store'
 import proficiencyDesc from '../assets/proficiencyDesc'
 import {
+  CvTool,
   ProjectRow,
   SkillExplanations,
   SkillRow,
@@ -76,11 +99,13 @@ export default {
     ProjectRow,
     UserProfileCard,
     SkillExplanations,
-    UtilizationChart
+    UtilizationChart,
+    CvTool
   },
   data () {
     return {
-      showInfo: false
+      showInfo: false,
+      showCvTool: false
     }
   },
   computed: {
