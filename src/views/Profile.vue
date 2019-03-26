@@ -7,10 +7,10 @@
           title="Profile"
         >
           <b-row>
-            <b-col class="col-md-6 col-sm-12 col-12">
+            <b-col class="col-md-12 col-sm-12 col-12">
               <UserProfileCard :profile="profile" />
             </b-col>
-            <b-col class="col-md-6 col-sm-12 col-12">
+            <b-col class="col-md-12 col-sm-12 col-12">
               <b-card id="proficiency">
                 <h5
                   slot="header"

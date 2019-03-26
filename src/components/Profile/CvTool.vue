@@ -23,7 +23,7 @@
         <h3>Skills</h3>
         <div
           v-for="category of skillsByCategory"
-          :key="category"
+          :key="category.id"
         >
           {{ skillCategories[category.category].title }}
           <p
@@ -84,10 +84,8 @@ export default {
         }
       }
       const categorisedSkills = categories.map(category => {
-        console.log(category)
         const skills = []
         for (const skill of this.skills) {
-          console.log(this.skillById(skill.skillId).skillCategoryId, category)
           if (this.skillById(skill.skillId).skillCategoryId === category) {
             skills.push(skill)
           }
@@ -97,7 +95,6 @@ export default {
           category: category
         }
       })
-      console.log(categorisedSkills)
       return categorisedSkills
     }
   },

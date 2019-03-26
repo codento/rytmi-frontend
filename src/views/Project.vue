@@ -64,6 +64,7 @@ import {
   ProjectMemberTable,
   ProjectForm
 } from '../components/Project'
+import { DEFAULT_LANGUAGE } from '../utils/language'
 
 export default {
   name: 'Project',
@@ -83,7 +84,18 @@ export default {
       'profileProjectsByProjectId'
     ]),
     project () {
-      return this.projectById(this.$route.params.id)
+      const project = this.projectById(this.$route.params.id)
+      const description = project.descriptions.find(description => description.language === DEFAULT_LANGUAGE)
+      const mappedProject = {
+        id: project.id,
+        code: project.code,
+        startDate: project.startDate,
+        endDate: project.endDate,
+        isSecret: project.isSecret,
+        name: description ? description.name : '',
+        description: description ? description.description : ''
+      }
+      return mappedProject
     },
     members () {
       return this.profileProjectsByProjectId(this.project.id)
