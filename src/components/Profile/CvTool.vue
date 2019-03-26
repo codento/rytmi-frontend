@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div style="text-align: center;">
       <img :src="profile.photoPath">
     </div>
@@ -19,7 +19,7 @@
       <div class="profileCardDetails profile-card-detail-row">
         {{ profile.description }}
       </div>
-      <b-card clasS="mt-2">
+      <b-card class="mt-2">
         <h3>Skills</h3>
         <div
           v-for="category of skillsByCategory"

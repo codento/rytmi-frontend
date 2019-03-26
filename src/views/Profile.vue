@@ -22,8 +22,8 @@
                     @mouseenter="showExplanations(true)"
                     @mouseout="showExplanations(false)"
                   >
-              &#9432;
-            </span>
+                    &#9432;
+                  </span>
                 </h5>
                 <b-row v-if="showInfo">
                   <skillExplanations
