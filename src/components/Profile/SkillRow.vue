@@ -42,6 +42,7 @@
         :max="5"
         class="mb-6"
         height="0.9rem"
+        v-show="!showSkillsOnly"
       >
         <b-progress-bar
           :value="wantsTo"
@@ -75,7 +76,11 @@ export default {
     wantsTo: Number,
     knows: Number,
     description: String,
-    highlight: Boolean
+    highlight: Boolean,
+    showSkillsOnly: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {

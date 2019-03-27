@@ -1,65 +1,137 @@
 <template>
-  <div>
-    <div style="text-align: center;">
-      <img :src="profile.photoPath">
-    </div>
-    <div style="text-align: center; color:#869fac">
-      <span class="profile-name"> {{ getNames }}</span><br>
-      <span class="profile-title">{{ profile.title }}</span>
-    </div>
-    <div>
-      <div>Born {{ birthYear }}</div>
-      <div class="profileCardDetails profile-card-detail-row">
-        {{ profile.email }}
+  <b-row>
+    <b-col cols="12">
+      <div class="text-center">
+        <img :src="profile.photoPath">
       </div>
-      <div class="profileCardDetails profile-card-detail-row">
-        {{ profile.phone }}
+    </b-col>
+    <b-col cols="12" class="text-center">
+      <div style="color:#869fac">
+        <span class="profile-name"> {{ getNames }}</span><br>
+        <span class="profile-title">{{ profile.title }}</span>
       </div>
-      <br>
-      <div class="profileCardDetails profile-card-detail-row">
-        {{ profile.description }}
+      <div>
+        <div>Born {{ birthYear }}</div>
+        <div class="profileCardDetails profile-card-detail-row">
+          {{ profile.email }}
+        </div>
+        <div class="profileCardDetails profile-card-detail-row">
+          {{ profile.phone }}
+        </div>
       </div>
-      <b-card class="mt-2">
-        <h3>Skills</h3>
-        <div
+    </b-col>
+    <b-col cols="12" class="mb-2">
+      <div class="profileCardDetails profile-card-detail-row">
+          <b-textarea
+            class="form-control"
+            type="text"
+            rows="6"
+            placeholder="Add profile description for CV"
+            :value="profileDescription"
+            :state="profileDescription.length > 0"
+          />
+        </div>
+    </b-col>
+    <b-col cols="12" class="mb-2">
+      <h5>Relevant skills</h5>
+      <div v-if="relevantSkills.length == 0" style="color: grey">No skills chosen</div>
+      <SkillRow
+        v-for="skill of relevantSkills"
+        :key="skill.id"
+        v-bind="skill"
+        show-skills-only
+      />
+    </b-col>
+    <b-col cols="12">
+      <b-card id="skills" class="mt-2 mb-2">
+        <h5
+          slot="header"
+          class="mb-0"
+        >
+        Skills
+        </h5>
+        <b-row
           v-for="category of skillsByCategory"
           :key="category.id"
         >
-          {{ skillCategories[category.category].title }}
-          <p
-            v-for="skill of category.skills"
-            :key="skill.id"
-          >
-            {{ skillName(skill.skillId) }}
-            {{ skill.knows }}
-          </p>
-        </div>
+          <b-col cols="12">
+            {{ skillCategories[category.category].title }}
+          </b-col>
+          <b-col class="mb-1">
+            <SkillRow
+               v-for="skill of category.skills"
+              :key="skill.id"
+              v-bind="skill"
+              show-skills-only
+            />
+          </b-col>
+        </b-row>
       </b-card>
-      <b-card>
-        <h3>Work experience</h3>
-        <div
-          v-for="project in profileProjects(profile.id)"
-          :key="project.id"
+      <b-card id="work-experience" class="mt-2 mb-2">
+        <h5
+          slot="header"
+          class="mb-0"
         >
-          <h4>{{ projectById(project.projectId).name }}</h4>
-          <div>{{ `${formattedDate(project.startDate)} - ${project.endDate ? formattedDate(project.endDate) : ''}` }}</div>
-        </div>
+        Work experience
+        </h5>
+        <h3>Codento</h3>
+        <loading v-if="!profileProjects(profile.id)" />
+        <ProjectRow
+          v-for="profileProject in profileProjects(profile.id)"
+          :key="profileProject.id"
+          :profile-project="profileProject"
+        />
+        <h3>Other</h3>
       </b-card>
-    </div>
-  </div>
+      <b-card id="other-cv-info" class="mt-2 mb-2">
+        <h5
+          slot="header"
+          class="mb-0"
+        >
+        Other information
+        </h5>
+        <b-row>
+          <b-col>
+            <b-textarea
+              v-model="otherInfoAsMarkdown"
+              rows="15"
+              placeholder="Use Markdown"
+              @input="update"
+            >
+            </b-textarea>
+          </b-col>
+          <b-col>
+            <div v-html="compiledMarkdown"></div>
+          </b-col>
+        </b-row>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 <script>
 import { format } from 'date-fns'
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
+import marked from 'marked'
+import SkillRow from './SkillRow.vue'
+import ProjectRow from './ProjectRow.vue'
+
 export default {
   name: 'CvTool',
+  components: {
+    SkillRow,
+    ProjectRow
+  },
   props: {
     'profile': Object
   },
   data () {
     return {
       birthYear: 1987,
-      profileProjects: (id) => this.profileProjectsByProfileId(id)
+      profileProjects: (id) => this.profileProjectsByProfileId(id),
+      relevantSkills: [],
+      otherInfoAsMarkdown:
+        '## Education\nHogwards\n## Hobbies\nQuiddish'
     }
   },
   computed: {
@@ -75,11 +147,19 @@ export default {
     getNames: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
     },
-    skills: function () { return this.skillsByProfileId(this.profile.id) },
+    profileDescription: function () {
+      return this.profile.description || ''
+    },
+    compiledMarkdown: function () {
+      return marked(this.otherInfoAsMarkdown, { sanitize: true })
+    },
+    skills: function () {
+      return this.skillsByProfileId(this.profile.id).filter(skill => skill.visibleInCV && skill.knows > 0)
+    },
     skillsByCategory: function () {
       const categories = []
       for (const skill of this.skills) {
-        if (!categories.includes(skill => this.skillById(skill.skillId).skillCategoryId)) {
+        if (!categories.includes(this.skillById(skill.skillId).skillCategoryId)) {
           categories.push(this.skillById(skill.skillId).skillCategoryId)
         }
       }
@@ -104,6 +184,11 @@ export default {
     },
     formattedDate: (date) => {
       return format(date, 'D.M.YYYY')
+    },
+    update: function () {
+      _.debounce(function (e) {
+        this.otherInfoAsMarkdown = e.target.value
+      }, 300)
     }
   }
 }
