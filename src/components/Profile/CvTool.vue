@@ -5,7 +5,10 @@
         <img :src="profile.photoPath">
       </div>
     </b-col>
-    <b-col cols="12" class="text-center">
+    <b-col
+      cols="12"
+      class="text-center"
+    >
       <div style="color:#869fac">
         <span class="profile-name"> {{ getNames }}</span><br>
         <span class="profile-title">{{ profile.title }}</span>
@@ -20,59 +23,102 @@
         </div>
       </div>
     </b-col>
-    <b-col cols="12" class="mb-2">
+    <b-col
+      cols="12"
+      class="mb-2"
+    >
       <div class="profileCardDetails profile-card-detail-row">
-          <b-textarea
-            class="form-control"
-            type="text"
-            rows="6"
-            placeholder="Add profile description for CV"
-            :value="profileDescription"
-            :state="profileDescription.length > 0"
-          />
-        </div>
+        <b-textarea
+          v-model="profileDescription"
+          class="form-control"
+          type="text"
+          rows="6"
+          placeholder="Add profile description for CV"
+          :state="profileDescription.length > 0"
+        />
+      </div>
     </b-col>
-    <b-col cols="12" class="mb-2">
+    <b-col
+      cols="12"
+      class="mb-2"
+    >
       <h5>Relevant skills</h5>
-      <div v-if="relevantSkills.length == 0" style="color: grey">No skills chosen</div>
-      <SkillRow
-        v-for="skill of relevantSkills"
-        :key="skill.id"
-        v-bind="skill"
-        show-skills-only
-      />
+      <b-row>
+        <b-col>
+          <div
+            v-if="relevantSkills.length == 0"
+            style="color: grey"
+          >
+            No skills chosen, use checkboxes below to add skills!
+          </div>
+          <SkillRow
+            v-for="skill of relevantSkills"
+            :key="skill.id"
+            v-bind="skill"
+            show-skills-only
+          />
+        </b-col>
+      </b-row>
     </b-col>
     <b-col cols="12">
-      <b-card id="skills" class="mt-2 mb-2">
+      <b-card
+        id="skills"
+        class="mt-2 mb-2"
+      >
         <h5
           slot="header"
           class="mb-0"
         >
-        Skills
+          Skills
         </h5>
         <b-row
           v-for="category of skillsByCategory"
           :key="category.id"
         >
-          <b-col cols="12">
-            {{ skillCategories[category.category].title }}
+          <b-col
+            cols="12"
+            class="text-center mt-2"
+          >
+            <h5>{{ skillCategories[category.category].title }}</h5>
           </b-col>
-          <b-col class="mb-1">
-            <SkillRow
-               v-for="skill of category.skills"
-              :key="skill.id"
-              v-bind="skill"
-              show-skills-only
-            />
+          <b-col cols="12">
+            <b-row>
+              <b-col cols="1">
+                <b-row
+                  v-for="skill of category.skills"
+                  :key="skill.id"
+                >
+                  <b-col>
+                    <b-checkbox
+                      :id="'skill_' + skill.id"
+                      v-model="selectedSkills"
+                      :value="skill.id"
+                      class="pull-right"
+                    />
+                  </b-col>
+                </b-row>
+              </b-col>
+              <b-col>
+                <SkillRow
+                  v-for="skill of category.skills"
+                  :key="skill.id"
+                  v-bind="skill"
+                  show-skills-only
+                />
+              </b-col>
+            </b-row>
           </b-col>
         </b-row>
       </b-card>
-      <b-card id="work-experience" class="mt-2 mb-2">
+      <b-card
+        id="work-experience"
+        class="mt-2 mb-2"
+      >
         <h5
           slot="header"
           class="mb-0"
         >
-        Work experience
+          Work experience
         </h5>
         <h3>Codento</h3>
         <loading v-if="!profileProjects(profile.id)" />
@@ -83,12 +129,15 @@
         />
         <h3>Other</h3>
       </b-card>
-      <b-card id="other-cv-info" class="mt-2 mb-2">
+      <b-card
+        id="other-cv-info"
+        class="mt-2 mb-2"
+      >
         <h5
           slot="header"
           class="mb-0"
         >
-        Other information
+          Other information
         </h5>
         <b-row>
           <b-col>
@@ -97,11 +146,10 @@
               rows="15"
               placeholder="Use Markdown"
               @input="update"
-            >
-            </b-textarea>
+            />
           </b-col>
           <b-col>
-            <div v-html="compiledMarkdown"></div>
+            <div v-html="compiledMarkdown" />
           </b-col>
         </b-row>
       </b-card>
@@ -129,9 +177,9 @@ export default {
     return {
       birthYear: 1987,
       profileProjects: (id) => this.profileProjectsByProfileId(id),
-      relevantSkills: [],
-      otherInfoAsMarkdown:
-        '## Education\nHogwards\n## Hobbies\nQuiddish'
+      profileDescription: '',
+      selectedSkills: [],
+      otherInfoAsMarkdown: ''
     }
   },
   computed: {
@@ -146,9 +194,6 @@ export default {
     ]),
     getNames: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
-    },
-    profileDescription: function () {
-      return this.profile.description || ''
     },
     compiledMarkdown: function () {
       return marked(this.otherInfoAsMarkdown, { sanitize: true })
@@ -176,7 +221,15 @@ export default {
         }
       })
       return categorisedSkills
+    },
+    relevantSkills: function () {
+      return this.skills.filter(skill => this.selectedSkills.includes(skill.id))
     }
+  },
+  created: function () {
+    // TODO
+    this.profileDescription = this.profile.description || ''
+    this.otherInfoAsMarkdown = this.profile.description || '## Education\nHogwards\n## Hobbies\nQuiddish'
   },
   methods: {
     getFAClass: function (object) {
@@ -189,6 +242,9 @@ export default {
       _.debounce(function (e) {
         this.otherInfoAsMarkdown = e.target.value
       }, 300)
+    },
+    toggleSkillSelection: function (skillId) {
+      if (this.selectedSkills.includes(skillId)) { this.selectedSkills = this.selectedSkills.filter(item => item !== skillId) } else { this.selectedSkills.push(skillId) }
     }
   }
 }

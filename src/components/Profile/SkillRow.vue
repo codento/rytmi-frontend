@@ -39,10 +39,10 @@
         </span>
       </b-progress>
       <b-progress
+        v-show="!showSkillsOnly"
         :max="5"
         class="mb-6"
         height="0.9rem"
-        v-show="!showSkillsOnly"
       >
         <b-progress-bar
           :value="wantsTo"
