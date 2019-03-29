@@ -6,14 +6,14 @@
       :style="style"
       :chart-data="chartData"
       :options="chartOptions"
-      class="utilizationChart"
+      class="UtilizationChart"
     />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import LineChart from '../Charts/LineChart'
+import LineChart from '@/components/Charts/LineChart'
 import moment from 'moment'
 
 export default {
@@ -149,7 +149,7 @@ export default {
 </script>
 
 <style scoped>
-  .utilizationChart {
+  .UserProfile {
     position: relative;
   }
 </style>

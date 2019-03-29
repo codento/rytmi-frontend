@@ -66,7 +66,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import proficiencyDesc from '../../assets/proficiencyDesc'
+import proficiencyDesc from '@/assets/proficiencyDesc'
 
 export default {
   name: 'SkillRow',
