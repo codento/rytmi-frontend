@@ -134,9 +134,6 @@ export default {
       project: {}
     }
   },
-  computed: {
-
-  },
   mounted () {
     if (this.editableProject) {
       this.project = this.editableProject
@@ -150,7 +147,6 @@ export default {
       'updateProject'
     ]),
     onSubmit (evt) {
-      console.log(this.project)
       evt.preventDefault()
       this.errorDetails = []
       // If the project has an ID, update; otherwise create a new project
