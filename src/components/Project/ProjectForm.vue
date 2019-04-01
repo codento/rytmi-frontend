@@ -19,47 +19,90 @@
       class="animated fadeIn"
       @submit="onSubmit"
     >
-      <small>Project code</small>
-      <b-input
-        v-model="project.code"
-        placeholder="Project code"
-        required
-        type="number"
-        min="0"
-        max="99999"
-      />
-      <small>Project name</small>
-      <b-input
-        v-model="project.name"
-        placeholder="Project name"
-        required
-        type="text"
-      />
-      <small>Start date</small>
-      <datepicker
-        v-model="project.startDate"
-        name="project-start-date"
-      />
-      <small>End date</small>
-      <datepicker
-        v-model="project.endDate"
-        name="project-end-date"
-      />
-      <small>Description</small>
-      <b-textarea
-        v-model="project.description"
-        class="form-control"
-        placeholder="Project description"
-        type="text"
-        rows="6"
-      />
-      <b-button
-        class="form-control"
-        type="submit"
-        primary
-      >
-        Submit
-      </b-button>
+      <b-row>
+        <b-col>
+          <small>Project code</small>
+          <b-input
+            v-model="project.code"
+            placeholder="Project code"
+            required
+            type="number"
+            min="0"
+            max="99999"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="6">
+          <small>Project name (Finnish)</small>
+          <b-input
+            v-model="getDescriptionByLanguage('fi').name"
+            placeholder="Project name (fi)"
+            required
+            type="text"
+          />
+        </b-col>
+        <b-col sm="6">
+          <small>Project name (English)</small>
+          <b-input
+            v-model="getDescriptionByLanguage('en').name"
+            placeholder="Project name (en)"
+            required
+            type="text"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <small>Start date</small>
+          <datepicker
+            v-model="project.startDate"
+            name="project-start-date"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <small>End date</small>
+          <datepicker
+            v-model="project.endDate"
+            name="project-end-date"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="6">
+          <small>Description (Finnish)</small>
+          <b-textarea
+            v-model="getDescriptionByLanguage('fi').description"
+            class="form-control"
+            placeholder="Project description (fi)"
+            type="text"
+            rows="5"
+          />
+        </b-col>
+        <b-col sm="6">
+          <small>Description (English)</small>
+          <b-textarea
+            v-model="getDescriptionByLanguage('en').description"
+            class="form-control"
+            placeholder="Project description (en)"
+            type="text"
+            rows="5"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-button
+            class="form-control"
+            type="submit"
+            primary
+          >
+            Submit
+          </b-button>
+        </b-col>
+      </b-row>
     </b-form>
     <div
       v-if="showError"
@@ -91,6 +134,9 @@ export default {
       project: {}
     }
   },
+  computed: {
+
+  },
   mounted () {
     if (this.editableProject) {
       this.project = this.editableProject
@@ -104,6 +150,7 @@ export default {
       'updateProject'
     ]),
     onSubmit (evt) {
+      console.log(this.project)
       evt.preventDefault()
       this.errorDetails = []
       // If the project has an ID, update; otherwise create a new project
@@ -138,6 +185,9 @@ export default {
             this.showError = true
           })
       }
+    },
+    getDescriptionByLanguage (language) {
+      return this.project.descriptions.find(description => description.language === language)
     }
   }
 }

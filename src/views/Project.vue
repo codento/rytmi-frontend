@@ -35,7 +35,7 @@
         </b-col>
       </b-row>
       <hr>
-      <ProjectForm :editable-project="project" />
+      <ProjectForm :editable-project="rawProject" />
       <hr>
       <div>
         <h3
@@ -96,6 +96,9 @@ export default {
         description: description ? description.description : ''
       }
       return mappedProject
+    },
+    rawProject () {
+      return this.projectById(this.$route.params.id)
     },
     members () {
       return this.profileProjectsByProjectId(this.project.id)
