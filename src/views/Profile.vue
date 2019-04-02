@@ -10,7 +10,10 @@
             :profile="profile"
           />
         </b-tab>
-        <b-tab title="CV tool">
+        <b-tab
+          no-body
+          title="CV tool"
+        >
           <CvTool
             :profile="profile"
           />

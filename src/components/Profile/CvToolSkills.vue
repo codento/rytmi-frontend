@@ -20,27 +20,24 @@
         <h5>{{ skillCategories[category.category].title }}</h5>
       </b-col>
       <b-col cols="12">
-        <b-row>
-          <b-col cols="1">
-            <b-row
-              v-for="skill of category.skills"
-              :key="skill.id"
+        <b-row
+          v-for="skill of category.skills"
+          :key="skill.id"
+        >
+          <b-col
+            cols="1"
+            align-self="center"
+          >
+            <input
+              id="skill.id"
+              v-model="selectedSkills"
+              type="checkbox"
+              :value="skill.skillId"
+              @change="updateSelectedSkills"
             >
-              <b-col>
-                <input
-                  id="skill.id"
-                  v-model="selectedSkills"
-                  type="checkbox"
-                  :value="skill.id"
-                  @change="updateSelectedSkills"
-                >
-              </b-col>
-            </b-row>
           </b-col>
           <b-col>
             <SkillRow
-              v-for="skill of category.skills"
-              :key="skill.id"
               v-bind="skill"
               show-skills-only
             />

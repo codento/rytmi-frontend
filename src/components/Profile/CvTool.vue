@@ -4,39 +4,37 @@
       cols="12"
       class="mb-2"
     >
+      <div id="disabled-button-wrapper">
+        <b-button
+          :disabled="!allRequiredFieldsFilled"
+          @click="createPDF"
+        >
+          Create PDF
+        </b-button>
+        <b-tooltip
+          :disabled.sync="allRequiredFieldsFilled"
+          target="disabled-button-wrapper"
+          placement="bottomright"
+        >
+          {{ disabledButtonInfo }}
+        </b-tooltip>
+      </div>
       <CvToolProfile
         :profile="profile"
+        :relevant-skills="topSkills"
+        :relevant-projects="topProjects"
         @updateDescription="profileDescriptionUpdated"
       />
-    </b-col>
-    <b-col
-      cols="12"
-      class="mb-2"
-    >
-      <h5>Relevant skills</h5>
-      <b-row>
-        <b-col>
-          <div
-            v-if="relevantSkills.length == 0"
-            style="color: grey"
-          >
-            No skills chosen, use checkboxes below to add skills!
-          </div>
-          <SkillRow
-            v-for="skill of relevantSkills"
-            :key="skill.id"
-            v-bind="skill"
-            show-skills-only
-          />
-        </b-col>
-      </b-row>
     </b-col>
     <b-col cols="12">
       <CvToolSkills
         :skills="skills"
-        @updateSelectedSkills="selectedSkillsUpdated"
+        @updateSelectedSkills="relevantSkillsUpdated"
       />
-      <CvToolWorkExperience :profile="profile" />
+      <CvToolWorkExperience
+        :profile-projects="projects"
+        @updateSelectedProjects="relevantProjectsUpdated"
+      />
       <CvToolOtherInfo
         :profile="profile"
         @updateMarkdown="markdownUpdated"
@@ -46,17 +44,18 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { format } from 'date-fns'
+
+import { DEFAULT_LANGUAGE } from '@/utils/language'
 
 import CvToolProfile from './CvToolProfile.vue'
 import CvToolSkills from './CvToolSkills.vue'
 import CvToolWorkExperience from './CvToolWorkExperience.vue'
 import CvToolOtherInfo from './CvToolOtherInfo.vue'
-import SkillRow from '@/components/Common/SkillRow.vue'
 
 export default {
   name: 'CvTool',
   components: {
-    SkillRow,
     CvToolProfile,
     CvToolSkills,
     CvToolWorkExperience,
@@ -67,30 +66,92 @@ export default {
   },
   data () {
     return {
-      selectedSkills: [],
-      profileDescription: '',
-      otherInfoAsMarkdown: ''
+      cvData: {
+        profileDescription: '',
+        relevantSkillIds: [],
+        relevantProjectIds: [],
+        otherInfoAsMarkdown: ''
+      },
+      showButtonInfo: true
     }
   },
   computed: {
-    ...mapGetters(['skillsByProfileId']),
+    ...mapGetters([
+      'skillsByProfileId',
+      'profileProjectsByProfileId',
+      'projectById'
+    ]),
     skills: function () {
       return this.skillsByProfileId(this.profile.id).filter(skill => skill.visibleInCV && skill.knows > 0)
     },
-    relevantSkills: function () {
-      return this.skills.filter(skill => this.selectedSkills.includes(skill.id))
+    topSkills: function () {
+      return this.skills.filter(skill => this.cvData.relevantSkillIds.includes(skill.skillId))
+    },
+    projects: function () {
+      return this.profileProjectsByProfileId(this.profile.id)
+    },
+    topProjects: function () {
+      return this.cvData.relevantProjectIds.map(id => this.processProjectData(id))
+    },
+    allRequiredFieldsFilled: {
+      get: function () {
+        return (this.cvData.relevantSkillIds.length > 0 && this.cvData.profileDescription.length > 0)
+      },
+      set: function () {}
+    },
+    disabledButtonInfo: function () {
+      const missingFields = []
+      if (!this.cvData.profileDescription) { missingFields.push('profile description') }
+      if (!this.cvData.relevantProjectIds.length) { missingFields.push('relevant projects') }
+      if (!this.cvData.relevantSkillIds.length) { missingFields.push('top skills') }
+      return 'Required info missing: '.concat(missingFields.join(', '))
     }
   },
   methods: {
-    profileDescriptionUpdated: function (updatedDescription) {
-      this.profileDescription = updatedDescription
+    processProjectData: function (projectId) {
+      const project = this.projectById(projectId)
+      const description = project.descriptions.find(description => description.language === DEFAULT_LANGUAGE)
+      const mappedProject = {
+        id: project.id,
+        code: project.code,
+        duration: format(project.startDate, 'MM/YYYY') + '-' + format(project.endDate, 'MM/YYYY'),
+        name: description ? description.name : '',
+        description: description ? description.description : ''
+      }
+      return mappedProject
     },
-    selectedSkillsUpdated: function (updatedSkills) {
-      this.selectedSkills = updatedSkills
+    profileDescriptionUpdated: function (updatedDescription) {
+      this.cvData.profileDescription = updatedDescription
+    },
+    relevantSkillsUpdated: function (selectedSkills) {
+      this.cvData.relevantSkillIds = selectedSkills
+    },
+    relevantProjectsUpdated: function (selectedProjects) {
+      this.cvData.relevantProjectIds = selectedProjects
     },
     markdownUpdated: function (updatedMarkdown) {
-      this.otherInfoAsMarkdown = updatedMarkdown
+      this.cvData.otherInfoAsMarkdown = updatedMarkdown
+    },
+    createPDF: function () {
+      const data = {
+        'description': this.cvData.profileDescription,
+        'relevantSkills': this.cvData.relevantSkillIds,
+        'otherInfo': this.cvData.otherInfoAsMarkdown
+      }
+      console.log(data)
     }
   }
 }
 </script>
+
+<style scoped>
+#disabled-button-wrapper {
+  display: inline-block; /* display: block works as well */
+  margin: 10px; /* make some space so the tooltip is visible */
+}
+
+#disabled-button-wrapper .btn :disabled {
+  /* don't let button block mouse events from reaching wrapper */
+  pointer-events: none;
+}
+</style>

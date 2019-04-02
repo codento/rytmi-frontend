@@ -11,16 +11,32 @@
     </h5>
     <h3>Codento</h3>
     <loading v-if="!profileProjects" />
-    <ProjectRow
+    <b-row
       v-for="profileProject in profileProjects"
       :key="profileProject.id"
-      :profile-project="profileProject"
-    />
+    >
+      <b-col
+        cols="1"
+        align-self="center"
+      >
+        <input
+          id="profileProject.id"
+          v-model="selectedProjects"
+          type="checkbox"
+          :value="profileProject.projectId"
+          @change="updateSelectedProjects"
+        >
+      </b-col>
+      <b-col>
+        <ProjectRow
+          :profile-project="profileProject"
+        />
+      </b-col>
+    </b-row>
     <h3>Other</h3>
   </b-card>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import ProjectRow from '@/components/Common/ProjectRow.vue'
 
 export default {
@@ -29,16 +45,17 @@ export default {
     ProjectRow
   },
   props: {
-    profile: Object
+    profileProjects: Array
   },
   data () {
     return {
+      selectedProjects: []
     }
   },
-  computed: {
-    ...mapGetters(['profileProjectsByProfileId']),
-    profileProjects: function () {
-      return this.profileProjectsByProfileId(this.profile.id)
+  computed: {},
+  methods: {
+    updateSelectedProjects: function () {
+      this.$emit('updateSelectedProjects', this.selectedProjects)
     }
   }
 }
