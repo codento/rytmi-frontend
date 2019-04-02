@@ -1,122 +1,96 @@
 <template>
-  <div>
-    <div style="text-align: center;">
-      <img :src="profile.photoPath">
-    </div>
-    <div style="text-align: center; color:#869fac">
-      <span class="profile-name"> {{ getNames }}</span><br>
-      <span class="profile-title">{{ profile.title }}</span>
-    </div>
-    <div>
-      <div>Born {{ birthYear }}</div>
-      <div class="profileCardDetails profile-card-detail-row">
-        {{ profile.email }}
-      </div>
-      <div class="profileCardDetails profile-card-detail-row">
-        {{ profile.phone }}
-      </div>
-      <br>
-      <div class="profileCardDetails profile-card-detail-row">
-        {{ profile.description }}
-      </div>
-      <b-card class="mt-2">
-        <h3>Skills</h3>
-        <div
-          v-for="category of skillsByCategory"
-          :key="category.id"
-        >
-          {{ skillCategories[category.category].title }}
-          <p
-            v-for="skill of category.skills"
-            :key="skill.id"
+  <b-row>
+    <b-col
+      cols="12"
+      class="mb-2"
+    >
+      <CvToolProfile
+        :profile="profile"
+        @updateDescription="profileDescriptionUpdated"
+      />
+    </b-col>
+    <b-col
+      cols="12"
+      class="mb-2"
+    >
+      <h5>Relevant skills</h5>
+      <b-row>
+        <b-col>
+          <div
+            v-if="relevantSkills.length == 0"
+            style="color: grey"
           >
-            {{ skillName(skill.skillId) }}
-            {{ skill.knows }}
-          </p>
-        </div>
-      </b-card>
-      <b-card>
-        <h3>Work experience</h3>
-        <div
-          v-for="project in profileProjects(profile.id)"
-          :key="project.id"
-        >
-          <h4>{{ projectById(project.projectId).name }}</h4>
-          <div>{{ `${formattedDate(project.startDate)} - ${project.endDate ? formattedDate(project.endDate) : ''}` }}</div>
-        </div>
-      </b-card>
-    </div>
-  </div>
+            No skills chosen, use checkboxes below to add skills!
+          </div>
+          <SkillRow
+            v-for="skill of relevantSkills"
+            :key="skill.id"
+            v-bind="skill"
+            show-skills-only
+          />
+        </b-col>
+      </b-row>
+    </b-col>
+    <b-col cols="12">
+      <CvToolSkills
+        :skills="skills"
+        @updateSelectedSkills="selectedSkillsUpdated"
+      />
+      <CvToolWorkExperience :profile="profile" />
+      <CvToolOtherInfo
+        :profile="profile"
+        @updateMarkdown="markdownUpdated"
+      />
+    </b-col>
+  </b-row>
 </template>
 <script>
-import { format } from 'date-fns'
 import { mapGetters } from 'vuex'
+
+import CvToolProfile from './CvToolProfile.vue'
+import CvToolSkills from './CvToolSkills.vue'
+import CvToolWorkExperience from './CvToolWorkExperience.vue'
+import CvToolOtherInfo from './CvToolOtherInfo.vue'
+import SkillRow from '@/components/Common/SkillRow.vue'
+
 export default {
   name: 'CvTool',
+  components: {
+    SkillRow,
+    CvToolProfile,
+    CvToolSkills,
+    CvToolWorkExperience,
+    CvToolOtherInfo
+  },
   props: {
     'profile': Object
   },
   data () {
     return {
-      birthYear: 1987,
-      profileProjects: (id) => this.profileProjectsByProfileId(id)
+      selectedSkills: [],
+      profileDescription: '',
+      otherInfoAsMarkdown: ''
     }
   },
   computed: {
-    ...mapGetters([
-      'profileId',
-      'skillsByProfileId',
-      'skillName',
-      'profileProjectsByProfileId',
-      'projectById',
-      'skillCategories',
-      'skillById'
-    ]),
-    getNames: function () {
-      return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
+    ...mapGetters(['skillsByProfileId']),
+    skills: function () {
+      return this.skillsByProfileId(this.profile.id).filter(skill => skill.visibleInCV && skill.knows > 0)
     },
-    skills: function () { return this.skillsByProfileId(this.profile.id) },
-    skillsByCategory: function () {
-      const categories = []
-      for (const skill of this.skills) {
-        if (!categories.includes(skill => this.skillById(skill.skillId).skillCategoryId)) {
-          categories.push(this.skillById(skill.skillId).skillCategoryId)
-        }
-      }
-      const categorisedSkills = categories.map(category => {
-        const skills = []
-        for (const skill of this.skills) {
-          if (this.skillById(skill.skillId).skillCategoryId === category) {
-            skills.push(skill)
-          }
-        }
-        return {
-          skills: skills,
-          category: category
-        }
-      })
-      return categorisedSkills
+    relevantSkills: function () {
+      return this.skills.filter(skill => this.selectedSkills.includes(skill.id))
     }
   },
   methods: {
-    getFAClass: function (object) {
-      return 'fa-'.concat(object.type)
+    profileDescriptionUpdated: function (updatedDescription) {
+      this.profileDescription = updatedDescription
     },
-    formattedDate: (date) => {
-      return format(date, 'D.M.YYYY')
+    selectedSkillsUpdated: function (updatedSkills) {
+      this.selectedSkills = updatedSkills
+    },
+    markdownUpdated: function (updatedMarkdown) {
+      this.otherInfoAsMarkdown = updatedMarkdown
     }
   }
 }
 </script>
-
-<style scoped>
-  .profile-card-detail-row {
-    margin-top: 0.5em;
-  }
-  .profile-title {
-    font-size: 13px;
-  }
-  .profile-name {
-    font-size: 32px;
-  }
-</style>

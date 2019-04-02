@@ -32,7 +32,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { DEFAULT_LANGUAGE } from '../../utils/language'
+import { DEFAULT_LANGUAGE } from '@/utils/language'
 export default {
   name: 'ProjectRow',
   props: {

@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { SkillRow, UtilizationChart } from '../Profile'
+import { SkillRow, UtilizationChart } from '@/components/Common'
 import { mapGetters } from 'vuex'
 
 export default {
