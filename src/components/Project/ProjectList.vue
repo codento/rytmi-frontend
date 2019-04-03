@@ -18,7 +18,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { DEFAULT_LANGUAGE } from '../../utils/language'
+import { DEFAULT_LANGUAGE } from '@/utils/constants'
 export default {
   name: 'ProjectList',
   data () {
