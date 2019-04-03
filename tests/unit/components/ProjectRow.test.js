@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import { ProjectRow } from '@/components/Profile'
+import { ProjectRow } from '@/components/Common'
 import Vuex from 'vuex'
 import { format } from 'date-fns'
 
@@ -23,8 +23,12 @@ describe('ProjectRow.test.js', () => {
       propsData: {
         profileProject: {
           projectId: 1,
-          name: 'Testi prkkis',
-          description: 'mail',
+          descriptions: [
+            {
+              name: 'Testi prkkis',
+              description: 'mail'
+            }
+          ],
           startDate: '2017-05-15',
           endDate: '2017-06-16'
         }

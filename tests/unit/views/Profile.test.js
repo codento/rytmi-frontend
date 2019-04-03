@@ -92,8 +92,12 @@ describe('Profile.vue shallowMount', () => {
       projectById: () => (projectId) => {
         return {
           id: projectId,
-          name: 'Project Foo',
-          description: 'Foo Bar'
+          descriptions: [
+            {
+              name: 'Project Foo',
+              description: 'Foo Bar'
+            }
+          ]
         }
       }
     }

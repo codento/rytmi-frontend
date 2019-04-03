@@ -10,15 +10,27 @@ localVue.use(Vuex)
 const initialProjectState = {
   projects: {
     one: {
-      name: 'one',
+      descriptions: [
+        {
+          name: 'one'
+        }
+      ],
       code: 1
     },
     two: {
-      name: 'two',
+      descriptions: [
+        {
+          name: 'two'
+        }
+      ],
       code: 2
     },
     twentyOne: {
-      name: 'twentyone',
+      descriptions: [
+        {
+          name: 'twentyone'
+        }
+      ],
       code: 21
     }
 

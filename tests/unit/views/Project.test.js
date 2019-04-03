@@ -17,9 +17,14 @@ localVue.filter('dateFilter', value => {
 
 const projectMock = (projectId) => ({
   id: projectId,
-  name: 'Project Foo',
+  descriptions: [
+    {
+      name: 'Project Foo',
+      description: 'Foo Bar',
+      language: 'fi'
+    }
+  ],
   code: 50,
-  description: 'Foo Bar',
   startDate: new Date('2018-01-01'),
   endDate: new Date('2018-05-01')
 })
@@ -84,7 +89,7 @@ describe('Project.vue', () => {
     expect(startDate.text()).toBe(format(projectMock().startDate, 'D.M.YYYY'))
     expect(endDate.text()).toBe(format(projectMock().endDate, 'D.M.YYYY'))
     expect(numOfMembers.text()).toBe(profileProjectMock().length.toString())
-    expect(wrapper.find('p').text()).toContain(projectMock().description)
+    expect(wrapper.find('p').text()).toContain(projectMock().descriptions[0].description)
   })
 
   it('does not show members field if there are no members', () => {
