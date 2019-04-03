@@ -1,11 +1,14 @@
 import * as types from '@/store/mutation-types'
+import { normalize } from 'normalizr'
+import { employeeRole } from '@/store/schema'
 import { getEmployeeRoles, newEmployeeRole, deleteEmployeeRole } from '@/utils/api'
 
 export function fetchEmployeeRoles ({ commit, state }) {
   return new Promise((resolve, reject) => {
     getEmployeeRoles()
       .then(response => {
-        commit(types.FETCH_EMPLOYEEROLES, response.data)
+        commit(types.FETCH_EMPLOYEEROLES,
+          normalize(response.data, [employeeRole]).entities.employeeRoles)
         resolve(response.data)
       })
       .catch(error => {
