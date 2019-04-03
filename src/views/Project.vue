@@ -39,16 +39,32 @@
       <hr>
       <div>
         <h3
-          class="project-profile-form-header"
+          class="form-header"
           @click="toggleProfileForm"
         >
           Add a consultant
-          <i class="fa fa-chevron-down" />
+          <i class="fa" :class="profileFormOpen ? 'fa-chevron-up' : 'fa-chevron-down'" />
         </h3>
         <div v-if="profileFormOpen">
           <ProjectProfileForm
             :toggle-form="toggleProfileForm"
             :project-id="project.id"
+          />
+        </div>
+      </div>
+      <hr>
+      <div>
+        <h3
+          class="form-header"
+          @click="isSkillFormOpen = !isSkillFormOpen"
+        >
+          Related skills
+          <i class="fa" :class="isSkillFormOpen ? 'fa-chevron-up' : 'fa-chevron-down'" />
+        </h3>
+        <div v-if="isSkillFormOpen">
+          <ProjectSkillForm
+            :project-id="project.id"
+            :project-skills="project.projectSkills"
           />
         </div>
       </div>
@@ -62,7 +78,8 @@ import store from '../store'
 import {
   ProjectProfileForm,
   ProjectMemberTable,
-  ProjectForm
+  ProjectForm,
+  ProjectSkillForm
 } from '../components/Project'
 import { DEFAULT_LANGUAGE } from '../utils/language'
 
@@ -71,11 +88,13 @@ export default {
   components: {
     ProjectProfileForm,
     ProjectMemberTable,
-    ProjectForm
+    ProjectForm,
+    ProjectSkillForm
   },
   data () {
     return {
-      profileFormOpen: false
+      profileFormOpen: false,
+      isSkillFormOpen: false
     }
   },
   computed: {
@@ -93,7 +112,8 @@ export default {
         endDate: project.endDate,
         isSecret: project.isSecret,
         name: description ? description.name : '',
-        description: description ? description.description : ''
+        description: description ? description.description : '',
+        projectSkills: project ? project.projectSkills : []
       }
       return mappedProject
     },
@@ -129,7 +149,7 @@ export default {
   padding: 1em;
   margin: 0 auto;
 }
-.project-profile-form-header {
+.form-header {
   text-align: center;
   cursor: pointer;
 }
