@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { denormalize } from 'normalizr'
-import { profile, skill, project } from '../store/schema'
-import store from '../store'
-import * as types from '../store/mutation-types'
+import { profile, skill, project } from '@/store/schema'
+import store from '@/store'
+import * as types from '@/store/mutation-types'
 
 const API_URL = process.env.VUE_APP_API_URL
 const PATH_AUTH = '/auth'

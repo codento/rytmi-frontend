@@ -1,6 +1,6 @@
 import { normalize } from 'normalizr'
-import * as types from '../../mutation-types'
-import { profile } from '../../schema'
+import * as types from '@/store/mutation-types'
+import { profile } from '@/store/schema'
 import {
   getProfiles,
   getProfileSkills,
@@ -8,7 +8,7 @@ import {
   newProfileSkill,
   deleteProfileSkill,
   alterProfileSkill
-} from '../../../utils/api'
+} from '@/utils/api/api'
 
 export const actions = {
   fetchProfiles ({ commit, state }) {

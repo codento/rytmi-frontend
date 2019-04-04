@@ -1,7 +1,9 @@
-export const DEFAULT_LANGUAGE = 'fi'
-export const LANGUAGE_GROUP_NAME = 'Languages'
+const DEFAULT_LANGUAGE = 'fi'
+const LANGUAGE_GROUP_NAME = 'Languages'
 
-export default {
-  DEFAULT_LANGUAGE: DEFAULT_LANGUAGE,
-  LANGUAGE_GROUP_NAME: LANGUAGE_GROUP_NAME
-}
+const LANGUAGE_ENUM = Object.freeze({
+  DEFAULT_LANGUAGE,
+  LANGUAGE_GROUP_NAME
+})
+
+export default LANGUAGE_ENUM

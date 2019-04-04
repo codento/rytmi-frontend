@@ -1,7 +1,7 @@
 import * as types from '@/store/mutation-types'
 import { normalize } from 'normalizr'
 import { employeeRole } from '@/store/schema'
-import { getEmployeeRoles, newEmployeeRole, deleteEmployeeRole } from '@/utils/api'
+import { getEmployeeRoles, newEmployeeRole, deleteEmployeeRole } from '@/utils/api/api'
 
 export function fetchEmployeeRoles ({ commit, state }) {
   return new Promise((resolve, reject) => {
