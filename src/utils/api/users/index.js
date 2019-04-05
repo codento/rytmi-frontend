@@ -1,6 +1,6 @@
 import { get, put, del } from '@/utils//api/apiUtils'
 
-const API_URL = process.env.VUE_APP_API_URL
+const API_URL = `${process.env.VUE_APP_BASE_URL}/api`
 const PATH = API_URL + '/users'
 
 export const getUsers = async () => {

@@ -4,7 +4,7 @@ import { profile, skill, project } from '@/store/schema'
 import store from '@/store'
 import * as types from '@/store/mutation-types'
 
-const API_URL = process.env.VUE_APP_API_URL
+const API_URL = `${process.env.VUE_APP_BASE_URL}/api`
 const PATH_AUTH = '/auth'
 const PATH_SKILLS = '/skills'
 const PATH_PROFILES = '/profiles'
