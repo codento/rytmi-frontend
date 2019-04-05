@@ -17,6 +17,8 @@ localVue.filter('dateFilter', value => {
 
 const projectMock = (projectId) => ({
   id: projectId,
+  name: 'Project Foo',
+  description: 'Foo Bar',
   descriptions: [
     {
       name: 'Project Foo',
@@ -35,7 +37,16 @@ const profileProjectMock = (projectId) => ([
     profile: 1,
     projectId: projectId,
     startDate: '2018-01-01',
-    endDate: '2018-02-01'
+    endDate: '2018-02-01',
+    name: 'Project Foo',
+    description: 'Foo Bar',
+    descriptions: [
+      {
+        name: 'Project Foo',
+        description: 'Foo Bar',
+        language: 'fi'
+      }
+    ]
   }
 ])
 
@@ -44,6 +55,9 @@ function createStore (overrideConfig) {
     getters: {
       projectById: () => (projectId) => projectMock(projectId),
       profileProjectsByProjectId: () => (projectId) => profileProjectMock(projectId)
+    },
+    state: {
+      language: { currentLanguage: 'fi' }
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -89,7 +103,7 @@ describe('Project.vue', () => {
     expect(startDate.text()).toBe(format(projectMock().startDate, 'D.M.YYYY'))
     expect(endDate.text()).toBe(format(projectMock().endDate, 'D.M.YYYY'))
     expect(numOfMembers.text()).toBe(profileProjectMock().length.toString())
-    expect(wrapper.find('p').text()).toContain(projectMock().descriptions[0].description)
+    expect(wrapper.find('p').text()).toContain(projectMock().description)
   })
 
   it('does not show members field if there are no members', () => {

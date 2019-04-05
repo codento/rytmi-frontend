@@ -20,7 +20,7 @@
         align-self="center"
       >
         <input
-          id="profileProject.id"
+          :id="'project_checkbox_' + profileProject.id"
           v-model="selectedProjects"
           type="checkbox"
           :value="profileProject.projectId"
@@ -55,7 +55,7 @@ export default {
   computed: {},
   methods: {
     updateSelectedProjects: function () {
-      this.$emit('updateSelectedProjects', this.selectedProjects)
+      this.$emit('update-selected-projects', this.selectedProjects)
     }
   }
 }

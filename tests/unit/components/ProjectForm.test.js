@@ -39,6 +39,18 @@ function createWrapper (overrideMountingOptions) {
 
 const mockProject = {
   id: 1,
+  descriptions: [
+    {
+      description: 'Mock description',
+      language: 'en',
+      name: 'Mock project'
+    },
+    {
+      description: 'Projektin kuvaus',
+      language: 'fi',
+      name: 'Projektin nimi'
+    }
+  ],
   startDate: '2018-10-01',
   endDate: '2018-10-11'
 }

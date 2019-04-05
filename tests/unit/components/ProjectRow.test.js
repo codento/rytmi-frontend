@@ -9,12 +9,15 @@ describe('ProjectRow.test.js', () => {
   localVue.filter('dateFilter', value => {
     return value ? format(value, 'D.M.YYYY') : undefined
   })
-  let getters, store
+  let getters, state, store
   beforeEach(() => {
     getters = {
       projectById: () => (arg) => arg
     }
-    store = new Vuex.Store({ getters })
+    state = {
+      language: { currentLanguage: 'fi' }
+    }
+    store = new Vuex.Store({ getters, state })
   })
   it('Template is correct', () => {
     let wrapper = mount(ProjectRow, {
@@ -23,12 +26,8 @@ describe('ProjectRow.test.js', () => {
       propsData: {
         profileProject: {
           projectId: 1,
-          descriptions: [
-            {
-              name: 'Testi prkkis',
-              description: 'mail'
-            }
-          ],
+          name: 'Testi prkkis',
+          description: 'mail',
           startDate: '2017-05-15',
           endDate: '2017-06-16'
         }

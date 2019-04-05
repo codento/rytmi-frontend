@@ -122,14 +122,14 @@ export default {
   created: function () {
     // TODO
     this.profileDescription = this.profile.description || ''
-    this.$emit('updateDescription', this.profileDescription)
+    this.$emit('update-description', this.profileDescription)
   },
   methods: {
     formattedDate: (date) => {
       return format(date, 'D.M.YYYY')
     },
     updateDescription: function () {
-      this.$emit('updateDescription', this.profileDescription)
+      this.$emit('update-description', this.profileDescription)
     }
   }
 }

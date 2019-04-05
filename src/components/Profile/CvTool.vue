@@ -23,30 +23,32 @@
         :profile="profile"
         :relevant-skills="topSkills"
         :relevant-projects="topProjects"
-        @updateDescription="profileDescriptionUpdated"
+        @update-description="profileDescriptionUpdated"
       />
     </b-col>
     <b-col cols="12">
       <CvToolSkills
         :skills="skills"
-        @updateSelectedSkills="relevantSkillsUpdated"
+        :languages="languages"
+        @update-selected-skills="relevantSkillsUpdated"
       />
       <CvToolWorkExperience
         :profile-projects="projects"
-        @updateSelectedProjects="relevantProjectsUpdated"
+        @update-selected-projects="relevantProjectsUpdated"
       />
       <CvToolOtherInfo
         :profile="profile"
-        @updateMarkdown="markdownUpdated"
+        @update-markdown="markdownUpdated"
       />
     </b-col>
   </b-row>
 </template>
 <script>
+import _ from 'lodash'
 import { mapGetters } from 'vuex'
 import { format } from 'date-fns'
 
-import { DEFAULT_LANGUAGE } from '@/utils/language'
+import LANGUAGE_ENUM from '@/utils/constants'
 
 import CvToolProfile from './CvToolProfile.vue'
 import CvToolSkills from './CvToolSkills.vue'
@@ -78,20 +80,40 @@ export default {
   computed: {
     ...mapGetters([
       'skillsByProfileId',
+      'skillById',
+      'skillCategoryById',
+      'skillGroupById',
       'profileProjectsByProfileId',
       'projectById'
     ]),
+    skillsAndLanguages: function () {
+      return this.skillsByProfileId(this.profile.id)
+        .filter(skill => skill.visibleInCV && skill.knows > 0)
+        .map(skill => this.joinSkillCategory(skill))
+    },
     skills: function () {
-      return this.skillsByProfileId(this.profile.id).filter(skill => skill.visibleInCV && skill.knows > 0)
+      return this.skillsAndLanguages.filter(skill => skill.skillGroup !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME)
+    },
+    languages: function () {
+      return this.skillsAndLanguages.filter(skill => skill.skillGroup === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME)
     },
     topSkills: function () {
       return this.skills.filter(skill => this.cvData.relevantSkillIds.includes(skill.skillId))
     },
     projects: function () {
       return this.profileProjectsByProfileId(this.profile.id)
+        .map(profileProject => {
+          const project = this.projectById(profileProject.projectId)
+          Object.assign(profileProject, {
+            duration: this.getProjectDuration(profileProject),
+            name: project.name,
+            description: project.description
+          })
+          return profileProject
+        })
     },
     topProjects: function () {
-      return this.cvData.relevantProjectIds.map(id => this.processProjectData(id))
+      return this.projects.filter(project => this.cvData.relevantProjectIds.includes(project.projectId))
     },
     allRequiredFieldsFilled: {
       get: function () {
@@ -108,17 +130,8 @@ export default {
     }
   },
   methods: {
-    processProjectData: function (projectId) {
-      const project = this.projectById(projectId)
-      const description = project.descriptions.find(description => description.language === DEFAULT_LANGUAGE)
-      const mappedProject = {
-        id: project.id,
-        code: project.code,
-        duration: format(project.startDate, 'MM/YYYY') + '-' + format(project.endDate, 'MM/YYYY'),
-        name: description ? description.name : '',
-        description: description ? description.description : ''
-      }
-      return mappedProject
+    getProjectDuration: function (project) {
+      return format(project.startDate, 'MM/YYYY') + '-' + format(project.endDate, 'MM/YYYY')
     },
     profileDescriptionUpdated: function (updatedDescription) {
       this.cvData.profileDescription = updatedDescription
@@ -132,11 +145,57 @@ export default {
     markdownUpdated: function (updatedMarkdown) {
       this.cvData.otherInfoAsMarkdown = updatedMarkdown
     },
+    joinSkillCategory: function (profileSkill) {
+      const profileSkillCopy = _.clone(profileSkill)
+      const skill = this.skillById(profileSkill.skillId)
+      const skillCategory = this.skillCategoryById(skill.skillCategoryId)
+      profileSkillCopy['skillName'] = skill.name
+      profileSkillCopy['skillCategory'] = skillCategory.title
+      profileSkillCopy['skillGroup'] = this.skillGroupById(skillCategory.skillGroupId).title
+      return profileSkillCopy
+    },
     createPDF: function () {
+      const cvLanguages = this.languages
+        .map(skill => {
+          return {
+            languageName: skill.skillName,
+            languageLevel: skill.knows
+          }
+        })
+
+      const cvSkills = this.skills
+        .map(skill => {
+          return {
+            skillId: skill.skillId,
+            skillName: skill.skillName,
+            skillLevel: skill.knows,
+            skillCategory: skill.skillCategory,
+            skillGroup: skill.skillGroup
+          }
+        })
+
+      const cvProjects = this.projects
+        .map(project => {
+          return {
+            projectId: project.projectId,
+            projectTitle: project.name,
+            projectDescription: project.description,
+            projectCustomer: project.customer,
+            projectDuration: project.duration
+          }
+        })
+
       const data = {
-        'description': this.cvData.profileDescription,
-        'relevantSkills': this.cvData.relevantSkillIds,
-        'otherInfo': this.cvData.otherInfoAsMarkdown
+        employeeName: this.profile.firstName + ' ' + this.profile.lastName,
+        employeePicture: this.profile.photoPath,
+        jobTitle: this.profile.title,
+        employeeDescription: this.cvData.profileDescription,
+        topProjects: cvProjects.filter(project => this.cvData.relevantProjectIds.includes(project.projectId)),
+        topSkills: cvSkills.filter(skill => this.cvData.relevantSkillIds.includes(skill.skillId)),
+        languages: cvLanguages,
+        projects: cvProjects,
+        skills: cvSkills,
+        otherInfo: this.cvData.otherInfoAsMarkdown
       }
       console.log(data)
     }

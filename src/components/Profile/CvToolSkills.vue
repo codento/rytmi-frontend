@@ -2,49 +2,67 @@
   <b-card
     id="skills"
     class="mt-2 mb-2"
+    no-body
   >
     <h5
       slot="header"
       class="mb-0"
     >
-      Skills
+      Skills and languages
     </h5>
-    <b-row
-      v-for="category of skillsByCategory"
-      :key="category.id"
-    >
-      <b-col
-        cols="12"
-        class="text-center mt-2"
+    <b-card-body>
+      <b-card-title>Skills</b-card-title>
+      <b-row
+        v-for="category of skillsByCategory"
+        :key="category.id"
       >
-        <h5>{{ skillCategories[category.category].title }}</h5>
-      </b-col>
-      <b-col cols="12">
-        <b-row
-          v-for="skill of category.skills"
-          :key="skill.id"
+        <b-col
+          cols="12"
+          class="text-center mt-2"
         >
-          <b-col
-            cols="1"
-            align-self="center"
+          <h5>{{ category.category }}</h5>
+        </b-col>
+        <b-col cols="12">
+          <b-row
+            v-for="skill of category.skills"
+            :key="skill.id"
           >
-            <input
-              id="skill.id"
-              v-model="selectedSkills"
-              type="checkbox"
-              :value="skill.skillId"
-              @change="updateSelectedSkills"
+            <b-col
+              cols="1"
+              align-self="center"
             >
-          </b-col>
-          <b-col>
-            <SkillRow
-              v-bind="skill"
-              show-skills-only
-            />
-          </b-col>
-        </b-row>
-      </b-col>
-    </b-row>
+              <input
+                id="skill.id"
+                v-model="selectedSkills"
+                type="checkbox"
+                :value="skill.skillId"
+                @change="updateSelectedSkills"
+              >
+            </b-col>
+            <b-col>
+              <SkillRow
+                v-bind="skill"
+                show-skills-only
+              />
+            </b-col>
+          </b-row>
+        </b-col>
+      </b-row>
+    </b-card-body>
+    <b-card-body>
+      <b-card-title>Languages</b-card-title>
+      <b-row
+        v-for="language of languages"
+        :key="language.id"
+      >
+        <b-col>
+          <SkillRow
+            v-bind="language"
+            show-skills-only
+          />
+        </b-col>
+      </b-row>
+    </b-card-body>
   </b-card>
 </template>
 <script>
@@ -58,7 +76,8 @@ export default {
     SkillRow
   },
   props: {
-    'skills': Array
+    skills: Array,
+    languages: Array
   },
   data () {
     return {
@@ -73,14 +92,14 @@ export default {
     skillsByCategory: function () {
       const categories = []
       for (const skill of this.skills) {
-        if (!categories.includes(this.skillById(skill.skillId).skillCategoryId)) {
-          categories.push(this.skillById(skill.skillId).skillCategoryId)
+        if (!categories.includes(skill.skillCategory)) {
+          categories.push(skill.skillCategory)
         }
       }
       const categorisedSkills = categories.map(category => {
         const skills = []
         for (const skill of this.skills) {
-          if (this.skillById(skill.skillId).skillCategoryId === category) {
+          if (skill.skillCategory === category) {
             skills.push(skill)
           }
         }
@@ -94,7 +113,7 @@ export default {
   },
   methods: {
     updateSelectedSkills: function () {
-      this.$emit('updateSelectedSkills', this.selectedSkills)
+      this.$emit('update-selected-skills', this.selectedSkills)
     }
   }
 }

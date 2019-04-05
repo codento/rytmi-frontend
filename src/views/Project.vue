@@ -35,7 +35,7 @@
         </b-col>
       </b-row>
       <hr>
-      <ProjectForm :editable-project="rawProject" />
+      <ProjectForm :editable-project="project" />
       <hr>
       <div>
         <h3
@@ -64,7 +64,6 @@ import {
   ProjectMemberTable,
   ProjectForm
 } from '../components/Project'
-import { DEFAULT_LANGUAGE } from '@/utils/constants'
 
 export default {
   name: 'Project',
@@ -84,20 +83,6 @@ export default {
       'profileProjectsByProjectId'
     ]),
     project () {
-      const project = this.projectById(this.$route.params.id)
-      const description = project.descriptions.find(description => description.language === DEFAULT_LANGUAGE)
-      const mappedProject = {
-        id: project.id,
-        code: project.code,
-        startDate: project.startDate,
-        endDate: project.endDate,
-        isSecret: project.isSecret,
-        name: description ? description.name : '',
-        description: description ? description.description : ''
-      }
-      return mappedProject
-    },
-    rawProject () {
       return this.projectById(this.$route.params.id)
     },
     members () {

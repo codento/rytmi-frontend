@@ -47,14 +47,14 @@ export default {
   created: function () {
     // TODO
     this.otherInfoAsMarkdown = this.profile.description || '## Education\nHogwards\n## Hobbies\nQuiddish'
-    this.$emit('updateMarkdown', this.otherInfoAsMarkdown)
+    this.$emit('update-markdown', this.otherInfoAsMarkdown)
   },
   methods: {
     updateMarkdown: function () {
       _.debounce(function (e) {
         this.otherInfoAsMarkdown = e.target.value
       }, 300)
-      this.$emit('updateMarkdown', this.otherInfoAsMarkdown)
+      this.$emit('update-markdown', this.otherInfoAsMarkdown)
     }
   }
 }
