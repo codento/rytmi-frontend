@@ -1,6 +1,6 @@
 import axios from 'axios'
-import store from '../store'
-import { AUTH_LOGOUT } from '../store/mutation-types'
+import store from '@/store'
+import { AUTH_LOGOUT } from '@/store/mutation-types'
 
 function getAuthHeaders () {
   const token = window.localStorage ? window.localStorage.getItem('user-token') || '' : ''

@@ -6,7 +6,7 @@ import {
   alterProjectProfile,
   deleteProjectProfile,
   getProfilesOfProject
-} from '../../../utils/api'
+} from '../../../utils/api/api'
 
 export default {
   newProjectProfile ({ commit, dispatch }, data) {

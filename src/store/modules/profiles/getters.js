@@ -2,9 +2,9 @@ import _ from 'lodash'
 
 export const getters = {
   futureProjectsOfProfile: (state, getters, rootState) => (profileId) => {
-    const ppIds = state.futurePpList[profileId] || []
-    return ppIds
-      .map(ppId => rootState.profileProjects.profileProjects[ppId])
+    const profileProjectIds = state.futurePpList[profileId] || []
+    return profileProjectIds
+      .map(profileProjectId => rootState.profileProjects.profileProjects[profileProjectId])
   },
   profileId: (state) => state.profileId,
   profiles: (state) => state.profiles,

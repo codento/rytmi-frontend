@@ -2,10 +2,10 @@ import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import projectModule from '@/store/modules/projects'
 import { cloneDeep } from 'lodash'
-import { getProjects, newProject, deleteProject, alterProject } from '@/utils/api'
+import { getProjects, newProject, deleteProject, alterProject } from '@/utils/api/api'
 import flushPromises from 'flush-promises'
 
-jest.mock('@/utils/api')
+jest.mock('@/utils/api/api')
 const mockProject = { id: 1, name: 'one' }
 
 const localVue = createLocalVue()

@@ -102,10 +102,27 @@ exports[`Project.vue Template is correct 1`] = `
      
     <div>
       <h3
-        class="project-profile-form-header"
+        class="form-header"
       >
         
         Add a consultant
+        
+        <i
+          class="fa fa-chevron-down"
+        />
+      </h3>
+       
+      <!---->
+    </div>
+     
+    <hr />
+     
+    <div>
+      <h3
+        class="form-header"
+      >
+        
+        Related skills
         
         <i
           class="fa fa-chevron-down"

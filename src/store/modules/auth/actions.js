@@ -1,5 +1,5 @@
 import * as types from '../../mutation-types'
-import { login } from '../../../utils/api'
+import { login } from '@/utils/api/api'
 
 export async function handleLogin ({ commit, dispatch }) {
   const options = { ux_mode: 'redirect', redirect_uri: process.env.VUE_APP_CLIENT_AUTH_REDIRECT_URI }

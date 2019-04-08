@@ -14,7 +14,7 @@
       </span>
     </h3>
     <b-form
-      v-if="showProjectForm"
+      v-show="showProjectForm"
       id="project_form"
       class="animated fadeIn"
       @submit="onSubmit"
@@ -183,7 +183,10 @@ export default {
       }
     },
     getDescriptionByLanguage (language) {
-      return this.project.descriptions.find(description => description.language === language)
+      if (this.project && this.project.descriptions) {
+        return this.project.descriptions.find(description => description.language === language)
+      }
+      return ''
     }
   }
 }

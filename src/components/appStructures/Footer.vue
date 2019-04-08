@@ -12,7 +12,7 @@
 <script>
 import { Footer as TheFooter } from '@coreui/vue'
 import { version as frontendVersion } from '../../../package'
-import { getVersion } from '../../utils/api'
+import { getVersion } from '@/utils/api/api'
 
 export default {
   name: 'CFooter',

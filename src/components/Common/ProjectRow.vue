@@ -32,7 +32,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { DEFAULT_LANGUAGE } from '@/utils/language'
+
 export default {
   name: 'ProjectRow',
   props: {
@@ -45,19 +45,8 @@ export default {
   },
   computed: {
     ...mapGetters(['projectById']),
-    project () {
-      const project = this.projectById(this.profileProject.projectId)
-      const description = project.descriptions.find(description => description.language === DEFAULT_LANGUAGE)
-      const mappedProject = {
-        id: project.id,
-        code: project.code,
-        startDate: project.startDate,
-        endDate: project.endDate,
-        isSecret: project.isSecret,
-        name: description ? description.name : '',
-        description: description ? description.description : ''
-      }
-      return mappedProject
+    project: function () {
+      return this.projectById(this.profileProject.projectId)
     }
   }
 }

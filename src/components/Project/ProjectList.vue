@@ -18,7 +18,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { DEFAULT_LANGUAGE } from '../../utils/language'
+
 export default {
   name: 'ProjectList',
   data () {
@@ -39,22 +39,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['projectFilter']),
+    ...mapGetters([
+      'projectFilter',
+      'projectById'
+    ]),
     results () {
       const projects = this.projectFilter(this.projectFilterTerm)
-      const mappedProjects = Object.values(projects).map(project => {
-        const description = project.descriptions.find(description => description.language === DEFAULT_LANGUAGE)
-        return {
-          id: project.id,
-          code: project.code,
-          startDate: project.startDate,
-          endDate: project.endDate,
-          isSecret: project.isSecret,
-          name: description ? description.name : '',
-          description: description ? description.description : ''
-        }
-      })
-      return mappedProjects
+      return Object.keys(projects).map(projectId => this.projectById(projectId))
     }
   },
   methods: {

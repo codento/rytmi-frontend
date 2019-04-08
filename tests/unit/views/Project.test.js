@@ -18,8 +18,15 @@ localVue.filter('dateFilter', value => {
 const projectMock = (projectId) => ({
   id: projectId,
   name: 'Project Foo',
-  code: 50,
   description: 'Foo Bar',
+  descriptions: [
+    {
+      name: 'Project Foo',
+      description: 'Foo Bar',
+      language: 'fi'
+    }
+  ],
+  code: 50,
   startDate: new Date('2018-01-01'),
   endDate: new Date('2018-05-01')
 })
@@ -30,7 +37,16 @@ const profileProjectMock = (projectId) => ([
     profile: 1,
     projectId: projectId,
     startDate: '2018-01-01',
-    endDate: '2018-02-01'
+    endDate: '2018-02-01',
+    name: 'Project Foo',
+    description: 'Foo Bar',
+    descriptions: [
+      {
+        name: 'Project Foo',
+        description: 'Foo Bar',
+        language: 'fi'
+      }
+    ]
   }
 ])
 
@@ -39,6 +55,9 @@ function createStore (overrideConfig) {
     getters: {
       projectById: () => (projectId) => projectMock(projectId),
       profileProjectsByProjectId: () => (projectId) => profileProjectMock(projectId)
+    },
+    state: {
+      language: { currentLanguage: 'fi' }
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)

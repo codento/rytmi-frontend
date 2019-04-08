@@ -1,4 +1,4 @@
-import * as usersApi from '@/utils/users'
+import * as usersApi from '@/utils/api/users'
 import { normalize } from 'normalizr'
 import { user } from '../../schema'
 import { FETCH_USERS, UPDATE_USER, DELETE_USER } from '../../mutation-types'
