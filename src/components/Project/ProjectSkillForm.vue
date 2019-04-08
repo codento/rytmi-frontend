@@ -10,7 +10,7 @@
           :key="skill.skillId"
           :class="skillsToDelete.includes(skill.skillId) ? 'marked-for-deletion' : ''"
         >
-          {{skillById(skill.skillId).name}}
+          {{ skillById(skill.skillId).name }}
           <i
             :class="skillsToDelete.includes(skill.skillId) ? 'fa-undo' : 'fa-trash'"
             class="fa"
@@ -22,7 +22,7 @@
           :key="skill"
           class="new-skill"
         >
-          {{skillById(skill).name}}
+          {{ skillById(skill).name }}
           <i
             class="fa fa-trash"
             @click="deleteNewSkill(skill)"
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 
 export default {
@@ -77,8 +77,8 @@ export default {
       if (this.skills) {
         return Object.values(this.skills)
           .filter(skill =>
-            !this.newSkills.includes(skill.id)
-            && !this.projectSkills.map(projectSkill => projectSkill.skillId).includes(skill.id))
+            !this.newSkills.includes(skill.id) &&
+            !this.projectSkills.map(projectSkill => projectSkill.skillId).includes(skill.id))
           .map(skill => ({
             label: skill.name,
             id: skill.id

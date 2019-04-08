@@ -43,7 +43,10 @@
           @click="toggleProfileForm"
         >
           Add a consultant
-          <i class="fa" :class="profileFormOpen ? 'fa-chevron-up' : 'fa-chevron-down'" />
+          <i
+            class="fa"
+            :class="profileFormOpen ? 'fa-chevron-up' : 'fa-chevron-down'"
+          />
         </h3>
         <div v-if="profileFormOpen">
           <ProjectProfileForm
@@ -59,7 +62,10 @@
           @click="isSkillFormOpen = !isSkillFormOpen"
         >
           Related skills
-          <i class="fa" :class="isSkillFormOpen ? 'fa-chevron-up' : 'fa-chevron-down'" />
+          <i
+            class="fa"
+            :class="isSkillFormOpen ? 'fa-chevron-up' : 'fa-chevron-down'"
+          />
         </h3>
         <div v-if="isSkillFormOpen">
           <ProjectSkillForm
