@@ -9,7 +9,14 @@ export const getters = {
   profileId: (state) => state.profileId,
   profiles: (state) => state.profiles,
   profileList: (state) => state.profileList,
-  profileById: (state) => (id) => state.profiles[id],
+  profileById: (state, getters, rootState) => (id) => {
+    let profile = _.cloneDeep(state.profiles[id])
+    if (profile) {
+      profile.cvDescriptions = profile.cvDescriptions
+        .filter(description => description.language === rootState.language.currentLanguage)
+    }
+    return profile
+  },
   profileByUserId: (state) => (userId) => state.profiles[userId],
   skillProfiles: (state) => state.profileSkills,
   skillsByProfileId: (state, getters) => (profileId) => {

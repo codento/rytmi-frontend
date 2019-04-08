@@ -14,7 +14,7 @@
         <b-textarea
           v-model="otherInfoAsMarkdown"
           rows="15"
-          placeholder="Use Markdown"
+          placeholder="## Education"
           @input="updateMarkdown"
         />
       </b-col>
@@ -45,8 +45,8 @@ export default {
     }
   },
   created: function () {
-    // TODO
-    this.otherInfoAsMarkdown = this.profile.description || '## Education\nHogwards\n## Hobbies\nQuiddish'
+    const descriptions = this.profile.cvDescriptions.find(description => description.type === 'other')
+    this.otherInfoAsMarkdown = descriptions ? descriptions.description : ''
     this.$emit('update-markdown', this.otherInfoAsMarkdown)
   },
   methods: {

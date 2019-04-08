@@ -120,8 +120,8 @@ export default {
     }
   },
   created: function () {
-    // TODO
-    this.profileDescription = this.profile.description || ''
+    const descriptions = this.profile.cvDescriptions.find(description => description.type === 'introduction')
+    this.profileDescription = descriptions ? descriptions.description : ''
     this.$emit('update-description', this.profileDescription)
   },
   methods: {
