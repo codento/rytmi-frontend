@@ -103,7 +103,11 @@ export default {
         await this.updateProfile(profileCopy)
         this.linkInput = ''
       } catch (error) {
-        this.errorDetails = error.details
+        if (Array.isArray(error.details)) {
+          this.errorDetails = error.details
+        } else {
+          this.errorDetails.push(error.details)
+        }
       }
     },
     linkExists (link) {

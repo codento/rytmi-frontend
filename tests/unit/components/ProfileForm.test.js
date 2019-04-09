@@ -135,4 +135,13 @@ describe('ProfileForm.vue', () => {
     expect(wrapper.find(ApiErrorDetailsPanel).isVisible()).toBeTruthy()
     expect(wrapper.vm.errorDetails).toHaveLength(1)
   })
+
+  it('returns correct employeeRoleList', () => {
+    const propsData = {
+      profile: mockProfile
+    }
+    const wrapper = createWrapper({ propsData })
+    wrapper.setData({ selectedEmployeeRoles: [] })
+    expect(wrapper.vm.employeeRoleList).toEqual([{ 'id': 1, 'label': 'somethinger' }, { 'id': 2, 'label': 'dunno lol' }])
+  })
 })

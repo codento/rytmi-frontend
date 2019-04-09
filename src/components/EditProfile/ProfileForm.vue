@@ -139,8 +139,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['employeeRoles', 'employeeRoleById']),
     employeeRoleList () {
-      const roles = this.employeeRoles().map(item => {
+      const employeeRolesToArray = Object.keys(this.employeeRoles).map(key => this.employeeRoles[key])
+      const roles = employeeRolesToArray.map(item => {
         return {
           label: item.title,
           id: item.id
@@ -161,7 +163,6 @@ export default {
   },
   methods: {
     ...mapActions(['updateProfile']),
-    ...mapGetters(['employeeRoles', 'employeeRoleById']),
     async onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []
@@ -171,7 +172,11 @@ export default {
         this.redirect()
       } catch (error) {
         this.showError = true
-        this.errorDetails = error.details
+        if (Array.isArray(error.details)) {
+          this.errorDetails = error.details
+        } else {
+          this.errorDetails.push(error.details)
+        }
       }
     },
     onReset (evt) {
@@ -179,7 +184,6 @@ export default {
       /* Trick to reset/clear native browser form validation state */
       this.show = false
       this.showError = false
-      this.errorDetails = []
       this.$nextTick(() => { this.show = true })
       this.redirect()
     },

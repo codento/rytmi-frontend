@@ -93,7 +93,11 @@ export default {
           this.resetForm()
         })
         .catch(err => {
-          this.errorDetails = err.response.data.error.details
+          if (Array.isArray(err.response.data.error.details)) {
+            this.errorDetails = err.response.data.error.details
+          } else {
+            this.errorDetails.push(err.response.data.error.details)
+          }
           this.showError = true
         })
     },
