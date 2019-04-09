@@ -4,6 +4,7 @@ import { profile, skill, project } from '@/store/schema'
 import store from '@/store'
 import * as types from '@/store/mutation-types'
 
+const CV_API_URL = `${process.env.VUE_APP_BASE_URL}/cv`
 const API_URL = `${process.env.VUE_APP_BASE_URL}/api`
 const PATH_AUTH = '/auth'
 const PATH_SKILLS = '/skills'
@@ -90,6 +91,14 @@ export function alterProfileSkill (data) {
 export function deleteProfileSkill (data) {
   return axios.delete(
     API_URL + PATH_PROFILES + '/' + data.profileId + PATH_SKILLS + '/' + data.id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function newCv (data) {
+  return axios.post(
+    CV_API_URL,
+    data,
     getAuthHeaders())
     .catch(handleError)
 }

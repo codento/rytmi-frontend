@@ -7,7 +7,7 @@
       <div id="disabled-button-wrapper">
         <b-button
           :disabled="!allRequiredFieldsFilled"
-          @click="createPDF"
+          @click.prevent="createPDF"
         >
           Create PDF
         </b-button>
@@ -45,7 +45,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { format } from 'date-fns'
 
 import LANGUAGE_ENUM from '@/utils/constants'
@@ -130,6 +130,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['addCV']),
     getProjectDuration: function (project) {
       return format(project.startDate, 'MM/YYYY') + '-' + format(project.endDate, 'MM/YYYY')
     },
@@ -154,7 +155,8 @@ export default {
       profileSkillCopy['skillGroup'] = this.skillGroupById(skillCategory.skillGroupId).title
       return profileSkillCopy
     },
-    createPDF: function () {
+    createPDF: function (event) {
+      event.preventDefault()
       const cvLanguages = this.languages
         .map(skill => {
           return {
@@ -198,6 +200,7 @@ export default {
         otherInfo: this.cvData.otherInfoAsMarkdown
       }
       console.log(data)
+      this.addCV(data)
     }
   }
 }

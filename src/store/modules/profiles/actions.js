@@ -7,7 +7,8 @@ import {
   alterProfile,
   newProfileSkill,
   deleteProfileSkill,
-  alterProfileSkill
+  alterProfileSkill,
+  newCv
 } from '@/utils/api/api'
 
 export const actions = {
@@ -69,6 +70,14 @@ export const actions = {
           commit(types.UPDATE_PROFILE_SKILL, response.data)
           resolve(response.data)
         })
+        .catch(err => reject(err))
+    })
+  },
+  addCV ({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      newCv().then(response => {
+        console.log(response)
+      })
         .catch(err => reject(err))
     })
   }
