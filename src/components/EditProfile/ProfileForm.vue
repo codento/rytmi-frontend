@@ -87,7 +87,6 @@
         id="PhonenumberInput"
         v-model="editedProfile.phone"
         type="tel"
-        required
       />
     </b-form-group>
     <b-form-group
@@ -96,12 +95,62 @@
       label="Description:"
       label-for="descriptionInput"
     >
-      <b-form-input
+<!--       <b-form-input
         id="descriptionInput"
         v-model="editedProfile.description"
         :rows="3"
         type="text"
-      />
+      /> -->
+      <b-row>
+        <b-col sm="6">
+          <small>Introduction for CV main page (in Finnish)</small>
+          <b-textarea
+            v-model="getDescription('fi','introduction').description"
+            placeholder="Introduction for CV main page (fi)"
+            type="text"
+            rows="5"
+          />
+        </b-col>
+        <b-col sm="6">
+          <small>Introduction for CV main page (in English)</small>
+          <b-textarea
+            v-model="getDescription('en','introduction').description"
+            placeholder="Introduction for CV main page (en)"
+            type="text"
+            rows="5"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="6">
+          <small>Other info for CV (in Finnish)</small>
+          <b-textarea
+            v-model="getDescription('fi','other').description"
+            :placeholder="'Use markdown syntax!\n## Koulutus\n## Harrastukset'"
+            rows="5"
+            @input="updateMarkdown('fi','other')"
+          />
+        </b-col>
+        <b-col sm="6">
+          <small>Preview</small>
+          <div v-html="otherInfoAsMarkdownFi" />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="6">
+          <small>Other info for CV (in English)</small>
+          <b-textarea
+            v-model="getDescription('en','other').description"
+            :placeholder="'Use markdown syntax!\n## Koulutus\n## Harrastukset'"
+            rows="5"
+            @input="updateMarkdown('en','other')"
+          />
+        </b-col>
+        <b-col sm="6">
+          <small>Preview</small>
+          <div v-html="otherInfoAsMarkdownEn" />
+        </b-col>
+      </b-row>
     </b-form-group>
     <b-button
       type="submit"
@@ -120,6 +169,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import _ from 'lodash'
+import marked from 'marked'
 import vSelect from 'vue-select'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
@@ -127,7 +178,7 @@ export default {
   name: 'ProfileForm',
   components: { ApiErrorDetailsPanel, vSelect },
   props: {
-    'profile': Object
+    profile: Object
   },
   data () {
     return {
@@ -149,6 +200,12 @@ export default {
         }
       })
       return roles.filter(role => !this.selectedEmployeeRoles.some(selectedRole => selectedRole.id === role.id))
+    },
+    otherInfoAsMarkdownFi () {
+      return this.compiledMarkdown(this.getDescription('fi', 'other').description)
+    },
+    otherInfoAsMarkdownEn () {
+      return this.compiledMarkdown(this.getDescription('en', 'other').description)
     }
   },
   watch: {
@@ -163,6 +220,29 @@ export default {
   },
   methods: {
     ...mapActions(['updateProfile']),
+    getDescription (language, type) {
+      const description = this.profile.cvDescriptions
+        .find(description => description.language === language && description.type === type)
+      if (!description) {
+        this.profile.cvDescriptions.push(
+          {
+            description: '',
+            language: language,
+            type: type
+          }
+        )
+      }
+      return this.profile.cvDescriptions
+        .find(description => description.language === language && description.type === type)
+    },
+    compiledMarkdown: function (text) {
+      return marked(text, { sanitize: true })
+    },
+    updateMarkdown: function (language, type) {
+      _.debounce(function (e) {
+        this.getDescription(language, type).description = e.target.value
+      }, 300)
+    },
     async onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []

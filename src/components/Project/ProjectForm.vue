@@ -72,6 +72,24 @@
       </b-row>
       <b-row>
         <b-col sm="6">
+          <small>Customer name (Finnish)</small>
+          <b-input
+            v-model="getDescriptionByLanguage('fi').customerName"
+            placeholder="Customer name (fi)"
+            type="text"
+          />
+        </b-col>
+        <b-col sm="6">
+          <small>Customer name (English)</small>
+          <b-input
+            v-model="getDescriptionByLanguage('en').customerName"
+            placeholder="Customer name (en)"
+            type="text"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="6">
           <small>Description (Finnish)</small>
           <b-textarea
             v-model="getDescriptionByLanguage('fi').description"
@@ -184,9 +202,24 @@ export default {
     },
     getDescriptionByLanguage (language) {
       if (this.project && this.project.descriptions) {
+        const paramsWithTranslations = this.project.descriptions.find(description => description.language === language)
+        if (!paramsWithTranslations) {
+          this.project.descriptions.push(
+            {
+              name: '',
+              customerName: '',
+              description: '',
+              language: language
+            }
+          )
+        }
         return this.project.descriptions.find(description => description.language === language)
       }
-      return ''
+      return {
+        name: '',
+        customerName: '',
+        description: ''
+      }
     }
   }
 }

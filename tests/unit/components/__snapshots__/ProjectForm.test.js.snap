@@ -30,6 +30,14 @@ exports[`ProjectForm.test.js Template is correct 1`] = `
       </b-col>
     </b-row>
     <b-row>
+      <b-col sm="6"><small>Customer name (Finnish)</small>
+        <b-input placeholder="Customer name (fi)" type="text"></b-input>
+      </b-col>
+      <b-col sm="6"><small>Customer name (English)</small>
+        <b-input placeholder="Customer name (en)" type="text"></b-input>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col sm="6"><small>Description (Finnish)</small>
         <b-textarea placeholder="Project description (fi)" type="text" rows="5" class="form-control"></b-textarea>
       </b-col>

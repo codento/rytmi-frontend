@@ -44,7 +44,12 @@ const mockProfile = {
   role: 'Employee role',
   title: 'Title',
   phone: 1234,
-  description: 'Description about me Foo',
+  cvDescriptions: [
+    { description: 'kuvaus1', language: 'fi', type: 'introduction' },
+    { description: 'desc1', language: 'en', type: 'introduction' },
+    { description: 'markdown kuvaus', language: 'fi', type: 'other' },
+    { description: 'markdown desc', language: 'en', type: 'other' },
+  ],
   email: 'foo.bar@barfoo.com',
   employeeRoles: [1]
 }
@@ -62,7 +67,11 @@ describe('ProfileForm.vue', () => {
     expect(inputWrappers.at(3).vm.value).toBe(mockProfile.title)
     expect(inputWrappers.at(4).vm.value).toBe(mockProfile.email)
     expect(inputWrappers.at(5).vm.value).toBe(mockProfile.phone)
-    expect(inputWrappers.at(6).vm.value).toBe(mockProfile.description)
+    const textAreaWrappers = wrapper.findAll('textarea')
+    expect(textAreaWrappers.at(0).vm.value).toBe(mockProfile.cvDescriptions[0].description)
+    expect(textAreaWrappers.at(1).vm.value).toBe(mockProfile.cvDescriptions[1].description)
+    expect(textAreaWrappers.at(2).vm.value).toBe(mockProfile.cvDescriptions[2].description)
+    expect(textAreaWrappers.at(3).vm.value).toBe(mockProfile.cvDescriptions[3].description)
   })
 
   it('should submit entered details when submit is clicked', async () => {
