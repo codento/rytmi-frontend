@@ -1,5 +1,5 @@
 const DEFAULT_LANGUAGE = 'fi'
-const LANGUAGE_GROUP_NAME = 'Languages'
+const LANGUAGE_GROUP_NAME = 'Language'
 
 const LANGUAGE_ENUM = Object.freeze({
   DEFAULT_LANGUAGE,
