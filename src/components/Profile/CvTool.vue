@@ -99,7 +99,10 @@ export default {
       return this.skillsAndLanguages.filter(skill => skill.skillGroup === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME)
     },
     topSkills: function () {
-      return this.skills.filter(skill => this.cvData.relevantSkillIds.includes(skill.skillId))
+      const unorderedSkills = this.skills
+        .filter(skill => this.cvData.relevantSkillIds.includes(skill.skillId))
+      return unorderedSkills.length > 0 ? this.cvData.relevantSkillIds
+        .map(id => unorderedSkills.find(item => item.skillId === id)) : []
     },
     projects: function () {
       return this.profileProjectsByProfileId(this.profile.id)
@@ -142,7 +145,7 @@ export default {
       this.cvData.relevantSkillIds = selectedSkills
     },
     skillOrderUpdated: function (orderedSkillIds) {
-      this.relevantSkillIds = orderedSkillIds
+      this.cvData.relevantSkillIds = orderedSkillIds
     },
     relevantProjectsUpdated: function (selectedProjects) {
       this.cvData.relevantProjectIds = selectedProjects
@@ -161,6 +164,15 @@ export default {
     },
     createPDF: function (event) {
       event.preventDefault()
+      function mapSkill (skillObj) {
+        return {
+          skillId: skillObj.skillId,
+          skillName: skillObj.skillName,
+          skillLevel: skillObj.knows,
+          skillCategory: skillObj.skillCategory,
+          skillGroup: skillObj.skillGroup
+        }
+      }
       const cvLanguages = this.languages
         .map(skill => {
           return {
@@ -170,15 +182,7 @@ export default {
         })
 
       const cvSkills = this.skills
-        .map(skill => {
-          return {
-            skillId: skill.skillId,
-            skillName: skill.skillName,
-            skillLevel: skill.knows,
-            skillCategory: skill.skillCategory,
-            skillGroup: skill.skillGroup
-          }
-        })
+        .map(skill => mapSkill(skill))
 
       const cvProjects = this.projects
         .map(project => {
@@ -197,7 +201,7 @@ export default {
         jobTitle: this.profile.title,
         employeeDescription: this.cvData.profileDescription,
         topProjects: cvProjects.filter(project => this.cvData.relevantProjectIds.includes(project.projectId)),
-        topSkills: cvSkills.filter(skill => this.cvData.relevantSkillIds.includes(skill.skillId)),
+        topSkills: this.topSkills.map(skill => mapSkill(skill)),
         languages: cvLanguages,
         projects: cvProjects,
         skills: cvSkills,

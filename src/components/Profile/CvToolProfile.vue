@@ -139,7 +139,7 @@ export default {
     reorder ({ oldIndex, newIndex }) {
       const movedItem = this.orderedSkills.splice(oldIndex, 1)[0]
       this.orderedSkills.splice(newIndex, 0, movedItem)
-      this.$emit('update-skill-order', this.orderedSkills.map(skill => skill.id))
+      this.$emit('update-skill-order', this.orderedSkills.map(skill => skill.skillId))
     },
     updateDescription: function () {
       this.$emit('update-description', this.profileDescription)
