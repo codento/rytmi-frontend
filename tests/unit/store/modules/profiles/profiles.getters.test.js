@@ -9,7 +9,7 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 const initialState = {
-  language: {
+  siteSettings: {
     currentLanguage: LANGUAGE_ENUM.DEFAULT_LANGUAGE
   },
   profileId: 15,

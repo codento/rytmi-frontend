@@ -9,7 +9,7 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 const initialProjectState = {
-  language: {
+  siteSettings: {
     currentLanguage: LANGUAGE_ENUM.DEFAULT_LANGUAGE
   },
   projects: {

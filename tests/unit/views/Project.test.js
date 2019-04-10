@@ -57,7 +57,7 @@ function createStore (overrideConfig) {
       profileProjectsByProjectId: () => (projectId) => profileProjectMock(projectId)
     },
     state: {
-      language: { currentLanguage: 'fi' }
+      siteSettings: { currentLanguage: 'fi' }
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)

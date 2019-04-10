@@ -9,7 +9,7 @@ import skillCategories from './modules/skillCategories'
 import skillGroups from './modules/skillGroups'
 import employeeRoles from './modules/employeeRoles'
 import users from './modules/users'
-import language from './modules/language'
+import siteSettings from './modules/siteSettings'
 import getters from './getters'
 import mutations from './mutations'
 
@@ -34,6 +34,6 @@ export default new Vuex.Store({
     skillGroups,
     employeeRoles,
     users,
-    language
+    siteSettings
   }
 })

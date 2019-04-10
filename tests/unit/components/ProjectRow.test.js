@@ -15,7 +15,7 @@ describe('ProjectRow.test.js', () => {
       projectById: () => (arg) => arg
     }
     state = {
-      language: { currentLanguage: 'fi' }
+      siteSettings: { currentLanguage: 'fi' }
     }
     store = new Vuex.Store({ getters, state })
   })

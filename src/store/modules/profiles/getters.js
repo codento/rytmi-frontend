@@ -13,7 +13,7 @@ export const getters = {
     let profile = _.cloneDeep(state.profiles[id])
     if (profile) {
       profile.cvDescriptions = profile.cvDescriptions
-        .filter(description => description.language === rootState.language.currentLanguage)
+        .filter(description => description.language === rootState.siteSettings.currentLanguage)
     }
     return profile
   },
