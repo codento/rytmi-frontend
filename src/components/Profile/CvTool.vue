@@ -19,6 +19,21 @@
           {{ disabledButtonInfo }}
         </b-tooltip>
       </div>
+      <b-button-group
+        v-for="languageButton in languageButtons"
+        :key="languageButton.id"
+        class="pull-right"
+      >
+        <b-button
+          class="language-button"
+          id="languageButton.id"
+          variant="outline-light"
+          :pressed.sync="languageButton.state"
+          @mouseup="toggleLanguage(languageButton.id)"
+        >
+          {{ languageButton.label }}
+        </b-button>
+      </b-button-group>
       <CvToolProfile
         :profile="profile"
         :relevant-skills="topSkills"
@@ -46,7 +61,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import { format } from 'date-fns'
 
 import LANGUAGE_ENUM from '@/utils/constants'
@@ -80,6 +95,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'currentLanguage',
       'skillsByProfileId',
       'skillById',
       'skillCategoryById',
@@ -87,6 +103,9 @@ export default {
       'profileProjectsByProfileId',
       'projectById'
     ]),
+    languageButtons: function () {
+      return LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) }))
+    },
     skillsAndLanguages: function () {
       return this.skillsByProfileId(this.profile.id)
         .filter(skill => skill.visibleInCV && skill.knows > 0)
@@ -134,7 +153,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addCV']),
+    ...mapActions([
+      'changeLanguage',
+      'addCV'
+    ]),
+    toggleLanguage: function (languageKey) {
+      this.changeLanguage(languageKey)
+    },
     getProjectDuration: function (project) {
       return format(project.startDate, 'MM/YYYY') + '-' + format(project.endDate, 'MM/YYYY')
     },
@@ -223,5 +248,9 @@ export default {
 #disabled-button-wrapper .btn :disabled {
   /* don't let button block mouse events from reaching wrapper */
   pointer-events: none;
+}
+
+.language-button.btn.btn-outline-light:not(.active) {
+  color: darkslategrey;
 }
 </style>

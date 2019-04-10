@@ -35,17 +35,17 @@ export default {
     'profile': Object
   },
   data () {
-    return {
-      otherInfoAsMarkdown: ''
-    }
+    return {}
   },
   computed: {
     compiledMarkdown: function () {
       return marked(this.otherInfoAsMarkdown, { sanitize: true })
+    },
+    otherInfoAsMarkdown: function () {
+      return this.profile.otherInfo ? this.profile.otherInfo : ''
     }
   },
   created: function () {
-    this.otherInfoAsMarkdown = this.profile.otherInfo ? this.profile.otherInfo : ''
     this.$emit('update-markdown', this.otherInfoAsMarkdown)
   },
   methods: {
