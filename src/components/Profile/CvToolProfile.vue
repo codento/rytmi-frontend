@@ -116,13 +116,15 @@ export default {
   },
   data () {
     return {
-      birthYear: 1987,
       profileDescription: ''
     }
   },
   computed: {
     getNames: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
+    },
+    birthYear: function () {
+      return format(this.profile.birthday, 'YYYY')
     },
     orderedSkills: function () {
       return this.relevantSkills
@@ -134,9 +136,6 @@ export default {
     this.$emit('update-description', this.profileDescription)
   },
   methods: {
-    formattedDate: (date) => {
-      return format(date, 'D.M.YYYY')
-    },
     reorder ({ oldIndex, newIndex }) {
       const movedItem = this.orderedSkills.splice(oldIndex, 1)[0]
       this.orderedSkills.splice(newIndex, 0, movedItem)
