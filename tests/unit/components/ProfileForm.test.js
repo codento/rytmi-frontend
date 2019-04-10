@@ -48,7 +48,7 @@ const mockProfile = {
     { description: 'kuvaus1', language: 'fi', type: 'introduction' },
     { description: 'desc1', language: 'en', type: 'introduction' },
     { description: 'markdown kuvaus', language: 'fi', type: 'other' },
-    { description: 'markdown desc', language: 'en', type: 'other' },
+    { description: 'markdown desc', language: 'en', type: 'other' }
   ],
   email: 'foo.bar@barfoo.com',
   employeeRoles: [1]

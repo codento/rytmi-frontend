@@ -95,12 +95,6 @@
       label="Description:"
       label-for="descriptionInput"
     >
-<!--       <b-form-input
-        id="descriptionInput"
-        v-model="editedProfile.description"
-        :rows="3"
-        type="text"
-      /> -->
       <b-row>
         <b-col sm="6">
           <small>Introduction for CV main page (in Finnish)</small>
