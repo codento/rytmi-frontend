@@ -14,5 +14,7 @@ export const mockProfile = {
     { description: 'desc1', language: 'en', type: 'introduction' },
     { description: 'markdown kuvaus', language: 'fi', type: 'other' },
     { description: 'markdown desc', language: 'en', type: 'other' }
-  ]
+  ],
+  introduction: 'kuvaus1',
+  otherInfo: 'markdown kuvaus'
 }

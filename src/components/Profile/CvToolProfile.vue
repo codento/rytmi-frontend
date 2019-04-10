@@ -131,8 +131,7 @@ export default {
     }
   },
   created () {
-    const descriptions = this.profile.cvDescriptions.find(description => description.type === 'introduction')
-    this.profileDescription = descriptions ? descriptions.description : ''
+    this.profileDescription = this.profile.introduction ? this.profile.introduction : ''
     this.$emit('update-description', this.profileDescription)
   },
   methods: {

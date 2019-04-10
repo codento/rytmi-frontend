@@ -45,8 +45,7 @@ export default {
     }
   },
   created: function () {
-    const descriptions = this.profile.cvDescriptions.find(description => description.type === 'other')
-    this.otherInfoAsMarkdown = descriptions ? descriptions.description : ''
+    this.otherInfoAsMarkdown = this.profile.otherInfo ? this.profile.otherInfo : ''
     this.$emit('update-markdown', this.otherInfoAsMarkdown)
   },
   methods: {

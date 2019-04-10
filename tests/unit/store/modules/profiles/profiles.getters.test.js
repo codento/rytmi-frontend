@@ -1,7 +1,6 @@
 import { getters } from '@/store/modules/profiles/getters'
 import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import LANGUAGE_ENUM from '@/utils/constants'
 
 jest.mock('@/utils/api/api')
 
@@ -10,7 +9,7 @@ localVue.use(Vuex)
 
 const initialState = {
   siteSettings: {
-    currentLanguage: LANGUAGE_ENUM.DEFAULT_LANGUAGE
+    currentLanguage: 'fi'
   },
   profileId: 15,
   userProfile: '',
@@ -30,6 +29,10 @@ const initialState = {
         { description: 'desc2', language: 'en', type: 'introduction' },
         { description: 'kuvaus2', language: 'fi', type: 'introduction' }
       ]
+    },
+    17: {
+      id: 17,
+      cvDescriptions: []
     }
   },
   profileList: [],
@@ -45,15 +48,32 @@ describe('Profiles.getters', () => {
     expect(store.getters.profiles).toBe(initialState.profiles)
   })
 
-  it('should return the correct profile with given id, dscriptions filtered by language', () => {
-    const defaultDescriptions = initialState.profiles[15].cvDescriptions
-      .filter(cvDescription => cvDescription.language === LANGUAGE_ENUM.DEFAULT_LANGUAGE)
+  it('Should return the correct profile with given id, and show introduction and other info using correct language', () => {
     expect(store.getters.profileById(15)).toEqual(
       {
         id: 15,
         cvDescriptions: initialState.profiles[15].cvDescriptions,
-        introduction: defaultDescriptions.filter(item => item.type === 'introduction').description,
-        otherInfo: defaultDescriptions.filter(item => item.type === 'other').description
+        introduction: 'kuvaus1',
+        otherInfo: 'markdown kuvaus'
+      }
+    )
+  })
+
+  it('Should work with some descriptions missing', () => {
+    expect(store.getters.profileById(16)).toEqual(
+      {
+        id: 16,
+        cvDescriptions: initialState.profiles[16].cvDescriptions,
+        introduction: 'kuvaus2'
+      }
+    )
+  })
+
+  it('Should work with all descriptions missing', () => {
+    expect(store.getters.profileById(17)).toEqual(
+      {
+        id: 17,
+        cvDescriptions: initialState.profiles[17].cvDescriptions
       }
     )
   })

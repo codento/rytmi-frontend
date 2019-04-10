@@ -35,6 +35,7 @@ describe('CvTool.test.js', () => {
   it('Renders correctly', () => {
     const wrapper = createWrapper()
     expect(wrapper.props().profile).toEqual(mockProfile)
+    expect(wrapper.vm.getNames).toBe('Foo Bar')
     expect(wrapper.vm.profileDescription).toBe(mockProfile.cvDescriptions[0].description)
   })
 
