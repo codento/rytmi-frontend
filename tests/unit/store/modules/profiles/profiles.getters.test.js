@@ -51,7 +51,9 @@ describe('Profiles.getters', () => {
     expect(store.getters.profileById(15)).toEqual(
       {
         id: 15,
-        cvDescriptions: defaultDescriptions
+        cvDescriptions: initialState.profiles[15].cvDescriptions,
+        introduction: defaultDescriptions.filter(item => item.type === 'introduction').description,
+        otherInfo: defaultDescriptions.filter(item => item.type === 'other').description
       }
     )
   })

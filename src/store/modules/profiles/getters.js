@@ -12,8 +12,12 @@ export const getters = {
   profileById: (state, getters, rootState) => (id) => {
     let profile = _.cloneDeep(state.profiles[id])
     if (profile) {
-      profile.cvDescriptions = profile.cvDescriptions
-        .filter(description => description.language === rootState.siteSettings.currentLanguage)
+      const descriptions = profile.cvDescriptions
+        .filter(item => item.language === rootState.siteSettings.currentLanguage)
+      profile = Object.assign(profile,
+        { introduction: descriptions.filter(item => item.type === 'introduction').description })
+      profile = Object.assign(profile,
+        { otherInfo: descriptions.filter(item => item.type === 'other').description })
     }
     return profile
   },
