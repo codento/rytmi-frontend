@@ -88,7 +88,8 @@ export default {
   computed: {
     ...mapGetters([
       'skillCategories',
-      'skillById'
+      'skillById',
+      'skillFilter'
     ]),
     skillsByCategory: function () {
       const categories = []
@@ -111,6 +112,10 @@ export default {
       })
       return categorisedSkills
     }
+  },
+  created () {
+    this.selectedSkills = this.skillFilter ? this.skillFilter.map(skill => skill.id) : []
+    this.$emit('update-selected-skills', this.selectedSkills)
   },
   methods: {
     updateSelectedSkills: function () {

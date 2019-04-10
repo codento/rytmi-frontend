@@ -63,7 +63,7 @@
 
 <script>
 import Datepicker from '../components/helpers/Datepicker'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { Results } from '../components/Search'
 import { sortBy } from 'lodash'
 import vSelect from 'vue-select'
@@ -87,6 +87,7 @@ export default {
     ...mapGetters([
       'skills',
       'skillName',
+      'skillFilter',
       'profiles',
       'employeeRoles'
     ]),
@@ -103,10 +104,19 @@ export default {
       return roles.filter(selectableRole => !(this.selectedRole.map(role => role.id)).includes(selectableRole.id))
     }
   },
+  watch: {
+    selectedSkills: function () {
+      this.updateSkillFilter(this.selectedSkills)
+    }
+  },
+  created () {
+    this.selectedSkills = this.skillFilter ? this.skillFilter : []
+  },
   mounted () {
     document.title = 'Rytmi - Search'
   },
   methods: {
+    ...mapActions(['updateSkillFilter']),
     clearUtilizationDateFilter () {
       this.utilizationDateFilter = undefined
     }

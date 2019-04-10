@@ -53,3 +53,7 @@ export function deleteSkill ({ commit, state }, id) {
       })
   })
 }
+
+export function updateSkillFilter ({ commit, state }, data) {
+  commit(types.UPDATE_SKILL_FILTER, data)
+}
