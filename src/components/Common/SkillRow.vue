@@ -1,6 +1,7 @@
 <template>
   <b-row
     v-b-tooltip.hover.top="description"
+    :disabled.sync="disableTooltip"
     class="skillRow"
   >
     <b-col
@@ -78,6 +79,10 @@ export default {
     description: String,
     highlight: Boolean,
     showSkillsOnly: {
+      type: Boolean,
+      default: false
+    },
+    disableTooltip: {
       type: Boolean,
       default: false
     }

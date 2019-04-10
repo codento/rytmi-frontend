@@ -43,6 +43,7 @@
               <SkillRow
                 v-bind="skill"
                 show-skills-only
+                disable-tooltip
               />
             </b-col>
           </b-row>

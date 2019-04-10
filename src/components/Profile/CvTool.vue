@@ -24,6 +24,7 @@
         :relevant-skills="topSkills"
         :relevant-projects="topProjects"
         @update-description="profileDescriptionUpdated"
+        @update-skill-order="skillOrderUpdated"
       />
     </b-col>
     <b-col cols="12">
@@ -139,6 +140,9 @@ export default {
     },
     relevantSkillsUpdated: function (selectedSkills) {
       this.cvData.relevantSkillIds = selectedSkills
+    },
+    skillOrderUpdated: function (orderedSkillIds) {
+      this.relevantSkillIds = orderedSkillIds
     },
     relevantProjectsUpdated: function (selectedProjects) {
       this.cvData.relevantProjectIds = selectedProjects

@@ -72,22 +72,28 @@
           class="mt-2 mb-2"
           title="Top skills"
         >
-          <b-row>
-            <b-col>
-              <div
-                v-if="relevantSkills.length == 0"
-                style="color: grey"
-              >
-                No skills chosen, use checkboxes below to add skills!
-              </div>
+          <div
+            v-if="orderedSkills.length == 0"
+            style="color: grey"
+          >
+            No skills chosen, use checkboxes below to add skills!
+          </div>
+          <b-list-group
+            id="top-skills"
+            v-sortable="{onEnd: reorder}"
+          >
+            <b-list-group-item
+              v-for="skill of orderedSkills"
+              :key="skill.id"
+              class="borderless"
+            >
               <SkillRow
-                v-for="skill of relevantSkills"
-                :key="skill.id"
                 v-bind="skill"
                 show-skills-only
+                disable-tooltip
               />
-            </b-col>
-          </b-row>
+            </b-list-group-item>
+          </b-list-group>
         </b-card>
       </b-col>
     </b-row>
@@ -117,9 +123,12 @@ export default {
   computed: {
     getNames: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
+    },
+    orderedSkills: function () {
+      return this.relevantSkills
     }
   },
-  created: function () {
+  created () {
     const descriptions = this.profile.cvDescriptions.find(description => description.type === 'introduction')
     this.profileDescription = descriptions ? descriptions.description : ''
     this.$emit('update-description', this.profileDescription)
@@ -127,6 +136,11 @@ export default {
   methods: {
     formattedDate: (date) => {
       return format(date, 'D.M.YYYY')
+    },
+    reorder ({ oldIndex, newIndex }) {
+      const movedItem = this.orderedSkills.splice(oldIndex, 1)[0]
+      this.orderedSkills.splice(newIndex, 0, movedItem)
+      this.$emit('update-skill-order', this.orderedSkills.map(skill => skill.id))
     },
     updateDescription: function () {
       this.$emit('update-description', this.profileDescription)
@@ -144,5 +158,9 @@ export default {
   }
   .profile-name {
     font-size: 32px;
+  }
+  #top-skills .borderless {
+    border: 0px;
+    cursor: pointer;
   }
 </style>

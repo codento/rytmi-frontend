@@ -41,6 +41,7 @@
     "perfect-scrollbar": "^1.4.0",
     "pikaday": "^1.8.0",
     "simple-line-icons": "^2.4.1",
+    "sortablejs": "^1.8.4",
     "vue": "^2.6.6",
     "vue-chartjs": "^3.4.0",
     "vue-perfect-scrollbar": "^0.1.0",

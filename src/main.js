@@ -7,6 +7,7 @@ import 'core-js/es7/array'
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App'
+import Sortable from 'sortablejs'
 import router from './router'
 import './filters'
 
@@ -20,6 +21,12 @@ Vue.use(BootstrapVue)
 Vue.use(Toasted)
 
 Vue.component('loading', Loading)
+
+Vue.directive('sortable', {
+  inserted: function (el, binding) {
+    return new Sortable(el, binding.value || {})
+  }
+})
 
 const options = {
   theme: 'bubble',
