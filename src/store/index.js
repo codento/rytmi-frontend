@@ -12,6 +12,7 @@ import users from './modules/users'
 import siteSettings from './modules/siteSettings'
 import getters from './getters'
 import mutations from './mutations'
+import employers from './modules/employers'
 
 Vue.use(Vuex)
 const state = {
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     skillGroups,
     employeeRoles,
     users,
-    siteSettings
+    siteSettings,
+    employers
   }
 })
