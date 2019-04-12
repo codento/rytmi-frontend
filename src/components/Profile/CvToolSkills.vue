@@ -32,10 +32,11 @@
               align-self="center"
             >
               <input
-                id="skill.id"
+                :id="'skill-checkbox-' + skill.id"
                 v-model="selectedSkills"
                 type="checkbox"
                 :value="skill.skillId"
+                :disabled="isNotSelectable(skill.skillId)"
                 @change="updateSelectedSkills"
               >
             </b-col>
@@ -82,15 +83,12 @@ export default {
   },
   data () {
     return {
-      selectedSkills: []
+      selectedSkills: [],
+      maxSelected: 5
     }
   },
   computed: {
-    ...mapGetters([
-      'skillCategories',
-      'skillById',
-      'skillFilter'
-    ]),
+    ...mapGetters(['skillFilter']),
     skillsByCategory: function () {
       const categories = []
       for (const skill of this.skills) {
@@ -118,6 +116,9 @@ export default {
     this.$emit('update-selected-skills', this.selectedSkills)
   },
   methods: {
+    isNotSelectable: function (skillId) {
+      return this.selectedSkills.length >= this.maxSelected && !(this.selectedSkills.includes(skillId))
+    },
     updateSelectedSkills: function () {
       this.$emit('update-selected-skills', this.selectedSkills)
     }

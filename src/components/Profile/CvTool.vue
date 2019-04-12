@@ -104,7 +104,6 @@ export default {
       'projectById'
     ]),
     languageButtons: function () {
-      console.log(LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) })))
       return LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) }))
     },
     skillsAndLanguages: function () {
