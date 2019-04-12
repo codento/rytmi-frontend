@@ -25,6 +25,7 @@
         class="align-self-center"
       >
         <UtilizationChart :projects="futureProjectsOfProfile(profile.id)" />
+        <ProfileCardProjectInfo :profile="profile" />
       </b-col>
       <b-col
         cols="12"
@@ -57,11 +58,12 @@
 
 <script>
 import { SkillRow, UtilizationChart } from '../Profile'
+import ProfileCardProjectInfo from './ProfileCardProjectInfoRow'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'ProfileCard',
-  components: { SkillRow, UtilizationChart },
+  components: { SkillRow, UtilizationChart, ProfileCardProjectInfo },
   props: {
     profile: Object,
     skillHighlight: Array
@@ -92,7 +94,7 @@ img {
     button {
         height: 100%;
         background: #fff;
-        border: 0px;
+        border: 0;
         width: 100%;
     }
 }
