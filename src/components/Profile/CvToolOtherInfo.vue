@@ -32,20 +32,29 @@ import marked from 'marked'
 export default {
   name: 'CvToolOtherInfo',
   props: {
-    'profile': Object
+    profile: Object
   },
   data () {
-    return {}
+    return {
+      otherInfoAsMarkdown: ''
+    }
   },
   computed: {
     compiledMarkdown: function () {
       return marked(this.otherInfoAsMarkdown, { sanitize: true })
     },
-    otherInfoAsMarkdown: function () {
+    profileOtherInfo: function () {
       return this.profile.otherInfo ? this.profile.otherInfo : ''
     }
   },
-  created: function () {
+  watch: {
+    profileOtherInfo: function () {
+      this.otherInfoAsMarkdown = this.profileOtherInfo
+      this.$emit('update-markdown', this.otherInfoAsMarkdown)
+    }
+  },
+  mounted: function () {
+    this.otherInfoAsMarkdown = this.profileOtherInfo
     this.$emit('update-markdown', this.otherInfoAsMarkdown)
   },
   methods: {

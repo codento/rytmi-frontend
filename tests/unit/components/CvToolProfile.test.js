@@ -1,6 +1,8 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
+import Sortable from 'sortablejs'
+
 import _ from 'lodash'
 import { format } from 'date-fns'
 import {
@@ -13,6 +15,11 @@ import { mockProfile } from './setup/mockData'
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 localVue.use(Vuex)
+localVue.directive('sortable', {
+  inserted: function (el, binding) {
+    return new Sortable(el, binding.value || {})
+  }
+})
 localVue.filter('dateFilter', value => {
   return value ? format(value, 'D.M.YYYY') : undefined
 })
@@ -28,7 +35,7 @@ function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
     }
   }
   const mergedMountingOptions = _.extend(defaultMountingOptions, overrideMountingOptions)
-  return shallowMount(CvToolProfile, mergedMountingOptions)
+  return mount(CvToolProfile, mergedMountingOptions)
 }
 
 describe('CvTool.test.js', () => {

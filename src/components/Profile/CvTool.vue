@@ -25,11 +25,11 @@
         class="pull-right"
       >
         <b-button
+          :id="languageButton.id"
           class="language-button"
-          id="languageButton.id"
           variant="outline-light"
           :pressed.sync="languageButton.state"
-          @mouseup="toggleLanguage(languageButton.id)"
+          @click="toggleLanguage(languageButton.id)"
         >
           {{ languageButton.label }}
         </b-button>
@@ -61,7 +61,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { format } from 'date-fns'
 
 import LANGUAGE_ENUM from '@/utils/constants'
@@ -104,6 +104,7 @@ export default {
       'projectById'
     ]),
     languageButtons: function () {
+      console.log(LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) })))
       return LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) }))
     },
     skillsAndLanguages: function () {
@@ -140,7 +141,7 @@ export default {
     },
     allRequiredFieldsFilled: {
       get: function () {
-        return (this.cvData.relevantSkillIds.length > 0 && this.cvData.profileDescription.length > 0)
+        return (this.cvData.relevantSkillIds.length > 0 && this.cvData.profileDescription.length > 0 && this.cvData.relevantProjectIds.length > 0)
       },
       set: function () {}
     },
