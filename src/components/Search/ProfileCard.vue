@@ -34,7 +34,7 @@
         style="margin-top: 1em;"
       >
         <SkillRow
-          v-for="skill in skillsByProfileId(profile.id)"
+          v-for="skill in sortedSkills(profile.id)"
           :key="skill.id"
           v-bind="skill"
           :highlight="skillHighlight.includes(skill.skillId)"
@@ -79,6 +79,22 @@ export default {
   methods: {
     openProfile (profile) {
       this.$router.push({ name: 'profile', params: { id: profile.id } })
+    },
+    sortedSkills (profileId) {
+      const sortedByProficiency = this.skillsByProfileId(profileId).sort((a, b) => {
+        if (b.knows > a.knows) { return 1 }
+        if (b.knows < a.knows) { return -1 }
+        return 0
+      })
+      return sortedByProficiency.sort((a, b) => {
+        if (this.skillHighlight.includes(b.skillId) && !this.skillHighlight.includes(a.skillId)) {
+          return 1
+        }
+        if (this.skillHighlight.includes(a.skillId) && !this.skillHighlight.includes(b.skillId)) {
+          return -1
+        }
+        return 0
+      })
     }
   }
 }
