@@ -115,7 +115,9 @@ export default {
     relevantProjects: Array
   },
   data () {
-    return {}
+    return {
+      profileDescription: ''
+    }
   },
   computed: {
     getNames: function () {
@@ -127,12 +129,19 @@ export default {
     orderedSkills: function () {
       return this.relevantSkills
     },
-    profileDescription: function () {
+    profileIntroduction: function () {
       return this.profile.introduction ? this.profile.introduction : ''
     }
   },
-  created () {
-    this.$emit('update-description', this.profileDescription)
+  watch: {
+    profileIntroduction: function () {
+      this.profileDescription = this.profileIntroduction
+      this.updateDescription()
+    }
+  },
+  mounted: function () {
+    this.profileDescription = this.profileIntroduction
+    this.updateDescription()
   },
   methods: {
     reorder ({ oldIndex, newIndex }) {
