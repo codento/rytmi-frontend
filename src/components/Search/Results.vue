@@ -110,10 +110,14 @@ export default {
     }
   },
   watch: {
-    skillFilters: function () {
+    skillFilters: function (newSkillFilters, oldSkillFilters) {
       // Set sorting attribute to name when last skill has been removed from skill filters
       if (this.skillFilters.length === 0) {
         this.sortAttribute = sortAttributeEnum.name
+      }
+      // Set sorting to knows if a first of skill filters is set
+      if (oldSkillFilters.length === 0 && newSkillFilters.length > 0) {
+        this.sortAttribute = sortAttributeEnum.knows
       }
     }
   },
