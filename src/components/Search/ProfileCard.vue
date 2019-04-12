@@ -25,6 +25,7 @@
         class="align-self-center"
       >
         <UtilizationChart :projects="futureProjectsOfProfile(profile.id)" />
+        <ProfileCardProjectInfo :profile="profile" />
       </b-col>
       <b-col
         cols="12"
@@ -33,7 +34,7 @@
         style="margin-top: 1em;"
       >
         <SkillRow
-          v-for="skill in skillsByProfileId(profile.id)"
+          v-for="skill in sortedSkills(profile.id)"
           :key="skill.id"
           v-bind="skill"
           :highlight="skillHighlight.includes(skill.skillId)"
@@ -57,11 +58,12 @@
 
 <script>
 import { SkillRow, UtilizationChart } from '@/components/Common'
+import ProfileCardProjectInfo from './ProfileCardProjectInfoRow'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'ProfileCard',
-  components: { SkillRow, UtilizationChart },
+  components: { SkillRow, UtilizationChart, ProfileCardProjectInfo },
   props: {
     profile: Object,
     skillHighlight: Array
@@ -77,6 +79,22 @@ export default {
   methods: {
     openProfile (profile) {
       this.$router.push({ name: 'profile', params: { id: profile.id } })
+    },
+    sortedSkills (profileId) {
+      const sortedByProficiency = this.skillsByProfileId(profileId).sort((a, b) => {
+        if (b.knows > a.knows) { return 1 }
+        if (b.knows < a.knows) { return -1 }
+        return 0
+      })
+      return sortedByProficiency.sort((a, b) => {
+        if (this.skillHighlight.includes(b.skillId) && !this.skillHighlight.includes(a.skillId)) {
+          return 1
+        }
+        if (this.skillHighlight.includes(a.skillId) && !this.skillHighlight.includes(b.skillId)) {
+          return -1
+        }
+        return 0
+      })
     }
   }
 }
@@ -92,7 +110,7 @@ img {
     button {
         height: 100%;
         background: #fff;
-        border: 0px;
+        border: 0;
         width: 100%;
     }
 }
