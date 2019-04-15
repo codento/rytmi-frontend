@@ -6,7 +6,7 @@
     <hr>
     <template v-if="profile">
       <ProfileForm :profile="profile" />
-      <edit-employers :profile="profile" />
+      <Employers :profile-id="profile.id" />
       <EditLinks :profile="profile" />
       <edit-skills :profile-id="profile.id" />
       <edit-projects :profile-id="profile.id" />
@@ -21,7 +21,7 @@ import {
   EditSkills,
   EditProjects,
   ProfileForm,
-  EditEmployers
+  Employers
 } from '../components/EditProfile'
 import store from '../store'
 
@@ -32,7 +32,7 @@ export default {
     EditLinks,
     EditSkills,
     EditProjects,
-    EditEmployers
+    Employers
   },
   props: {
     profileId: {
