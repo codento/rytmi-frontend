@@ -5,10 +5,16 @@
       :key="project.id"
     >
       <b-row class="project-info-row">
-        <b-col lg="12" xl="8">
+        <b-col
+          lg="12"
+          xl="8"
+        >
           <b>{{ `${projectById(project.projectId).name}` }}</b>
         </b-col>
-        <b-col lg="12" xl="4">
+        <b-col
+          lg="12"
+          xl="4"
+        >
           <b>End date: </b>
           <b>{{ `${project.endDate ? formattedDate(project.endDate) : 'undefined'}` }}</b>
         </b-col>

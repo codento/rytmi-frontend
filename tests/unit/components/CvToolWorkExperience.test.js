@@ -18,9 +18,10 @@ function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
     store: createStore(_.extend(overrideStoreConfigs)),
     propsData: {
       profileProjects: [
-        { id: 1, projectId: 10 },
-        { id: 2, projectId: 20 },
-        { id: 3, projectId: 30 }
+        { id: 1, projectId: 10, endDate: '2019-12-04T21:51:49.963Z' },
+        { id: 2, projectId: 20, endDate: '2019-12-01T21:51:49.963Z' },
+        { id: 3, projectId: 30, endDate: '2019-12-02T22:50:41.000Z' },
+        { id: 4, projectId: 40, endDate: '2019-12-02T22:50:41.001Z' }
       ]
     }
   }
@@ -31,8 +32,8 @@ function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
 describe('CvToolWorkExperience.test.js', () => {
   it('Should show correct components', () => {
     const wrapper = createWrapper()
-    expect(wrapper.findAll(ProjectRow).length).toBe(3)
-    expect(wrapper.findAll('input').length).toBe(3)
+    expect(wrapper.findAll(ProjectRow).length).toBe(4)
+    expect(wrapper.findAll('input').length).toBe(4)
   })
 
   it('Should disable selection when maximum skills are selected', () => {
@@ -40,5 +41,10 @@ describe('CvToolWorkExperience.test.js', () => {
     wrapper.setData({ maxSelected: 2 })
     wrapper.setData({ selectedProjects: [1, 2] })
     expect(wrapper.vm.isNotSelectable(3)).toBeTruthy()
+  })
+
+  it('Should select by default latest 3 (maxSelexted=3) projects', () => {
+    const wrapper = createWrapper()
+    expect(wrapper.vm.selectedProjects).toEqual([10, 40, 30])
   })
 })
