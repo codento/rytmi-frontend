@@ -20,10 +20,11 @@
         align-self="center"
       >
         <input
-          :id="'project_checkbox_' + profileProject.id"
+          :id="'project-checkbox-' + profileProject.id"
           v-model="selectedProjects"
           type="checkbox"
           :value="profileProject.projectId"
+          :disabled="isNotSelectable(profileProject.projectId)"
           @change="updateSelectedProjects"
         >
       </b-col>
@@ -49,11 +50,15 @@ export default {
   },
   data () {
     return {
-      selectedProjects: []
+      selectedProjects: [],
+      maxSelected: 3
     }
   },
   computed: {},
   methods: {
+    isNotSelectable: function (projectId) {
+      return this.selectedProjects.length >= this.maxSelected && !(this.selectedProjects.includes(projectId))
+    },
     updateSelectedProjects: function () {
       this.$emit('update-selected-projects', this.selectedProjects)
     }
