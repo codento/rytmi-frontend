@@ -15,6 +15,7 @@ const PATH_PROFILEPROJECTS = '/profileprojects'
 const PATH_SKILLCATEGORIES = '/skillcategories'
 const PATH_SKILLGROUPS = '/skillgroups'
 const PATH_EMPLOYEEROLES = '/employeeroles'
+const PATH_PROJECTSKILLS = '/projectskills'
 
 export function login (token) {
   return axios.post(API_URL + PATH_AUTH, { id_token: token })
@@ -240,6 +241,32 @@ export function deleteEmployeeRole (id) {
     API_URL + PATH_EMPLOYEEROLES + '/' + id,
     getAuthHeaders())
     .catch(handleError)
+}
+
+export function insertProjectSkills (data) {
+  return axios.post(
+    API_URL + PATH_PROJECTSKILLS + '/',
+    data,
+    getAuthHeaders())
+}
+
+export function deleteProjectSkill (id) {
+  return axios.delete(
+    API_URL + PATH_PROJECTSKILLS + '/' + id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getActiveProjectSkills (id) {
+  return axios.get(
+    API_URL + PATH_PROJECTSKILLS,
+    {
+      params: {
+        projectId: id
+      },
+      headers: getAuthHeaders().headers
+    }
+  ).catch(handleError)
 }
 
 function handleError (error) {
