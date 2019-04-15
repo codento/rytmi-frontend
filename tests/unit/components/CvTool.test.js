@@ -1,7 +1,8 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
-import { merge } from 'lodash'
+import Sortable from 'sortablejs'
+import _ from 'lodash'
 import { format } from 'date-fns'
 import {
   CvTool,
@@ -11,111 +12,38 @@ import {
   CvToolOtherInfo
 } from '@/components/Profile'
 
+import { createStore } from './setup/createTestStore'
+import { mockProfile, mockGetters, mockActions } from './setup/mockData'
+
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 localVue.use(Vuex)
+localVue.directive('sortable', {
+  inserted: function (el, binding) {
+    return new Sortable(el, binding.value || {})
+  }
+})
 localVue.filter('dateFilter', value => {
   return value ? format(value, 'D.M.YYYY') : undefined
 })
 
-function createStore (overrideConfig) {
-  const defaultStoreConfig = {
-    getters: {
-      skillsByProfileId: () => (profileId) => {
-        return [
-          {
-            id: 1,
-            name: 'Python',
-            description: 'Python desc',
-            visibleInCv: true,
-            knows: 3
-          }
-        ]
-      },
-      skillById: () => (skillId) => {
-        return {
-          id: skillId,
-          name: 'Python',
-          description: 'Python desc'
-        }
-      },
-      skillCategoryById: () => (skillCategoryId) => {
-        return {
-          id: skillCategoryId,
-          name: 'Programming',
-          description: 'Programming desc'
-        }
-      },
-      skillGroupById: () => (skillGroupById) => {
-        return {
-          id: skillGroupById,
-          name: 'Software development',
-          description: 'Software development desc'
-        }
-      },
-      profileProjectsByProfileId: () => (profileId) => {
-        return [
-          {
-            id: 1,
-            profile: profileId,
-            projectId: 1,
-            startDate: '2018-01-01',
-            endDate: '2018-02-01'
-          }
-        ]
-      },
-      projectById: () => (projectId) => {
-        return {
-          id: projectId,
-          name: 'Project Foo',
-          description: 'Foo Bar',
-          descriptions: [
-            {
-              name: 'Project Foo (en)',
-              description: 'Foo Bar (en)',
-              language: 'en'
-            },
-            {
-              name: 'Project Foo (fi)',
-              description: 'Foo Bar (fi)',
-              language: 'fi'
-            }
-          ]
-        }
-      }
-    }
-  }
-  const mergedConfig = merge(defaultStoreConfig, overrideConfig)
-  return new Vuex.Store(mergedConfig)
-}
-
-function createWrapper (overrideMountingOptions) {
+function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
   const defaultMountingOptions = {
     localVue,
-    store: createStore()
+    store: createStore(_.extend(overrideStoreConfigs, mockGetters, mockActions)),
+    propsData: {
+      profile: mockProfile
+    }
   }
-  const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
-  return shallowMount(CvTool, mergedMountingOptions)
-}
-
-const mockProfile = {
-  id: 2,
-  firstName: 'Foo',
-  lastName: 'Bar',
-  role: 'Employee role',
-  title: 'Title',
-  phone: 1234,
-  description: 'Description about me Foo',
-  email: 'foo.bar@barfoo.com',
-  employeeRoles: [1]
+  const mergedMountingOptions = _.extend(defaultMountingOptions, overrideMountingOptions, {
+    sync: false
+  })
+  return mount(CvTool, mergedMountingOptions)
 }
 
 describe('CvTool.test.js', () => {
   it('Should show correct components', () => {
-    const propsData = {
-      profile: mockProfile
-    }
-    const wrapper = createWrapper({ propsData })
+    const wrapper = createWrapper()
     const profileWrapper = wrapper.find(CvToolProfile)
     const SkillsWrapper = wrapper.find(CvToolSkills)
     const ProjectsWrapper = wrapper.find(CvToolWorkExperience)
@@ -128,5 +56,11 @@ describe('CvTool.test.js', () => {
     expect(ProjectsWrapper.isVisible()).toBeTruthy()
     expect(OtherInfoWrapper.isVisible()).toBeTruthy()
     expect(OtherInfoWrapper.props().profile).toEqual(mockProfile)
+  })
+
+  it('Should disable button if inputs are not valid', () => {
+    const wrapper = createWrapper()
+    const button = wrapper.find('#create-cv-button')
+    expect(button.find('disabled')).toBeTruthy()
   })
 })

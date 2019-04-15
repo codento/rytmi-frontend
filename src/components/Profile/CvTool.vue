@@ -6,6 +6,7 @@
     >
       <div id="disabled-button-wrapper">
         <b-button
+          id="create-cv-button"
           :disabled="!allRequiredFieldsFilled"
           @click.prevent="createPDF"
         >
@@ -38,7 +39,7 @@
         :profile="profile"
         :relevant-skills="topSkills"
         :relevant-projects="topProjects"
-        @update-description="profileDescriptionUpdated"
+        @update-introduction="cvIntroductionUpdated"
         @update-skill-order="skillOrderUpdated"
       />
     </b-col>
@@ -84,8 +85,8 @@ export default {
   },
   data () {
     return {
+      isIntroductionValid: false,
       cvData: {
-        profileDescription: '',
         relevantSkillIds: [],
         relevantProjectIds: [],
         otherInfoAsMarkdown: ''
@@ -101,7 +102,8 @@ export default {
       'skillCategoryById',
       'skillGroupById',
       'profileProjectsByProfileId',
-      'projectById'
+      'projectById',
+      'cvIntroduction'
     ]),
     languageButtons: function () {
       return LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) }))
@@ -140,13 +142,13 @@ export default {
     },
     allRequiredFieldsFilled: {
       get: function () {
-        return (this.cvData.relevantSkillIds.length > 0 && this.cvData.profileDescription.length > 0 && this.cvData.relevantProjectIds.length > 0)
+        return (this.cvData.relevantSkillIds.length > 0 && this.isIntroductionValid && this.cvData.relevantProjectIds.length > 0)
       },
       set: function () {}
     },
     disabledButtonInfo: function () {
       const missingFields = []
-      if (!this.cvData.profileDescription) { missingFields.push('profile description') }
+      if (!this.isIntroductionValid) { missingFields.push('profile description') }
       if (!this.cvData.relevantProjectIds.length) { missingFields.push('relevant projects') }
       if (!this.cvData.relevantSkillIds.length) { missingFields.push('top skills') }
       return 'Required info missing: '.concat(missingFields.join(', '))
@@ -163,8 +165,8 @@ export default {
     getProjectDuration: function (project) {
       return format(project.startDate, 'MM/YYYY') + '-' + format(project.endDate, 'MM/YYYY')
     },
-    profileDescriptionUpdated: function (updatedDescription) {
-      this.cvData.profileDescription = updatedDescription
+    cvIntroductionUpdated: function (inputState) {
+      this.isIntroductionValid = inputState
     },
     relevantSkillsUpdated: function (selectedSkills) {
       this.cvData.relevantSkillIds = selectedSkills
@@ -224,7 +226,7 @@ export default {
         employeeName: this.profile.firstName + ' ' + this.profile.lastName,
         employeePicture: this.profile.photoPath,
         jobTitle: this.profile.title,
-        employeeDescription: this.cvData.profileDescription,
+        employeeDescription: this.cvIntroduction,
         topProjects: cvProjects.filter(project => this.cvData.relevantProjectIds.includes(project.projectId)),
         topSkills: this.topSkills.map(skill => mapSkill(skill)),
         languages: cvLanguages,

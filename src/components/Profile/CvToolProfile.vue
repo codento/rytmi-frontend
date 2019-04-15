@@ -5,7 +5,7 @@
         <img :src="profile.photoPath">
       </div>
       <div style="color:#869fac">
-        <span class="profile-name"> {{ getNames }}</span><br>
+        <span class="profile-name"> {{ fullName }}</span><br>
         <span class="profile-title">{{ profile.title }}</span>
       </div>
       <div>
@@ -19,14 +19,31 @@
       </div>
       <div class="profileCardDetails profile-card-detail-row">
         <b-textarea
-          v-model="profileDescription"
+          id="input-introduction"
+          v-model="modifiedIntroduction"
           class="form-control"
           type="text"
           rows="6"
           placeholder="Add profile description for CV"
-          :state="profileDescription.length > 0"
-          @update="updateDescription"
+          :state="introductionIsValid"
+          @update="updateIntroduction"
         />
+        <b-form-invalid-feedback
+          id="input-introduction-feedback"
+          class="text-left"
+        >
+          <div v-if="modifiedIntroduction.length === 0">
+            Introduction can not be empty
+          </div>
+          <div v-else>
+            Maximum number of characters reached ({{ modifiedIntroduction.length }}/{{ maxIntroductionLength }})
+          </div>
+        </b-form-invalid-feedback>
+        <div v-if="introductionIsValid">
+          <p class="text-right text-success">
+            {{ maxIntroductionLength - modifiedIntroduction.length }}/{{ maxIntroductionLength }}
+          </p>
+        </div>
       </div>
     </div>
     <b-row>
@@ -100,6 +117,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import { format } from 'date-fns'
 
 import SkillRow from '@/components/Common/SkillRow.vue'
@@ -116,11 +134,12 @@ export default {
   },
   data () {
     return {
-      profileDescription: ''
+      modifiedIntroduction: '',
+      maxIntroductionLength: 360
     }
   },
   computed: {
-    getNames: function () {
+    fullName: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
     },
     birthYear: function () {
@@ -131,26 +150,31 @@ export default {
     },
     profileIntroduction: function () {
       return this.profile.introduction ? this.profile.introduction : ''
+    },
+    introductionIsValid: function () {
+      return this.modifiedIntroduction.length > 0 && this.modifiedIntroduction.length <= 360
     }
   },
   watch: {
     profileIntroduction: function () {
-      this.profileDescription = this.profileIntroduction
-      this.updateDescription()
+      this.modifiedIntroduction = this.profileIntroduction
+      this.updateIntroduction()
     }
   },
   mounted: function () {
-    this.profileDescription = this.profileIntroduction
-    this.updateDescription()
+    this.modifiedIntroduction = this.profileIntroduction
+    this.updateIntroduction()
   },
   methods: {
+    ...mapActions(['updateCvIntroduction']),
     reorder ({ oldIndex, newIndex }) {
       const movedItem = this.orderedSkills.splice(oldIndex, 1)[0]
       this.orderedSkills.splice(newIndex, 0, movedItem)
       this.$emit('update-skill-order', this.orderedSkills.map(skill => skill.skillId))
     },
-    updateDescription: function () {
-      this.$emit('update-description', this.profileDescription)
+    updateIntroduction: function () {
+      this.updateCvIntroduction(this.modifiedIntroduction)
+      this.$emit('update-introduction', this.introductionIsValid)
     }
   }
 }
