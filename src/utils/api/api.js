@@ -16,6 +16,7 @@ const PATH_SKILLCATEGORIES = '/skillcategories'
 const PATH_SKILLGROUPS = '/skillgroups'
 const PATH_EMPLOYEEROLES = '/employeeroles'
 const PATH_EMPLOYERS = '/employers'
+const PATH_PROJECTSKILLS = '/projectskills'
 
 export function login (token) {
   return axios.post(API_URL + PATH_AUTH, { id_token: token })
@@ -242,7 +243,6 @@ export function deleteEmployeeRole (id) {
     getAuthHeaders())
     .catch(handleError)
 }
-
 export function newEmployer (data) {
   return axios.post(
     API_URL + PATH_EMPLOYERS,
@@ -272,6 +272,31 @@ export function getEmployers () {
     .catch(handleError)
 }
 
+export function insertProjectSkills (data) {
+  return axios.post(
+    API_URL + PATH_PROJECTSKILLS + '/',
+    data,
+    getAuthHeaders())
+}
+
+export function deleteProjectSkill (id) {
+  return axios.delete(
+    API_URL + PATH_PROJECTSKILLS + '/' + id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getActiveProjectSkills (id) {
+  return axios.get(
+    API_URL + PATH_PROJECTSKILLS,
+    {
+      params: {
+        projectId: id
+      },
+      headers: getAuthHeaders().headers
+    }
+  ).catch(handleError)
+}
 function handleError (error) {
   if (error.response.status === 401) {
     store.commit(types.AUTH_LOGOUT)

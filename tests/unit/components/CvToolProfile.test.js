@@ -25,9 +25,14 @@ localVue.filter('dateFilter', value => {
 })
 
 function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
+  const defaultStoreConfigs = {
+    actions: {
+      updateCvIntroduction: jest.fn(() => [])
+    }
+  }
   const defaultMountingOptions = {
     localVue,
-    store: createStore(overrideStoreConfigs),
+    store: createStore(_.extend(defaultStoreConfigs, overrideStoreConfigs)),
     propsData: {
       profile: mockProfile,
       relevantSkills: [],
@@ -42,8 +47,8 @@ describe('CvTool.test.js', () => {
   it('Renders correctly', () => {
     const wrapper = createWrapper()
     expect(wrapper.props().profile).toEqual(mockProfile)
-    expect(wrapper.vm.getNames).toBe('Foo Bar')
-    expect(wrapper.vm.profileDescription).toBe(mockProfile.cvDescriptions[0].description)
+    expect(wrapper.vm.fullName).toBe('Foo Bar')
+    expect(wrapper.vm.modifiedIntroduction).toBe(mockProfile.cvDescriptions[0].description)
   })
 
   it('Birthday is converted to correct year', () => {
