@@ -44,8 +44,8 @@
         <div>
           <span class="employer-name">{{ employer ? employer.name : '' }}</span> <span>{{ getFormatedDate(employer.startDate) + ' - ' + getFormatedDate(employer.endDate) }}</span>
           <i
-            class="fa fa-trash icon"
             v-b-modal="'delete-modal'"
+            class="fa fa-trash icon"
           />
         </div>
         <div class="details">
@@ -66,11 +66,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { ProjectProfileForm } from '../Project'
 import { format, getDate, getMonth, getYear } from 'date-fns'
 import { sortBy, cloneDeep } from 'lodash'
 import EditEmployer from './EditEmployer'
-import { copyFile } from 'fs';
 
 export default {
   name: 'Employers',
@@ -95,9 +93,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'removeEmployer'
-    ]),
+    ...mapActions(['removeEmployer']),
     getFormatedDate (date) {
       return format(date, 'YYYY/MM')
     },
@@ -115,21 +111,23 @@ export default {
     },
     getEmptyEmployer () {
       return {
-        descriptions: [{
-          description: '',
-          title: '',
-          language: 'fi'
-        },
-        {
-          description: '',
-          title: '',
-          language: 'en'
-        }],
+        descriptions: [
+          {
+            description: '',
+            title: '',
+            language: 'fi'
+          },
+          {
+            description: '',
+            title: '',
+            language: 'en'
+          }
+        ],
         endDate: null,
         id: null,
         name: '',
         profileId: this.profileId,
-        startDate: null,
+        startDate: null
       }
     },
     deleteEmployer () {

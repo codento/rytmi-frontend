@@ -7,26 +7,26 @@
       <b-col>
         <small for="employer-name">Employer name</small>
         <b-input
+          id="employer-name"
           v-model="employer.name"
           type="text"
           placeholder="Employer name"
-          id="employer-name"
         />
       </b-col>
       <b-col>
         <small for="employer-start-date">Start date</small>
         <Datepicker
+          id="employer-start-date"
           v-model="employer.startDate"
           name="employer-start-date"
-          id="employer-start-date"
         />
       </b-col>
       <b-col>
         <small for="employer-end-date">End date</small>
         <Datepicker
+          id="employer-end-date"
           v-model="employer.endDate"
           name="employer-end-date"
-          id="employer-end-date"
         />
       </b-col>
     </b-row>
@@ -34,19 +34,19 @@
       <b-col>
         <small for="title-fi">Title (Finnish)</small>
         <b-input
+          id="title-fi"
           v-model="descriptionFi.title"
           type="text"
           placeholder="Title (fi)"
-          id="title-fi"
         />
       </b-col>
       <b-col>
         <small for="title-en">Title (English)</small>
         <b-input
+          id="title-en"
           v-model="descriptionEn.title"
           type="text"
           placeholder="Title (en)"
-          id="title-en"
         />
       </b-col>
     </b-row>
@@ -54,19 +54,19 @@
       <b-col>
         <small for="description-fi">Description (Finnish)</small>
         <b-textarea
+          id="description-fi"
           v-model="descriptionFi.description"
           type="text"
           placeholder="Description (fi)"
-          id="description-fi"
         />
       </b-col>
       <b-col>
         <small for="description-en">Description (English)</small>
         <b-textarea
+          id="description-en"
           v-model="descriptionEn.description"
           type="text"
           placeholder="Description (en)"
-          id="description-en"
         />
       </b-col>
     </b-row>
@@ -86,8 +86,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { format } from 'date-fns'
-import { sortBy, isEmpty, isDate } from 'lodash'
+import { isEmpty, isDate } from 'lodash'
 import Datepicker from '../helpers/Datepicker'
 
 export default {
@@ -99,13 +98,11 @@ export default {
   data () {
     return {
       showError: false,
-      errorDetails: [],
+      errorDetails: []
     }
   },
   computed: {
-    ...mapGetters([
-
-    ]),
+    ...mapGetters([]),
     descriptionFi () {
       return this.getEmployerDescriptionByLanguage(this.employer, 'fi')
     },
