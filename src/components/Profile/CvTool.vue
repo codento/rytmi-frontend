@@ -132,7 +132,8 @@ export default {
           Object.assign(profileProject, {
             duration: this.getProjectDuration(profileProject),
             name: project.name,
-            description: project.description
+            description: project.description,
+            customerName: project.customerName
           })
           return profileProject
         })

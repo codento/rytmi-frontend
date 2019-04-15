@@ -67,14 +67,21 @@
             class="justify-content-md-center mb-2 mt-2"
           >
             <b-col
+              id="project-customer-label"
+              class="mb-1 mt-2"
+              cols="12"
+            >
+              <b>{{ project.customerName }}</b>
+            </b-col>
+            <b-col
               sm="12"
-              md="6"
+              md="7"
             >
               {{ project.name }}
             </b-col>
             <b-col
               sm="12"
-              md="6"
+              md="5"
             >
               <strong>{{ project.duration }}</strong>
             </b-col>
