@@ -5,7 +5,7 @@ import _ from 'lodash'
 
 import { CvToolSkills } from '@/components/Profile'
 import { SkillRow } from '@/components/Common'
-
+import { state, getters, mutations, actions } from '@/store/modules/cvTool/index'
 import { createStore } from './setup/createTestStore'
 
 const localVue = createLocalVue()
@@ -13,6 +13,12 @@ localVue.use(BootstrapVue)
 localVue.use(Vuex)
 
 function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
+  const cvToolStore = {
+    state: state,
+    getters: getters,
+    actions: actions,
+    mutations: mutations
+  }
   const defaultStoreConfigs = {
     getters: {
       skillFilter: () => { return [] }
@@ -20,7 +26,7 @@ function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
   }
   const defaultMountingOptions = {
     localVue,
-    store: createStore(_.extend(defaultStoreConfigs, overrideStoreConfigs)),
+    store: createStore(_.merge(cvToolStore, defaultStoreConfigs, overrideStoreConfigs)),
     propsData: {
       skills: [
         { id: 1, skillId: 10, skillCategory: 'A' },
@@ -34,7 +40,7 @@ function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
       ]
     }
   }
-  const mergedMountingOptions = _.extend(defaultMountingOptions, overrideMountingOptions)
+  const mergedMountingOptions = _.merge(defaultMountingOptions, overrideMountingOptions)
   return shallowMount(CvToolSkills, mergedMountingOptions)
 }
 

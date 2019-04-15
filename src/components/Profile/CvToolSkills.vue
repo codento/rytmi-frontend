@@ -68,7 +68,7 @@
   </b-card>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import SkillRow from '@/components/Common/SkillRow.vue'
 
@@ -88,7 +88,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['skillFilter']),
+    ...mapGetters([
+      'skillFilter',
+      'topSkills'
+    ]),
     skillsByCategory: function () {
       const categories = []
       for (const skill of this.skills) {
@@ -113,14 +116,20 @@ export default {
   },
   created () {
     this.selectedSkills = this.skillFilter ? this.skillFilter.map(skill => skill.id) : []
-    this.$emit('update-selected-skills', this.selectedSkills)
+    this.updateSelectedSkills()
   },
   methods: {
+    ...mapActions(['updateTopSkills']),
     isNotSelectable: function (skillId) {
       return this.selectedSkills.length >= this.maxSelected && !(this.selectedSkills.includes(skillId))
     },
     updateSelectedSkills: function () {
-      this.$emit('update-selected-skills', this.selectedSkills)
+      const updatedSkills = this.selectedSkills
+        .map(skillId => this.skills.find(skill => skill.skillId === skillId))
+      updatedSkills.sort((a, b) => {
+        return this.topSkills.indexOf(a) > 0 ? this.topSkills.indexOf(a) - this.topSkills.indexOf(b) : 0
+      })
+      this.updateTopSkills(updatedSkills)
     }
   }
 }

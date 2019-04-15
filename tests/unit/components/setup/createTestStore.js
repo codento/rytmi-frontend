@@ -13,7 +13,6 @@ export function createStore (overrideConfig) {
       state
     }
   }
-
-  const mergedConfig = _.extend({}, defaultStoreConfig, overrideConfig)
+  const mergedConfig = _.merge(defaultStoreConfig, overrideConfig)
   return new Vuex.Store(mergedConfig)
 }

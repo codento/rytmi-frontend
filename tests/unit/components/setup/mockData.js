@@ -90,9 +90,3 @@ export const mockGetters = {
     }
   }
 }
-
-export const mockActions = {
-  actions: {
-    updateCvIntroduction: jest.fn(() => [])
-  }
-}

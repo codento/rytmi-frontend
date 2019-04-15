@@ -5,7 +5,7 @@ import _ from 'lodash'
 
 import { CvToolWorkExperience } from '@/components/Profile'
 import { ProjectRow } from '@/components/Common'
-
+import { state, getters, actions, mutations } from '@/store/modules/cvTool/index'
 import { createStore } from './setup/createTestStore'
 
 const localVue = createLocalVue()
@@ -13,9 +13,15 @@ localVue.use(BootstrapVue)
 localVue.use(Vuex)
 
 function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
+  const cvToolStore = {
+    state: state,
+    getters: getters,
+    actions: actions,
+    mutations: mutations
+  }
   const defaultMountingOptions = {
     localVue,
-    store: createStore(_.extend(overrideStoreConfigs)),
+    store: createStore(_.merge(overrideStoreConfigs, cvToolStore)),
     propsData: {
       profileProjects: [
         { id: 1, projectId: 10, endDate: '2019-12-04T21:51:49.963Z' },
@@ -25,7 +31,7 @@ function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
       ]
     }
   }
-  const mergedMountingOptions = _.extend(defaultMountingOptions, overrideMountingOptions)
+  const mergedMountingOptions = _.merge(defaultMountingOptions, overrideMountingOptions)
   return shallowMount(CvToolWorkExperience, mergedMountingOptions)
 }
 

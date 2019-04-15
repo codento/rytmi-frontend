@@ -37,21 +37,16 @@
       </b-button-group>
       <CvToolProfile
         :profile="profile"
-        :relevant-skills="topSkills"
-        :relevant-projects="topProjects"
         @update-introduction="cvIntroductionUpdated"
-        @update-skill-order="skillOrderUpdated"
       />
     </b-col>
     <b-col cols="12">
       <CvToolSkills
         :skills="skills"
         :languages="languages"
-        @update-selected-skills="relevantSkillsUpdated"
       />
       <CvToolWorkExperience
         :profile-projects="projects"
-        @update-selected-projects="relevantProjectsUpdated"
       />
       <CvToolOtherInfo
         :profile="profile"
@@ -87,8 +82,6 @@ export default {
     return {
       isIntroductionValid: false,
       cvData: {
-        relevantSkillIds: [],
-        relevantProjectIds: [],
         otherInfoAsMarkdown: ''
       },
       showButtonInfo: true
@@ -103,7 +96,9 @@ export default {
       'skillGroupById',
       'profileProjectsByProfileId',
       'projectById',
-      'cvIntroduction'
+      'cvIntroduction',
+      'topSkills',
+      'topProjects'
     ]),
     languageButtons: function () {
       return LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) }))
@@ -119,12 +114,6 @@ export default {
     languages: function () {
       return this.skillsAndLanguages.filter(skill => skill.skillGroup === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME)
     },
-    topSkills: function () {
-      const unorderedSkills = this.skills
-        .filter(skill => this.cvData.relevantSkillIds.includes(skill.skillId))
-      return unorderedSkills.length > 0 ? this.cvData.relevantSkillIds
-        .map(id => unorderedSkills.find(item => item.skillId === id)) : []
-    },
     projects: function () {
       return this.profileProjectsByProfileId(this.profile.id)
         .map(profileProject => {
@@ -138,21 +127,18 @@ export default {
           return profileProject
         })
     },
-    topProjects: function () {
-      return this.projects.filter(project => this.cvData.relevantProjectIds.includes(project.projectId))
-    },
     allRequiredFieldsFilled: {
       get: function () {
-        return (this.cvData.relevantSkillIds.length > 0 && this.isIntroductionValid && this.cvData.relevantProjectIds.length > 0)
+        return (this.topSkills.length > 0 && this.isIntroductionValid && this.topProjects.length > 0)
       },
       set: function () {}
     },
     disabledButtonInfo: function () {
-      const missingFields = []
-      if (!this.isIntroductionValid) { missingFields.push('profile description') }
-      if (!this.cvData.relevantProjectIds.length) { missingFields.push('relevant projects') }
-      if (!this.cvData.relevantSkillIds.length) { missingFields.push('top skills') }
-      return 'Required info missing: '.concat(missingFields.join(', '))
+      const missingInfo = []
+      if (!this.isIntroductionValid) { missingInfo.push('profile description') }
+      if (!this.topProjects.length) { missingInfo.push('relevant projects') }
+      if (!this.topSkills.length) { missingInfo.push('top skills') }
+      return 'Required info missing: '.concat(missingInfo.join(', '))
     }
   },
   methods: {
@@ -168,15 +154,6 @@ export default {
     },
     cvIntroductionUpdated: function (inputState) {
       this.isIntroductionValid = inputState
-    },
-    relevantSkillsUpdated: function (selectedSkills) {
-      this.cvData.relevantSkillIds = selectedSkills
-    },
-    skillOrderUpdated: function (orderedSkillIds) {
-      this.cvData.relevantSkillIds = orderedSkillIds
-    },
-    relevantProjectsUpdated: function (selectedProjects) {
-      this.cvData.relevantProjectIds = selectedProjects
     },
     markdownUpdated: function (updatedMarkdown) {
       this.cvData.otherInfoAsMarkdown = updatedMarkdown
@@ -201,6 +178,16 @@ export default {
           skillGroup: skillObj.skillGroup
         }
       }
+      function mapProject (projectObj) {
+        return {
+          projectId: projectObj.projectId,
+          projectTitle: projectObj.title,
+          projectName: projectObj.name,
+          projectDescription: projectObj.description,
+          projectCustomer: projectObj.customer,
+          projectDuration: projectObj.duration
+        }
+      }
       const cvLanguages = this.languages
         .map(skill => {
           return {
@@ -213,22 +200,14 @@ export default {
         .map(skill => mapSkill(skill))
 
       const cvProjects = this.projects
-        .map(project => {
-          return {
-            projectId: project.projectId,
-            projectTitle: project.name,
-            projectDescription: project.description,
-            projectCustomer: project.customer,
-            projectDuration: project.duration
-          }
-        })
+        .map(project => mapProject(project))
 
       const data = {
         employeeName: this.profile.firstName + ' ' + this.profile.lastName,
         employeePicture: this.profile.photoPath,
         jobTitle: this.profile.title,
         employeeDescription: this.cvIntroduction,
-        topProjects: cvProjects.filter(project => this.cvData.relevantProjectIds.includes(project.projectId)),
+        topProjects: this.topProjects.map(project => mapProject(project)),
         topSkills: this.topSkills.map(skill => mapSkill(skill)),
         languages: cvLanguages,
         projects: cvProjects,

@@ -38,6 +38,7 @@
   </b-card>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import ProjectRow from '@/components/Common/ProjectRow.vue'
 
 export default {
@@ -54,7 +55,9 @@ export default {
       maxSelected: 3
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['topProjects'])
+  },
   created: function () {
     const sortedProjects = this.profileProjects
       .sort((a, b) => {
@@ -63,14 +66,17 @@ export default {
         return date1 > date2 ? -1 : date1 < date2 ? 1 : 0
       })
     this.selectedProjects = sortedProjects.map(item => item.projectId).slice(0, this.maxSelected)
-    this.$emit('update-selected-projects', this.selectedProjects)
+    this.updateSelectedProjects()
   },
   methods: {
+    ...mapActions(['updateTopProjects']),
     isNotSelectable: function (projectId) {
       return this.selectedProjects.length >= this.maxSelected && !(this.selectedProjects.includes(projectId))
     },
     updateSelectedProjects: function () {
-      this.$emit('update-selected-projects', this.selectedProjects)
+      this.updateTopProjects(this.selectedProjects
+        .map(projectId => this.profileProjects
+          .find(profileProject => profileProject.projectId === projectId)))
     }
   }
 }

@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
 import Sortable from 'sortablejs'
@@ -11,9 +11,10 @@ import {
   CvToolWorkExperience,
   CvToolOtherInfo
 } from '@/components/Profile'
+import { state, getters, actions, mutations } from '@/store/modules/cvTool/index'
 
 import { createStore } from './setup/createTestStore'
-import { mockProfile, mockGetters, mockActions } from './setup/mockData'
+import { mockProfile, mockGetters } from './setup/mockData'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -28,17 +29,22 @@ localVue.filter('dateFilter', value => {
 })
 
 function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
+  const cvToolStore = {
+    state: state,
+    getters: getters,
+    actions: actions,
+    mutations: mutations
+  }
   const defaultMountingOptions = {
     localVue,
-    store: createStore(_.extend(overrideStoreConfigs, mockGetters, mockActions)),
+    store: createStore(_.merge(mockGetters, cvToolStore, overrideStoreConfigs)),
     propsData: {
       profile: mockProfile
     }
   }
-  const mergedMountingOptions = _.extend(defaultMountingOptions, overrideMountingOptions, {
-    sync: false
-  })
-  return mount(CvTool, mergedMountingOptions)
+
+  const mergedMountingOptions = _.merge(defaultMountingOptions, overrideMountingOptions)
+  return shallowMount(CvTool, mergedMountingOptions)
 }
 
 describe('CvTool.test.js', () => {
@@ -50,8 +56,6 @@ describe('CvTool.test.js', () => {
     const OtherInfoWrapper = wrapper.find(CvToolOtherInfo)
     expect(profileWrapper.isVisible()).toBeTruthy()
     expect(profileWrapper.props().profile).toEqual(mockProfile)
-    expect(profileWrapper.props().relevantSkills).toEqual([])
-    expect(profileWrapper.props().relevantProjects).toEqual([])
     expect(SkillsWrapper.isVisible()).toBeTruthy()
     expect(ProjectsWrapper.isVisible()).toBeTruthy()
     expect(OtherInfoWrapper.isVisible()).toBeTruthy()

@@ -8,7 +8,7 @@ import { format } from 'date-fns'
 import {
   CvToolProfile
 } from '@/components/Profile'
-
+import { state, getters, actions, mutations } from '@/store/modules/cvTool/index'
 import { createStore } from './setup/createTestStore'
 import { mockProfile } from './setup/mockData'
 
@@ -25,21 +25,20 @@ localVue.filter('dateFilter', value => {
 })
 
 function createWrapper (overrideMountingOptions, overrideStoreConfigs) {
-  const defaultStoreConfigs = {
-    actions: {
-      updateCvIntroduction: jest.fn(() => [])
-    }
+  const cvToolStore = {
+    state: state,
+    getters: getters,
+    actions: actions,
+    mutations: mutations
   }
   const defaultMountingOptions = {
     localVue,
-    store: createStore(_.extend(defaultStoreConfigs, overrideStoreConfigs)),
+    store: createStore(_.merge(cvToolStore, overrideStoreConfigs)),
     propsData: {
-      profile: mockProfile,
-      relevantSkills: [],
-      relevantProjects: []
+      profile: mockProfile
     }
   }
-  const mergedMountingOptions = _.extend(defaultMountingOptions, overrideMountingOptions)
+  const mergedMountingOptions = _.merge(defaultMountingOptions, overrideMountingOptions)
   return mount(CvToolProfile, mergedMountingOptions)
 }
 

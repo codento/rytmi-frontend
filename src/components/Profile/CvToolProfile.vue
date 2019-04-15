@@ -56,13 +56,13 @@
           title="Relevant projects"
         >
           <div
-            v-if="relevantProjects.length == 0"
+            v-if="topProjects.length == 0"
             style="color: grey"
           >
             No relevant projects chosen, use checkboxes below to add projects!
           </div>
           <b-row
-            v-for="project of relevantProjects"
+            v-for="project of topProjects"
             :key="project.id"
             class="justify-content-md-center mb-2 mt-2"
           >
@@ -124,7 +124,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { format } from 'date-fns'
 
 import SkillRow from '@/components/Common/SkillRow.vue'
@@ -135,9 +135,7 @@ export default {
     SkillRow
   },
   props: {
-    profile: Object,
-    relevantSkills: Array,
-    relevantProjects: Array
+    profile: Object
   },
   data () {
     return {
@@ -146,6 +144,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'topSkills',
+      'topProjects'
+    ]),
     fullName: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
     },
@@ -153,7 +155,7 @@ export default {
       return format(this.profile.birthday, 'YYYY')
     },
     orderedSkills: function () {
-      return this.relevantSkills
+      return this.topSkills
     },
     profileIntroduction: function () {
       return this.profile.introduction ? this.profile.introduction : ''
@@ -173,11 +175,14 @@ export default {
     this.updateIntroduction()
   },
   methods: {
-    ...mapActions(['updateCvIntroduction']),
+    ...mapActions([
+      'updateCvIntroduction',
+      'updateTopSkills'
+    ]),
     reorder ({ oldIndex, newIndex }) {
       const movedItem = this.orderedSkills.splice(oldIndex, 1)[0]
       this.orderedSkills.splice(newIndex, 0, movedItem)
-      this.$emit('update-skill-order', this.orderedSkills.map(skill => skill.skillId))
+      this.updateTopSkills(this.orderedSkills)
     },
     updateIntroduction: function () {
       this.updateCvIntroduction(this.modifiedIntroduction)
