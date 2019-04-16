@@ -2,14 +2,14 @@
 
 exports[`Profile.vue shallowMount Template is correct 1`] = `
 <b-container-stub
-  class="animated fadeIn profile"
+  class="animated fadeIn profile mt-2"
   tag="div"
 >
   <b-row-stub
     tag="div"
   >
     <b-tabs-stub
-      contentclass="mt-3"
+      contentclass="mt-3 border-0"
       tag="div"
     >
       <b-tab-stub

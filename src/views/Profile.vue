@@ -1,7 +1,7 @@
 <template>
-  <b-container class="animated fadeIn profile">
+  <b-container class="animated fadeIn profile mt-2">
     <b-row>
-      <b-tabs content-class="mt-3">
+      <b-tabs content-class="mt-3 border-0">
         <b-tab
           no-body
           title="Profile"
