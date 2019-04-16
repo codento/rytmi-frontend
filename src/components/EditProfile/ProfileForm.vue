@@ -93,7 +93,6 @@
       id="description"
       label-cols-sm="3"
       label="Description:"
-      label-for="descriptionInput"
     >
       <b-row>
         <b-col sm="6">
@@ -115,36 +114,20 @@
           />
         </b-col>
       </b-row>
-      <b-row>
-        <b-col sm="6">
-          <small>Other info for CV (in Finnish)</small>
-          <b-textarea
-            v-model="getDescription('fi','other').description"
-            :placeholder="'Use markdown syntax!\n## Koulutus\n## Harrastukset'"
-            rows="5"
-            @input="updateMarkdown('fi','other')"
-          />
-        </b-col>
-        <b-col sm="6">
-          <small>Preview</small>
-          <div v-html="otherInfoAsMarkdownFi" />
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col sm="6">
-          <small>Other info for CV (in English)</small>
-          <b-textarea
-            v-model="getDescription('en','other').description"
-            :placeholder="'Use markdown syntax!\n## Koulutus\n## Harrastukset'"
-            rows="5"
-            @input="updateMarkdown('en','other')"
-          />
-        </b-col>
-        <b-col sm="6">
-          <small>Preview</small>
-          <div v-html="otherInfoAsMarkdownEn" />
-        </b-col>
-      </b-row>
+      <EditOtherInfo
+        :input-text="getDescription('fi','other').description"
+        input-label="Other info for CV (in Finnish)"
+        language-key="fi"
+        :rows="5"
+        @input-updated="updateOtherInfo"
+      />
+      <EditOtherInfo
+        :input-text="getDescription('en','other').description"
+        input-label="Other info for CV (in English)"
+        language-key="en"
+        :rows="5"
+        @input-updated="updateOtherInfo"
+      />
     </b-form-group>
     <b-button
       type="submit"
@@ -163,14 +146,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import _ from 'lodash'
-import marked from 'marked'
 import vSelect from 'vue-select'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
+import { EditOtherInfo } from '@/components/Common'
 
 export default {
   name: 'ProfileForm',
-  components: { ApiErrorDetailsPanel, vSelect },
+  components: { ApiErrorDetailsPanel, vSelect, EditOtherInfo },
   props: {
     profile: Object
   },
@@ -194,12 +176,6 @@ export default {
         }
       })
       return roles.filter(role => !this.selectedEmployeeRoles.some(selectedRole => selectedRole.id === role.id))
-    },
-    otherInfoAsMarkdownFi () {
-      return this.compiledMarkdown(this.getDescription('fi', 'other').description)
-    },
-    otherInfoAsMarkdownEn () {
-      return this.compiledMarkdown(this.getDescription('en', 'other').description)
     }
   },
   watch: {
@@ -229,13 +205,8 @@ export default {
       return this.profile.cvDescriptions
         .find(description => description.language === language && description.type === type)
     },
-    compiledMarkdown: function (text) {
-      return marked(text, { sanitize: true })
-    },
-    updateMarkdown: function (language, type) {
-      _.debounce(function (e) {
-        this.getDescription(language, type).description = e.target.value
-      }, 300)
+    updateOtherInfo: function (updatedInfo, language) {
+      this.getDescription(language, 'other').description = updatedInfo
     },
     async onSubmit (evt) {
       evt.preventDefault()

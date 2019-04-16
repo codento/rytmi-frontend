@@ -9,62 +9,44 @@
     >
       Other information
     </h5>
-    <b-row>
-      <b-col>
-        <b-textarea
-          v-model="otherInfoAsMarkdown"
-          rows="15"
-          placeholder="## Education"
-          @input="updateMarkdown"
-        />
-      </b-col>
-      <b-col>
-        <div v-html="compiledMarkdown" />
-      </b-col>
-    </b-row>
+    <EditOtherInfo
+      :input-text="otherInfo"
+      :language-key="currentLanguage"
+      @input-updated="saveInput"
+    />
   </b-card>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import _ from 'lodash'
-import marked from 'marked'
+import { EditOtherInfo } from '@/components/Common'
 
 export default {
   name: 'CvToolOtherInfo',
+  components: {
+    EditOtherInfo
+  },
   props: {
     profile: Object
   },
   data () {
-    return {
-      otherInfoAsMarkdown: ''
-    }
+    return {}
   },
   computed: {
-    ...mapGetters(['cvOtherInfo']),
-    compiledMarkdown: function () {
-      return marked(this.otherInfoAsMarkdown, { sanitize: true })
-    },
-    profileOtherInfo: function () {
-      return this.profile.otherInfo ? this.profile.otherInfo : ''
+    ...mapGetters([
+      'cvOtherInfo',
+      'currentLanguage'
+    ]),
+    otherInfo: function () {
+      if (this.cvOtherInfo.length === 0) {
+        return this.profile.otherInfo ? this.profile.otherInfo : ''
+      }
+      return this.cvOtherInfo
     }
-  },
-  watch: {
-    profileOtherInfo: function () {
-      this.otherInfoAsMarkdown = this.profileOtherInfo
-      this.$emit('update-markdown', this.otherInfoAsMarkdown)
-    }
-  },
-  mounted: function () {
-    this.otherInfoAsMarkdown = this.profileOtherInfo
-    this.$emit('update-markdown', this.otherInfoAsMarkdown)
   },
   methods: {
     ...mapActions(['updateCvOtherInfo']),
-    updateMarkdown: function () {
-      _.debounce(function (e) {
-        this.otherInfoAsMarkdown = e.target.value
-      }, 300)
-      this.updateCvOtherInfo(this.otherInfoAsMarkdown)
+    saveInput: function (editedInput, language) {
+      this.updateCvOtherInfo(editedInput)
     }
   }
 }

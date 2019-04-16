@@ -33,7 +33,7 @@
           class="text-left"
         >
           <div v-if="modifiedIntroduction.length === 0">
-            Introduction can not be empty
+            Introduction cannot be empty
           </div>
           <div v-else>
             Maximum number of characters reached ({{ modifiedIntroduction.length }}/{{ maxIntroductionLength }})

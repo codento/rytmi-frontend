@@ -70,8 +70,6 @@ describe('ProfileForm.vue', () => {
     const textAreaWrappers = wrapper.findAll('textarea')
     expect(textAreaWrappers.at(0).vm.value).toBe(mockProfile.cvDescriptions[0].description)
     expect(textAreaWrappers.at(1).vm.value).toBe(mockProfile.cvDescriptions[1].description)
-    expect(textAreaWrappers.at(2).vm.value).toBe(mockProfile.cvDescriptions[2].description)
-    expect(textAreaWrappers.at(3).vm.value).toBe(mockProfile.cvDescriptions[3].description)
   })
 
   it('should submit entered details when submit is clicked', async () => {
