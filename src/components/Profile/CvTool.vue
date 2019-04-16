@@ -50,7 +50,6 @@
       />
       <CvToolOtherInfo
         :profile="profile"
-        @update-markdown="markdownUpdated"
       />
     </b-col>
   </b-row>
@@ -81,9 +80,6 @@ export default {
   data () {
     return {
       isIntroductionValid: false,
-      cvData: {
-        otherInfoAsMarkdown: ''
-      },
       showButtonInfo: true
     }
   },
@@ -97,6 +93,7 @@ export default {
       'profileProjectsByProfileId',
       'projectById',
       'cvIntroduction',
+      'cvOtherInfo',
       'topSkills',
       'topProjects'
     ]),
@@ -155,9 +152,6 @@ export default {
     cvIntroductionUpdated: function (inputState) {
       this.isIntroductionValid = inputState
     },
-    markdownUpdated: function (updatedMarkdown) {
-      this.cvData.otherInfoAsMarkdown = updatedMarkdown
-    },
     joinSkillCategory: function (profileSkill) {
       const profileSkillCopy = _.clone(profileSkill)
       const skill = this.skillById(profileSkill.skillId)
@@ -212,7 +206,7 @@ export default {
         languages: cvLanguages,
         projects: cvProjects,
         skills: cvSkills,
-        otherInfo: this.cvData.otherInfoAsMarkdown
+        otherInfo: this.cvOtherInfo
       }
       console.log(data)
       this.addCV(data)

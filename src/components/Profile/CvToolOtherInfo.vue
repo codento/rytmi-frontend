@@ -25,7 +25,7 @@
   </b-card>
 </template>
 <script>
-
+import { mapGetters, mapActions } from 'vuex'
 import _ from 'lodash'
 import marked from 'marked'
 
@@ -40,6 +40,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['cvOtherInfo']),
     compiledMarkdown: function () {
       return marked(this.otherInfoAsMarkdown, { sanitize: true })
     },
@@ -58,11 +59,12 @@ export default {
     this.$emit('update-markdown', this.otherInfoAsMarkdown)
   },
   methods: {
+    ...mapActions(['updateCvOtherInfo']),
     updateMarkdown: function () {
       _.debounce(function (e) {
         this.otherInfoAsMarkdown = e.target.value
       }, 300)
-      this.$emit('update-markdown', this.otherInfoAsMarkdown)
+      this.updateCvOtherInfo(this.otherInfoAsMarkdown)
     }
   }
 }
