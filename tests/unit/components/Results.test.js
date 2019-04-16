@@ -46,7 +46,7 @@ function createStore (overrideConfig) {
     getters: {
       skills: () => skillsMock,
       profileFilter: () => (name) => !isEmpty(name) ? filter(profilesMock, profile => profile.firstName === name) : Object.values(profilesMock),
-      skillsByProfileId: () => (profileId) => filter(profileSkills, ps => ps.profileId === profileId),
+      profileSkillsByProfileId: () => (profileId) => filter(profileSkills, ps => ps.profileId === profileId),
       profiles: () => profilesMock,
       futureProjectsOfProfile: () => (profileId) => filter(profileProjectsMock, project => project.profileId === profileId)
     }

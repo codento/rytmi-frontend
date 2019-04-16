@@ -22,7 +22,7 @@ export const mockProfile = {
 export const mockGetters = {
   getters: {
     currentLanguage: () => { return 'fi' },
-    skillsByProfileId: () => (profileId) => {
+    profileSkillsByProfileId: () => (profileId) => {
       return [
         {
           id: 1,

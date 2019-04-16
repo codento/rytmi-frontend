@@ -86,7 +86,7 @@ export default {
   computed: {
     ...mapGetters([
       'currentLanguage',
-      'skillsByProfileId',
+      'profileSkillsByProfileId',
       'skillById',
       'skillCategoryById',
       'skillGroupById',
@@ -101,7 +101,7 @@ export default {
       return LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) }))
     },
     skillsAndLanguages: function () {
-      const profileSkills = this.skillsByProfileId(this.profile.id)
+      const profileSkills = this.profileSkillsByProfileId(this.profile.id)
       return profileSkills ? profileSkills.filter(skill => skill.visibleInCV && skill.knows > 0).map(skill => this.joinSkillCategory(skill)) : []
     },
     skills: function () {
