@@ -69,6 +69,25 @@
         </b-form-select>
       </b-form-group>
 
+      <b-row>
+        <b-col>
+          <span>Title (Finnish)</span>
+          <b-input
+            v-model="profileProject.workPercentage"
+            type="text"
+            required
+          />
+        </b-col>
+        <b-col>
+          <span>Title (English)</span>
+          <b-input
+            v-model="profileProject.workPercentage"
+            type="text"
+            required
+          />
+        </b-col>
+      </b-row>
+
       <span>Start date</span>
       <Datepicker
         v-model="profileProject.startDate"
@@ -152,6 +171,7 @@ export default {
     ])
   },
   created () {
+    console.log(this.profileProject)
     this.projectVisible = this.projectId === null
     this.profileVisible = this.profileId === null
   },

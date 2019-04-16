@@ -61,7 +61,7 @@
       <b-col class="col-12 projects-form">
         <b-card
           class="newProject"
-          title="Add a new Project"
+          title="Join a project"
         >
           <ProjectProfileForm :profile-id="profileId" />
         </b-card>
