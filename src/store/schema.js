@@ -13,3 +13,5 @@ export const profile = new schema.Entity('profiles')
 export const user = new schema.Entity('users')
 
 export const project = new schema.Entity('projects')
+
+export const employer = new schema.Entity('employers')

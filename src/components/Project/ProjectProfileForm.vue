@@ -64,7 +64,7 @@
             :key="project.id"
             :value="project.id"
           >
-            {{ project.code }} - {{ project.name }}
+            {{ project.code }} - {{ getProjectName(project) }}
           </option>
         </b-form-select>
       </b-form-group>
@@ -147,7 +147,8 @@ export default {
   computed: {
     ...mapGetters([
       'profiles',
-      'projects'
+      'projects',
+      'currentLanguage'
     ])
   },
   created () {
@@ -156,6 +157,10 @@ export default {
   },
   methods: {
     ...mapActions(['newProjectProfile']),
+    getProjectName (project) {
+      const description = project.descriptions.find(description => description.language === this.currentLanguage)
+      return description ? description.name : ''
+    },
     onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []

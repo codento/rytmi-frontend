@@ -2,83 +2,72 @@
   <div>
     <b-form
       id="project-skill-form"
-      @submit="onSubmit"
     >
       <ul>
         <li
-          v-for="skill of projectSkills"
+          v-for="skill of activeProjectSkills"
           :key="skill.skillId"
-          :class="skillsToDelete.includes(skill.skillId) ? 'marked-for-deletion' : ''"
         >
           {{ skillById(skill.skillId).name }}
           <i
-            :class="skillsToDelete.includes(skill.skillId) ? 'fa-undo' : 'fa-trash'"
-            class="fa"
-            @click="markForDeletionOrCancel(skill.skillId)"
-          />
-        </li>
-        <li
-          v-for="skill of newSkills"
-          :key="skill"
-          class="new-skill"
-        >
-          {{ skillById(skill).name }}
-          <i
             class="fa fa-trash"
-            @click="deleteNewSkill(skill)"
+            @click="markForDeletionOrCancel(skill)"
           />
         </li>
       </ul>
-      <v-select
-        id="addProjectSkillDropdown"
-        v-model="skillToAdd"
-        :options="skillList"
-      />
-      <b-button
-        primary
-        type="submit"
-      >
-        Submit
+      <b-button v-b-modal.skill-modal>
+        Add skills to project
       </b-button>
+      <b-modal
+        id="skill-modal"
+        title="Add skills to project"
+        centered
+        ok-only
+      >
+        <b-list-group>
+          Click on a skill to add it to the project
+          <b-list-group-item
+            v-for="skill of skillList"
+            :key="skill.id"
+            button
+            @click="triggerAddProjectSkill(skill)"
+          >
+            {{ skill.label }}
+          </b-list-group-item>
+        </b-list-group>
+      </b-modal>
     </b-form>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import vSelect from 'vue-select'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ProjectSkillForm',
-  components: { vSelect },
   props: {
     projectId: {
       type: Number,
-      default: null
-    },
-    projectSkills: {
-      type: Array,
       default: null
     }
   },
   data () {
     return {
-      skillToAdd: null,
       newSkills: [],
-      skillsToDelete: []
+      projectSkillList: []
     }
   },
   computed: {
     ...mapGetters([
       'skills',
-      'skillById'
+      'skillById',
+      'activeProjectSkills'
     ]),
     skillList () {
       if (this.skills) {
         return Object.values(this.skills)
           .filter(skill =>
-            !this.newSkills.includes(skill.id) &&
-            !this.projectSkills.map(projectSkill => projectSkill.skillId).includes(skill.id))
+            !this.activeProjectSkills.map(projectSkill => projectSkill.skillId).includes(skill.id))
           .map(skill => ({
             label: skill.name,
             id: skill.id
@@ -87,24 +76,39 @@ export default {
       return []
     }
   },
-  watch: {
-    skillToAdd: function () {
-      this.newSkills.push(this.skillToAdd.id)
-    }
+  mounted: function () {
+    this.fetchActiveProjectSkills(this.projectId)
+  },
+  beforeDestroy: function () {
+    this.$store.commit('projectskills/SET_ACTIVE_PROJECTSKILLS', [])
   },
   methods: {
-    markForDeletionOrCancel (skillId) {
-      if (this.skillsToDelete.includes(skillId)) {
-        this.skillsToDelete = this.skillsToDelete.filter(skill => skill !== skillId)
-      } else {
-        this.skillsToDelete.push(skillId)
+    ...mapActions([
+      'addProjectSkill',
+      'removeProjectSkill',
+      'fetchActiveProjectSkills'
+    ]),
+    async markForDeletionOrCancel (skill) {
+      try {
+        await this.removeProjectSkill(skill.id)
+        await this.fetchActiveProjectSkills(this.projectId)
+        this.$toasted.global.rytmi_success({ message: 'Project skill removed succesfully!' })
+      } catch (error) {
+        this.$toasted.global.rytmi_error({ message: error.message })
       }
     },
-    deleteNewSkill (skillId) {
-      this.newSkills = this.newSkills.filter(skill => skill !== skillId)
-    },
-    onSubmit (evt) {
-
+    async triggerAddProjectSkill (skill) {
+      const projectSkill = {
+        skillId: skill.id,
+        projectId: this.projectId
+      }
+      try {
+        await this.addProjectSkill(projectSkill)
+        await this.fetchActiveProjectSkills(this.projectId)
+        this.$toasted.global.rytmi_success({ message: 'New project skill added succesfully!' })
+      } catch (error) {
+        this.$toasted.global.rytmi_error({ message: error.message })
+      }
     }
   }
 }
@@ -114,14 +118,7 @@ button {
   width: 100%;
   margin-top: 1em;
 }
-.new-skill {
-  color: #007700;
-}
 .fa {
   color: gray;
-}
-.marked-for-deletion {
-  text-decoration: line-through;
-  color: #990000;
 }
 </style>

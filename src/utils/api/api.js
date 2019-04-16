@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { denormalize } from 'normalizr'
-import { profile, skill, project } from '@/store/schema'
+import { profile, skill, project, employer } from '@/store/schema'
 import store from '@/store'
 import * as types from '@/store/mutation-types'
 
@@ -15,6 +15,8 @@ const PATH_PROFILEPROJECTS = '/profileprojects'
 const PATH_SKILLCATEGORIES = '/skillcategories'
 const PATH_SKILLGROUPS = '/skillgroups'
 const PATH_EMPLOYEEROLES = '/employeeroles'
+const PATH_EMPLOYERS = '/employers'
+const PATH_PROJECTSKILLS = '/projectskills'
 
 export function login (token) {
   return axios.post(API_URL + PATH_AUTH, { id_token: token })
@@ -241,7 +243,60 @@ export function deleteEmployeeRole (id) {
     getAuthHeaders())
     .catch(handleError)
 }
+export function newEmployer (data) {
+  return axios.post(
+    API_URL + PATH_EMPLOYERS,
+    denormalize(data, [employer]),
+    getAuthHeaders())
+}
 
+export function alterEmployer (data) {
+  return axios.put(
+    API_URL + PATH_EMPLOYERS + '/' + data.id,
+    denormalize(data, [employer]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function deleteEmployer (data) {
+  return axios.delete(
+    API_URL + PATH_EMPLOYERS + '/' + data.id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getEmployers () {
+  return axios.get(
+    API_URL + PATH_EMPLOYERS,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function insertProjectSkills (data) {
+  return axios.post(
+    API_URL + PATH_PROJECTSKILLS + '/',
+    data,
+    getAuthHeaders())
+}
+
+export function deleteProjectSkill (id) {
+  return axios.delete(
+    API_URL + PATH_PROJECTSKILLS + '/' + id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getActiveProjectSkills (id) {
+  return axios.get(
+    API_URL + PATH_PROJECTSKILLS,
+    {
+      params: {
+        projectId: id
+      },
+      headers: getAuthHeaders().headers
+    }
+  ).catch(handleError)
+}
 function handleError (error) {
   if (error.response.status === 401) {
     store.commit(types.AUTH_LOGOUT)

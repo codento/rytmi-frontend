@@ -1,9 +1,9 @@
-import _ from 'lodash'
+import { cloneDeep } from 'lodash'
 
 export default {
   projects: (state) => state.projects,
   projectById: (state, getters, rootState) => (id) => {
-    let project = _.cloneDeep(state.projects[id])
+    let project = cloneDeep(state.projects[id])
     if (project) {
       const descriptions = project.descriptions
         .find(description => description.language === rootState.siteSettings.currentLanguage)

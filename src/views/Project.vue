@@ -70,7 +70,6 @@
         <div v-if="isSkillFormOpen">
           <ProjectSkillForm
             :project-id="project.id"
-            :project-skills="project.projectSkills"
           />
         </div>
       </div>
