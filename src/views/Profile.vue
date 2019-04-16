@@ -6,7 +6,9 @@
           no-body
           title="Profile"
         >
+          <loading v-if="!profile" />
           <UserProfile
+            v-else
             :profile="profile"
           />
         </b-tab>
@@ -14,19 +16,12 @@
           no-body
           title="CV tool"
         >
+          <loading v-if="!profile" />
           <CvTool
+            v-else
             :profile="profile"
           />
         </b-tab>
-        <!--<h3>-->
-        <!--{{ showCvTool ? "Show cv tool" : "Show profile" }}-->
-        <!--<span @click="showCvTool = !showCvTool">-->
-        <!--<i-->
-        <!--:class="showCvTool ? 'fa-chevron-down' : 'fa-chevron-up'"-->
-        <!--class="fa"-->
-        <!--/>-->
-        <!--</span>-->
-        <!--</h3>-->
       </b-tabs>
     </b-row>
   </b-container>

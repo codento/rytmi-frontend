@@ -101,9 +101,8 @@ export default {
       return LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) }))
     },
     skillsAndLanguages: function () {
-      return this.skillsByProfileId(this.profile.id)
-        .filter(skill => skill.visibleInCV && skill.knows > 0)
-        .map(skill => this.joinSkillCategory(skill))
+      const profileSkills = this.skillsByProfileId(this.profile.id)
+      return profileSkills ? profileSkills.filter(skill => skill.visibleInCV && skill.knows > 0).map(skill => this.joinSkillCategory(skill)) : []
     },
     skills: function () {
       return this.skillsAndLanguages.filter(skill => skill.skillGroup !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME)
@@ -115,13 +114,15 @@ export default {
       return this.profileProjectsByProfileId(this.profile.id)
         .map(profileProject => {
           const project = this.projectById(profileProject.projectId)
-          Object.assign(profileProject, {
-            duration: this.getProjectDuration(profileProject),
-            name: project.name,
-            description: project.description,
-            customerName: project.customerName
-          })
-          return profileProject
+          if (project) {
+            Object.assign(profileProject, {
+              duration: this.getProjectDuration(profileProject),
+              name: project.name,
+              description: project.description,
+              customerName: project.customerName
+            })
+            return profileProject
+          }
         })
     },
     allRequiredFieldsFilled: {
@@ -155,10 +156,13 @@ export default {
     joinSkillCategory: function (profileSkill) {
       const profileSkillCopy = _.clone(profileSkill)
       const skill = this.skillById(profileSkill.skillId)
-      const skillCategory = this.skillCategoryById(skill.skillCategoryId)
-      profileSkillCopy['skillName'] = skill.name
-      profileSkillCopy['skillCategory'] = skillCategory.title
-      profileSkillCopy['skillGroup'] = this.skillGroupById(skillCategory.skillGroupId).title
+      const skillCategory = skill ? this.skillCategoryById(skill.skillCategoryId) : undefined
+      const skillGroup = skillCategory ? this.skillGroupById(skillCategory.skillGroupId) : undefined
+      if (skill && skillCategory && skillGroup) {
+        profileSkillCopy['skillName'] = skill.name
+        profileSkillCopy['skillCategory'] = skillCategory.title
+        profileSkillCopy['skillGroup'] = skillGroup.title
+      }
       return profileSkillCopy
     },
     createPDF: function (event) {
