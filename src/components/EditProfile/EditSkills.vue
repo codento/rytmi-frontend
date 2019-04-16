@@ -5,7 +5,7 @@
     <b-row>
       <b-col class="col-12 col-md-7">
         <b-table
-          :items="skillsByProfileId(profileId)"
+          :items="profileSkillsByProfileId(profileId)"
           :fields="fields"
           fixed
           caption-top
@@ -146,7 +146,7 @@ export default {
     ...mapGetters([
       'skills',
       'skillById',
-      'skillsByProfileId'
+      'profileSkillsByProfileId'
     ])
   },
   methods: {

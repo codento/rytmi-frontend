@@ -22,7 +22,7 @@ export const getters = {
   },
   profileByUserId: (state) => (userId) => state.profiles[userId],
   skillProfiles: (state) => state.profileSkills,
-  skillsByProfileId: (state, getters) => (profileId) => {
+  profileSkillsByProfileId: (state, getters) => (profileId) => {
     return state.profileSkills
       .filter(skill => skill.profileId === profileId)
       .sort((a, b) => {

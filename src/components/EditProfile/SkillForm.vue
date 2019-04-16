@@ -127,10 +127,10 @@ export default {
   computed: {
     ...mapGetters([
       'skills',
-      'skillsByProfileId'
+      'profileSkillsByProfileId'
     ]),
     availableSkills () {
-      const existingSkills = this.skillsByProfileId(this.profileId)
+      const existingSkills = this.profileSkillsByProfileId(this.profileId)
         .map(profileSkill => profileSkill.skillId)
       return filter(this.skills, (value, key) =>
         existingSkills.indexOf(value.id) === -1
