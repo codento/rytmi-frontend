@@ -52,9 +52,9 @@
       </b-col>
     </b-row>
     <b-button
+      v-show="selectedEmployer.id"
       id="add-new-employer-button"
       @click="addNewEmployer"
-      v-show="selectedEmployer.id"
     >
       Add new employer
     </b-button>
