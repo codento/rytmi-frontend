@@ -81,6 +81,24 @@
       hide-header
     >
       <h3>{{ printMember(editedProjectProfile.profileId) }}</h3>
+      <b-row>
+        <b-col>
+          <small>Title (Finnish)</small>
+          <b-input
+            v-model="descriptionFi.title"
+            type="text"
+            required
+          />
+        </b-col>
+        <b-col>
+          <small>Title (English)</small>
+          <b-input
+            v-model="descriptionEn.title"
+            type="text"
+            required
+          />
+        </b-col>
+      </b-row>
       <small>Start date</small>
       <Datepicker
         v-model="editedProjectProfile.startDate"
@@ -138,7 +156,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['profileById'])
+    ...mapGetters(['profileById']),
+    descriptionFi () {
+      return this.getProfileProjectDescriptionByLanguage('fi')
+    },
+    descriptionEn () {
+      return this.getProfileProjectDescriptionByLanguage('en')
+    }
   },
   methods: {
     ...mapActions([
@@ -194,6 +218,15 @@ export default {
             message: err
           })
         })
+    },
+    getProfileProjectDescriptionByLanguage (language) {
+      if (!this.editedProjectProfile.descriptions || !this.editedProjectProfile.descriptions.find(description => description.language === language)) {
+        return {
+          language,
+          title: ''
+        }
+      }
+      return this.editedProjectProfile.descriptions.find(description => description.language === language)
     }
   }
 }

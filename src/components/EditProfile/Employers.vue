@@ -27,13 +27,6 @@
     </b-modal>
     <h1>Previous employers</h1>
     <hr>
-
-    <b-button
-      id="add-new-employer-button"
-      @click="addNewEmployer"
-    >
-      Add new employer
-    </b-button>
     <b-row
       v-for="employer in employers"
       :key="employer.id"
@@ -52,13 +45,19 @@
           <div class="title">
             {{ getEmployerDescriptionInCurrentLanguage(employer) ? getEmployerDescriptionInCurrentLanguage(employer).title : '' }}
           </div>
-          <!-- Description has "white-space: pre-line" so keep the text on the same line as the div -->
           <div class="description">
             {{ getEmployerDescriptionInCurrentLanguage(employer) ? getEmployerDescriptionInCurrentLanguage(employer).description : '' }}
           </div>
         </div>
       </b-col>
     </b-row>
+    <b-button
+      v-show="selectedEmployer.id"
+      id="add-new-employer-button"
+      @click="addNewEmployer"
+    >
+      Add new employer
+    </b-button>
     <EditEmployer
       :employer="selectedEmployer"
     />
@@ -153,6 +152,10 @@ export default {
 .description {
   font-style: italic;
   white-space: pre-line;
+
+}
+.description:first-line {
+  line-height: 0px;
 }
 .details {
   padding-left: 15px;

@@ -109,7 +109,7 @@ describe('ProjectMemberTable.vue', () => {
     expect(modalWrapper.element.style.display).toBe('none')
     wrapper.vm.openEditModal({ item: propsData.members[0] })
     const modalInputs = modalWrapper.findAll('input')
-    expect(modalInputs.at(2).vm.value).toBe(propsData.members[0].workPercentage)
+    expect(modalInputs.at(4).vm.value).toBe(propsData.members[0].workPercentage)
     expect(modalSpy).toHaveBeenCalled()
   })
 

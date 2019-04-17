@@ -69,6 +69,25 @@
         </b-form-select>
       </b-form-group>
 
+      <b-row>
+        <b-col>
+          <span>Title (Finnish)</span>
+          <b-input
+            v-model="descriptionFi.title"
+            type="text"
+            required
+          />
+        </b-col>
+        <b-col>
+          <span>Title (English)</span>
+          <b-input
+            v-model="descriptionEn.title"
+            type="text"
+            required
+          />
+        </b-col>
+      </b-row>
+
       <span>Start date</span>
       <Datepicker
         v-model="profileProject.startDate"
@@ -138,7 +157,8 @@ export default {
       errorDetails: [],
       profileProject: {
         projectId: this.projectId,
-        profileId: this.profileId
+        profileId: this.profileId,
+        descriptions: this.descriptions ? this.descriptions : this.getEmptyDescriptions()
       },
       projectVisible: true,
       profileVisible: false
@@ -149,7 +169,13 @@ export default {
       'profiles',
       'projects',
       'currentLanguage'
-    ])
+    ]),
+    descriptionFi () {
+      return this.getProfileProjectDescriptionByLanguage('fi')
+    },
+    descriptionEn () {
+      return this.getProfileProjectDescriptionByLanguage('en')
+    }
   },
   created () {
     this.projectVisible = this.projectId === null
@@ -193,7 +219,26 @@ export default {
       this.redirect()
     },
     redirect () {
-      this.$router.push('/profile/' + this.profile.id)
+      if (this.profileId) {
+        this.$router.push('/profile/' + this.profileId)
+      } else if (this.projectId) {
+        this.$router.push('/projects/' + this.projectId)
+      }
+    },
+    getEmptyDescriptions () {
+      return [
+        {
+          language: 'fi',
+          title: ''
+        },
+        {
+          language: 'en',
+          title: ''
+        }
+      ]
+    },
+    getProfileProjectDescriptionByLanguage (language) {
+      return this.profileProject.descriptions.find(description => description.language === language)
     }
   }
 }

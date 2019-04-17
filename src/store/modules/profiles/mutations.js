@@ -33,10 +33,10 @@ export const mutations = {
     })
   },
   [types.SET_PROFILEID] (state, profileId) {
-    state.profileId = profileId
+    state.profileId = parseInt(profileId)
   },
   [types.CLEAR_PROFILEID] (state) {
-    state.profileId = ''
+    state.profileId = undefined
   },
   [types.ADD_PPTOPROFILE] (state, profileProject) {
     if (!(profileProject.profileId in state.profileProjectList)) {
