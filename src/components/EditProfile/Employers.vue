@@ -27,13 +27,6 @@
     </b-modal>
     <h1>Previous employers</h1>
     <hr>
-
-    <b-button
-      id="add-new-employer-button"
-      @click="addNewEmployer"
-    >
-      Add new employer
-    </b-button>
     <b-row
       v-for="employer in employers"
       :key="employer.id"
@@ -58,6 +51,13 @@
         </div>
       </b-col>
     </b-row>
+    <b-button
+      id="add-new-employer-button"
+      @click="addNewEmployer"
+      v-show="selectedEmployer.id"
+    >
+      Add new employer
+    </b-button>
     <EditEmployer
       :employer="selectedEmployer"
     />
