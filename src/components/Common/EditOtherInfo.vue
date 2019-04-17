@@ -1,26 +1,42 @@
 <template>
   <b-row class="mt-2">
     <b-col>
-      <label
-        v-if="inputLabel.length > 0"
-        for="input-other-info"
-      >
-        {{ inputLabel }}
-      </label>
-      <b-textarea
-        id="input-other-info"
-        v-model="otherInfoAsMarkdown"
-        :rows="rows"
-        :placeholder="placeholderText"
-        :state="isValidMarkdown"
-        @input="updateMarkdown"
-      />
-      <b-form-invalid-feedback
-        id="input-other-info-feedback"
-        class="text-left"
-      >
-        {{ errorMessage }}
-      </b-form-invalid-feedback>
+      <b-tabs content-class="mt-1 border-0">
+        <b-tab
+          active
+          title="Edit"
+        >
+          <label
+            v-if="inputLabel.length > 0"
+            for="input-other-info"
+          >
+            {{ inputLabel }}
+          </label>
+          <b-textarea
+            id="input-other-info"
+            v-model="otherInfoAsMarkdown"
+            :rows="rows"
+            :placeholder="placeholderText"
+            :state="isValidMarkdown"
+            @input="updateMarkdown"
+          />
+          <b-form-invalid-feedback
+            id="input-other-info-feedback"
+            class="text-left"
+          >
+            {{ errorMessage }}
+          </b-form-invalid-feedback>
+        </b-tab>
+        <b-tab
+          title="Template"
+        >
+          <b-textarea
+            :rows="rows"
+            :value="placeholderText"
+            plaintext
+          />
+        </b-tab>
+      </b-tabs>
     </b-col>
     <b-col>
       <div v-html="compiledMarkdown" />
