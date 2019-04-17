@@ -90,6 +90,8 @@ export default {
       'skillById',
       'skillCategoryById',
       'skillGroupById',
+      'skillCategoryBySkillId',
+      'skillGroupBySkillId',
       'profileProjectsByProfileId',
       'projectById',
       'cvIntroduction',
@@ -156,8 +158,8 @@ export default {
     joinSkillCategory: function (profileSkill) {
       const profileSkillCopy = _.clone(profileSkill)
       const skill = this.skillById(profileSkill.skillId)
-      const skillCategory = skill ? this.skillCategoryById(skill.skillCategoryId) : undefined
-      const skillGroup = skillCategory ? this.skillGroupById(skillCategory.skillGroupId) : undefined
+      const skillCategory = this.this.skillCategoryBySkillId(skill.id)
+      const skillGroup = this.skillGroupBySkillId(skill.id)
       if (skill && skillCategory && skillGroup) {
         profileSkillCopy['skillName'] = skill.name
         profileSkillCopy['skillCategory'] = skillCategory.title

@@ -79,6 +79,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
+import LANGUAGE_ENUM from '@/utils/constants'
 import SkillChart from './SkillChart'
 import TopSkillChart from './TopSkillChart'
 import MostWillingnessChart from './MostWillingnessChart'
@@ -109,12 +110,17 @@ export default {
       'appInitialized',
       'skills',
       'skillProfiles',
+      'skillGroupBySkillId',
       'profileList',
       'employeeRoles',
       'profileById'
     ]),
     skillList () {
-      return Object.keys(this.skills).map(key => this.skills[key])
+      const skillsAndLanguages = Object.keys(this.skills).map(key => this.skills[key])
+      return skillsAndLanguages ? skillsAndLanguages.filter(skill => {
+        const skillGroup = this.skillGroupBySkillId(skill.id)
+        return skillGroup ? skillGroup.title !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
+      }) : []
     },
     skillInfo () {
       const skillProfienciesByGroup = this.groupSkillProfilesBySkill(this.skillList)
@@ -150,7 +156,7 @@ export default {
     },
     groupSkillProfilesBySkill (skills) {
       const skillObject = this.createEmptySkillObject(skills)
-      this.skillProfiles.forEach((skillProfile) => {
+      this.skillProfiles.filter(profileSkill => this.skillList.find(skill => skill.id === profileSkill.skillId)).forEach((skillProfile) => {
         if (this.selectedEmployeeRoles.some(role => { return this.profileById(skillProfile.profileId).employeeRoles.includes(role.id) })) {
           skillObject[skillProfile.skillId].proficiencies.push(skillProfile.knows)
           skillObject[skillProfile.skillId].willingness.push(skillProfile.wantsTo)
