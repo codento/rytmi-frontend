@@ -27,10 +27,10 @@
         {{ profile.description }}
       </div>
       <div
-        v-if="profileId == profile.id"
+        v-if="profileId == profile.id || this.isAdmin"
         class="profile-card-detail-row"
       >
-        <router-link :to="{ name: 'editProfile', params: { profileId: profileId }}">
+        <router-link :to="{ name: 'editProfile', params: { profileId: '' + profile.id }}">
           Edit profile
         </router-link>
       </div>
@@ -48,7 +48,7 @@ export default {
     getNames: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
     },
-    ...mapGetters(['profileId'])
+    ...mapGetters(['profileId', 'isAdmin'])
   },
   methods: {
     getFAClass: function (object) {

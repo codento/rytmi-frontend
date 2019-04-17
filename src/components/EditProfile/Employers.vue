@@ -53,9 +53,7 @@
             {{ getEmployerDescriptionInCurrentLanguage(employer) ? getEmployerDescriptionInCurrentLanguage(employer).title : '' }}
           </div>
           <!-- Description has "white-space: pre-line" so keep the text on the same line as the div -->
-          <div class="description">
-            {{ getEmployerDescriptionInCurrentLanguage(employer) ? getEmployerDescriptionInCurrentLanguage(employer).description : '' }}
-          </div>
+          <div class="description">{{ getEmployerDescriptionInCurrentLanguage(employer) ? getEmployerDescriptionInCurrentLanguage(employer).description : '' }}</div>
         </div>
       </b-col>
     </b-row>

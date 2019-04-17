@@ -73,7 +73,7 @@
         <b-col>
           <span>Title (Finnish)</span>
           <b-input
-            v-model="profileProject.workPercentage"
+            v-model="descriptionFi.title"
             type="text"
             required
           />
@@ -81,7 +81,7 @@
         <b-col>
           <span>Title (English)</span>
           <b-input
-            v-model="profileProject.workPercentage"
+            v-model="descriptionEn.title"
             type="text"
             required
           />
@@ -157,7 +157,8 @@ export default {
       errorDetails: [],
       profileProject: {
         projectId: this.projectId,
-        profileId: this.profileId
+        profileId: this.profileId,
+        descriptions: this.descriptions ? this.descriptions : this.getEmptyDescriptions()
       },
       projectVisible: true,
       profileVisible: false
@@ -168,10 +169,15 @@ export default {
       'profiles',
       'projects',
       'currentLanguage'
-    ])
+    ]),
+    descriptionFi () {
+      return this.getProfileProjectDescriptionByLanguage('fi')
+    },
+    descriptionEn () {
+      return this.getProfileProjectDescriptionByLanguage('en')
+    }
   },
   created () {
-    console.log(this.profileProject)
     this.projectVisible = this.projectId === null
     this.profileVisible = this.profileId === null
   },
@@ -213,7 +219,27 @@ export default {
       this.redirect()
     },
     redirect () {
-      this.$router.push('/profile/' + this.profile.id)
+      if (this.profileId) {
+        this.$router.push('/profile/' + this.profileId)
+      }
+      else if (this.projectId) {
+        this.$router.push('/projects/' + this.projectId)
+      }
+    },
+    getEmptyDescriptions () {
+      return [
+        {
+          language: 'fi',
+          title: ''
+        },
+        {
+          language: 'en',
+          title: ''
+        }
+      ]
+    },
+    getProfileProjectDescriptionByLanguage (language) {
+      return this.profileProject.descriptions.find(description => description.language === language)
     }
   }
 }
