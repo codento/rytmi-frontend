@@ -73,7 +73,9 @@ export default new Router({
       path: '/profile/:profileId/edit',
       name: 'editProfile',
       component: EditProfile,
-      props: true
+      props: (route) => {
+        return { profileId: parseInt(route.params.profileId) }
+      }
     },
     {
       path: '/skills',

@@ -4,7 +4,7 @@ import * as actions from './actions'
 const state = {
   token: window.localStorage ? window.localStorage.getItem('user-token') || '' : '',
   tokenExpirationTime: window.localStorage ? window.localStorage.getItem('user-token-expiration') || '' : '',
-  profileId: window.localStorage ? window.localStorage.getItem('profile-id') || '' : '',
+  profileId: window.localStorage ? parseInt(window.localStorage.getItem('profile-id')) || undefined : undefined,
   status: '',
   isTokenValid: false,
   hasLoadedOnce: false,
