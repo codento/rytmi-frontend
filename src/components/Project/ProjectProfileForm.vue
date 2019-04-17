@@ -221,8 +221,7 @@ export default {
     redirect () {
       if (this.profileId) {
         this.$router.push('/profile/' + this.profileId)
-      }
-      else if (this.projectId) {
+      } else if (this.projectId) {
         this.$router.push('/projects/' + this.projectId)
       }
     },
