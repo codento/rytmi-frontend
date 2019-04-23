@@ -2,11 +2,20 @@ import _ from 'lodash'
 
 import { CvToolSkills } from '@/components/Profile'
 import { SkillRow } from '@/components/Common'
-import { state, getters, mutations, actions } from '@/store/modules/cvTool/index'
+import { getters } from '@/store/modules/cvTool/getters'
+import { actions } from '@/store/modules/cvTool/actions'
+import { mutations } from '@/store/modules/cvTool/mutations'
 import { createShallowWrapper } from './setup/setup'
 
+const initialState = {
+  cvIntroduction: '',
+  cvOtherInfo: '',
+  topSkills: [],
+  topProjects: []
+}
+
 const storeConfig = {
-  state: state,
+  state: initialState,
   getters: _.merge(getters, { skillFilter: () => { return [] } }),
   actions: actions,
   mutations: mutations
@@ -46,15 +55,31 @@ describe('CvToolSkills.test.js', () => {
       getters: {
         skillFilter: () => {
           return [
-            { id: 1, skillId: 10 },
-            { id: 2, skillId: 20 }
+            { id: 10 },
+            { id: 20 }
           ]
         }
       }
     }
     const overrideStoreConfigs = _.merge(storeConfig, skillFilter)
     const wrapper = createShallowWrapper(CvToolSkills, overrideStoreConfigs, additionalMountingOptions)
-    expect(wrapper.vm.selectedSkills).toEqual([1, 2])
+    expect(wrapper.vm.selectedSkills).toEqual([10, 20])
+  })
+
+  it('Should not fail if skill filter contains skills not visible in cv', () => {
+    const skillFilter = {
+      getters: {
+        skillFilter: () => {
+          return [
+            { id: 90 },
+            { id: 20 }
+          ]
+        }
+      }
+    }
+    const overrideStoreConfigs = _.merge(storeConfig, skillFilter)
+    const wrapper = createShallowWrapper(CvToolSkills, overrideStoreConfigs, additionalMountingOptions)
+    expect(wrapper.vm.selectedSkills).toEqual([20])
   })
 
   it('Computed property skillsByCategory should group skills by category', () => {

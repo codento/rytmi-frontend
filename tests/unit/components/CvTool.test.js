@@ -7,10 +7,49 @@ import {
   CvToolWorkExperience,
   CvToolOtherInfo
 } from '@/components/Profile'
-import { state, getters, actions, mutations } from '@/store/modules/cvTool/index'
+import { getters } from '@/store/modules/cvTool/getters'
 
 import { createShallowWrapper } from './setup/setup'
 import { mockProfile } from './setup/mockData'
+
+const mockProfileProject = {
+  id: 1,
+  profile: mockProfile.id,
+  projectId: 11,
+  startDate: '2018-01-01',
+  endDate: '2018-02-01',
+  title: 'Developer',
+  descriptions: [
+    {
+      title: 'Developer',
+      language: 'en'
+    },
+    {
+      title: 'Devaaja',
+      language: 'fi'
+    }
+  ]
+}
+
+const mockProject = {
+  id: 11,
+  name: 'Project Foo',
+  description: 'Foo Bar',
+  descriptions: [
+    {
+      name: 'Project Foo (en)',
+      customerName: 'Customer',
+      description: 'Foo Bar (en)',
+      language: 'en'
+    },
+    {
+      name: 'Projekti Foo (fi)',
+      customerName: 'Asiakas',
+      description: 'Foo Bar (fi)',
+      language: 'fi'
+    }
+  ]
+}
 
 const mockGetters = {
   profileSkillsByProfileId: () => (profileId) => {
@@ -41,6 +80,13 @@ const mockGetters = {
       description: 'Programming desc'
     }
   },
+  skillCategoryBySkillId: () => (skillId) => {
+    return {
+      id: 1,
+      name: 'Programming',
+      description: 'Programming desc'
+    }
+  },
   skillGroupById: () => (skillGroupById) => {
     return {
       id: skillGroupById,
@@ -48,43 +94,31 @@ const mockGetters = {
       description: 'Software development desc'
     }
   },
+  skillGroupBySkillId: () => (skillId) => {
+    return {
+      id: 1,
+      name: 'Software development',
+      description: 'Software development desc'
+    }
+  },
   profileProjectsByProfileId: () => (profileId) => {
-    return [
-      {
-        id: 1,
-        profile: profileId,
-        projectId: 1,
-        startDate: '2018-01-01',
-        endDate: '2018-02-01'
-      }
-    ]
+    return [mockProfileProject]
   },
   projectById: () => (projectId) => {
-    return {
-      id: projectId,
-      name: 'Project Foo',
-      description: 'Foo Bar',
-      descriptions: [
-        {
-          name: 'Project Foo (en)',
-          description: 'Foo Bar (en)',
-          language: 'en'
-        },
-        {
-          name: 'Project Foo (fi)',
-          description: 'Foo Bar (fi)',
-          language: 'fi'
-        }
-      ]
-    }
+    return mockProject
   }
 }
 
+const initialState = {
+  cvIntroduction: '',
+  cvOtherInfo: '',
+  topSkills: [],
+  topProjects: []
+}
+
 const storeConfig = {
-  state: state,
-  getters: _.merge(getters, mockGetters),
-  actions: actions,
-  mutations: mutations
+  state: initialState,
+  getters: _.merge(getters, mockGetters)
 }
 
 const additionalMountingOptions = {
@@ -111,6 +145,43 @@ describe('CvTool.test.js', () => {
   it('Should disable button if inputs are not valid', () => {
     const wrapper = createShallowWrapper(CvTool, storeConfig, additionalMountingOptions)
     const button = wrapper.find('#create-cv-button')
-    expect(button.find('disabled')).toBeTruthy()
+    expect(button.html().includes('disabled')).toBeTruthy()
+  })
+
+  it('Should enable button if inputs are valid', () => {
+    const overrideStore = {
+      state: {
+        cvIntroduction: 'Test introduction',
+        cvOtherInfo: 'Test information',
+        topSkills: [
+          {
+            id: 1,
+            name: 'Python',
+            description: 'Python desc'
+          }
+        ],
+        topProjects: [
+          {
+            id: mockProfileProject.id,
+            profile: mockProfile.id,
+            projectId: mockProfileProject.projectId,
+            startDate: mockProfileProject.startDate,
+            endDate: mockProfileProject.endDate,
+            title: mockProfileProject.endDate,
+            name: mockProject.name,
+            description: mockProject.description,
+            customerName: mockProject.customerName,
+            duration: '01/2018-02/2018'
+          }
+        ]
+      },
+      actions: {
+        addCV: jest.fn()
+      }
+    }
+    const wrapper = createShallowWrapper(CvTool, _.merge(storeConfig, overrideStore), additionalMountingOptions)
+    wrapper.setData({ isIntroductionValid: true })
+    const button = wrapper.find('#create-cv-button')
+    expect(button.html().includes('disabled')).toBeFalsy()
   })
 })

@@ -115,8 +115,11 @@ export default {
     }
   },
   created () {
-    this.selectedSkills = this.skillFilter ? this.skillFilter.map(skill => skill.id) : []
-    this.updateSelectedSkills()
+    if (this.skillFilter) {
+      const profileSkillIds = this.skills.map(skill => skill.skillId)
+      this.selectedSkills = profileSkillIds.filter(id => this.skillFilter.map(skill => skill.id).includes(id))
+      this.updateSelectedSkills()
+    }
   },
   methods: {
     ...mapActions(['updateTopSkills']),

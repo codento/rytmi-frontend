@@ -38,7 +38,7 @@
   </b-card>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import ProjectRow from '@/components/Common/ProjectRow.vue'
 
 export default {
@@ -54,9 +54,6 @@ export default {
       selectedProjects: [],
       maxSelected: 3
     }
-  },
-  computed: {
-    ...mapGetters(['topProjects'])
   },
   created: function () {
     const sortedProjects = this.profileProjects

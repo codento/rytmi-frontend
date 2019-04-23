@@ -45,9 +45,11 @@
         :skills="skills"
         :languages="languages"
       />
-      <CvToolWorkExperience
-        :profile-projects="projects"
-      />
+      <div v-if="projectsLoaded">
+        <CvToolWorkExperience
+          :profile-projects="projects"
+        />
+      </div>
       <CvToolOtherInfo
         :profile="profile"
       />
@@ -123,9 +125,12 @@ export default {
               description: project.description,
               customerName: project.customerName
             })
-            return profileProject
           }
+          return profileProject
         })
+    },
+    projectsLoaded: function () {
+      return this.projects.length > 0 ? this.projects.every(project => project.hasOwnProperty('duration')) : false
     },
     allRequiredFieldsFilled: {
       get: function () {
