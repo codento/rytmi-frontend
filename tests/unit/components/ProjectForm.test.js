@@ -108,6 +108,16 @@ describe('ProjectForm.test.js', () => {
   })
 
   it('Submits the form and calls create project when submit is clicked and project id is uknown', async () => {
+    const expectedResult = {
+      code: '1234',
+      startDate: null,
+      endDate: null,
+      isSecret: false,
+      descriptions: [
+        { customerName: '', name: '', description: '', language: 'fi' },
+        { customerName: '', name: '', description: '', language: 'en' }
+      ]
+    }
     const actions = {
       createProject: jest.fn((obj, project, dno) => Promise.resolve(project))
     }
@@ -121,7 +131,7 @@ describe('ProjectForm.test.js', () => {
     wrapper.findAll('input').at(0).setValue(1234)
     wrapper.find('button').trigger('submit')
     await flushPromises()
-    expect(actions.createProject).toHaveBeenCalledWith(expect.anything(), { code: '1234' }, undefined)
+    expect(actions.createProject).toHaveBeenCalledWith(expect.anything(), expectedResult, undefined)
   })
 
   it('Submit the form and calls update project when submit is clicked and project id is known', async () => {

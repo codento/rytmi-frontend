@@ -46,6 +46,13 @@ exports[`ProjectForm.test.js Template is correct 1`] = `
       </b-col>
     </b-row>
     <b-row>
+      <b-col class="mt-2 mb-2">
+        <b-form-checkbox>
+          This is a secret project
+        </b-form-checkbox>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col>
         <b-button type="submit" primary="" class="form-control">
           Submit
