@@ -1,9 +1,9 @@
-import { cloneDeep } from 'lodash'
+import _ from 'lodash'
 
 export default {
   projects: (state) => state.projects,
   projectById: (state, getters, rootState) => (id) => {
-    let project = cloneDeep(state.projects[id])
+    let project = _.cloneDeep(state.projects[id])
     if (project) {
       const descriptions = project.descriptions
         .find(description => description.language === rootState.siteSettings.currentLanguage)
@@ -18,7 +18,7 @@ export default {
       return state.projects
     }
     filterString = filterString.toLowerCase()
-    return Object.values(state.projects).filter(project => {
+    const filteredProjects = Object.values(state.projects).filter(project => {
       if (project.code.toString().includes(filterString)) {
         return true
       }
@@ -29,5 +29,6 @@ export default {
       }
       return false
     })
+    return _.keyBy(filteredProjects, 'id')
   }
 }

@@ -10,46 +10,7 @@ import {
 import { getters } from '@/store/modules/cvTool/getters'
 
 import { createShallowWrapper } from './setup/setup'
-import { mockProfile } from './setup/mockData'
-
-const mockProfileProject = {
-  id: 1,
-  profile: mockProfile.id,
-  projectId: 11,
-  startDate: '2018-01-01',
-  endDate: '2018-02-01',
-  title: 'Developer',
-  descriptions: [
-    {
-      title: 'Developer',
-      language: 'en'
-    },
-    {
-      title: 'Devaaja',
-      language: 'fi'
-    }
-  ]
-}
-
-const mockProject = {
-  id: 11,
-  name: 'Project Foo',
-  description: 'Foo Bar',
-  descriptions: [
-    {
-      name: 'Project Foo (en)',
-      customerName: 'Customer',
-      description: 'Foo Bar (en)',
-      language: 'en'
-    },
-    {
-      name: 'Projekti Foo (fi)',
-      customerName: 'Asiakas',
-      description: 'Foo Bar (fi)',
-      language: 'fi'
-    }
-  ]
-}
+import { mockProfile, mockProject, mockProfileProject } from './setup/mockData'
 
 const mockGetters = {
   profileSkillsByProfileId: () => (profileId) => {

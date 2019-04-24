@@ -18,3 +18,42 @@ export const mockProfile = {
   introduction: 'kuvaus1',
   otherInfo: 'markdown kuvaus'
 }
+
+export const mockProfileProject = {
+  id: 1,
+  profile: mockProfile.id,
+  projectId: 11,
+  startDate: '2018-01-01',
+  endDate: '2018-02-01',
+  title: 'Developer',
+  descriptions: [
+    {
+      title: 'Developer',
+      language: 'en'
+    },
+    {
+      title: 'Devaaja',
+      language: 'fi'
+    }
+  ]
+}
+
+export const mockProject = {
+  id: 11,
+  name: 'Project Foo',
+  description: 'Foo Bar',
+  descriptions: [
+    {
+      name: 'Project Foo (en)',
+      customerName: 'Customer',
+      description: 'Foo Bar (en)',
+      language: 'en'
+    },
+    {
+      name: 'Projekti Foo (fi)',
+      customerName: 'Asiakas',
+      description: 'Foo Bar (fi)',
+      language: 'fi'
+    }
+  ]
+}
