@@ -47,6 +47,17 @@
             </span>
           </template>
           <template
+            slot="visibleInCV"
+            slot-scope="visibleInCV"
+          >
+            <div @click="changeVisibilityInCV(visibleInCV)">
+              <i
+                class="fa"
+                :class="visibleInCV.value ? 'fa-check-square' : 'fa-square'"
+              />
+            </div>
+          </template>
+          <template
             slot="remove"
             slot-scope="remove"
           >
@@ -135,6 +146,7 @@ export default {
         { key: 'skillId', label: 'Proficiency' },
         { key: 'knows', label: 'Level' },
         { key: 'wantsTo', label: 'Willingness' },
+        { key: 'visibleInCV', label: 'Show in CV' },
         { key: 'remove', label: ' ' }
       ],
       wantsToOptions: proficiencyDesc.wants,
@@ -176,11 +188,17 @@ export default {
       this.updateProfileSkill(this.editedSkill)
         .then(response => {
           this.$toasted.global.rytmi_success({
-            message: 'Proficiency updated.'
+            message: 'User\'s skill updated.'
           })
           this.$refs.wantsToModal.hide()
           this.$refs.knowsModal.hide()
         })
+    },
+    changeVisibilityInCV (visibleInCV) {
+      const skillToEdit = { ...visibleInCV.item }
+      skillToEdit.visibleInCV = !skillToEdit.visibleInCV
+      this.editedSkill = skillToEdit
+      this.updateSkill()
     }
   }
 }
