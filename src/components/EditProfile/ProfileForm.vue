@@ -181,6 +181,9 @@ export default {
   watch: {
     selectedEmployeeRoles (newRoles) {
       this.editedProfile.employeeRoles = newRoles.map(role => role.id)
+    },
+    profile (newProfileValue) {
+      this.editedProfile = Object.assign({}, newProfileValue)
     }
   },
   created () {
@@ -237,11 +240,6 @@ export default {
     },
     redirect () {
       this.$router.push('/profile/' + this.profile.id)
-    }
-  },
-  watch: {
-    profile (newProfileValue) {
-      this.editedProfile = Object.assign({}, newProfileValue)
     }
   }
 }
