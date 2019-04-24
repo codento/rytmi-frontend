@@ -214,7 +214,10 @@ export default {
       this.showError = false
       try {
         await this.updateProfile(this.editedProfile)
-        this.redirect()
+        this.$emit('profileUpdated')
+        this.$toasted.global.rytmi_success({
+          message: 'Profile edited.'
+        })
       } catch (error) {
         this.showError = true
         if (Array.isArray(error.details)) {
@@ -234,6 +237,11 @@ export default {
     },
     redirect () {
       this.$router.push('/profile/' + this.profile.id)
+    }
+  },
+  watch: {
+    profile (newProfileValue) {
+      this.editedProfile = Object.assign({}, newProfileValue)
     }
   }
 }

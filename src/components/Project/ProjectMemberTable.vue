@@ -208,17 +208,17 @@ export default {
     callUpdateProfileProjectAction () {
       if (this.isDataValid()) {
         this.updateProfileProject(this.editedProjectProfile)
-        .then((response) => {
-          this.$toasted.global.rytmi_success({
-            message: 'Member updated.'
+          .then((response) => {
+            this.$toasted.global.rytmi_success({
+              message: 'Member updated.'
+            })
+            this.$refs.projectProfileEditModal.hide()
           })
-          this.$refs.projectProfileEditModal.hide()
-        })
-        .catch((err) => {
-          this.$toasted.global.rytmi_error({
-            message: err
+          .catch((err) => {
+            this.$toasted.global.rytmi_error({
+              message: err
+            })
           })
-        })
       }
     },
     getProfileProjectDescriptionByLanguage (language) {
