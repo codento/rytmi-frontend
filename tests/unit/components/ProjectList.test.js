@@ -1,30 +1,40 @@
-import Vuex from 'vuex'
-import BootstrapVue from 'bootstrap-vue'
-import { merge } from 'lodash'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import _ from 'lodash'
 import { ProjectList } from '@/components/Project'
+import getters from '@/store/modules/projects/getters'
+import { createShallowWrapper } from './setup/setup'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(BootstrapVue)
-
-function createStore (overrideConfig) {
-  const defaultStoreConfig = {
-    getters: {
-      projectFilter: () => jest.fn((args) => args)
-    }
+const mockProjects = {
+  11: {
+    id: 11,
+    code: 100,
+    descriptions: [
+      { name: 'one', description: 'test', language: 'en' },
+      { name: 'yksi', description: 'testi', language: 'fi' }
+    ]
+  },
+  12: {
+    id: 12,
+    code: 200,
+    descriptions: [
+      { name: 'two', language: 'en' },
+      { name: 'kaksi', language: 'fi' }
+    ]
+  },
+  13: {
+    id: 13,
+    code: 300,
+    descriptions: [
+      { name: 'three', language: 'en' },
+      { name: 'kolme', language: 'fi' }
+    ]
   }
-  const mergedConfig = merge(defaultStoreConfig, overrideConfig)
-  return new Vuex.Store(mergedConfig)
 }
 
-function createWrapper (overrideMountingOptions) {
-  const defaultMountingOptions = {
-    localVue,
-    store: createStore()
+const defaultStoreConfig = {
+  getters: getters,
+  state: {
+    projects: {}
   }
-  const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
-  return shallowMount(ProjectList, mergedMountingOptions)
 }
 
 describe('ProjectList.vue', () => {
@@ -34,7 +44,7 @@ describe('ProjectList.vue', () => {
         push: jest.fn()
       }
     }
-    const wrapper = createWrapper({ mocks })
+    const wrapper = createShallowWrapper(ProjectList, defaultStoreConfig, { mocks })
     const table = wrapper.find({ name: 'BTable' })
     table.vm.$emit('row-clicked', { id: 1 })
     expect(table.emitted).toHaveLength(1)
@@ -42,7 +52,29 @@ describe('ProjectList.vue', () => {
   })
 
   it('Template is correct', () => {
-    const wrapper = createWrapper()
+    const wrapper = createShallowWrapper(ProjectList, defaultStoreConfig, {})
     expect(wrapper.element).toMatchSnapshot()
+  })
+
+  it('Shows all projects when filter is empty', () => {
+    const overrideStoreConfigs = {
+      state: {
+        projects: mockProjects
+      }
+    }
+    const wrapper = createShallowWrapper(ProjectList, _.merge(defaultStoreConfig, overrideStoreConfigs), {})
+    expect(wrapper.vm.results.length).toEqual(3)
+  })
+
+  it('Filtering projects should work', () => {
+    const wrapper = createShallowWrapper(ProjectList, defaultStoreConfig, {})
+    wrapper.setData({ projectFilterTerm: 'yksi' })
+    expect(wrapper.vm.results.length).toEqual(1)
+    wrapper.setData({ projectFilterTerm: '00' })
+    expect(wrapper.vm.results.length).toEqual(3)
+    wrapper.setData({ projectFilterTerm: '30' })
+    expect(wrapper.vm.results.length).toEqual(1)
+    wrapper.setData({ projectFilterTerm: 'thr' })
+    expect(wrapper.vm.results.length).toEqual(1)
   })
 })
