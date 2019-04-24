@@ -30,6 +30,13 @@ function createStore (overrideConfig) {
 
 function createWrapper (overrideMountingOptions) {
   const defaultMountingOptions = {
+    mocks: {
+      $toasted: {
+        global: {
+          rytmi_success: jest.fn()
+        }
+      }
+    },
     localVue,
     store: createStore()
   }
@@ -51,7 +58,8 @@ const mockProfile = {
     { description: 'markdown desc', language: 'en', type: 'other' }
   ],
   email: 'foo.bar@barfoo.com',
-  employeeRoles: [1]
+  employeeRoles: [1],
+  links: ['http://christy.net', 'http://holly.biz', 'http://www.linkedin.com/username']
 }
 
 describe('ProfileForm.vue', () => {
@@ -73,7 +81,7 @@ describe('ProfileForm.vue', () => {
   })
 
   it('should submit entered details when submit is clicked', async () => {
-    expect.assertions(4)
+    expect.assertions(3)
     const propsData = {
       profile: mockProfile
     }
@@ -96,7 +104,6 @@ describe('ProfileForm.vue', () => {
       expect.anything(), editedProfile, undefined)
     expect(wrapper.vm.showError).toBe(false)
     expect(wrapper.vm.errorDetails).toHaveLength(0)
-    expect(mocks.$router.push).toHaveBeenCalledWith(`/profile/${mockProfile.id}`)
   })
 
   it('should go back to profile view when reset is clicked', () => {

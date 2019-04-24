@@ -66,8 +66,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { format, getDate, getMonth, getYear } from 'date-fns'
-import { sortBy, cloneDeep } from 'lodash'
+import { format, getDate, getMonth, getYear, parse } from 'date-fns'
+import { orderBy, cloneDeep } from 'lodash'
 import EditEmployer from './EditEmployer'
 
 export default {
@@ -89,7 +89,12 @@ export default {
       'currentLanguage'
     ]),
     employers () {
-      return sortBy(this.employersByProfileId(this.profileId), ['-startDate'])
+      const employers = this.employersByProfileId(this.profileId).map(employer => ({
+        ...employer,
+        startDate: parse(employer.startDate),
+        endDate: parse(employer.endDate)
+      }))
+      return orderBy(employers, ['startDate'], ['desc'])
     }
   },
   methods: {
