@@ -12,7 +12,8 @@ localVue.use(BootstrapVue)
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
-      isAuthenticated: jest.fn(() => false)
+      isAuthenticated: jest.fn(() => false),
+      employeeRoles: () => [{ id: 1, title: 'administrative' }]
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -32,6 +33,17 @@ describe('LandingPage.vue', () => {
   it('Landing page shows unauthenticated view when user is not signed in', () => {
     const wrapper = createWrapper()
     expect(wrapper.text()).toContain('Please Sign in')
+  })
+
+  it('Landing page should not mount dashboard view if employee profiles are not yet loaded', () => {
+    const store = createStore({
+      getters: {
+        isAuthenticated: jest.fn(() => true),
+        employeeRoles: () => []
+      }
+    })
+    const wrapper = createWrapper({ store })
+    expect(wrapper.find(Dashboard).exists()).toBeFalsy()
   })
 
   it('Landing page shows dashboard view when user is signed in', () => {

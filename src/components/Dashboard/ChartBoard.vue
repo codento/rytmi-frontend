@@ -29,7 +29,7 @@
             :cols="12"
             :md="8"
           >
-            <consultant-utilization-chart
+            <ConsultantUtilizationChart
               :active-role-selection="selectedEmployeeRoles"
             />
           </b-col>
@@ -41,7 +41,7 @@
               <b-col
                 :cols="12"
               >
-                <top-skill-chart
+                <TopSkillChart
                   :skill-info="skillInfo"
                 />
               </b-col>
@@ -49,7 +49,7 @@
                 :cols="12"
                 class="mt-2"
               >
-                <most-willingness-chart
+                <MostWillingnessChart
                   :skill-info="skillInfo"
                 />
               </b-col>
@@ -61,7 +61,7 @@
             :cols="12"
             :md="12"
           >
-            <skill-chart
+            <SkillChart
               v-if="appInitialized"
               :md-size="12"
               :skills="skillsOnly"
