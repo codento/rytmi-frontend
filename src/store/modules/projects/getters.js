@@ -7,9 +7,11 @@ export default {
     if (project) {
       const descriptions = project.descriptions
         .find(description => description.language === rootState.siteSettings.currentLanguage)
-      project = Object.assign(project, { description: descriptions.description })
-      project = Object.assign(project, { name: descriptions.name })
-      project = Object.assign(project, { customerName: descriptions.customerName })
+      if (descriptions) {
+        project = Object.assign(project, { description: descriptions.description })
+        project = Object.assign(project, { name: descriptions.name })
+        project = Object.assign(project, { customerName: descriptions.customerName })
+      }
     }
     return project
   },

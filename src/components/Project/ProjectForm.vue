@@ -111,6 +111,15 @@
         </b-col>
       </b-row>
       <b-row>
+        <b-col class="mt-2 mb-2">
+          <b-form-checkbox
+            v-model="project.isSecret"
+          >
+            This is a secret project
+          </b-form-checkbox>
+        </b-col>
+      </b-row>
+      <b-row>
         <b-col>
           <b-button
             class="form-control"
@@ -157,6 +166,14 @@ export default {
       this.project = this.editableProject
       this.project.endDate = new Date(this.editableProject.endDate)
       this.project.startDate = new Date(this.editableProject.startDate)
+    } else {
+      this.project = {
+        code: null,
+        startDate: null,
+        endDate: null,
+        isSecret: false,
+        descriptions: []
+      }
     }
   },
   methods: {
