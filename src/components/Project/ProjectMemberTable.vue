@@ -206,7 +206,8 @@ export default {
       this.$refs.projectProfileEditModal.hide()
     },
     callUpdateProfileProjectAction () {
-      this.updateProfileProject(this.editedProjectProfile)
+      if (this.isDataValid()) {
+        this.updateProfileProject(this.editedProjectProfile)
         .then((response) => {
           this.$toasted.global.rytmi_success({
             message: 'Member updated.'
@@ -218,6 +219,7 @@ export default {
             message: err
           })
         })
+      }
     },
     getProfileProjectDescriptionByLanguage (language) {
       if (!this.editedProjectProfile.descriptions || !this.editedProjectProfile.descriptions.find(description => description.language === language)) {
@@ -227,6 +229,33 @@ export default {
         }
       }
       return this.editedProjectProfile.descriptions.find(description => description.language === language)
+    },
+    isDataValid () {
+      if (!this.editedProjectProfile.workPercentage || !this.descriptionEn.title || !this.descriptionFi.title) {
+        this.$toasted.global.rytmi_error({
+          message: 'Not all fields have data, please fill them in.'
+        })
+        return false
+      }
+      if (this.editedProjectProfile.startDate > this.editedProjectProfile.endDate) {
+        this.$toasted.global.rytmi_error({
+          message: 'Start date can\'t be after end date.'
+        })
+        return false
+      }
+      if (this.editedProjectProfile.workPercentage > 100) {
+        this.$toasted.global.rytmi_error({
+          message: 'Utilization percent can\'t be over 100.'
+        })
+        return false
+      }
+      if (this.editedProjectProfile.workPercentage < 0) {
+        this.$toasted.global.rytmi_error({
+          message: 'Utilization percent can\'t be under 0.'
+        })
+        return false
+      }
+      return true
     }
   }
 }

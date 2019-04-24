@@ -60,8 +60,8 @@ export const mutations = {
     if (index > -1) {
       state.profileProjectList[profileProject.profileId].splice(index, 1)
     }
-    const futureIndex = state.futurePpList[profileProject.profileId].indexOf(profileProject.id)
-    if (index > -1) {
+    const futureIndex = state.futurePpList[profileProject.profileId] ? state.futurePpList[profileProject.profileId].indexOf(profileProject.id) : -1
+    if (futureIndex > -1) {
       state.futurePpList[profileProject.profileId].splice(futureIndex, 1)
     }
   }
