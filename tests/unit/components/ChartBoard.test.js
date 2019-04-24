@@ -4,6 +4,7 @@ import ChartBoard from '@/components/Dashboard/ChartBoard'
 import SkillChart from '@/components/Dashboard/SkillChart'
 import TopSkillChart from '@/components/Dashboard/TopSkillChart'
 import MostWillingnessChart from '@/components/Dashboard/MostWillingnessChart'
+import ConsultantUtilizationChart from '@/components/Dashboard/ConsultantUtilizationChart'
 import { createShallowWrapper } from './setup/setup'
 
 const storeConfig = {
@@ -87,7 +88,7 @@ describe('ChartBoard.vue', () => {
     expect(wrapper.find(SkillChart).exists()).toBeFalsy()
   })
 
-  it('should show SkillChart, TopSkillChart, MostWillingnessChart', () => {
+  it('should show SkillChart, TopSkillChart, MostWillingnessChart, ConsultantUtilizationChart', () => {
     const getters = {
       skills: () => mockSkills,
       skillProfiles: () => mockSkillProfiles
@@ -97,6 +98,9 @@ describe('ChartBoard.vue', () => {
     expect(wrapper.find(TopSkillChart).isVisible()).toBeTruthy()
     expect(wrapper.find(MostWillingnessChart).isVisible()).toBeTruthy()
     expect(wrapper.find(SkillChart).isVisible()).toBeTruthy()
+    const utilizationChart = wrapper.find(ConsultantUtilizationChart)
+    expect(utilizationChart.isVisible()).toBeTruthy()
+    expect(utilizationChart.vm.activeRoleSelection.length).toEqual(2)
   })
 
   it('createEmptySkillObject should create object with skill id\'s as properties, languages should be ignored', () => {

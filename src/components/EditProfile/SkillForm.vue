@@ -29,20 +29,6 @@
         </b-form-select>
       </b-form-group>
       <b-form-group
-        id="description"
-        vertical
-        label="Description:"
-        label-for="descriptionInput"
-      >
-        <b-form-textarea
-          id="descriptionInput"
-          v-model="profileSkill.description"
-          :rows="3"
-          type="text"
-          placeholder="Short description"
-        />
-      </b-form-group>
-      <b-form-group
         id="knowsLabel"
         label="Proficiency level:"
       >
@@ -99,12 +85,12 @@
 import { mapGetters, mapActions } from 'vuex'
 import proficiencyDesc from '../../assets/proficiencyDesc'
 import { filter } from 'lodash'
+
 const skillTemplate = () => {
   return {
     skillId: null,
     knows: 0,
     wantsTo: 0,
-    description: '',
     visibleInCV: true
   }
 }

@@ -45,14 +45,13 @@ export default {
           sortable: true
         },
         {
-          key: 'skillCategoryId',
+          key: 'categoryTitle',
           label: 'Skill Category',
-          sortable: true,
-          formatter: 'getSkillCategoryTitle'
+          sortable: true
         },
         {
           key: 'description',
-          sortable: true
+          sortable: false
         },
         {
           key: 'created',
@@ -69,7 +68,7 @@ export default {
     ...mapGetters(['skills', 'skillCategories', 'skillProfiles']),
     mapSkillsToArray () {
       const objectKeys = Object.keys(this.skills)
-      const skillsArray = objectKeys.map(skillKey => this.mapSkillRow(this.skills[skillKey], this.skillCategories))
+      const skillsArray = objectKeys.map(skillKey => this.mapSkillRow(this.skills[skillKey]))
       return orderBy(skillsArray, [skill => skill.name.toLowerCase()], ['asc'])
     },
     calculatePeopleWithSelectedSkill () {
@@ -94,10 +93,11 @@ export default {
     getSkillCategoryTitle (id) {
       return Object.keys(this.skillCategories).length > 0 && id ? this.skillCategories[id].title : ''
     },
-    mapSkillRow: function (skill, skillCategories) {
+    mapSkillRow: function (skill) {
       return {
         id: skill.id,
         skillCategoryId: skill.skillCategoryId,
+        categoryTitle: this.getSkillCategoryTitle(skill.skillCategoryId),
         name: skill.name,
         description: skill.description,
         created: this.$options.filters.dateFilter(skill.createdAt),

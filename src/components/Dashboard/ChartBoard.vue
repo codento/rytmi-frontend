@@ -20,7 +20,7 @@
       </b-col>
     </b-row>
     <div>
-      <div v-if="skillList.length === 0 || skillProfiles.length === 0">
+      <div v-if="skillsOnlyList.length === 0 || skillProfiles.length === 0">
         <span id="no-data-message">Sorry there is no data to display :(</span>
       </div>
       <div v-else>
@@ -29,7 +29,7 @@
             :cols="12"
             :md="8"
           >
-            <consultant-utilization-chart
+            <ConsultantUtilizationChart
               :active-role-selection="selectedEmployeeRoles"
             />
           </b-col>
@@ -41,7 +41,7 @@
               <b-col
                 :cols="12"
               >
-                <top-skill-chart
+                <TopSkillChart
                   :skill-info="skillInfo"
                 />
               </b-col>
@@ -49,7 +49,7 @@
                 :cols="12"
                 class="mt-2"
               >
-                <most-willingness-chart
+                <MostWillingnessChart
                   :skill-info="skillInfo"
                 />
               </b-col>
@@ -61,10 +61,10 @@
             :cols="12"
             :md="12"
           >
-            <skill-chart
+            <SkillChart
               v-if="appInitialized"
               :md-size="12"
-              :skills="skills"
+              :skills="skillsOnly"
               :skill-info="skillInfo"
               :profile-list="profileList"
               class="pb-1"
@@ -78,6 +78,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
 import vSelect from 'vue-select'
 import LANGUAGE_ENUM from '@/utils/constants'
 import SkillChart from './SkillChart'
@@ -115,15 +116,18 @@ export default {
       'employeeRoles',
       'profileById'
     ]),
-    skillList () {
-      const skillsAndLanguages = Object.keys(this.skills).map(key => this.skills[key])
-      return skillsAndLanguages ? skillsAndLanguages.filter(skill => {
-        const skillGroup = this.skillGroupBySkillId(skill.id)
+    skillsOnlyList () {
+      const filteredSkillKeys = Object.keys(this.skills).filter(skillId => {
+        const skillGroup = this.skillGroupBySkillId(skillId)
         return skillGroup ? skillGroup.title !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
-      }) : []
+      })
+      return filteredSkillKeys.map(key => this.skills[key])
+    },
+    skillsOnly () {
+      return _.keyBy(this.skillsOnlyList, 'id')
     },
     skillInfo () {
-      const skillProfienciesByGroup = this.groupSkillProfilesBySkill(this.skillList)
+      const skillProfienciesByGroup = this.groupSkillProfilesBySkill()
       Object.keys(skillProfienciesByGroup).forEach((skillId) => {
         const skill = skillProfienciesByGroup[skillId]
         skill.proficiencyAverage = calculateAverage(skill.proficiencies)
@@ -142,10 +146,9 @@ export default {
     this.selectedEmployeeRoles = this.employeeRoleOptions
   },
   methods: {
-    createEmptySkillObject (skills) {
-      const skillProfiencyBySkillId = {
-      }
-      skills.forEach((skill) => {
+    createEmptySkillObject () {
+      const skillProfiencyBySkillId = {}
+      this.skillsOnlyList.forEach((skill) => {
         skillProfiencyBySkillId[skill.id] = {
           name: skill.name,
           proficiencies: [],
@@ -154,9 +157,12 @@ export default {
       })
       return skillProfiencyBySkillId
     },
-    groupSkillProfilesBySkill (skills) {
-      const skillObject = this.createEmptySkillObject(skills)
-      this.skillProfiles.filter(profileSkill => this.skillList.find(skill => skill.id === profileSkill.skillId)).forEach((skillProfile) => {
+    groupSkillProfilesBySkill () {
+      const skillObject = this.createEmptySkillObject()
+      const filteredSkillProfiles = this.skillProfiles.filter(profileSkill => {
+        return profileSkill ? Object.keys(this.skillsOnly).includes(profileSkill.skillId.toString()) : false
+      })
+      filteredSkillProfiles.forEach(skillProfile => {
         if (this.selectedEmployeeRoles.some(role => { return this.profileById(skillProfile.profileId).employeeRoles.includes(role.id) })) {
           skillObject[skillProfile.skillId].proficiencies.push(skillProfile.knows)
           skillObject[skillProfile.skillId].willingness.push(skillProfile.wantsTo)

@@ -16,14 +16,16 @@
         Please Sign in
       </template>
     </b-jumbotron>
-    <dashboard
-      v-if="isAuthenticated"
-      class="mb-2"
-    >
-      <template slot="header">
-        Codento Rytmi
-      </template>
-    </dashboard>
+    <div v-if="employeeRolesLoaded">
+      <Dashboard
+        v-if="isAuthenticated"
+        class="mb-2"
+      >
+        <template slot="header">
+          Codento Rytmi
+        </template>
+      </Dashboard>
+    </div>
   </div>
 </template>
 
@@ -37,7 +39,13 @@ export default {
     Dashboard
   },
   computed: {
-    ...mapGetters(['isAuthenticated'])
+    ...mapGetters([
+      'isAuthenticated',
+      'employeeRoles'
+    ]),
+    employeeRolesLoaded () {
+      return Object.keys(this.employeeRoles).length > 0
+    }
   },
   mounted () {
     document.title = 'Rytmi'
