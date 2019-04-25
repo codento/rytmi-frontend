@@ -50,7 +50,10 @@
             slot="visibleInCV"
             slot-scope="visibleInCV"
           >
-            <div @click="changeVisibilityInCV(visibleInCV)">
+            <div
+              :id="`visible-in-cv-checkbox-container-${visibleInCV.item.id}`"
+              @click="changeVisibilityInCV(visibleInCV)"
+            >
               <i
                 class="fa"
                 :class="visibleInCV.value ? 'fa-check-square' : 'fa-square'"
