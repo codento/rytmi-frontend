@@ -17,6 +17,7 @@
           slot-scope="profileId"
         >
           <span
+            name="open-profile"
             class="clickable"
             @click.stop="openProfile(profileId.value)"
           >
@@ -28,6 +29,7 @@
           slot-scope="element"
         >
           <span
+            name="open-edit-modal-1"
             class="clickable"
             @click.stop="openEditModal(element)"
           >
@@ -39,6 +41,7 @@
           slot-scope="element"
         >
           <span
+            name="open-edit-modal-2"
             class="clickable"
             @click.stop="openEditModal(element)"
           >
@@ -50,6 +53,7 @@
           slot-scope="element"
         >
           <span
+            name="open-edit-modal-3"
             class="clickable"
             @click.stop="openEditModal(element)"
           >
@@ -61,6 +65,7 @@
           slot-scope="remove"
         >
           <b-btn
+            name="remove-member"
             size="sm"
             class="mr-1"
             variant="danger"

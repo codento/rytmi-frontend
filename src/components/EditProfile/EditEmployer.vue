@@ -73,6 +73,7 @@
     <b-row>
       <b-col>
         <b-button
+          id="submit"
           class="form-control"
           type="submit"
           primary

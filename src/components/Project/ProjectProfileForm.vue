@@ -101,6 +101,7 @@
       <span>Utilization percentage</span>
       <b-input
         v-model="profileProject.workPercentage"
+        name="utilization"
         type="number"
         required
         min="0"
@@ -109,6 +110,7 @@
 
       <b-button
         primary
+        name="submit"
         type="submit"
       >
         Submit

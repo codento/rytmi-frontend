@@ -130,12 +130,14 @@
       />
     </b-form-group>
     <b-button
+      id="submit-basic-details"
       type="submit"
       variant="primary"
     >
       Submit
     </b-button>
     <b-button
+      id="reset-basic-details"
       type="reset"
       variant="danger"
     >

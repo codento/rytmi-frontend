@@ -29,6 +29,7 @@
           <b-list-group-item
             v-for="skill of skillList"
             :key="skill.id"
+            name="skill"
             button
             @click="triggerAddProjectSkill(skill)"
           >

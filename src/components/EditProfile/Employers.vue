@@ -30,6 +30,7 @@
     <b-row
       v-for="employer in employers"
       :key="employer.id"
+      name="employer"
       class="clickable"
       @click="employerClicked(employer)"
     >

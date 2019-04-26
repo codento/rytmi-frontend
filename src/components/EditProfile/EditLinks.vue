@@ -11,6 +11,7 @@
             style="padding-right:20px"
           >
             <span
+              name="remove-link"
               style="color:red; padding-right:10px; cursor:pointer"
               @click="removeLink(link)"
             >X</span>

@@ -48,6 +48,7 @@
             slot-scope="data"
           >
             <b-btn
+              name="remove"
               size="sm"
               class="mr-1"
               variant="danger"

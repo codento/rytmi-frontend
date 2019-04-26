@@ -2,6 +2,7 @@
   <div v-if="project">
     <div
       class="row mb-1"
+      name="show-row"
       @click="show = !show"
     >
       <div class="col-sm-12">
