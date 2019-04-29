@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import merge from 'lodash/merge'
 import { mapGetters } from 'vuex'
 import LineChart from '../Charts/LineChart'
 import moment from 'moment'
@@ -108,7 +108,7 @@ export default {
         }
       }
       if (this.overrideOptions) {
-        _.merge(options, this.overrideOptions)
+        merge(options, this.overrideOptions)
       }
       return options
     },

@@ -24,7 +24,7 @@
             block
             variant="light"
           >
-            Consultants without a project
+            Consultants without a project in the next 3 months
           </b-button>
         </b-card-header>
         <b-collapse
@@ -57,7 +57,7 @@
                   v-if="index === 0"
                   :projects="item.projects"
                   :override-options="chartOptionsForFirstItem"
-                  height="60px"
+                  height="25px"
                 />
                 <utilization-chart
                   v-if="index > 0"
@@ -115,7 +115,7 @@
                   v-if="index === 0"
                   :projects="item.projects"
                   :override-options="chartOptionsForFirstItem"
-                  height="60px"
+                  height="25px"
                 />
                 <utilization-chart
                   v-if="index > 0"
@@ -133,7 +133,8 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import merge from 'lodash/merge'
+import cloneDeep from 'lodash/cloneDeep'
 import { mapGetters } from 'vuex'
 import { differenceInDays } from 'date-fns'
 import { UtilizationChart } from '../Profile'
@@ -185,7 +186,7 @@ export default {
       'profileProjectsByProfileId'
     ]),
     chartOptionsForFirstItem () {
-      const optionsCopy = _.cloneDeep(this.overrideChartOptions)
+      const optionsCopy = cloneDeep(this.overrideChartOptions)
       const overrideOptions = {
         scales: {
           xAxes: [
@@ -205,10 +206,10 @@ export default {
           ]
         }
       }
-      return _.merge(optionsCopy, overrideOptions)
+      return merge(optionsCopy, overrideOptions)
     },
     alwaysVisibleProfiles () {
-      return this.orderedProfiles.filter(item => item.daysToZeroUtilization < this.hideThresholdInDays)
+      return this.orderedProfiles.filter(item => item.daysToZeroUtilization <= this.hideThresholdInDays)
     },
     initiallyHiddenProfiles () {
       return this.orderedProfiles.filter(item => item.daysToZeroUtilization > this.hideThresholdInDays)
