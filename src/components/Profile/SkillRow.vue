@@ -1,6 +1,7 @@
 <template>
   <b-row
     v-b-tooltip.hover.top="description"
+    :disabled.sync="disableTooltip"
     class="skillRow"
   >
     <b-col
@@ -39,6 +40,7 @@
         </span>
       </b-progress>
       <b-progress
+        v-show="!showSkillsOnly"
         :max="5"
         class="mb-6"
         height="0.9rem"
@@ -65,7 +67,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import proficiencyDesc from '../../assets/proficiencyDesc'
+import proficiencyDesc from '@/assets/proficiencyDesc'
 
 export default {
   name: 'SkillRow',
@@ -75,7 +77,15 @@ export default {
     wantsTo: Number,
     knows: Number,
     description: String,
-    highlight: Boolean
+    highlight: Boolean,
+    showSkillsOnly: {
+      type: Boolean,
+      default: false
+    },
+    disableTooltip: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
