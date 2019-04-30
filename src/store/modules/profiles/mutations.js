@@ -17,7 +17,7 @@ export const mutations = {
     state.profileSkills = profileSkills
   },
   [types.ADD_PROFILE_SKILL] (state, profileSkill) {
-    Vue.set(state.profileSkills, profileSkill.id, profileSkill)
+    state.profileSkills.push(profileSkill)
   },
   [types.UPDATE_PROFILE_SKILL] (state, profileSkill) {
     const profileSkillIndex = state.profileSkills.findIndex(skill => profileSkill.id === skill.id)
