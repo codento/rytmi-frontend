@@ -29,8 +29,8 @@
           >
             {{ section.heading }}
             <i
-              :class="{ down: !section.visible }"
-              class="fa fa-chevron-up rotate"
+              :class="section.visible ? 'fa-chevron-up' : 'fa-chevron-down'"
+              class="fa"
             />
           </b-button>
         </b-card-header>
@@ -225,15 +225,5 @@ export default {
 }
 .employee-name:hover {
   font-weight: bolder;
-}
-.rotate {
-    -moz-transition: all .5s linear;
-    -webkit-transition: all .5s linear;
-    transition: all .5s linear;
-}
-.rotate.down {
-    -moz-transform:rotate(-180deg);
-    -webkit-transform:rotate(-180deg);
-    transform:rotate(-180deg);
 }
 </style>
