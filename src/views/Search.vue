@@ -78,7 +78,7 @@ export default {
   data () {
     return {
       nameFilter: '',
-      utilizationDateFilter: Date.now(),
+      utilizationDateFilter: new Date(),
       selectedSkills: [],
       selectedRole: []
     }
