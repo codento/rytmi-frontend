@@ -6,6 +6,8 @@ import ChartBoard from '@/components/Dashboard/ChartBoard'
 import SkillChart from '@/components/Dashboard/SkillChart'
 import TopSkillChart from '@/components/Dashboard/TopSkillChart'
 import MostWillingnessChart from '@/components/Dashboard/MostWillingnessChart'
+import ConsultantUtilizationChart from '@/components/Dashboard/ConsultantUtilizationChart'
+import ConsultantUtilizationList from '@/components/Dashboard/ConsultantUtilizationList'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -107,6 +109,8 @@ describe('ChartBoard.vue', () => {
     expect(wrapper.find(TopSkillChart).isVisible()).toBeTruthy()
     expect(wrapper.find(MostWillingnessChart).isVisible()).toBeTruthy()
     expect(wrapper.find(SkillChart).isVisible()).toBeTruthy()
+    expect(wrapper.find(ConsultantUtilizationChart).isVisible()).toBeTruthy()
+    expect(wrapper.find(ConsultantUtilizationList).isVisible()).toBeTruthy()
   })
 
   it('createEmptySkillObject should create object with skill id\'s as properties', () => {

@@ -89,8 +89,9 @@ import { differenceInDays } from 'date-fns'
 import { UtilizationChart } from '../Profile'
 import ChartCard from './ChartCard'
 
-const getMinDate = (projectsArray) => {
-  return new Date(Math.min.apply(null, projectsArray.map(project => new Date(project.endDate))))
+const getMaxDate = (projectsArray) => {
+  const projectsEndDates = projectsArray.filter(project => !!project.endDate).map(project => new Date(project.endDate))
+  return projectsEndDates.length > 0 ? new Date(Math.max.apply(null, projectsEndDates)) : undefined
 }
 
 export default {
@@ -107,13 +108,25 @@ export default {
           id: 1,
           initiallyVisible: true,
           visible: true,
-          heading: 'Consultants without a project in the next 3 months'
+          heading: 'Developers soon to be without a project'
         },
         {
           id: 2,
           initiallyVisible: false,
           visible: false,
-          heading: 'Consultants currently in a project'
+          heading: 'Rest of the developers sorted by utilization'
+        },
+        {
+          id: 3,
+          initiallyVisible: false,
+          visible: false,
+          heading: 'Agile coaches soon to be  without a project'
+        },
+        {
+          id: 4,
+          initiallyVisible: false,
+          visible: false,
+          heading: 'Rest of the agile coaches sorted by utilization'
         }
       ],
       hideThresholdInDays: 90,
@@ -143,8 +156,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'skillsByProfileId',
-      'profiles',
+      'profileFilter',
       'futureProjectsOfProfile',
       'profileProjectsByProfileId'
     ]),
@@ -172,7 +184,8 @@ export default {
       return merge(optionsCopy, overrideOptions)
     },
     orderedProfiles () {
-      const mappedObjects = this.mapSkillsAndProjectsToProfiles()
+      // Filter out profiles having only administrative role
+      const mappedObjects = this.mapProjectsToProfiles().filter(item => item.profile.employeeRoles.every(i => [1, 2].includes(i)))
       return mappedObjects.sort((a, b) => a.utilization === 0 ? a.utilization - b.utilization : a.daysToZeroUtilization - b.daysToZeroUtilization)
     },
     initiallyVisibleProfiles () {
@@ -183,28 +196,33 @@ export default {
     },
     sectionsData () {
       return {
-        1: this.initiallyVisibleProfiles,
-        2: this.initiallyHiddenProfiles
+        1: this.initiallyVisibleProfiles.filter(item => item.profile.employeeRoles.includes(1)),
+        2: this.initiallyHiddenProfiles.filter(item => item.profile.employeeRoles.includes(1)),
+        3: this.initiallyVisibleProfiles.filter(item => !item.profile.employeeRoles.includes(1)),
+        4: this.initiallyHiddenProfiles.filter(item => !item.profile.employeeRoles.includes(1))
       }
     }
   },
   methods: {
-    mapSkillsAndProjectsToProfiles () {
-      // First, get profiles, filtered by name
-      const profilesWithoutSkills = Object.values(this.profiles)
-      // Then map skills and projects for each profile
-      return profilesWithoutSkills.map(profile => {
+    mapProjectsToProfiles () {
+      const activeProfiles = this.profileFilter()
+      // Map projects for each active profile
+      return Object.values(activeProfiles).map(profile => {
         const projects = this.futureProjectsOfProfile(profile.id)
         let utilizationOnSelectedDate = 0
         projects.map(project => {
           utilizationOnSelectedDate += project.workPercentage
         })
+        let daysToZeroUtilization = 0
+        if (projects.length > 0) {
+          // Handle projects without end date
+          daysToZeroUtilization = getMaxDate(projects) ? differenceInDays(getMaxDate(projects), Date.now()) : 100000
+        }
         return {
           profile: profile,
-          skills: this.skillsByProfileId(profile.id),
           projects: projects,
           utilization: utilizationOnSelectedDate,
-          daysToZeroUtilization: projects.length > 0 ? differenceInDays(getMinDate(projects), Date.now()) : 0
+          daysToZeroUtilization: daysToZeroUtilization
         }
       })
     },
