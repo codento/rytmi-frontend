@@ -20,12 +20,8 @@ export const mutations = {
     Vue.set(state.profileSkills, profileSkill.id, profileSkill)
   },
   [types.UPDATE_PROFILE_SKILL] (state, profileSkill) {
-    // TODO: this might be wise to refactor
-    state.profileSkills = state.profileSkills.filter((skill) => {
-      return skill.id !== profileSkill.id
-    })
-    Vue.set(state.profileSkills, profileSkill.id, profileSkill)
-    state.profileSkills.sort((a, b) => { return a.id - b.id })
+    const profileSkillIndex = state.profileSkills.findIndex(skill => profileSkill.id === skill.id)
+    Vue.set(state.profileSkills, profileSkillIndex, profileSkill)
   },
   [types.REMOVE_PROFILE_SKILL] (state, profileSkillId) {
     state.profileSkills = state.profileSkills.filter((skill) => {
