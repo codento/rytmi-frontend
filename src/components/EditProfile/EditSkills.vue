@@ -24,7 +24,10 @@
             slot="knows"
             slot-scope="knows"
           >
-            <span @click.stop="showKnowsModal(knows)">
+            <span
+              class="clickable"
+              @click.stop="showKnowsModal(knows)"
+            >
               <b-progress
                 :value="knows.value"
                 :max="5"
@@ -37,7 +40,10 @@
             slot="wantsTo"
             slot-scope="wantsTo"
           >
-            <span @click.stop="showWantsModal(wantsTo)">
+            <span
+              class="clickable"
+              @click.stop="showWantsModal(wantsTo)"
+            >
               <b-progress
                 :value="wantsTo.value"
                 :max="5"
@@ -55,7 +61,7 @@
               @click="changeVisibilityInCV(visibleInCV)"
             >
               <i
-                class="fa"
+                class="fa clickable"
                 :class="visibleInCV.value ? 'fa-check-square' : 'fa-square'"
               />
             </div>
@@ -214,5 +220,7 @@ button {
 .modal-btn {
   margin-top: 0.5rem;
 }
-
+.clickable {
+  cursor: pointer;
+}
 </style>
