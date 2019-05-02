@@ -44,6 +44,18 @@
           </template>
 
           <template
+            slot="edit"
+            slot-scope="data"
+          >
+            <b-btn
+              size="sm"
+              class="mr-1"
+              variant="success"
+              @click="editProject(data.item)"
+            >
+              Edit
+            </b-btn>
+          </template>          <template
             slot="remove"
             slot-scope="data"
           >
@@ -90,6 +102,7 @@ export default {
         { key: 'startDate', label: 'From' },
         { key: 'endDate', label: 'To' },
         { key: 'workPercentage', label: 'Utilization' },
+        'edit',
         'remove'
       ]
     }
@@ -107,6 +120,9 @@ export default {
       if (confirmation) {
         this.removeProfileProject(item)
       }
+    },
+    editProject (item) {
+      this.$router.push(`/projects/${item.projectId}`)
     }
   }
 }
