@@ -10,16 +10,13 @@
         caption-top
       >
         <template slot="table-caption">
-          Consultants (click value to edit)
+          Consultants
         </template>
         <template
           slot="profileId"
           slot-scope="profileId"
         >
-          <span
-            class="clickable"
-            @click.stop="openProfile(profileId.value)"
-          >
+          <span>
             {{ printMember(profileId.value) }}
           </span>
         </template>
@@ -27,10 +24,7 @@
           slot="startDate"
           slot-scope="element"
         >
-          <span
-            class="clickable"
-            @click.stop="openEditModal(element)"
-          >
+          <span>
             {{ element.value | dateFilter }}
           </span>
         </template>
@@ -38,10 +32,7 @@
           slot="endDate"
           slot-scope="element"
         >
-          <span
-            class="clickable"
-            @click.stop="openEditModal(element)"
-          >
+          <span>
             {{ element.value | dateFilter }}
           </span>
         </template>
@@ -49,14 +40,23 @@
           slot="workPercentage"
           slot-scope="element"
         >
-          <span
-            class="clickable"
-            @click.stop="openEditModal(element)"
-          >
+          <span>
             {{ element.value }} %
           </span>
         </template>
         <template
+          slot="edit"
+          slot-scope="element"
+        >
+          <b-btn
+            size="sm"
+            class="mr-1"
+            variant="success"
+            @click.stop="openEditModal(element)"
+          >
+            Edit
+          </b-btn>
+        </template>        <template
           slot="remove"
           slot-scope="remove"
         >
@@ -150,6 +150,7 @@ export default {
         { key: 'startDate', label: 'From' },
         { key: 'endDate', label: 'To' },
         { key: 'workPercentage', label: 'Utilization' },
+        { key: 'edit', label: ' ' },
         { key: 'remove', label: ' ' }
       ],
       editedProjectProfile: {}
