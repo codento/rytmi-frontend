@@ -38,6 +38,7 @@
           :key="skill.id"
           v-bind="skill"
           :highlight="skillHighlight.includes(skill.skillId)"
+          :show-skills-only="showSkillsOnly"
         />
       </b-col>
       <b-col
@@ -66,7 +67,11 @@ export default {
   components: { SkillRow, UtilizationChart, ProfileCardProjectInfo },
   props: {
     profile: Object,
-    skillHighlight: Array
+    skillHighlight: Array,
+    showSkillsOnly: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapGetters([
