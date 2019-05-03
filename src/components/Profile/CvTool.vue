@@ -59,7 +59,8 @@
 <script>
 import _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
-import { format } from 'date-fns'
+import getYear from 'date-fns/get_year'
+import format from 'date-fns/format'
 
 import LANGUAGE_ENUM from '@/utils/constants'
 
@@ -217,7 +218,8 @@ export default {
         languages: cvLanguages,
         projects: cvProjects,
         skills: cvSkills,
-        otherInfo: this.cvOtherInfo
+        otherInfo: this.cvOtherInfo,
+        born: getYear(this.profile.birthday)
       }
       console.log(data)
       this.addCV(data)
