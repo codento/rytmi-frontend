@@ -3,7 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
-import { UtilizationChart } from '@/components/Profile'
+import { UtilizationChart } from '@/components/Common'
 import ConsultantUtilizationList from '@/components/Dashboard/ConsultantUtilizationList'
 import profileProjectGetters from '@/store/modules/profileProjects/getters'
 

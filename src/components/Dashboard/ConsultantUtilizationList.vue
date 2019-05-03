@@ -86,7 +86,7 @@ import merge from 'lodash/merge'
 import cloneDeep from 'lodash/cloneDeep'
 import { mapGetters } from 'vuex'
 import { differenceInDays } from 'date-fns'
-import { UtilizationChart } from '../Profile'
+import { UtilizationChart } from '@/components/Common'
 import ChartCard from './ChartCard'
 
 const getMaxDate = (projectsArray) => {
