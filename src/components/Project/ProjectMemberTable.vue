@@ -202,7 +202,7 @@ export default {
     openEditModal (item) {
       this.editedProjectProfile = Object.assign({}, item.item)
       this.editedProjectProfile.startDate = new Date(this.editedProjectProfile.startDate)
-      this.editedProjectProfile.endDate = new Date(this.editedProjectProfile.endDate)
+      this.editedProjectProfile.endDate = this.editedProjectProfile.endDate ? new Date(this.editedProjectProfile.endDate) : null
       this.editedProjectProfile.index = item.index
       this.$refs.projectProfileEditModal.show()
     },
@@ -241,7 +241,7 @@ export default {
         })
         return false
       }
-      if (this.editedProjectProfile.startDate > this.editedProjectProfile.endDate) {
+      if (this.editedProjectProfile.endDate && this.editedProjectProfile.startDate > this.editedProjectProfile.endDate) {
         this.$toasted.global.rytmi_error({
           message: 'Start date can\'t be after end date.'
         })
@@ -273,5 +273,8 @@ button {
 }
 .clickable {
   cursor: pointer;
+}
+.clickable:hover {
+  font-weight: bolder;
 }
 </style>
