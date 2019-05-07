@@ -9,74 +9,49 @@
       role="tablist"
       class="mx-2 mb-1"
     >
-      <b-card
+      <CollapsableItem
         v-for="(section, index) in sections"
         :key="'utilization-list-' + index"
-        no-body
-        class="mb-1 rounded"
+        :title="section.heading"
+        :initial-visibility="section.initiallyVisible"
       >
-        <b-card-header
-          header-tag="header"
-          class="p-1"
-          role="tab"
-        >
-          <b-button
-            :id="'toggle-section-' + index"
-            v-b-toggle="'section-' + index"
-            block
-            variant="light"
-            @click.prevent="section.visible=!section.visible"
+        <b-card-body>
+          <b-row
+            v-for="(item, itemIndex) in sectionsData[section.id]"
+            :key="item.profile.id"
+            class="align-items-end"
           >
-            {{ section.heading }}
-            <i
-              :class="section.visible ? 'fa-chevron-up' : 'fa-chevron-down'"
-              class="fa"
-            />
-          </b-button>
-        </b-card-header>
-        <b-collapse
-          :id="'section-' + index"
-          :visible="section.initiallyVisible"
-          role="tabpanel"
-        >
-          <b-card-body>
-            <b-row
-              v-for="(item, itemIndex) in sectionsData[section.id]"
-              :key="item.profile.id"
-              class="align-items-end"
+            <b-col
+              cols="2"
+              class="ml-4"
             >
-              <b-col
-                cols="2"
-                class="ml-4"
+              <span
+                class="employee-name"
+                @click="openProfile(item.profile)"
               >
-                <span
-                  class="employee-name"
-                  @click="openProfile(item.profile)"
-                >
-                  {{ item.profile.firstName }} {{ item.profile.lastName }}
-                </span>
-              </b-col>
-              <b-col
-                cols="9"
-                class="mb-1"
-              >
-                <utilization-chart
-                  v-if="itemIndex === 0"
-                  :projects="item.projects"
-                  :override-options="chartOptionsForFirstItem"
-                  height="25px"
-                />
-                <utilization-chart
-                  v-if="itemIndex > 0"
-                  :projects="item.projects"
-                  :override-options="overrideChartOptions"
-                  height="20px"
-                />
-              </b-col>
-            </b-row>
-          </b-card-body>
-        </b-collapse>
-      </b-card>
+                {{ item.profile.firstName }} {{ item.profile.lastName }}
+              </span>
+            </b-col>
+            <b-col
+              cols="9"
+              class="mb-1"
+            >
+              <utilization-chart
+                v-if="itemIndex === 0"
+                :projects="item.projects"
+                :override-options="chartOptionsForFirstItem"
+                height="25px"
+              />
+              <utilization-chart
+                v-if="itemIndex > 0"
+                :projects="item.projects"
+                :override-options="overrideChartOptions"
+                height="20px"
+              />
+            </b-col>
+          </b-row>
+        </b-card-body>
+      </CollapsableItem>
     </b-col>
   </chart-card>
 </template>
@@ -86,7 +61,7 @@ import merge from 'lodash/merge'
 import cloneDeep from 'lodash/cloneDeep'
 import { mapGetters } from 'vuex'
 import { differenceInDays } from 'date-fns'
-import { UtilizationChart } from '@/components/Common'
+import { UtilizationChart, CollapsableItem } from '@/components/Common'
 import ChartCard from './ChartCard'
 
 const getMaxDate = (projectsArray) => {
@@ -98,7 +73,8 @@ export default {
   name: 'ConsultantUtilizationList',
   components: {
     ChartCard,
-    UtilizationChart
+    UtilizationChart,
+    CollapsableItem
   },
   props: {},
   data () {

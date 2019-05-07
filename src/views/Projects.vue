@@ -1,11 +1,16 @@
 <template>
   <div class="animated fadeIn col-sm-12 col-md-8 project-list-container">
-    <ProjectForm />
+    <CollapsableItem title="Add a new project">
+      <ProjectForm
+        :editable-project="project"
+      />
+    </CollapsableItem>
     <ProjectList />
   </div>
 </template>
 
 <script>
+import { CollapsableItem } from '../components/Common'
 import {
   ProjectForm,
   ProjectList
@@ -15,7 +20,8 @@ export default {
   name: 'Projects',
   components: {
     ProjectForm,
-    ProjectList
+    ProjectList,
+    CollapsableItem
   },
   mounted () {
     document.title = 'Rytmi - Project List'

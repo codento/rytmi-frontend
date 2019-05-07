@@ -1,20 +1,6 @@
 <template>
   <div>
-    <h3 style="text-align: center">
-      {{ editableProject ? 'Edit project' : 'Add a new project' }}
-      <span @click="showProjectForm = !showProjectForm">
-        <i
-          v-if="!showProjectForm"
-          class="fa fa-chevron-down"
-        />
-        <i
-          v-else
-          class="fa fa-chevron-up"
-        />
-      </span>
-    </h3>
     <b-form
-      v-show="showProjectForm"
       id="project_form"
       class="animated fadeIn"
       @submit="onSubmit"
@@ -155,7 +141,6 @@ export default {
   },
   data () {
     return {
-      showProjectForm: false,
       showError: false,
       errorDetails: [],
       project: {}
