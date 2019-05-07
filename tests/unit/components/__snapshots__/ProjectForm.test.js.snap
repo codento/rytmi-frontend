@@ -2,10 +2,7 @@
 
 exports[`ProjectForm.test.js Template is correct 1`] = `
 <div>
-  <h3 style="text-align: center;">
-    Add a new project
-    <span><i class="fa fa-chevron-down"></i></span></h3>
-  <b-form id="project_form" class="animated fadeIn" style="display: none;">
+  <b-form id="project_form" class="animated fadeIn">
     <b-row>
       <b-col><small>Project code</small>
         <b-input placeholder="Project code" required="" type="number" min="0" max="99999"></b-input>

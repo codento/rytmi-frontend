@@ -10,7 +10,7 @@
         caption-top
       >
         <template slot="table-caption">
-          Consultants (click value to edit)
+          Consultants
         </template>
         <template
           slot="profileId"
@@ -27,10 +27,7 @@
           slot="startDate"
           slot-scope="element"
         >
-          <span
-            class="clickable"
-            @click.stop="openEditModal(element)"
-          >
+          <span>
             {{ element.value | dateFilter }}
           </span>
         </template>
@@ -38,10 +35,7 @@
           slot="endDate"
           slot-scope="element"
         >
-          <span
-            class="clickable"
-            @click.stop="openEditModal(element)"
-          >
+          <span>
             {{ element.value | dateFilter }}
           </span>
         </template>
@@ -49,14 +43,23 @@
           slot="workPercentage"
           slot-scope="element"
         >
-          <span
-            class="clickable"
-            @click.stop="openEditModal(element)"
-          >
+          <span>
             {{ element.value }} %
           </span>
         </template>
         <template
+          slot="edit"
+          slot-scope="element"
+        >
+          <b-btn
+            size="sm"
+            class="mr-1"
+            variant="success"
+            @click.stop="openEditModal(element)"
+          >
+            Edit
+          </b-btn>
+        </template>        <template
           slot="remove"
           slot-scope="remove"
         >
@@ -150,6 +153,7 @@ export default {
         { key: 'startDate', label: 'From' },
         { key: 'endDate', label: 'To' },
         { key: 'workPercentage', label: 'Utilization' },
+        { key: 'edit', label: ' ' },
         { key: 'remove', label: ' ' }
       ],
       editedProjectProfile: {}
@@ -198,7 +202,7 @@ export default {
     openEditModal (item) {
       this.editedProjectProfile = Object.assign({}, item.item)
       this.editedProjectProfile.startDate = new Date(this.editedProjectProfile.startDate)
-      this.editedProjectProfile.endDate = new Date(this.editedProjectProfile.endDate)
+      this.editedProjectProfile.endDate = this.editedProjectProfile.endDate ? new Date(this.editedProjectProfile.endDate) : null
       this.editedProjectProfile.index = item.index
       this.$refs.projectProfileEditModal.show()
     },
@@ -237,7 +241,7 @@ export default {
         })
         return false
       }
-      if (this.editedProjectProfile.startDate > this.editedProjectProfile.endDate) {
+      if (this.editedProjectProfile.endDate && this.editedProjectProfile.startDate > this.editedProjectProfile.endDate) {
         this.$toasted.global.rytmi_error({
           message: 'Start date can\'t be after end date.'
         })
@@ -269,5 +273,8 @@ button {
 }
 .clickable {
   cursor: pointer;
+}
+.clickable:hover {
+  font-weight: bolder;
 }
 </style>

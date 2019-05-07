@@ -39,6 +39,7 @@
           v-bind="skill"
           :highlight="skillHighlight.includes(skill.skillId)"
           :show-skills-only="showSkillsOnly"
+          disable-tooltip
         />
         <b-row
           v-if="skillHighlight.length > 1"

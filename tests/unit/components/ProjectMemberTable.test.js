@@ -94,7 +94,7 @@ describe('ProjectMemberTable.vue', () => {
     })
     const wrapper = createWrapper({ propsData, store })
     const removeProfileSpy = jest.spyOn(wrapper.vm, 'removeMember')
-    wrapper.find('tbody').find('button').trigger('click')
+    wrapper.find('tbody').find('.btn-danger').trigger('click')
     await flushPromises()
     expect(removeProfileSpy).toHaveBeenCalledWith(propsData.members[0])
     expect(confirmSpy).toHaveBeenCalled()
@@ -127,6 +127,23 @@ describe('ProjectMemberTable.vue', () => {
     await flushPromises()
     expect(actions.updateProfileProject).toHaveBeenCalled()
   })
+
+  it('should call updateProfileProject even if endDate is null', async () => {
+    const actions = {
+      updateProfileProject: jest.fn(() => Promise.resolve())
+    }
+    const store = createStore({ actions })
+    const wrapper = createWrapper({ store })
+    let propsData = getMembersList()
+
+    propsData.members[0].endDate = null
+    wrapper.vm.openEditModal({ item: propsData.members[0] })
+    let modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' })
+    modalWrapper.find('button[id=save]').trigger('click')
+    await flushPromises()
+    expect(actions.updateProfileProject).toHaveBeenCalled()
+  })
+
   it('should not call updateProfileProject if startDate is after endDate or if workPercentage is not between 0 and 100 or if some data is not entered at all', async () => {
     const actions = {
       updateProfileProject: jest.fn(() => Promise.resolve())

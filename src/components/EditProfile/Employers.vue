@@ -30,12 +30,14 @@
     <b-row
       v-for="employer in employers"
       :key="employer.id"
-      class="clickable"
-      @click="employerClicked(employer)"
     >
       <b-col>
         <div>
-          <span class="employer-name">{{ employer ? employer.name : '' }}</span> <span>{{ getFormatedDate(employer.startDate) + ' - ' + getFormatedDate(employer.endDate) }}</span>
+          <span
+            class="employer-name clickable"
+            @click="employerClicked(employer)"
+          >
+            {{ employer ? employer.name : '' }}</span> <span>{{ getFormatedDate(employer.startDate) + ' - ' + getFormatedDate(employer.endDate) }}</span>
           <i
             v-b-modal="'delete-modal'"
             class="fa fa-trash icon"
@@ -160,7 +162,7 @@ export default {
 
 }
 .description:first-line {
-  line-height: 0px;
+  line-height: 0;
 }
 .details {
   padding-left: 15px;

@@ -3,7 +3,6 @@ import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Project from '@/views/Project.vue'
-import { ProjectProfileForm } from '@/components/Project'
 import Loading from '@/components/helpers/LoadingSpinner'
 import { format } from 'date-fns'
 
@@ -114,13 +113,6 @@ describe('Project.vue', () => {
     })
     const wrapper = createWrapper({ store })
     expect(wrapper.find('span[class="detail members').text()).toBe('Consultants')
-  })
-
-  it('opens the add consultant form when clicked', () => {
-    const wrapper = createWrapper()
-    expect(wrapper.find(ProjectProfileForm).exists()).toBe(false)
-    wrapper.find('h3').trigger('click')
-    expect(wrapper.find(ProjectProfileForm).exists()).toBe(true)
   })
 
   it('Template is correct', () => {

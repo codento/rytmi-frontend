@@ -221,6 +221,7 @@ export default {
         this.$toasted.global.rytmi_success({
           message: 'Profile edited.'
         })
+        this.$router.push(`/profile/${this.profile.id}`)
       } catch (error) {
         this.showError = true
         if (Array.isArray(error.details)) {
