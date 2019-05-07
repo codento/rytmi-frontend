@@ -2,7 +2,7 @@
   <div>
     <b-card
       no-body
-      class="mb-1 rounded"
+      class="mb-1 rounded border-0"
     >
       <b-card-header
         class="p-1 btn-rytmi-light"

@@ -23,5 +23,15 @@ td > button {
 }
 
 .btn-rytmi-light {
-  background-color: rgb(238, 238, 238);
+  background-color: rgb(242, 242, 242);
+  border: none;
+}
+
+.btn-rytmi-light:hover {
+  background-color: rgb(235, 235, 235);
+}
+
+.btn-rytmi-light:focus,.btn-rytmi-light:active {
+  outline: none !important;
+  box-shadow: none;
 }
