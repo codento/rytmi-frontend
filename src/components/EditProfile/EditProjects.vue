@@ -75,7 +75,10 @@
           class="newProject"
           title="Join a project"
         >
-          <ProjectProfileForm :profile-id="profileId" />
+          <ProjectProfileForm
+            :profile-id="profileId"
+            no-redirect
+          />
         </b-card>
       </b-col>
     </b-row>
