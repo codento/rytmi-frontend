@@ -62,6 +62,7 @@ import { mapGetters, mapActions } from 'vuex'
 import getYear from 'date-fns/get_year'
 import format from 'date-fns/format'
 
+import { newCv } from '@/utils/api/api'
 import LANGUAGE_ENUM from '@/utils/constants'
 
 import CvToolProfile from './CvToolProfile.vue'
@@ -148,10 +149,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'changeLanguage',
-      'addCV'
-    ]),
+    ...mapActions(['changeLanguage']),
     toggleLanguage: function (languageKey) {
       this.changeLanguage(languageKey)
     },
@@ -221,8 +219,14 @@ export default {
         otherInfo: this.cvOtherInfo,
         born: getYear(this.profile.birthday)
       }
-      console.log(data)
-      this.addCV(data)
+      newCv(data)
+        .then(response => {
+          const blob = new Blob([response.data], { type: 'application/pdf' })
+          const link = document.createElement('a')
+          link.href = window.URL.createObjectURL(blob)
+          link.download = `Codento CV ${this.profile.firstName} ${this.profile.lastName}.pdf`
+          link.click()
+        })
     }
   }
 }
