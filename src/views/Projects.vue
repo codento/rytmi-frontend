@@ -1,9 +1,7 @@
 <template>
   <div class="animated fadeIn col-sm-12 col-md-8 project-list-container">
     <CollapsableItem title="Add a new project">
-      <ProjectForm
-        :editable-project="project"
-      />
+      <ProjectForm />
     </CollapsableItem>
     <ProjectList />
   </div>

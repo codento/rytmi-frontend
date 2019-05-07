@@ -94,7 +94,7 @@ describe('ProjectMemberTable.vue', () => {
     })
     const wrapper = createWrapper({ propsData, store })
     const removeProfileSpy = jest.spyOn(wrapper.vm, 'removeMember')
-    wrapper.find('tbody').find('button').trigger('click')
+    wrapper.find('tbody').find('.btn-danger').trigger('click')
     await flushPromises()
     expect(removeProfileSpy).toHaveBeenCalledWith(propsData.members[0])
     expect(confirmSpy).toHaveBeenCalled()

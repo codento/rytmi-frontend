@@ -16,7 +16,10 @@
           slot="profileId"
           slot-scope="profileId"
         >
-          <span>
+          <span
+            class="clickable"
+            @click.stop="openProfile(profileId.value)"
+          >
             {{ printMember(profileId.value) }}
           </span>
         </template>

@@ -177,7 +177,6 @@ export default {
               message: 'Project updated!'
             })
             this.showError = false
-            this.showProjectForm = false
           })
           .catch(err => {
             this.errorDetails = err.response.data.error.details
@@ -191,7 +190,6 @@ export default {
             })
             document.getElementById('project_form').reset()
             this.showError = false
-            this.showProjectForm = false
           }).catch(err => {
             if (Array.isArray(err.data.error.details)) {
               this.errorDetails = err.data.error.details
@@ -234,8 +232,4 @@ export default {
 .project-creation-error {
   color: red;
 }
-.project-form-chevron {
-  float: right;
-}
-
 </style>
