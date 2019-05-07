@@ -2,13 +2,14 @@
   <div>
     <b-form
       id="project-profile-form"
+      class="mx-2 my-2"
       @submit="onSubmit"
       @reset="onReset"
     >
       <b-form-group
         v-show="profileVisible"
         id="consultantLabel"
-        label="Consultant:"
+        label="Consultant"
         label-for="consultant"
       >
         <b-form-select

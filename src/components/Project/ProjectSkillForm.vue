@@ -2,6 +2,7 @@
   <div>
     <b-form
       id="project-skill-form"
+      class="mx-2 my-2"
     >
       <ul>
         <li
