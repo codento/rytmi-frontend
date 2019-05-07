@@ -135,9 +135,6 @@ describe('CvTool.test.js', () => {
             duration: '01/2018-02/2018'
           }
         ]
-      },
-      actions: {
-        addCV: jest.fn()
       }
     }
     const wrapper = createShallowWrapper(CvTool, _.merge(storeConfig, overrideStore), additionalMountingOptions)
