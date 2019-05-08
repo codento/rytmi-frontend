@@ -12,5 +12,18 @@ export const mutations = {
   },
   [types.UPDATE_TOP_PROJECTS]: (state, projects) => {
     state.topProjects = projects
+  },
+  [types.GET_PDF_PENDING] (state) {
+    state.pdfDownloading = true
+    state.pdfDownloaded = false
+    state.pdfDownloadError = ''
+  },
+  [types.GET_PDF_SUCCESS] (state, boolean) {
+    state.pdfDownloaded = boolean
+    state.pdfDownloading = false
+  },
+  [types.GET_PDF_FAILURE] (state, error) {
+    state.pdfDownloadError = error
+    state.pdfDownloading = false
   }
 }

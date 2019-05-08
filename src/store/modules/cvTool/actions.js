@@ -1,3 +1,4 @@
+import { generateCv } from '../../../utils/api/api'
 import * as types from '../../mutation-types'
 
 export const actions = {
@@ -12,5 +13,27 @@ export const actions = {
   },
   updateTopProjects ({ commit }, params) {
     commit(types.UPDATE_TOP_PROJECTS, params)
+  },
+  resetPDF ({ commit }, params) {
+    commit(types.GET_PDF_SUCCESS, false)
+    commit(types.GET_PDF_FAILURE, '')
+  },
+  downloadCv ({ commit }, params) {
+    commit(types.GET_PDF_PENDING)
+    return new Promise((resolve, reject) => {
+      generateCv(params.cvData)
+        .then(response => {
+          const blob = new Blob([response.data], { type: 'application/pdf' })
+          const link = document.createElement('a')
+          link.href = window.URL.createObjectURL(blob)
+          link.download = params.pdfName + 'pdf'
+          link.click()
+          commit(types.GET_PDF_SUCCESS, true)
+          resolve(response)
+        }).catch(err => {
+          commit(types.GET_PDF_FAILURE, err)
+          reject(err.response)
+        })
+    })
   }
 }

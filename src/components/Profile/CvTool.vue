@@ -6,9 +6,9 @@
     >
       <div id="disabled-button-wrapper">
         <b-button
-          id="create-cv-button"
+          id="open-create-pdf-modal"
+          v-b-modal.create-pdf-modal
           :disabled="!allRequiredFieldsFilled"
-          @click.prevent="createPDF"
         >
           Create PDF
         </b-button>
@@ -19,6 +19,71 @@
         >
           {{ disabledButtonInfo }}
         </b-tooltip>
+        <b-modal
+          id="create-pdf-modal"
+          ref="create-pdf-modal"
+          title="Create PDF"
+          hide-footer
+          hide-header-close
+          @hide="resetPDF"
+        >
+          <b-row>
+            <b-col
+              cols="12"
+              class="my-2"
+            >
+              <label
+                class="sm"
+                for="pdf-name-input"
+              >
+                Enter filename for PDF
+              </label>
+              <b-form-input
+                id="pdf-name-input"
+                v-model="pdfName"
+                required
+              />
+            </b-col>
+            <b-col
+              cols="12"
+              class="my-2"
+            >
+              <b-button
+                id="create-cv-button"
+                :disabled.sync="pdfDownloading"
+                @click.prevent="createPDF"
+              >
+                Create PDF
+              </b-button>
+            </b-col>
+            <b-col
+              cols="12"
+              class="my-2"
+            >
+              <div v-if="pdfDownloading">
+                <LoadingSpinner />
+              </div>
+              <div
+                v-else
+                class="text-center"
+              >
+                <div v-if="pdfDownloaded">
+                  File <strong>{{ pdfName }}.pdf</strong> succesfully downloaded
+                </div>
+                <div v-else-if="pdfDownloadError.length > 0">
+                  {{ pdfDownloadError }}
+                </div>
+              </div>
+            </b-col>
+          </b-row>
+          <b-button
+            class="pull-right"
+            variant="primary"
+            @click="hideModal"
+          >
+            Close
+          </b-button>
+        </b-modal>
       </div>
       <b-button-group
         v-for="languageButton in languageButtons"
@@ -62,7 +127,6 @@ import { mapGetters, mapActions } from 'vuex'
 import getYear from 'date-fns/get_year'
 import format from 'date-fns/format'
 
-import { newCv } from '@/utils/api/api'
 import LANGUAGE_ENUM from '@/utils/constants'
 
 import CvToolProfile from './CvToolProfile.vue'
@@ -70,13 +134,16 @@ import CvToolSkills from './CvToolSkills.vue'
 import CvToolWorkExperience from './CvToolWorkExperience.vue'
 import CvToolOtherInfo from './CvToolOtherInfo.vue'
 
+import LoadingSpinner from '@/components/helpers/LoadingSpinner.vue'
+
 export default {
   name: 'CvTool',
   components: {
     CvToolProfile,
     CvToolSkills,
     CvToolWorkExperience,
-    CvToolOtherInfo
+    CvToolOtherInfo,
+    LoadingSpinner
   },
   props: {
     'profile': Object
@@ -84,7 +151,8 @@ export default {
   data () {
     return {
       isIntroductionValid: false,
-      showButtonInfo: true
+      showButtonInfo: true,
+      pdfName: ''
     }
   },
   computed: {
@@ -101,7 +169,10 @@ export default {
       'cvIntroduction',
       'cvOtherInfo',
       'topSkills',
-      'topProjects'
+      'topProjects',
+      'pdfDownloading',
+      'pdfDownloaded',
+      'pdfDownloadError'
     ]),
     languageButtons: function () {
       return LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) }))
@@ -134,6 +205,9 @@ export default {
     projectsLoaded: function () {
       return this.projects.length > 0 ? this.projects.every(project => project.hasOwnProperty('duration')) : false
     },
+    defaultPDFName: function () {
+      return `Codento CV ${this.profile.firstName} ${this.profile.lastName} [${this.currentLanguage}]`
+    },
     allRequiredFieldsFilled: {
       get: function () {
         return (this.topSkills.length > 0 && this.isIntroductionValid && this.topProjects.length > 0)
@@ -148,8 +222,15 @@ export default {
       return 'Required info missing: '.concat(missingInfo.join(', '))
     }
   },
+  mounted () {
+    this.pdfName = this.defaultPDFName
+  },
   methods: {
-    ...mapActions(['changeLanguage']),
+    ...mapActions([
+      'changeLanguage',
+      'downloadCv',
+      'resetPDF'
+    ]),
     toggleLanguage: function (languageKey) {
       this.changeLanguage(languageKey)
     },
@@ -171,8 +252,11 @@ export default {
       }
       return profileSkillCopy
     },
-    createPDF: function (event) {
-      event.preventDefault()
+    hideModal () {
+      this.$refs['create-pdf-modal'].hide()
+      this.resetPDF()
+    },
+    createPDF: function () {
       function mapSkill (skillObj) {
         return {
           skillId: skillObj.skillId,
@@ -219,14 +303,7 @@ export default {
         otherInfo: this.cvOtherInfo,
         born: getYear(this.profile.birthday)
       }
-      newCv(data)
-        .then(response => {
-          const blob = new Blob([response.data], { type: 'application/pdf' })
-          const link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
-          link.download = `Codento CV ${this.profile.firstName} ${this.profile.lastName}.pdf`
-          link.click()
-        })
+      this.downloadCv({ cvData: data, pdfName: this.pdfName })
     }
   }
 }

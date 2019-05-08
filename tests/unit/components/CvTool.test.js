@@ -74,7 +74,14 @@ const initialState = {
   cvIntroduction: '',
   cvOtherInfo: '',
   topSkills: [],
-  topProjects: []
+  topProjects: [],
+  pdfDownloading: false,
+  pdfDownloaded: {
+    url: '',
+    name: '',
+    timestamp: null
+  },
+  pdfDownloadError: false
 }
 
 const storeConfig = {
@@ -105,41 +112,48 @@ describe('CvTool.test.js', () => {
 
   it('Should disable button if inputs are not valid', () => {
     const wrapper = createShallowWrapper(CvTool, storeConfig, additionalMountingOptions)
-    const button = wrapper.find('#create-cv-button')
+    const button = wrapper.find('#open-create-pdf-modal')
     expect(button.html().includes('disabled')).toBeTruthy()
   })
+})
+
+describe('CvTool.test.js', () => {
+  const overrideState = {
+    state: {
+      cvIntroduction: 'Test introduction',
+      cvOtherInfo: 'Test information',
+      topSkills: [
+        {
+          id: 1,
+          name: 'Python',
+          description: 'Python desc'
+        }
+      ],
+      topProjects: [
+        {
+          id: mockProfileProject.id,
+          profile: mockProfile.id,
+          projectId: mockProfileProject.projectId,
+          startDate: mockProfileProject.startDate,
+          endDate: mockProfileProject.endDate,
+          title: mockProfileProject.endDate,
+          name: mockProject.name,
+          description: mockProject.description,
+          customerName: mockProject.customerName,
+          duration: '01/2018-02/2018'
+        }
+      ]
+    }
+  }
 
   it('Should enable button if inputs are valid', () => {
-    const overrideStore = {
-      state: {
-        cvIntroduction: 'Test introduction',
-        cvOtherInfo: 'Test information',
-        topSkills: [
-          {
-            id: 1,
-            name: 'Python',
-            description: 'Python desc'
-          }
-        ],
-        topProjects: [
-          {
-            id: mockProfileProject.id,
-            profile: mockProfile.id,
-            projectId: mockProfileProject.projectId,
-            startDate: mockProfileProject.startDate,
-            endDate: mockProfileProject.endDate,
-            title: mockProfileProject.endDate,
-            name: mockProject.name,
-            description: mockProject.description,
-            customerName: mockProject.customerName,
-            duration: '01/2018-02/2018'
-          }
-        ]
-      }
-    }
-    const wrapper = createShallowWrapper(CvTool, _.merge(storeConfig, overrideStore), additionalMountingOptions)
+    const wrapper = createShallowWrapper(CvTool, _.merge(storeConfig, overrideState), additionalMountingOptions)
+    // isIntroductionValid is updated first when child component CvToolProfile is created -> mock by setting it manually here
     wrapper.setData({ isIntroductionValid: true })
-    const button = wrapper.find('#create-cv-button')
-    expect(button.html().includes('disabled')).toBeFalsy()
+    const openModalButton = wrapper.find('#open-create-pdf-modal')
+    expect(openModalButton.html().includes('disabled')).toBeFalsy()
+    openModalButton.trigger('click')
+    // Should open modal
+    expect(wrapper.find('#create-pdf-modal').isVisible()).toBeTruthy()
   })
 })

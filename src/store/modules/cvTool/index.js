@@ -6,7 +6,10 @@ const initialState = {
   cvIntroduction: '',
   cvOtherInfo: '',
   topSkills: [],
-  topProjects: []
+  topProjects: [],
+  pdfDownloading: false,
+  pdfDownloaded: true,
+  pdfDownloadError: false
 }
 
 export default {
