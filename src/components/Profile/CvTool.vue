@@ -104,7 +104,7 @@ export default {
       'topProjects'
     ]),
     languageButtons: function () {
-      return LANGUAGE_ENUM.LANGUAGES.map(item => ({...item, state: item.id === this.currentLanguage}))
+      return LANGUAGE_ENUM.LANGUAGES.map(item => ({ ...item, state: item.id === this.currentLanguage }))
     },
     skillsAndLanguages: function () {
       const profileSkills = this.profileSkillsByProfileId(this.profile.id)
