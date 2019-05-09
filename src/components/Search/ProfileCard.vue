@@ -41,13 +41,6 @@
           :show-skills-only="showSkillsOnly"
           disable-tooltip
         />
-        <b-row
-          v-if="skillHighlight.length > 1"
-          align-h="end"
-          no-gutters
-        >
-          {{ `Sum of selected skills: ${highlightedSum}` }}
-        </b-row>
       </b-col>
       <b-col
         cols="12"
@@ -87,13 +80,7 @@ export default {
       'profileSkillsByProfileId',
       'skillById',
       'futureProjectsOfProfile'
-    ]),
-    highlightedSum: function () {
-      const highlightedSkills = this.skillHighlight.map(skillId => {
-        return this.profileSkillsByProfileId(this.profile.id).find(skill => skill.skillId === skillId).knows
-      })
-      return highlightedSkills.reduce((a, b) => a + b)
-    }
+    ])
   },
   methods: {
     openProfile (profile) {
