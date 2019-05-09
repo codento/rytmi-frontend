@@ -2,12 +2,14 @@
   <div>
     <b-form
       id="project-profile-form"
+      class="mx-2 my-2"
       @submit="onSubmit"
+      @reset="onReset"
     >
       <b-form-group
         v-show="profileVisible"
         id="consultantLabel"
-        label="Consultant:"
+        label="Consultant"
         label-for="consultant"
       >
         <b-form-select
@@ -63,10 +65,29 @@
             :key="project.id"
             :value="project.id"
           >
-            {{ project.code }} - {{ project.name }}
+            {{ project.code }} - {{ getProjectName(project) }}
           </option>
         </b-form-select>
       </b-form-group>
+
+      <b-row>
+        <b-col>
+          <span>Title (Finnish)</span>
+          <b-input
+            v-model="descriptionFi.title"
+            type="text"
+            required
+          />
+        </b-col>
+        <b-col>
+          <span>Title (English)</span>
+          <b-input
+            v-model="descriptionEn.title"
+            type="text"
+            required
+          />
+        </b-col>
+      </b-row>
 
       <span>Start date</span>
       <Datepicker
@@ -96,14 +117,14 @@
     </b-form>
     <div
       v-if="showError"
-      class="profile-form-errors"
     >
-      <div
-        v-for="detail in errorDetails"
-        :key="detail"
+      <b-alert
+        show
+        variant="warning"
       >
-        {{ detail }}
-      </div>
+        Adding project failed
+        <ApiErrorDetailsPanel :error-details="errorDetails" />
+      </b-alert>
     </div>
   </div>
 </template>
@@ -111,10 +132,11 @@
 <script>
 import Datepicker from '../helpers/Datepicker'
 import { mapGetters, mapActions } from 'vuex'
+import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 export default {
   name: 'ProjectProfileForm',
-  components: { Datepicker },
+  components: { ApiErrorDetailsPanel, Datepicker },
   props: {
     projectId: {
       type: Number,
@@ -127,15 +149,21 @@ export default {
     toggleForm: {
       type: Function,
       default: null
+    },
+    noRedirect: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
+      show: true,
       showError: false,
       errorDetails: [],
       profileProject: {
         projectId: this.projectId,
-        profileId: this.profileId
+        profileId: this.profileId,
+        descriptions: this.descriptions ? this.descriptions : this.getEmptyDescriptions()
       },
       projectVisible: true,
       profileVisible: false
@@ -144,8 +172,15 @@ export default {
   computed: {
     ...mapGetters([
       'profiles',
-      'projects'
-    ])
+      'projects',
+      'currentLanguage'
+    ]),
+    descriptionFi () {
+      return this.getProfileProjectDescriptionByLanguage('fi')
+    },
+    descriptionEn () {
+      return this.getProfileProjectDescriptionByLanguage('en')
+    }
   },
   created () {
     this.projectVisible = this.projectId === null
@@ -153,8 +188,14 @@ export default {
   },
   methods: {
     ...mapActions(['newProjectProfile']),
+    getProjectName (project) {
+      const description = project.descriptions.find(description => description.language === this.currentLanguage)
+      return description ? description.name : ''
+    },
     onSubmit (evt) {
       evt.preventDefault()
+      this.errorDetails = []
+      this.showError = false
       this.newProjectProfile(this.profileProject)
         .then((response) => {
           this.$toasted.global.rytmi_success({
@@ -166,9 +207,50 @@ export default {
           }
         })
         .catch((err) => {
-          this.errorDetails = err.response.data.error.details
+          if (Array.isArray(err.response.data.error.details)) {
+            this.errorDetails = err.response.data.error.details
+          } else {
+            this.errorDetails.push(err.response.data.error.details)
+          }
           this.showError = true
         })
+    },
+    onReset (evt) {
+      evt.preventDefault()
+      /* Trick to reset/clear native browser form validation state */
+      this.show = false
+      this.showError = false
+      this.$nextTick(() => { this.show = true })
+      if (this.noRedirect) {
+        this.profileProject = {}
+        this.profileProject.projectId = null
+        this.profileProject.profileId = this.profileId
+        this.profileProject.descriptions = this.getEmptyDescriptions()
+      } else {
+        this.redirect()
+      }
+    },
+    redirect () {
+      if (this.profileId) {
+        this.$router.push('/profile/' + this.profileId)
+      } else if (this.projectId) {
+        this.$router.push('/projects/' + this.projectId)
+      }
+    },
+    getEmptyDescriptions () {
+      return [
+        {
+          language: 'fi',
+          title: ''
+        },
+        {
+          language: 'en',
+          title: ''
+        }
+      ]
+    },
+    getProfileProjectDescriptionByLanguage (language) {
+      return this.profileProject.descriptions.find(description => description.language === language)
     }
   }
 }

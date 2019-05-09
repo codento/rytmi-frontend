@@ -5,8 +5,15 @@
     <h1>Basic Details</h1>
     <hr>
     <template v-if="profile">
-      <ProfileForm :profile="profile" />
-      <EditLinks :profile="profile" />
+      <ProfileForm
+        :profile="profile"
+        @profileUpdated="profileUpdated()"
+      />
+      <Employers :profile-id="profile.id" />
+      <EditLinks
+        :profile="profile"
+        @profileUpdated="profileUpdated()"
+      />
       <edit-skills :profile-id="profile.id" />
       <edit-projects :profile-id="profile.id" />
     </template>
@@ -19,7 +26,8 @@ import {
   EditLinks,
   EditSkills,
   EditProjects,
-  ProfileForm
+  ProfileForm,
+  Employers
 } from '../components/EditProfile'
 import store from '../store'
 
@@ -29,11 +37,12 @@ export default {
     ProfileForm,
     EditLinks,
     EditSkills,
-    EditProjects
+    EditProjects,
+    Employers
   },
   props: {
     profileId: {
-      type: String,
+      type: Number,
       required: true
     }
   },
@@ -49,6 +58,11 @@ export default {
   beforeRouteEnter (to, from, next) {
     store.dispatch('fetchPPsOfProfile', to.params.profileId)
     next()
+  },
+  methods: {
+    profileUpdated () {
+      this.$forceUpdate()
+    }
   }
 }
 </script>

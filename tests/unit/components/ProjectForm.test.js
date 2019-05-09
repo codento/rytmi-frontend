@@ -37,32 +37,7 @@ function createWrapper (overrideMountingOptions) {
   return mount(ProjectForm, mergedMountingOptions)
 }
 
-const mockProject = {
-  id: 1,
-  startDate: '2018-10-01',
-  endDate: '2018-10-11'
-}
-
 describe('ProjectForm.test.js', () => {
-  it('Shows Add project when project id is unknown', () => {
-    const propsData = { editableProject: null }
-    const wrapper = createWrapper({ propsData })
-    expect(wrapper.find('h3').text()).toContain('Add a new project')
-  })
-
-  it('Shows Edit project when project id is known', () => {
-    const propsData = { editableProject: mockProject }
-    const wrapper = createWrapper({ propsData })
-    expect(wrapper.find('h3').text()).toContain('Edit project')
-  })
-
-  it('Shows the form when heading is clicked', () => {
-    const wrapper = createWrapper()
-    expect(wrapper.find('form').exists()).toBeFalsy()
-    wrapper.find('h3').find('span').trigger('click')
-    expect(wrapper.find('form').exists()).toBeTruthy()
-  })
-
   it('Shows error message when update project fails', async () => {
     const apiError = {
       response: {
@@ -96,6 +71,16 @@ describe('ProjectForm.test.js', () => {
   })
 
   it('Submits the form and calls create project when submit is clicked and project id is uknown', async () => {
+    const expectedResult = {
+      code: '1234',
+      startDate: null,
+      endDate: null,
+      isSecret: false,
+      descriptions: [
+        { customerName: '', name: '', description: '', language: 'fi' },
+        { customerName: '', name: '', description: '', language: 'en' }
+      ]
+    }
     const actions = {
       createProject: jest.fn((obj, project, dno) => Promise.resolve(project))
     }
@@ -109,7 +94,7 @@ describe('ProjectForm.test.js', () => {
     wrapper.findAll('input').at(0).setValue(1234)
     wrapper.find('button').trigger('submit')
     await flushPromises()
-    expect(actions.createProject).toHaveBeenCalledWith(expect.anything(), { code: '1234' }, undefined)
+    expect(actions.createProject).toHaveBeenCalledWith(expect.anything(), expectedResult, undefined)
   })
 
   it('Submit the form and calls update project when submit is clicked and project id is known', async () => {

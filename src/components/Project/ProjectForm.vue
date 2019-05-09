@@ -1,65 +1,121 @@
 <template>
   <div>
-    <h3 style="text-align: center">
-      {{ editableProject ? 'Edit project' : 'Add a new project' }}
-      <span @click="showProjectForm = !showProjectForm">
-        <i
-          v-if="!showProjectForm"
-          class="fa fa-chevron-down"
-        />
-        <i
-          v-else
-          class="fa fa-chevron-up"
-        />
-      </span>
-    </h3>
     <b-form
-      v-if="showProjectForm"
       id="project_form"
       class="animated fadeIn"
       @submit="onSubmit"
     >
-      <small>Project code</small>
-      <b-input
-        v-model="project.code"
-        placeholder="Project code"
-        required
-        type="number"
-        min="0"
-        max="99999"
-      />
-      <small>Project name</small>
-      <b-input
-        v-model="project.name"
-        placeholder="Project name"
-        required
-        type="text"
-      />
-      <small>Start date</small>
-      <datepicker
-        v-model="project.startDate"
-        name="project-start-date"
-      />
-      <small>End date</small>
-      <datepicker
-        v-model="project.endDate"
-        name="project-end-date"
-      />
-      <small>Description</small>
-      <b-textarea
-        v-model="project.description"
-        class="form-control"
-        placeholder="Project description"
-        type="text"
-        rows="6"
-      />
-      <b-button
-        class="form-control"
-        type="submit"
-        primary
-      >
-        Submit
-      </b-button>
+      <b-row>
+        <b-col>
+          <small>Project code</small>
+          <b-input
+            v-model="project.code"
+            placeholder="Project code"
+            required
+            type="number"
+            min="0"
+            max="99999"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="6">
+          <small>Project name (Finnish)</small>
+          <b-input
+            v-model="getDescriptionByLanguage('fi').name"
+            placeholder="Project name (fi)"
+            required
+            type="text"
+          />
+        </b-col>
+        <b-col sm="6">
+          <small>Project name (English)</small>
+          <b-input
+            v-model="getDescriptionByLanguage('en').name"
+            placeholder="Project name (en)"
+            required
+            type="text"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <small>Start date</small>
+          <datepicker
+            v-model="project.startDate"
+            name="project-start-date"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <small>End date</small>
+          <datepicker
+            v-model="project.endDate"
+            name="project-end-date"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="6">
+          <small>Customer name (Finnish)</small>
+          <b-input
+            v-model="getDescriptionByLanguage('fi').customerName"
+            placeholder="Customer name (fi)"
+            type="text"
+          />
+        </b-col>
+        <b-col sm="6">
+          <small>Customer name (English)</small>
+          <b-input
+            v-model="getDescriptionByLanguage('en').customerName"
+            placeholder="Customer name (en)"
+            type="text"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="6">
+          <small>Description (Finnish)</small>
+          <b-textarea
+            v-model="getDescriptionByLanguage('fi').description"
+            class="form-control"
+            placeholder="Project description (fi)"
+            type="text"
+            rows="5"
+          />
+        </b-col>
+        <b-col sm="6">
+          <small>Description (English)</small>
+          <b-textarea
+            v-model="getDescriptionByLanguage('en').description"
+            class="form-control"
+            placeholder="Project description (en)"
+            type="text"
+            rows="5"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col class="mt-2 mb-2">
+          <b-form-checkbox
+            v-model="project.isSecret"
+          >
+            This is a secret project
+          </b-form-checkbox>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-button
+            class="form-control"
+            type="submit"
+            primary
+          >
+            Submit
+          </b-button>
+        </b-col>
+      </b-row>
     </b-form>
     <div
       v-if="showError"
@@ -85,7 +141,6 @@ export default {
   },
   data () {
     return {
-      showProjectForm: false,
       showError: false,
       errorDetails: [],
       project: {}
@@ -96,6 +151,14 @@ export default {
       this.project = this.editableProject
       this.project.endDate = new Date(this.editableProject.endDate)
       this.project.startDate = new Date(this.editableProject.startDate)
+    } else {
+      this.project = {
+        code: null,
+        startDate: null,
+        endDate: null,
+        isSecret: false,
+        descriptions: []
+      }
     }
   },
   methods: {
@@ -114,7 +177,6 @@ export default {
               message: 'Project updated!'
             })
             this.showError = false
-            this.showProjectForm = false
           })
           .catch(err => {
             this.errorDetails = err.response.data.error.details
@@ -128,7 +190,6 @@ export default {
             })
             document.getElementById('project_form').reset()
             this.showError = false
-            this.showProjectForm = false
           }).catch(err => {
             if (Array.isArray(err.data.error.details)) {
               this.errorDetails = err.data.error.details
@@ -137,6 +198,27 @@ export default {
             }
             this.showError = true
           })
+      }
+    },
+    getDescriptionByLanguage (language) {
+      if (this.project && this.project.descriptions) {
+        const paramsWithTranslations = this.project.descriptions.find(description => description.language === language)
+        if (!paramsWithTranslations) {
+          this.project.descriptions.push(
+            {
+              name: '',
+              customerName: '',
+              description: '',
+              language: language
+            }
+          )
+        }
+        return this.project.descriptions.find(description => description.language === language)
+      }
+      return {
+        name: '',
+        customerName: '',
+        description: ''
       }
     }
   }
@@ -150,8 +232,4 @@ export default {
 .project-creation-error {
   color: red;
 }
-.project-form-chevron {
-  float: right;
-}
-
 </style>

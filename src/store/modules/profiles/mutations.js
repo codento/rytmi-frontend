@@ -17,15 +17,11 @@ export const mutations = {
     state.profileSkills = profileSkills
   },
   [types.ADD_PROFILE_SKILL] (state, profileSkill) {
-    Vue.set(state.profileSkills, profileSkill.id, profileSkill)
+    state.profileSkills.push(profileSkill)
   },
   [types.UPDATE_PROFILE_SKILL] (state, profileSkill) {
-    // TODO: this might be wise to refactor
-    state.profileSkills = state.profileSkills.filter((skill) => {
-      return skill.id !== profileSkill.id
-    })
-    Vue.set(state.profileSkills, profileSkill.id, profileSkill)
-    state.profileSkills.sort((a, b) => { return a.id - b.id })
+    const profileSkillIndex = state.profileSkills.findIndex(skill => profileSkill.id === skill.id)
+    Vue.set(state.profileSkills, profileSkillIndex, profileSkill)
   },
   [types.REMOVE_PROFILE_SKILL] (state, profileSkillId) {
     state.profileSkills = state.profileSkills.filter((skill) => {
@@ -33,10 +29,10 @@ export const mutations = {
     })
   },
   [types.SET_PROFILEID] (state, profileId) {
-    state.profileId = profileId
+    state.profileId = parseInt(profileId)
   },
   [types.CLEAR_PROFILEID] (state) {
-    state.profileId = ''
+    state.profileId = undefined
   },
   [types.ADD_PPTOPROFILE] (state, profileProject) {
     if (!(profileProject.profileId in state.profileProjectList)) {
@@ -60,8 +56,8 @@ export const mutations = {
     if (index > -1) {
       state.profileProjectList[profileProject.profileId].splice(index, 1)
     }
-    const futureIndex = state.futurePpList[profileProject.profileId].indexOf(profileProject.id)
-    if (index > -1) {
+    const futureIndex = state.futurePpList[profileProject.profileId] ? state.futurePpList[profileProject.profileId].indexOf(profileProject.id) : -1
+    if (futureIndex > -1) {
       state.futurePpList[profileProject.profileId].splice(futureIndex, 1)
     }
   }

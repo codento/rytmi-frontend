@@ -1,7 +1,7 @@
 import * as types from '@/store/mutation-types'
 import { normalize } from 'normalizr'
 import { skillCategory } from '@/store/schema'
-import { getSkillCategories, newSkillCategory } from '@/utils/api'
+import { getSkillCategories, newSkillCategory } from '@/utils/api/api'
 
 export function fetchSkillCategories ({ commit, state }) {
   return new Promise((resolve, reject) => {

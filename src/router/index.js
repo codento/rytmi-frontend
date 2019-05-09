@@ -65,7 +65,7 @@ export default new Router({
     },
     {
       path: '/projects/:id',
-      name: 'Project',
+      name: 'project',
       component: Project,
       beforeEnter: requireAuth
     },
@@ -73,7 +73,9 @@ export default new Router({
       path: '/profile/:profileId/edit',
       name: 'editProfile',
       component: EditProfile,
-      props: true
+      props: (route) => {
+        return { profileId: parseInt(route.params.profileId) }
+      }
     },
     {
       path: '/skills',

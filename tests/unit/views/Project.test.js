@@ -3,7 +3,6 @@ import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Project from '@/views/Project.vue'
-import { ProjectProfileForm } from '@/components/Project'
 import Loading from '@/components/helpers/LoadingSpinner'
 import { format } from 'date-fns'
 
@@ -18,8 +17,15 @@ localVue.filter('dateFilter', value => {
 const projectMock = (projectId) => ({
   id: projectId,
   name: 'Project Foo',
-  code: 50,
   description: 'Foo Bar',
+  descriptions: [
+    {
+      name: 'Project Foo',
+      description: 'Foo Bar',
+      language: 'fi'
+    }
+  ],
+  code: 50,
   startDate: new Date('2018-01-01'),
   endDate: new Date('2018-05-01')
 })
@@ -30,7 +36,16 @@ const profileProjectMock = (projectId) => ([
     profile: 1,
     projectId: projectId,
     startDate: '2018-01-01',
-    endDate: '2018-02-01'
+    endDate: '2018-02-01',
+    name: 'Project Foo',
+    description: 'Foo Bar',
+    descriptions: [
+      {
+        name: 'Project Foo',
+        description: 'Foo Bar',
+        language: 'fi'
+      }
+    ]
   }
 ])
 
@@ -39,6 +54,9 @@ function createStore (overrideConfig) {
     getters: {
       projectById: () => (projectId) => projectMock(projectId),
       profileProjectsByProjectId: () => (projectId) => profileProjectMock(projectId)
+    },
+    state: {
+      siteSettings: { currentLanguage: 'fi' }
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -95,13 +113,6 @@ describe('Project.vue', () => {
     })
     const wrapper = createWrapper({ store })
     expect(wrapper.find('span[class="detail members').text()).toBe('Consultants')
-  })
-
-  it('opens the add consultant form when clicked', () => {
-    const wrapper = createWrapper()
-    expect(wrapper.find(ProjectProfileForm).exists()).toBe(false)
-    wrapper.find('h3').trigger('click')
-    expect(wrapper.find(ProjectProfileForm).exists()).toBe(true)
   })
 
   it('Template is correct', () => {

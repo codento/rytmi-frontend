@@ -87,20 +87,46 @@
         id="PhonenumberInput"
         v-model="editedProfile.phone"
         type="tel"
-        required
       />
     </b-form-group>
     <b-form-group
       id="description"
       label-cols-sm="3"
       label="Description:"
-      label-for="descriptionInput"
     >
-      <b-form-input
-        id="descriptionInput"
-        v-model="editedProfile.description"
-        :rows="3"
-        type="text"
+      <b-row>
+        <b-col sm="6">
+          <small>Introduction for CV main page (in Finnish)</small>
+          <b-textarea
+            v-model="getDescription('fi','introduction').description"
+            placeholder="Introduction for CV main page (fi)"
+            type="text"
+            rows="5"
+          />
+        </b-col>
+        <b-col sm="6">
+          <small>Introduction for CV main page (in English)</small>
+          <b-textarea
+            v-model="getDescription('en','introduction').description"
+            placeholder="Introduction for CV main page (en)"
+            type="text"
+            rows="5"
+          />
+        </b-col>
+      </b-row>
+      <EditOtherInfo
+        :input-text="getDescription('fi','other').description"
+        input-label="Other info for CV (in Finnish)"
+        language-key="fi"
+        :rows="5"
+        @input-updated="updateOtherInfo"
+      />
+      <EditOtherInfo
+        :input-text="getDescription('en','other').description"
+        input-label="Other info for CV (in English)"
+        language-key="en"
+        :rows="5"
+        @input-updated="updateOtherInfo"
       />
     </b-form-group>
     <b-button
@@ -122,12 +148,13 @@
 import { mapActions, mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
+import { EditOtherInfo } from '@/components/Common'
 
 export default {
   name: 'ProfileForm',
-  components: { ApiErrorDetailsPanel, vSelect },
+  components: { ApiErrorDetailsPanel, vSelect, EditOtherInfo },
   props: {
-    'profile': Object
+    profile: Object
   },
   data () {
     return {
@@ -139,8 +166,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['employeeRoles', 'employeeRoleById']),
     employeeRoleList () {
-      const roles = this.employeeRoles().map(item => {
+      const employeeRolesToArray = Object.keys(this.employeeRoles).map(key => this.employeeRoles[key])
+      const roles = employeeRolesToArray.map(item => {
         return {
           label: item.title,
           id: item.id
@@ -152,6 +181,9 @@ export default {
   watch: {
     selectedEmployeeRoles (newRoles) {
       this.editedProfile.employeeRoles = newRoles.map(role => role.id)
+    },
+    profile (newProfileValue) {
+      this.editedProfile = Object.assign({}, newProfileValue)
     }
   },
   created () {
@@ -161,17 +193,42 @@ export default {
   },
   methods: {
     ...mapActions(['updateProfile']),
-    ...mapGetters(['employeeRoles', 'employeeRoleById']),
+    getDescription (language, type) {
+      const description = this.profile.cvDescriptions
+        .find(description => description.language === language && description.type === type)
+      if (!description) {
+        this.profile.cvDescriptions.push(
+          {
+            description: '',
+            language: language,
+            type: type
+          }
+        )
+      }
+      return this.profile.cvDescriptions
+        .find(description => description.language === language && description.type === type)
+    },
+    updateOtherInfo: function (updatedInfo, language) {
+      this.getDescription(language, 'other').description = updatedInfo
+    },
     async onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []
       this.showError = false
       try {
         await this.updateProfile(this.editedProfile)
-        this.redirect()
+        this.$emit('profileUpdated')
+        this.$toasted.global.rytmi_success({
+          message: 'Profile edited.'
+        })
+        this.$router.push(`/profile/${this.profile.id}`)
       } catch (error) {
         this.showError = true
-        this.errorDetails = error.details
+        if (Array.isArray(error.details)) {
+          this.errorDetails = error.details
+        } else {
+          this.errorDetails.push(error.details)
+        }
       }
     },
     onReset (evt) {
@@ -179,7 +236,6 @@ export default {
       /* Trick to reset/clear native browser form validation state */
       this.show = false
       this.showError = false
-      this.errorDetails = []
       this.$nextTick(() => { this.show = true })
       this.redirect()
     },

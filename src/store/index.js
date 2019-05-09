@@ -9,8 +9,12 @@ import skillCategories from './modules/skillCategories'
 import skillGroups from './modules/skillGroups'
 import employeeRoles from './modules/employeeRoles'
 import users from './modules/users'
+import siteSettings from './modules/siteSettings'
+import projectSkills from './modules/projectSkills'
+import cvTool from './modules/cvTool'
 import getters from './getters'
 import mutations from './mutations'
+import employers from './modules/employers'
 
 Vue.use(Vuex)
 const state = {
@@ -32,6 +36,10 @@ export default new Vuex.Store({
     skillCategories,
     skillGroups,
     employeeRoles,
-    users
+    users,
+    siteSettings,
+    employers,
+    cvTool,
+    projectSkills
   }
 })

@@ -102,8 +102,16 @@ export default {
         const profileCopy = { ...this.profile, links }
         await this.updateProfile(profileCopy)
         this.linkInput = ''
+        this.$emit('profileUpdated')
+        this.$toasted.global.rytmi_success({
+          message: 'Links updated.'
+        })
       } catch (error) {
-        this.errorDetails = error.details
+        if (Array.isArray(error.details)) {
+          this.errorDetails = error.details
+        } else {
+          this.errorDetails.push(error.details)
+        }
       }
     },
     linkExists (link) {

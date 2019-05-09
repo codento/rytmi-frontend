@@ -1,6 +1,6 @@
 <template>
   <TheFooter>
-    <span>Rytmiapp &copy; 2018 <a href="https://codento.com">Codento Oy</a></span>
+    <span>Rytmiapp &copy; 2019 <a href="https://codento.com">Codento Oy</a></span>
     <div class="ml-auto">
       {{ `Frontend: ${frontendVersion}` }}
       <br>
@@ -12,7 +12,7 @@
 <script>
 import { Footer as TheFooter } from '@coreui/vue'
 import { version as frontendVersion } from '../../../package'
-import { getVersion } from '../../utils/api'
+import { getVersion } from '@/utils/api/api'
 
 export default {
   name: 'CFooter',

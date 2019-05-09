@@ -1,7 +1,7 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-process.env = { VUE_APP_API_URL: 'http://localhost:8081/api' }
-const api = require('../../../src/utils/api')
+process.env = { VUE_APP_BASE_URL: 'http://localhost:8081' }
+const api = require('../../../src/utils/api/api')
 const API_URL = 'http://localhost:8081/api'
 const PATH_AUTH = '/auth'
 const PATH_SKILLS = '/skills'

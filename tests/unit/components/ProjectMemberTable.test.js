@@ -94,7 +94,7 @@ describe('ProjectMemberTable.vue', () => {
     })
     const wrapper = createWrapper({ propsData, store })
     const removeProfileSpy = jest.spyOn(wrapper.vm, 'removeMember')
-    wrapper.find('tbody').find('button').trigger('click')
+    wrapper.find('tbody').find('.btn-danger').trigger('click')
     await flushPromises()
     expect(removeProfileSpy).toHaveBeenCalledWith(propsData.members[0])
     expect(confirmSpy).toHaveBeenCalled()
@@ -109,7 +109,7 @@ describe('ProjectMemberTable.vue', () => {
     expect(modalWrapper.element.style.display).toBe('none')
     wrapper.vm.openEditModal({ item: propsData.members[0] })
     const modalInputs = modalWrapper.findAll('input')
-    expect(modalInputs.at(2).vm.value).toBe(propsData.members[0].workPercentage)
+    expect(modalInputs.at(4).vm.value).toBe(propsData.members[0].workPercentage)
     expect(modalSpy).toHaveBeenCalled()
   })
 
@@ -127,7 +127,93 @@ describe('ProjectMemberTable.vue', () => {
     await flushPromises()
     expect(actions.updateProfileProject).toHaveBeenCalled()
   })
+
+  it('should call updateProfileProject even if endDate is null', async () => {
+    const actions = {
+      updateProfileProject: jest.fn(() => Promise.resolve())
+    }
+    const store = createStore({ actions })
+    const wrapper = createWrapper({ store })
+    let propsData = getMembersList()
+
+    propsData.members[0].endDate = null
+    wrapper.vm.openEditModal({ item: propsData.members[0] })
+    let modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' })
+    modalWrapper.find('button[id=save]').trigger('click')
+    await flushPromises()
+    expect(actions.updateProfileProject).toHaveBeenCalled()
+  })
+
+  it('should not call updateProfileProject if startDate is after endDate or if workPercentage is not between 0 and 100 or if some data is not entered at all', async () => {
+    const actions = {
+      updateProfileProject: jest.fn(() => Promise.resolve())
+    }
+    const store = createStore({ actions })
+    const wrapper = createWrapper({ store })
+    let propsData = getMembersList()
+
+    propsData.members[0].endDate = new Date('2017-12-01')
+    wrapper.vm.openEditModal({ item: propsData.members[0] })
+    let modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' })
+    modalWrapper.find('button[id=save]').trigger('click')
+    await flushPromises()
+    expect(actions.updateProfileProject).not.toHaveBeenCalled()
+
+    wrapper.vm.closeEditModal()
+    propsData = getMembersList()
+    propsData.members[0].workPercentage = 101
+    wrapper.vm.openEditModal({ item: propsData.members[0] })
+    modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' })
+    modalWrapper.find('button[id=save]').trigger('click')
+    await flushPromises()
+    expect(actions.updateProfileProject).not.toHaveBeenCalled()
+
+    wrapper.vm.closeEditModal()
+    propsData = getMembersList()
+    propsData.members[0].descriptions[0].title = ''
+    wrapper.vm.openEditModal({ item: propsData.members[0] })
+    modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' })
+    modalWrapper.find('button[id=save]').trigger('click')
+    await flushPromises()
+    expect(actions.updateProfileProject).not.toHaveBeenCalled()
+
+    wrapper.vm.closeEditModal()
+    propsData = getMembersList()
+    propsData.members[0].descriptions[1].title = ''
+    wrapper.vm.openEditModal({ item: propsData.members[0] })
+    modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' })
+    modalWrapper.find('button[id=save]').trigger('click')
+    await flushPromises()
+    expect(actions.updateProfileProject).not.toHaveBeenCalled()
+
+    wrapper.vm.closeEditModal()
+    propsData = getMembersList()
+    propsData.members[0].workPercentage = -1
+    wrapper.vm.openEditModal({ item: propsData.members[0] })
+    modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' })
+    modalWrapper.find('button[id=save]').trigger('click')
+    await flushPromises()
+    expect(actions.updateProfileProject).not.toHaveBeenCalled()
+
+    wrapper.vm.closeEditModal()
+    propsData = getMembersList()
+    propsData.members[0].workPercentage = ''
+    wrapper.vm.openEditModal({ item: propsData.members[0] })
+    modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' })
+    modalWrapper.find('button[id=save]').trigger('click')
+    await flushPromises()
+    expect(actions.updateProfileProject).not.toHaveBeenCalled()
+
+    wrapper.vm.closeEditModal()
+    propsData = getMembersList()
+    wrapper.vm.openEditModal({ item: propsData.members[0] })
+    modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' })
+    modalWrapper.find('button[id=save]').trigger('click')
+    await flushPromises()
+    expect(actions.updateProfileProject).toHaveBeenCalled()
+  })
 })
+
 function getMembersList () {
   return {
     members: [
@@ -137,7 +223,19 @@ function getMembersList () {
         projectId: 2,
         startDate: new Date('2018-01-01'),
         endDate: new Date('2018-02-01'),
-        workPercentage: 45
+        workPercentage: 45,
+        descriptions: [
+          {
+            id: 1,
+            language: 'fi',
+            title: 'Koodaaja'
+          },
+          {
+            id: 2,
+            language: 'en',
+            title: 'Coder'
+          }
+        ]
       }
     ]
   }

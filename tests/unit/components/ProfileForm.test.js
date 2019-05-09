@@ -30,6 +30,13 @@ function createStore (overrideConfig) {
 
 function createWrapper (overrideMountingOptions) {
   const defaultMountingOptions = {
+    mocks: {
+      $toasted: {
+        global: {
+          rytmi_success: jest.fn()
+        }
+      }
+    },
     localVue,
     store: createStore()
   }
@@ -44,9 +51,15 @@ const mockProfile = {
   role: 'Employee role',
   title: 'Title',
   phone: 1234,
-  description: 'Description about me Foo',
+  cvDescriptions: [
+    { description: 'kuvaus1', language: 'fi', type: 'introduction' },
+    { description: 'desc1', language: 'en', type: 'introduction' },
+    { description: 'markdown kuvaus', language: 'fi', type: 'other' },
+    { description: 'markdown desc', language: 'en', type: 'other' }
+  ],
   email: 'foo.bar@barfoo.com',
-  employeeRoles: [1]
+  employeeRoles: [1],
+  links: ['http://christy.net', 'http://holly.biz', 'http://www.linkedin.com/username']
 }
 
 describe('ProfileForm.vue', () => {
@@ -62,11 +75,13 @@ describe('ProfileForm.vue', () => {
     expect(inputWrappers.at(3).vm.value).toBe(mockProfile.title)
     expect(inputWrappers.at(4).vm.value).toBe(mockProfile.email)
     expect(inputWrappers.at(5).vm.value).toBe(mockProfile.phone)
-    expect(inputWrappers.at(6).vm.value).toBe(mockProfile.description)
+    const textAreaWrappers = wrapper.findAll('textarea')
+    expect(textAreaWrappers.at(0).vm.value).toBe(mockProfile.cvDescriptions[0].description)
+    expect(textAreaWrappers.at(1).vm.value).toBe(mockProfile.cvDescriptions[1].description)
   })
 
   it('should submit entered details when submit is clicked', async () => {
-    expect.assertions(4)
+    expect.assertions(3)
     const propsData = {
       profile: mockProfile
     }
@@ -89,7 +104,6 @@ describe('ProfileForm.vue', () => {
       expect.anything(), editedProfile, undefined)
     expect(wrapper.vm.showError).toBe(false)
     expect(wrapper.vm.errorDetails).toHaveLength(0)
-    expect(mocks.$router.push).toHaveBeenCalledWith(`/profile/${mockProfile.id}`)
   })
 
   it('should go back to profile view when reset is clicked', () => {
@@ -134,5 +148,14 @@ describe('ProfileForm.vue', () => {
     expect(wrapper.vm.showError).toBe(true)
     expect(wrapper.find(ApiErrorDetailsPanel).isVisible()).toBeTruthy()
     expect(wrapper.vm.errorDetails).toHaveLength(1)
+  })
+
+  it('returns correct employeeRoleList', () => {
+    const propsData = {
+      profile: mockProfile
+    }
+    const wrapper = createWrapper({ propsData })
+    wrapper.setData({ selectedEmployeeRoles: [] })
+    expect(wrapper.vm.employeeRoleList).toEqual([{ 'id': 1, 'label': 'somethinger' }, { 'id': 2, 'label': 'dunno lol' }])
   })
 })

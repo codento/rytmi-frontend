@@ -2,106 +2,40 @@
 
 exports[`Profile.vue shallowMount Template is correct 1`] = `
 <b-container-stub
-  class="animated fadeIn profile"
+  class="animated fadeIn profile mt-2"
   tag="div"
 >
   <b-row-stub
     tag="div"
   >
-    <b-col-stub
-      class="col-md-6 col-sm-12 col-12"
+    <b-tabs-stub
+      contentclass="mt-3 border-0"
       tag="div"
     >
-      <userprofilecard-stub
-        profile="[object Object]"
-      />
-    </b-col-stub>
-     
-    <b-col-stub
-      class="col-md-6 col-sm-12 col-12"
-      tag="div"
-    >
-      <b-card-stub
-        bodytag="div"
-        footertag="div"
-        headertag="div"
-        id="proficiency"
-        subtitle=""
-        subtitletag="h6"
-        subtitletextvariant="muted"
+      <b-tab-stub
+        buttonid=""
+        href="#"
+        nobody="true"
         tag="div"
-        title=""
-        titletag="h4"
+        title="Profile"
       >
-        <h5
-          class="mb-0"
-          slot="header"
-        >
-          
-          Proficiency
-          
-          <span
-            style="float: right; cursor: pointer;"
-          >
-            
-            ⓘ
-          
-          </span>
-        </h5>
-         
-        <b-row-stub
-          tag="div"
-        >
-          <b-col-stub
-            class="col mb-1"
-            tag="div"
-          >
-            <skillrow-stub
-              description="Python desc"
-              id="1"
-              name="Python"
-            />
-          </b-col-stub>
-        </b-row-stub>
-      </b-card-stub>
-       
-      <b-card-stub
-        bodytag="div"
-        footertag="div"
-        header="Projects"
-        headertag="div"
-        subtitle=""
-        subtitletag="h6"
-        subtitletextvariant="muted"
-        tag="div"
-        title=""
-        titletag="h4"
-      >
-        <projectrow-stub
-          profileproject="[object Object]"
+        <userprofile-stub
+          profile="[object Object]"
         />
-      </b-card-stub>
+      </b-tab-stub>
        
-      <b-card-stub
-        bodytag="div"
-        footertag="div"
-        header="Utilization"
-        headertag="div"
-        subtitle=""
-        subtitletag="h6"
-        subtitletextvariant="muted"
+      <b-tab-stub
+        buttonid=""
+        href="#"
+        nobody="true"
         tag="div"
-        title=""
-        titletag="h4"
+        title="CV tool"
       >
-        <utilizationchart-stub
-          backgroundcolor="rgba(251, 85, 85, 0.4)"
-          fillcolor="rgb(97, 176, 32)"
-          height="90px"
-          projects="[object Object]"
+        <cvtool-stub
+          profile="[object Object]"
         />
-      </b-card-stub>
-    </b-col-stub>
+      </b-tab-stub>
+    </b-tabs-stub>
   </b-row-stub>
 </b-container-stub>
 `;

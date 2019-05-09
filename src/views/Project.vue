@@ -3,7 +3,7 @@
     <loading v-if="!project" />
     <div
       v-else
-      class="animated fadeIn project-container col-sm-12 col-md-7"
+      class="animated fadeIn project-container col-xl-7"
     >
       <b-row>
         <b-col class="project-details">
@@ -35,23 +35,23 @@
         </b-col>
       </b-row>
       <hr>
-      <ProjectForm :editable-project="project" />
+      <CollapsableItem title="Edit project">
+        <ProjectForm
+          :editable-project="project"
+        />
+      </CollapsableItem>
       <hr>
-      <div>
-        <h3
-          class="project-profile-form-header"
-          @click="toggleProfileForm"
-        >
-          Add a consultant
-          <i class="fa fa-chevron-down" />
-        </h3>
-        <div v-if="profileFormOpen">
-          <ProjectProfileForm
-            :toggle-form="toggleProfileForm"
-            :project-id="project.id"
-          />
-        </div>
-      </div>
+      <CollapsableItem title="Add a consultant">
+        <ProjectProfileForm
+          :project-id="project.id"
+        />
+      </CollapsableItem>
+      <hr>
+      <CollapsableItem title="Related skills">
+        <ProjectSkillForm
+          :project-id="project.id"
+        />
+      </CollapsableItem>
     </div>
   </div>
 </template>
@@ -59,10 +59,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import store from '../store'
+import { CollapsableItem } from '../components/Common'
 import {
   ProjectProfileForm,
   ProjectMemberTable,
-  ProjectForm
+  ProjectForm,
+  ProjectSkillForm
 } from '../components/Project'
 
 export default {
@@ -70,12 +72,9 @@ export default {
   components: {
     ProjectProfileForm,
     ProjectMemberTable,
-    ProjectForm
-  },
-  data () {
-    return {
-      profileFormOpen: false
-    }
+    ProjectForm,
+    ProjectSkillForm,
+    CollapsableItem
   },
   computed: {
     ...mapGetters([
@@ -99,12 +98,6 @@ export default {
         document.title = 'Rytmi - ' + val.name
       }
     }
-  },
-  methods: {
-    // TODO: scroll to bottom when opening form
-    toggleProfileForm () {
-      this.profileFormOpen = !this.profileFormOpen
-    }
   }
 }
 </script>
@@ -113,10 +106,6 @@ export default {
 .project-container {
   padding: 1em;
   margin: 0 auto;
-}
-.project-profile-form-header {
-  text-align: center;
-  cursor: pointer;
 }
 .detail-container {
   display: flex;

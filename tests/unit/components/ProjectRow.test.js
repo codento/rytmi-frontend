@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import { ProjectRow } from '@/components/Profile'
+import { ProjectRow } from '@/components/Common'
 import Vuex from 'vuex'
 import { format } from 'date-fns'
 
@@ -9,12 +9,15 @@ describe('ProjectRow.test.js', () => {
   localVue.filter('dateFilter', value => {
     return value ? format(value, 'D.M.YYYY') : undefined
   })
-  let getters, store
+  let getters, state, store
   beforeEach(() => {
     getters = {
       projectById: () => (arg) => arg
     }
-    store = new Vuex.Store({ getters })
+    state = {
+      siteSettings: { currentLanguage: 'fi' }
+    }
+    store = new Vuex.Store({ getters, state })
   })
   it('Template is correct', () => {
     let wrapper = mount(ProjectRow, {

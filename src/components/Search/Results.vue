@@ -88,7 +88,7 @@ export default {
   computed: {
     ...mapGetters([
       'profileFilter',
-      'skillsByProfileId',
+      'profileSkillsByProfileId',
       'profiles',
       'futureProjectsOfProfile',
       'profileProjectsByProfileId'
@@ -168,7 +168,7 @@ export default {
         })
         return {
           profile: profile,
-          skills: this.skillsByProfileId(profile.id),
+          skills: this.profileSkillsByProfileId(profile.id),
           projects: this.futureProjectsOfProfile(profile.id),
           utilization: utilizationOnSelectedDate
         }

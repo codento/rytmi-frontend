@@ -39,7 +39,15 @@
           v-bind="skill"
           :highlight="skillHighlight.includes(skill.skillId)"
           :show-skills-only="showSkillsOnly"
+          disable-tooltip
         />
+        <b-row
+          v-if="skillHighlight.length > 1"
+          align-h="end"
+          no-gutters
+        >
+          {{ `Sum of selected skills: ${highlightedSum}` }}
+        </b-row>
       </b-col>
       <b-col
         cols="12"
@@ -58,7 +66,7 @@
 </template>
 
 <script>
-import { SkillRow, UtilizationChart } from '../Profile'
+import { SkillRow, UtilizationChart } from '@/components/Common'
 import ProfileCardProjectInfo from './ProfileCardProjectInfoRow'
 import { mapGetters } from 'vuex'
 
@@ -76,17 +84,23 @@ export default {
   computed: {
     ...mapGetters([
       'profileFilter',
-      'skillsByProfileId',
+      'profileSkillsByProfileId',
       'skillById',
       'futureProjectsOfProfile'
-    ])
+    ]),
+    highlightedSum: function () {
+      const highlightedSkills = this.skillHighlight.map(skillId => {
+        return this.profileSkillsByProfileId(this.profile.id).find(skill => skill.skillId === skillId).knows
+      })
+      return highlightedSkills.reduce((a, b) => a + b)
+    }
   },
   methods: {
     openProfile (profile) {
       this.$router.push({ name: 'profile', params: { id: profile.id } })
     },
     sortedSkills (profileId) {
-      const sortedByProficiency = this.skillsByProfileId(profileId).sort((a, b) => {
+      const sortedByProficiency = this.profileSkillsByProfileId(profileId).sort((a, b) => {
         if (b.knows > a.knows) { return 1 }
         if (b.knows < a.knows) { return -1 }
         return 0

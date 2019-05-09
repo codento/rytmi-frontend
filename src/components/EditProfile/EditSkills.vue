@@ -5,7 +5,7 @@
     <b-row>
       <b-col class="col-12 col-md-7">
         <b-table
-          :items="skillsByProfileId(profileId)"
+          :items="profileSkillsByProfileId(profileId)"
           :fields="fields"
           fixed
           caption-top
@@ -24,7 +24,10 @@
             slot="knows"
             slot-scope="knows"
           >
-            <span @click.stop="showKnowsModal(knows)">
+            <span
+              class="clickable"
+              @click.stop="showKnowsModal(knows)"
+            >
               <b-progress
                 :value="knows.value"
                 :max="5"
@@ -37,7 +40,10 @@
             slot="wantsTo"
             slot-scope="wantsTo"
           >
-            <span @click.stop="showWantsModal(wantsTo)">
+            <span
+              class="clickable"
+              @click.stop="showWantsModal(wantsTo)"
+            >
               <b-progress
                 :value="wantsTo.value"
                 :max="5"
@@ -45,6 +51,20 @@
                 show-value
               />
             </span>
+          </template>
+          <template
+            slot="visibleInCV"
+            slot-scope="visibleInCV"
+          >
+            <div
+              :id="`visible-in-cv-checkbox-container-${visibleInCV.item.id}`"
+              @click="changeVisibilityInCV(visibleInCV)"
+            >
+              <i
+                class="fa clickable"
+                :class="visibleInCV.value ? 'fa-check-square' : 'fa-square'"
+              />
+            </div>
           </template>
           <template
             slot="remove"
@@ -135,6 +155,7 @@ export default {
         { key: 'skillId', label: 'Proficiency' },
         { key: 'knows', label: 'Level' },
         { key: 'wantsTo', label: 'Willingness' },
+        { key: 'visibleInCV', label: 'Show in CV' },
         { key: 'remove', label: ' ' }
       ],
       wantsToOptions: proficiencyDesc.wants,
@@ -146,7 +167,7 @@ export default {
     ...mapGetters([
       'skills',
       'skillById',
-      'skillsByProfileId'
+      'profileSkillsByProfileId'
     ])
   },
   methods: {
@@ -176,11 +197,17 @@ export default {
       this.updateProfileSkill(this.editedSkill)
         .then(response => {
           this.$toasted.global.rytmi_success({
-            message: 'Proficiency updated.'
+            message: 'User\'s skill updated.'
           })
           this.$refs.wantsToModal.hide()
           this.$refs.knowsModal.hide()
         })
+    },
+    changeVisibilityInCV (visibleInCV) {
+      const skillToEdit = { ...visibleInCV.item }
+      skillToEdit.visibleInCV = !skillToEdit.visibleInCV
+      this.editedSkill = skillToEdit
+      this.updateSkill()
     }
   }
 }
@@ -193,5 +220,7 @@ button {
 .modal-btn {
   margin-top: 0.5rem;
 }
-
+.clickable {
+  cursor: pointer;
+}
 </style>

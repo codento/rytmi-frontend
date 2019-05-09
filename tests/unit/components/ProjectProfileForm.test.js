@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import { merge } from 'lodash'
 import flushPromises from 'flush-promises'
 import { ProjectProfileForm } from '@/components/Project'
+import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -122,6 +123,7 @@ describe('ProjectProfileForm.vue', () => {
     wrapper.find('#project-profile-form').trigger('submit')
     await flushPromises()
     expect(wrapper.vm.errorDetails[0]).toBe('Failure')
-    expect(wrapper.find('div[class="profile-form-errors"]').isVisible()).toBe(true)
+    expect(wrapper.vm.showError).toBe(true)
+    expect(wrapper.find(ApiErrorDetailsPanel).isVisible()).toBeTruthy()
   })
 })

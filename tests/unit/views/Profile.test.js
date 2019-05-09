@@ -67,7 +67,7 @@ describe('Profile.vue shallowMount', () => {
           description: 'Python desc'
         }
       },
-      skillsByProfileId: () => (profileId) => {
+      profileSkillsByProfileId: () => (profileId) => {
         return [
           {
             id: 1,
@@ -92,8 +92,12 @@ describe('Profile.vue shallowMount', () => {
       projectById: () => (projectId) => {
         return {
           id: projectId,
-          name: 'Project Foo',
-          description: 'Foo Bar'
+          descriptions: [
+            {
+              name: 'Project Foo',
+              description: 'Foo Bar'
+            }
+          ]
         }
       }
     }

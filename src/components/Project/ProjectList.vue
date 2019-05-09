@@ -18,6 +18,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+
 export default {
   name: 'ProjectList',
   data () {
@@ -38,15 +39,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['projectFilter']),
+    ...mapGetters([
+      'projectFilter',
+      'projectById'
+    ]),
     results () {
-      const r = this.projectFilter(this.projectFilterTerm)
-      return Object.values(r)
+      const projects = this.projectFilter(this.projectFilterTerm)
+      return Object.keys(projects).map(projectId => this.projectById(projectId))
     }
   },
   methods: {
     openProject (project) {
-      this.$router.push({ name: 'Project', params: { id: project.id } })
+      this.$router.push({ name: 'project', params: { id: project.id } })
     }
   }
 }

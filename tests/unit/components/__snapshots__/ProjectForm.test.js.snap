@@ -2,10 +2,61 @@
 
 exports[`ProjectForm.test.js Template is correct 1`] = `
 <div>
-  <h3 style="text-align: center;">
-    Add a new project
-    <span><i class="fa fa-chevron-down"></i></span></h3>
-  <!---->
+  <b-form id="project_form" class="animated fadeIn">
+    <b-row>
+      <b-col><small>Project code</small>
+        <b-input placeholder="Project code" required="" type="number" min="0" max="99999"></b-input>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col sm="6"><small>Project name (Finnish)</small>
+        <b-input placeholder="Project name (fi)" required="" type="text"></b-input>
+      </b-col>
+      <b-col sm="6"><small>Project name (English)</small>
+        <b-input placeholder="Project name (en)" required="" type="text"></b-input>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col><small>Start date</small>
+        <div><input id="project-start-date-datepicker" type="text" autocomplete="off" class="form-control"></div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col><small>End date</small>
+        <div><input id="project-end-date-datepicker" type="text" autocomplete="off" class="form-control"></div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col sm="6"><small>Customer name (Finnish)</small>
+        <b-input placeholder="Customer name (fi)" type="text"></b-input>
+      </b-col>
+      <b-col sm="6"><small>Customer name (English)</small>
+        <b-input placeholder="Customer name (en)" type="text"></b-input>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col sm="6"><small>Description (Finnish)</small>
+        <b-textarea placeholder="Project description (fi)" type="text" rows="5" class="form-control"></b-textarea>
+      </b-col>
+      <b-col sm="6"><small>Description (English)</small>
+        <b-textarea placeholder="Project description (en)" type="text" rows="5" class="form-control"></b-textarea>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col class="mt-2 mb-2">
+        <b-form-checkbox>
+          This is a secret project
+        </b-form-checkbox>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-button type="submit" primary="" class="form-control">
+          Submit
+        </b-button>
+      </b-col>
+    </b-row>
+  </b-form>
   <!---->
 </div>
 `;
