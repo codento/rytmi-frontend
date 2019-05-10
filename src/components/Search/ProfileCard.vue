@@ -72,7 +72,8 @@ export default {
     showSkillsOnly: {
       type: Boolean,
       default: false
-    }
+    },
+    showAllSkills: Boolean
   },
   computed: {
     ...mapGetters([
@@ -100,6 +101,12 @@ export default {
           return -1
         }
         return 0
+      }).filter(skill => {
+        if (this.showAllSkills) {
+          return true
+        } else {
+          return this.skillHighlight.length > 0 ? this.skillHighlight.find(skillId => skillId === skill.skillId) : true
+        }
       })
     }
   }

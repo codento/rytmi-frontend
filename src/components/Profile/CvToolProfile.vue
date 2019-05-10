@@ -2,7 +2,10 @@
   <div>
     <div class="text-center">
       <div>
-        <img :src="profile.photoPath">
+        <img
+          alt="profile photo"
+          :src="profile.photoPath"
+        >
       </div>
       <div style="color:#869fac">
         <span class="profile-name"> {{ fullName }}</span><br>
@@ -56,7 +59,7 @@
           title="Relevant projects"
         >
           <div
-            v-if="topProjects.length == 0"
+            v-if="topProjects.length === 0"
             style="color: grey"
           >
             No relevant projects chosen, use checkboxes below to add projects!
@@ -97,7 +100,7 @@
           title="Top skills"
         >
           <div
-            v-if="orderedSkills.length == 0"
+            v-if="orderedSkills.length === 0"
             style="color: grey"
           >
             No skills chosen, use checkboxes below to add skills!
