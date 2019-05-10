@@ -8,13 +8,25 @@
         cols="12"
         class="text-right"
       >
-        <b-form-checkbox
-          id="willingness-checkbox"
-          v-model="showSkillsOnly"
-          name="hide-willingnesss-checkbox"
-        >
-          Hide willingness
-        </b-form-checkbox>
+        <div>
+          <b-form-checkbox
+            v-if="mapIdsOfSkillFilters.length > 0"
+            id="show-all-skills-checkbox"
+            v-model="showAllSkills"
+            name="how-all-skills-checkbox"
+            inline
+          >
+            Show all skills
+          </b-form-checkbox>
+          <b-form-checkbox
+            id="willingness-checkbox"
+            v-model="showSkillsOnly"
+            name="hide-willingnesss-checkbox"
+            inline
+          >
+            Hide willingness
+          </b-form-checkbox>
+        </div>
         <small>Sort profiles by: </small>
         <b-form-radio-group
           id="btnradios"
@@ -41,6 +53,7 @@
       :profile="profile"
       :skill-highlight="mapIdsOfSkillFilters"
       :show-skills-only="showSkillsOnly"
+      :show-all-skills="showAllSkills"
     />
   </div>
 </template>
@@ -82,7 +95,8 @@ export default {
       sortAttribute: sortAttributeEnum.name,
       profilesWithSkills: null,
       reversedOrder: false,
-      showSkillsOnly: false
+      showSkillsOnly: false,
+      showAllSkills: false
     }
   },
   computed: {
