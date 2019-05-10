@@ -1,7 +1,10 @@
 <template>
   <div class="profile-details">
     <div style="text-align: center;">
-      <img :src="profile.photoPath">
+      <img
+        alt="profile photo"
+        :src="profile.photoPath"
+      >
     </div>
     <div style="text-align: center; color:#869fac">
       <span class="profile-name"> {{ getNames }}</span><br>
@@ -27,7 +30,7 @@
         {{ profile.description }}
       </div>
       <div
-        v-if="profileId == profile.id || isAdmin"
+        v-if="profileId === profile.id || isAdmin"
         class="profile-card-detail-row"
       >
         <router-link :to="{ name: 'editProfile', params: { profileId: '' + profile.id }}">
@@ -59,12 +62,6 @@ export default {
 </script>
 
 <style scoped>
-.profile {
-    padding: 1em;
-}
-.profile-editor {
-    padding: 1em;
-}
 .profile-details {
     text-align: center;
 }

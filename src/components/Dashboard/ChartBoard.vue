@@ -181,17 +181,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-#spinner-container {
-  text-align: center;
-}
-.card-box {
-  border:1px solid black
-}
-.fa {
-  font-size: 24px;
-  color: grey;
-}
-
-</style>

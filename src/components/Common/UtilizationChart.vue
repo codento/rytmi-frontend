@@ -156,9 +156,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .UserProfile {
-    position: relative;
-  }
-</style>
