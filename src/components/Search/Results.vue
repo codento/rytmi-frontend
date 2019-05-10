@@ -13,7 +13,7 @@
             v-if="mapIdsOfSkillFilters.length > 0"
             id="show-all-skills-checkbox"
             v-model="showAllSkills"
-            name="how-all-skills-checkbox"
+            name="show-all-skills-checkbox"
             inline
           >
             Show all skills
