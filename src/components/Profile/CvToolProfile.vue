@@ -203,7 +203,7 @@ export default {
     font-size: 32px;
   }
   #top-skills .borderless {
-    border: 0px;
+    border: 0;
     cursor: pointer;
   }
 </style>

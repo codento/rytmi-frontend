@@ -12,7 +12,7 @@
           {{ skillById(skill.skillId).name }}
           <i
             class="fa fa-trash"
-            @click="markForDeletionOrCancel(skill)"
+            @click="removeSkill(skill)"
           />
         </li>
       </ul>
@@ -89,7 +89,7 @@ export default {
       'removeProjectSkill',
       'fetchActiveProjectSkills'
     ]),
-    async markForDeletionOrCancel (skill) {
+    async removeSkill (skill) {
       try {
         await this.removeProjectSkill(skill.id)
         await this.fetchActiveProjectSkills(this.projectId)
