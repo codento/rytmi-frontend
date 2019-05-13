@@ -68,7 +68,7 @@
                 class="text-center"
               >
                 <div v-if="pdfDownloaded">
-                  File <strong>{{ pdfName }}.pdf</strong> succesfully downloaded
+                  File <strong>{{ pdfDownloaded }}.pdf</strong> succesfully downloaded
                 </div>
                 <div v-else-if="pdfDownloadError.length > 0">
                   {{ pdfDownloadError }}
@@ -224,6 +224,7 @@ export default {
   },
   mounted () {
     this.pdfName = this.defaultPDFName
+    this.resetPDF()
   },
   methods: {
     ...mapActions([

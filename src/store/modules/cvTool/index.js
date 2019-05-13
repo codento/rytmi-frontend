@@ -8,7 +8,7 @@ const initialState = {
   topSkills: [],
   topProjects: [],
   pdfDownloading: false,
-  pdfDownloaded: true,
+  pdfDownloaded: '',
   pdfDownloadError: false
 }
 

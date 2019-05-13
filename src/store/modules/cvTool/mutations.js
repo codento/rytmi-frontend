@@ -15,11 +15,11 @@ export const mutations = {
   },
   [types.GET_PDF_PENDING] (state) {
     state.pdfDownloading = true
-    state.pdfDownloaded = false
+    state.pdfDownloaded = ''
     state.pdfDownloadError = ''
   },
-  [types.GET_PDF_SUCCESS] (state, boolean) {
-    state.pdfDownloaded = boolean
+  [types.GET_PDF_SUCCESS] (state, name) {
+    state.pdfDownloaded = name
     state.pdfDownloading = false
   },
   [types.GET_PDF_FAILURE] (state, error) {

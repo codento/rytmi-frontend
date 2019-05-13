@@ -14,8 +14,8 @@ export const actions = {
   updateTopProjects ({ commit }, params) {
     commit(types.UPDATE_TOP_PROJECTS, params)
   },
-  resetPDF ({ commit }, params) {
-    commit(types.GET_PDF_SUCCESS, false)
+  resetPDF ({ commit }) {
+    commit(types.GET_PDF_SUCCESS, '')
     commit(types.GET_PDF_FAILURE, '')
   },
   downloadCv ({ commit }, params) {
@@ -28,11 +28,10 @@ export const actions = {
           link.href = window.URL.createObjectURL(blob)
           link.download = params.pdfName + 'pdf'
           link.click()
-          commit(types.GET_PDF_SUCCESS, true)
-          resolve(response)
+          commit(types.GET_PDF_SUCCESS, params.pdfName)
+          resolve()
         }).catch(err => {
-          commit(types.GET_PDF_FAILURE, err)
-          reject(err.response)
+          commit(types.GET_PDF_FAILURE, err.message)
         })
     })
   }
