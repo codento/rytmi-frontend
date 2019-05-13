@@ -59,7 +59,6 @@
 <script>
 import clone from 'lodash/clone'
 import { mapGetters, mapActions } from 'vuex'
-import getYear from 'date-fns/get_year'
 import format from 'date-fns/format'
 
 import { newCv } from '@/utils/api/api'
@@ -217,7 +216,7 @@ export default {
         projects: cvProjects,
         skills: cvSkills,
         otherInfo: this.cvOtherInfo,
-        born: getYear(this.profile.birthday)
+        born: this.profile.birthYear
       }
       newCv(data)
         .then(response => {

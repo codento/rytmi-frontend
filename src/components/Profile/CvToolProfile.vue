@@ -12,7 +12,7 @@
         <span class="profile-title">{{ profile.title }}</span>
       </div>
       <div>
-        <div>Born {{ birthYear }}</div>
+        <div>Born {{ profile.birthYear }}</div>
         <div class="profileCardDetails profile-card-detail-row">
           {{ profile.email }}
         </div>
@@ -128,7 +128,6 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { format } from 'date-fns'
 
 import SkillRow from '@/components/Common/SkillRow.vue'
 
@@ -153,9 +152,6 @@ export default {
     ]),
     fullName: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
-    },
-    birthYear: function () {
-      return format(this.profile.birthday, 'YYYY')
     },
     orderedSkills: function () {
       return this.topSkills
