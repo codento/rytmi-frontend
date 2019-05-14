@@ -274,7 +274,7 @@ export default {
       this.isIntroductionValid = inputState
     },
     joinSkillCategory: function (profileSkill) {
-      const profileSkillCopy = _.clone(profileSkill)
+      const profileSkillCopy = clone(profileSkill)
       const skill = this.skillById(profileSkill.skillId)
       const skillCategory = this.skillCategoryBySkillId(skill.id)
       const skillGroup = this.skillGroupBySkillId(skill.id)
