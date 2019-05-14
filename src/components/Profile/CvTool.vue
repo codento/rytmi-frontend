@@ -123,9 +123,8 @@
   </b-row>
 </template>
 <script>
-import _ from 'lodash'
+import clone from 'lodash/clone'
 import { mapGetters, mapActions } from 'vuex'
-import getYear from 'date-fns/get_year'
 import format from 'date-fns/format'
 
 import LANGUAGE_ENUM from '@/utils/constants'
@@ -276,7 +275,7 @@ export default {
       this.isIntroductionValid = inputState
     },
     joinSkillCategory: function (profileSkill) {
-      const profileSkillCopy = _.clone(profileSkill)
+      const profileSkillCopy = clone(profileSkill)
       const skill = this.skillById(profileSkill.skillId)
       const skillCategory = this.skillCategoryBySkillId(skill.id)
       const skillGroup = this.skillGroupBySkillId(skill.id)
@@ -332,7 +331,7 @@ export default {
         projects: cvProjects,
         skills: cvSkills,
         otherInfo: this.cvOtherInfo,
-        born: getYear(this.profile.birthday)
+        born: this.profile.birthYear
       }
     },
     async startCvExport () {

@@ -52,6 +52,19 @@
       />
     </b-form-group>
     <b-form-group
+      id="birthYearLabel"
+      label-cols-sm="3"
+      label="Birth year:"
+      label-for="birthYearInput"
+    >
+      <b-form-input
+        id="birthYearInput"
+        v-model="editedProfile.birthYear"
+        type="number"
+        placeholder="Enter year"
+      />
+    </b-form-group>
+    <b-form-group
       id="titleLabel"
       label-cols-sm="3"
       label="Title:"
@@ -245,5 +258,3 @@ export default {
   }
 }
 </script>
-
-<style scoped />

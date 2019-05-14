@@ -2,14 +2,17 @@
   <div>
     <div class="text-center">
       <div>
-        <img :src="profile.photoPath">
+        <img
+          alt="profile photo"
+          :src="profile.photoPath"
+        >
       </div>
       <div style="color:#869fac">
         <span class="profile-name"> {{ fullName }}</span><br>
         <span class="profile-title">{{ profile.title }}</span>
       </div>
       <div>
-        <div>Born {{ birthYear }}</div>
+        <div>Born {{ profile.birthYear }}</div>
         <div class="profileCardDetails profile-card-detail-row">
           {{ profile.email }}
         </div>
@@ -56,7 +59,7 @@
           title="Relevant projects"
         >
           <div
-            v-if="topProjects.length == 0"
+            v-if="topProjects.length === 0"
             style="color: grey"
           >
             No relevant projects chosen, use checkboxes below to add projects!
@@ -97,7 +100,7 @@
           title="Top skills"
         >
           <div
-            v-if="orderedSkills.length == 0"
+            v-if="orderedSkills.length === 0"
             style="color: grey"
           >
             No skills chosen, use checkboxes below to add skills!
@@ -125,7 +128,6 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { format } from 'date-fns'
 
 import SkillRow from '@/components/Common/SkillRow.vue'
 
@@ -150,9 +152,6 @@ export default {
     ]),
     fullName: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
-    },
-    birthYear: function () {
-      return format(this.profile.birthday, 'YYYY')
     },
     orderedSkills: function () {
       return this.topSkills
@@ -203,7 +202,7 @@ export default {
     font-size: 32px;
   }
   #top-skills .borderless {
-    border: 0px;
+    border: 0;
     cursor: pointer;
   }
 </style>

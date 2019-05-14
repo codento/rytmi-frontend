@@ -8,6 +8,7 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
     style="text-align: center;"
   >
     <img
+      alt="profile photo"
       src="shouldNotWork"
     />
   </div>
