@@ -13,17 +13,7 @@ export const mutations = {
   [types.UPDATE_TOP_PROJECTS]: (state, projects) => {
     state.topProjects = projects
   },
-  [types.GET_PDF_PENDING] (state) {
-    state.pdfDownloading = true
-    state.pdfDownloaded = ''
-    state.pdfDownloadError = ''
-  },
-  [types.GET_PDF_SUCCESS] (state, name) {
-    state.pdfDownloaded = name
-    state.pdfDownloading = false
-  },
-  [types.GET_PDF_FAILURE] (state, error) {
-    state.pdfDownloadError = error
-    state.pdfDownloading = false
+  [types.EXPORT_CV_PENDING] (state, boolean) {
+    state.cvExportPending = boolean
   }
 }

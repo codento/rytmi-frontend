@@ -6,11 +6,11 @@
     >
       <div id="disabled-button-wrapper">
         <b-button
-          id="open-create-pdf-modal"
-          v-b-modal.create-pdf-modal
+          id="open-create-cv-modal"
+          v-b-modal.create-cv-modal
           :disabled="!allRequiredFieldsFilled"
         >
-          Create PDF
+          Create CV
         </b-button>
         <b-tooltip
           :disabled.sync="allRequiredFieldsFilled"
@@ -19,72 +19,67 @@
         >
           {{ disabledButtonInfo }}
         </b-tooltip>
-        <b-modal
-          id="create-pdf-modal"
-          ref="create-pdf-modal"
-          title="Create PDF"
-          hide-footer
-          hide-header-close
-          @hide="resetPDF"
-        >
-          <b-row>
-            <b-col
-              cols="12"
-              class="my-2"
+      </div>
+      <b-modal
+        id="create-cv-modal"
+        ref="create-cv-modal"
+        title="Export CV as PDF"
+        hide-header-close
+      >
+        <b-row>
+          <b-col
+            cols="12"
+            class="my-2"
+          >
+            <label
+              class="sm"
+              for="pdf-name-input"
             >
-              <label
-                class="sm"
-                for="pdf-name-input"
-              >
-                Enter filename for PDF
-              </label>
+              Enter filename for PDF
+            </label>
+            <b-input-group append=".pdf">
               <b-form-input
                 id="pdf-name-input"
                 v-model="pdfName"
+                type="text"
+                :state="!containsInvalidCharacters(pdfName)"
                 required
               />
-            </b-col>
-            <b-col
-              cols="12"
-              class="my-2"
-            >
-              <b-button
-                id="create-cv-button"
-                :disabled.sync="pdfDownloading"
-                @click.prevent="createPDF"
-              >
-                Create PDF
-              </b-button>
-            </b-col>
-            <b-col
-              cols="12"
-              class="my-2"
-            >
-              <div v-if="pdfDownloading">
-                <LoadingSpinner />
-              </div>
-              <div
-                v-else
-                class="text-center"
-              >
-                <div v-if="pdfDownloaded">
-                  File <strong>{{ pdfDownloaded }}.pdf</strong> succesfully downloaded
-                </div>
-                <div v-else-if="pdfDownloadError.length > 0">
-                  {{ pdfDownloadError }}
-                </div>
-              </div>
-            </b-col>
-          </b-row>
-          <b-button
-            class="pull-right"
-            variant="primary"
-            @click="hideModal"
+              <b-form-invalid-feedback :state="!containsInvalidCharacters(pdfName)">
+                Filename must not contain following characters: {{ invalidFilenameCharacters }}
+              </b-form-invalid-feedback>
+            </b-input-group>
+          </b-col>
+          <b-col
+            cols="12"
+            class="my-2"
           >
-            Close
+            <div v-if="cvExportPending">
+              <LoadingSpinner />
+            </div>
+          </b-col>
+        </b-row>
+        <template
+          slot="modal-footer"
+          class="mx-1"
+        >
+          <b-button
+            slot="modal-cancel"
+            variant="danger"
+            @click="hideModal()"
+          >
+            Cancel
           </b-button>
-        </b-modal>
-      </div>
+          <b-button
+            slot="modal-ok"
+            variant="primary"
+            :disabled.sync="cvExportPending"
+            @click.prevent="startCvExport()"
+          >
+            Export
+          </b-button>
+        </template>
+      </b-modal>
       <b-button-group
         v-for="languageButton in languageButtons"
         :key="languageButton.id"
@@ -152,7 +147,8 @@ export default {
     return {
       isIntroductionValid: false,
       showButtonInfo: true,
-      pdfName: ''
+      pdfName: '',
+      invalidFilenameCharacters: '/:*?"<>|.'
     }
   },
   computed: {
@@ -170,9 +166,7 @@ export default {
       'cvOtherInfo',
       'topSkills',
       'topProjects',
-      'pdfDownloading',
-      'pdfDownloaded',
-      'pdfDownloadError'
+      'cvExportPending'
     ]),
     languageButtons: function () {
       return LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) }))
@@ -224,14 +218,18 @@ export default {
   },
   mounted () {
     this.pdfName = this.defaultPDFName
-    this.resetPDF()
   },
   methods: {
     ...mapActions([
       'changeLanguage',
-      'downloadCv',
-      'resetPDF'
+      'downloadCv'
     ]),
+    containsInvalidCharacters (text) {
+      // Escape special characters for regexp
+      const escapedCharacters = this.invalidFilenameCharacters.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      const pattern = new RegExp('[' + escapedCharacters + ']')
+      return pattern.test(text)
+    },
     toggleLanguage: function (languageKey) {
       this.changeLanguage(languageKey)
     },
@@ -254,10 +252,9 @@ export default {
       return profileSkillCopy
     },
     hideModal () {
-      this.$refs['create-pdf-modal'].hide()
-      this.resetPDF()
+      this.$refs['create-cv-modal'].hide()
     },
-    createPDF: function () {
+    generateCvData () {
       function mapSkill (skillObj) {
         return {
           skillId: skillObj.skillId,
@@ -291,7 +288,7 @@ export default {
       const cvProjects = this.projects
         .map(project => mapProject(project))
 
-      const data = {
+      return {
         employeeName: this.profile.firstName + ' ' + this.profile.lastName,
         employeePicture: this.profile.photoPath,
         jobTitle: this.profile.title,
@@ -304,7 +301,21 @@ export default {
         otherInfo: this.cvOtherInfo,
         born: getYear(this.profile.birthday)
       }
-      this.downloadCv({ cvData: data, pdfName: this.pdfName })
+    },
+    async startCvExport () {
+      this.downloadCv({ cvData: this.generateCvData(), pdfName: this.pdfName })
+        .then((response) => {
+          this.$toasted.global.rytmi_success({
+            message: `${this.pdfName}.pdf succesfully downloaded`
+          })
+          this.hideModal()
+        })
+        .catch((error) => {
+          this.$toasted.global.rytmi_error({
+            message: error
+          })
+          this.hideModal()
+        })
     }
   }
 }

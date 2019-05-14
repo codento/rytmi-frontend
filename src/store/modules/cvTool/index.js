@@ -7,9 +7,7 @@ const initialState = {
   cvOtherInfo: '',
   topSkills: [],
   topProjects: [],
-  pdfDownloading: false,
-  pdfDownloaded: '',
-  pdfDownloadError: false
+  cvExportPending: false
 }
 
 export default {

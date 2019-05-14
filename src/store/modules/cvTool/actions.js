@@ -14,12 +14,8 @@ export const actions = {
   updateTopProjects ({ commit }, params) {
     commit(types.UPDATE_TOP_PROJECTS, params)
   },
-  resetPDF ({ commit }) {
-    commit(types.GET_PDF_SUCCESS, '')
-    commit(types.GET_PDF_FAILURE, '')
-  },
   downloadCv ({ commit }, params) {
-    commit(types.GET_PDF_PENDING)
+    commit(types.EXPORT_CV_PENDING, true)
     return new Promise((resolve, reject) => {
       generateCv(params.cvData)
         .then(response => {
@@ -28,10 +24,11 @@ export const actions = {
           link.href = window.URL.createObjectURL(blob)
           link.download = params.pdfName + 'pdf'
           link.click()
-          commit(types.GET_PDF_SUCCESS, params.pdfName)
+          commit(types.EXPORT_CV_PENDING, false)
           resolve()
         }).catch(err => {
-          commit(types.GET_PDF_FAILURE, err.message)
+          commit(types.EXPORT_CV_PENDING, false)
+          reject(err)
         })
     })
   }
