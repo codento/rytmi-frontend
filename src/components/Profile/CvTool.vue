@@ -26,36 +26,41 @@
           hide-header-close
         >
           <b-row>
-            <b-col
-              cols="12"
-              class="my-2"
-            >
+            <b-col cols="12">
               <label
                 class="sm"
                 for="pdf-name-input"
-              >
-                Enter filename for PDF
-              </label>
-              <b-form-input
-                id="pdf-name-input"
-                v-model="pdfName"
-                type="text"
-                :state="!containsInvalidCharacters(pdfName) && pdfName.length > 0"
-                required
-              />
-              <b-form-invalid-feedback>
+              >Enter filename for PDF</label>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="12">
+              <b-input-group append=".pdf">
+                <b-form-input
+                  id="pdf-name-input"
+                  v-model="pdfName"
+                  sm="6"
+                  type="text"
+                  :state="!containsInvalidCharacters(pdfName) && pdfName.length > 0"
+                  required
+                />
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="12">
+              <div class="d-block invalid-feedback">
                 <p v-if="containsInvalidCharacters(pdfName)">
                   Filename must not contain following characters: {{ invalidFilenameCharacters }}
                 </p>
                 <p v-if="pdfName.length === 0">
                   Filename cannot be empty
                 </p>
-              </b-form-invalid-feedback>
+              </div>
             </b-col>
-            <b-col
-              cols="12"
-              class="my-2"
-            >
+          </b-row>
+          <b-row>
+            <b-col cols="12">
               <div v-if="cvExportPending">
                 <LoadingSpinner />
               </div>
@@ -75,6 +80,7 @@
             <b-button
               slot="modal-ok"
               variant="primary"
+              :class="!containsInvalidCharacters(pdfName) && pdfName.length > 0 ? '' : 'disabled'"
               :disabled.sync="cvExportPending"
               @click.prevent="startCvExport()"
             >
@@ -109,13 +115,9 @@
         :languages="languages"
       />
       <div v-if="projectsLoaded">
-        <CvToolWorkExperience
-          :profile-projects="projects"
-        />
+        <CvToolWorkExperience :profile-projects="projects" />
       </div>
-      <CvToolOtherInfo
-        :profile="profile"
-      />
+      <CvToolOtherInfo :profile="profile" />
     </b-col>
   </b-row>
 </template>
@@ -144,7 +146,7 @@ export default {
     LoadingSpinner
   },
   props: {
-    'profile': Object
+    profile: Object
   },
   data () {
     return {
@@ -172,21 +174,31 @@ export default {
       'cvExportPending'
     ]),
     languageButtons: function () {
-      return LANGUAGE_ENUM.LANGUAGES.map(item => _.extend(item, { state: (item.id === this.currentLanguage) }))
+      return LANGUAGE_ENUM.LANGUAGES.map(item =>
+        _.extend(item, { state: item.id === this.currentLanguage })
+      )
     },
     skillsAndLanguages: function () {
       const profileSkills = this.profileSkillsByProfileId(this.profile.id)
-      return profileSkills ? profileSkills.filter(skill => skill.visibleInCV && skill.knows > 0).map(skill => this.joinSkillCategory(skill)) : []
+      return profileSkills
+        ? profileSkills
+          .filter(skill => skill.visibleInCV && skill.knows > 0)
+          .map(skill => this.joinSkillCategory(skill))
+        : []
     },
     skills: function () {
-      return this.skillsAndLanguages.filter(skill => skill.skillGroup !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME)
+      return this.skillsAndLanguages.filter(
+        skill => skill.skillGroup !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
+      )
     },
     languages: function () {
-      return this.skillsAndLanguages.filter(skill => skill.skillGroup === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME)
+      return this.skillsAndLanguages.filter(
+        skill => skill.skillGroup === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
+      )
     },
     projects: function () {
-      return this.profileProjectsByProfileId(this.profile.id)
-        .map(profileProject => {
+      return this.profileProjectsByProfileId(this.profile.id).map(
+        profileProject => {
           const project = this.projectById(profileProject.projectId)
           if (project) {
             Object.assign(profileProject, {
@@ -197,25 +209,40 @@ export default {
             })
           }
           return profileProject
-        })
+        }
+      )
     },
     projectsLoaded: function () {
-      return this.projects.length > 0 ? this.projects.every(project => project.hasOwnProperty('duration')) : false
+      return this.projects.length > 0
+        ? this.projects.every(project => project.hasOwnProperty('duration'))
+        : false
     },
     defaultPDFName: function () {
-      return `Codento CV ${this.profile.firstName} ${this.profile.lastName} [${this.currentLanguage}]`
+      return `Codento CV ${this.profile.firstName} ${this.profile.lastName} [${
+        this.currentLanguage
+      }]`
     },
     allRequiredFieldsFilled: {
       get: function () {
-        return (this.topSkills.length > 0 && this.isIntroductionValid && this.topProjects.length > 0)
+        return (
+          this.topSkills.length > 0 &&
+          this.isIntroductionValid &&
+          this.topProjects.length > 0
+        )
       },
       set: function () {}
     },
     disabledButtonInfo: function () {
       const missingInfo = []
-      if (!this.isIntroductionValid) { missingInfo.push('profile description') }
-      if (!this.topProjects.length) { missingInfo.push('relevant projects') }
-      if (!this.topSkills.length) { missingInfo.push('top skills') }
+      if (!this.isIntroductionValid) {
+        missingInfo.push('profile description')
+      }
+      if (!this.topProjects.length) {
+        missingInfo.push('relevant projects')
+      }
+      if (!this.topSkills.length) {
+        missingInfo.push('top skills')
+      }
       return 'Required info missing: '.concat(missingInfo.join(', '))
     }
   },
@@ -223,13 +250,13 @@ export default {
     this.pdfName = this.defaultPDFName
   },
   methods: {
-    ...mapActions([
-      'changeLanguage',
-      'downloadCv'
-    ]),
+    ...mapActions(['changeLanguage', 'downloadCv']),
     containsInvalidCharacters (text) {
       // Escape special characters for regexp
-      const escapedCharacters = this.invalidFilenameCharacters.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      const escapedCharacters = this.invalidFilenameCharacters.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        '\\$&'
+      )
       const pattern = new RegExp('[' + escapedCharacters + ']')
       return pattern.test(text)
     },
@@ -238,7 +265,11 @@ export default {
       this.pdfName = this.defaultPDFName
     },
     getProjectDuration: function (project) {
-      return format(project.startDate, 'MM/YYYY') + '-' + format(project.endDate, 'MM/YYYY')
+      return (
+        format(project.startDate, 'MM/YYYY') +
+        '-' +
+        format(project.endDate, 'MM/YYYY')
+      )
     },
     cvIntroductionUpdated: function (inputState) {
       this.isIntroductionValid = inputState
@@ -278,19 +309,16 @@ export default {
           projectDuration: projectObj.duration
         }
       }
-      const cvLanguages = this.languages
-        .map(skill => {
-          return {
-            languageName: skill.skillName,
-            languageLevel: skill.knows
-          }
-        })
+      const cvLanguages = this.languages.map(skill => {
+        return {
+          languageName: skill.skillName,
+          languageLevel: skill.knows
+        }
+      })
 
-      const cvSkills = this.skills
-        .map(skill => mapSkill(skill))
+      const cvSkills = this.skills.map(skill => mapSkill(skill))
 
-      const cvProjects = this.projects
-        .map(project => mapProject(project))
+      const cvProjects = this.projects.map(project => mapProject(project))
 
       return {
         employeeName: this.profile.firstName + ' ' + this.profile.lastName,
@@ -308,13 +336,13 @@ export default {
     },
     async startCvExport () {
       this.downloadCv({ cvData: this.generateCvData(), pdfName: this.pdfName })
-        .then((response) => {
+        .then(response => {
           this.$toasted.global.rytmi_success({
             message: `${this.pdfName}.pdf succesfully downloaded`
           })
           this.hideModal()
         })
-        .catch((error) => {
+        .catch(error => {
           this.$toasted.global.rytmi_error({
             message: error
           })
