@@ -22,7 +22,7 @@ export const actions = {
           const blob = new Blob([response.data], { type: 'application/pdf' })
           const link = document.createElement('a')
           link.href = window.URL.createObjectURL(blob)
-          link.download = params.pdfName + 'pdf'
+          link.download = params.pdfName
           link.click()
           commit(types.EXPORT_CV_PENDING, false)
           resolve()

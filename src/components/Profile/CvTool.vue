@@ -19,67 +19,72 @@
         >
           {{ disabledButtonInfo }}
         </b-tooltip>
-      </div>
-      <b-modal
-        id="create-cv-modal"
-        ref="create-cv-modal"
-        title="Export CV as PDF"
-        hide-header-close
-      >
-        <b-row>
-          <b-col
-            cols="12"
-            class="my-2"
-          >
-            <label
-              class="sm"
-              for="pdf-name-input"
-            >
-              Enter filename for PDF
-            </label>
-            <b-input-group append=".pdf">
-              <b-form-input
-                id="pdf-name-input"
-                v-model="pdfName"
-                type="text"
-                :state="!containsInvalidCharacters(pdfName)"
-                required
-              />
-              <b-form-invalid-feedback :state="!containsInvalidCharacters(pdfName)">
-                Filename must not contain following characters: {{ invalidFilenameCharacters }}
-              </b-form-invalid-feedback>
-            </b-input-group>
-          </b-col>
-          <b-col
-            cols="12"
-            class="my-2"
-          >
-            <div v-if="cvExportPending">
-              <LoadingSpinner />
-            </div>
-          </b-col>
-        </b-row>
-        <template
-          slot="modal-footer"
-          class="mx-1"
+        <b-modal
+          id="create-cv-modal"
+          ref="create-cv-modal"
+          title="Export CV as PDF"
+          hide-header-close
         >
-          <b-button
-            slot="modal-cancel"
-            variant="danger"
-            @click="hideModal()"
+          <b-row>
+            <b-col
+              cols="12"
+              class="my-2"
+            >
+              <label
+                class="sm"
+                for="pdf-name-input"
+              >
+                Enter filename for PDF
+              </label>
+              <b-input-group append=".pdf">
+                <b-form-input
+                  id="pdf-name-input"
+                  v-model="pdfName"
+                  type="text"
+                  :state="!containsInvalidCharacters(pdfName) && pdfName.length > 0"
+                  required
+                />
+                <b-form-invalid-feedback>
+                  <p v-if="containsInvalidCharacters(pdfName)">
+                    Filename must not contain following characters: {{ invalidFilenameCharacters }}
+                  </p>
+                  <p v-if="pdfName.length === 0">
+                    Filename cannot be empty
+                  </p>
+                </b-form-invalid-feedback>
+              </b-input-group>
+            </b-col>
+            <b-col
+              cols="12"
+              class="my-2"
+            >
+              <div v-if="cvExportPending">
+                <LoadingSpinner />
+              </div>
+            </b-col>
+          </b-row>
+          <template
+            slot="modal-footer"
+            class="mx-1"
           >
-            Cancel
-          </b-button>
-          <b-button
-            slot="modal-ok"
-            variant="primary"
-            :disabled.sync="cvExportPending"
-            @click.prevent="startCvExport()"
-          >
-            Export
-          </b-button>
-        </template>
-      </b-modal>
+            <b-button
+              slot="modal-cancel"
+              variant="danger"
+              @click="hideModal()"
+            >
+              Cancel
+            </b-button>
+            <b-button
+              slot="modal-ok"
+              variant="primary"
+              :disabled.sync="cvExportPending"
+              @click.prevent="startCvExport()"
+            >
+              Export
+            </b-button>
+          </template>
+        </b-modal>
+      </div>
       <b-button-group
         v-for="languageButton in languageButtons"
         :key="languageButton.id"
@@ -232,6 +237,7 @@ export default {
     },
     toggleLanguage: function (languageKey) {
       this.changeLanguage(languageKey)
+      this.pdfName = this.defaultPDFName
     },
     getProjectDuration: function (project) {
       return format(project.startDate, 'MM/YYYY') + '-' + format(project.endDate, 'MM/YYYY')
