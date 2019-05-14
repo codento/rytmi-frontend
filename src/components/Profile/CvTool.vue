@@ -49,6 +49,7 @@
           </b-row>
           <b-row>
             <b-col cols="12">
+              <!-- This is intentionally done not using b-invalid-feedback to have the appended .pdf div work -->
               <div class="d-block invalid-feedback">
                 <p v-if="containsInvalidCharacters(pdfName)">
                   Filename must not contain following characters: {{ invalidFilenameCharacters }}
