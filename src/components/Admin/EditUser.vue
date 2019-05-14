@@ -109,10 +109,10 @@ export default {
   },
   methods: {
     employeeRoleList (selectedRoles) {
-      const roles = this.employeeRoles.map(item => {
+      const roles = Object.keys(this.employeeRoles).map((key) => {
         return {
-          label: item.title,
-          id: item.id
+          label: this.employeeRoles[key].title,
+          id: this.employeeRoles[key].id
         }
       })
       return roles.filter(role => !selectedRoles.some(selectedRole => selectedRole.id === role.id))

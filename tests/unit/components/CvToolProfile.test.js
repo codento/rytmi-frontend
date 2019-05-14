@@ -35,11 +35,6 @@ describe('CvToolProfile.test.js', () => {
     expect(wrapper.vm.modifiedIntroduction).toBe(mockProfile.cvDescriptions[0].description)
   })
 
-  it('Birthday is converted to correct year', () => {
-    const wrapper = createWrapper(CvToolProfile, storeConfig, defaultMountingOptions)
-    expect(wrapper.vm.birthYear).toEqual('1984')
-  })
-
   it('Shows top skills', () => {
     const overrideStore = {
       state: {

@@ -3,7 +3,7 @@ node_js:
 - '9'
 cache: npm
 before_install:
-- openssl aes-256-cbc -K $encrypted_e3cbb7d17a25_key -iv $encrypted_e3cbb7d17a25_iv -in secrets.tar.enc -out secrets.tar -d
+- openssl aes-256-cbc -K $encrypted_68027f53ccef_key -iv $encrypted_68027f53ccef_iv -in secrets.tar.enc -out secrets.tar -d
 - tar xvf secrets.tar
 before_script:
 - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64

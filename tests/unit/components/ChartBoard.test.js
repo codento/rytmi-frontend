@@ -31,17 +31,8 @@ const storeConfig = {
         photoPath: '',
         employeeRoles: [2],
         title: 'software developer',
-        accounts: [
-          {
-            address: 'twitter.com/foo'
-          },
-          {
-            address: 'github.com/bar'
-          }
-        ],
         email: 'foo.bar@foo.com',
-        phone: '1354',
-        description: 'fdas'
+        phone: '1354'
       }
     },
     skillGroupBySkillId: () => (id) => mockSkillGroups[id]
