@@ -123,7 +123,7 @@
   </b-row>
 </template>
 <script>
-import _ from 'lodash'
+import clone from 'lodash/clone'
 import { mapGetters, mapActions } from 'vuex'
 import getYear from 'date-fns/get_year'
 import format from 'date-fns/format'
@@ -175,9 +175,7 @@ export default {
       'cvExportPending'
     ]),
     languageButtons: function () {
-      return LANGUAGE_ENUM.LANGUAGES.map(item =>
-        _.extend(item, { state: item.id === this.currentLanguage })
-      )
+      return LANGUAGE_ENUM.LANGUAGES.map(item => ({ ...item, state: item.id === this.currentLanguage }))
     },
     skillsAndLanguages: function () {
       const profileSkills = this.profileSkillsByProfileId(this.profile.id)
