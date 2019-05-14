@@ -6,11 +6,11 @@
     >
       <div id="disabled-button-wrapper">
         <b-button
-          id="create-cv-button"
+          id="open-create-cv-modal"
+          v-b-modal.create-cv-modal
           :disabled="!allRequiredFieldsFilled"
-          @click.prevent="createPDF"
         >
-          Create PDF
+          Create CV
         </b-button>
         <b-tooltip
           :disabled.sync="allRequiredFieldsFilled"
@@ -19,6 +19,76 @@
         >
           {{ disabledButtonInfo }}
         </b-tooltip>
+        <b-modal
+          id="create-cv-modal"
+          ref="create-cv-modal"
+          title="Export CV as PDF"
+          hide-header-close
+        >
+          <b-row>
+            <b-col cols="12">
+              <label
+                class="sm"
+                for="pdf-name-input"
+              >Enter filename for PDF</label>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="12">
+              <b-input-group append=".pdf">
+                <b-form-input
+                  id="pdf-name-input"
+                  v-model="pdfName"
+                  sm="6"
+                  type="text"
+                  :state="!containsInvalidCharacters(pdfName) && pdfName.length > 0"
+                  required
+                />
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="12">
+              <!-- This is intentionally done not using b-invalid-feedback to have the appended .pdf div work -->
+              <div class="d-block invalid-feedback">
+                <p v-if="containsInvalidCharacters(pdfName)">
+                  Filename must not contain following characters: {{ invalidFilenameCharacters }}
+                </p>
+                <p v-if="pdfName.length === 0">
+                  Filename cannot be empty
+                </p>
+              </div>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="12">
+              <div v-if="cvExportPending">
+                <LoadingSpinner />
+              </div>
+            </b-col>
+          </b-row>
+          <template
+            slot="modal-footer"
+            class="mx-1"
+          >
+            <b-button
+              slot="modal-cancel"
+              variant="danger"
+              @click="hideModal()"
+            >
+              Cancel
+            </b-button>
+            <b-button
+              slot="modal-ok"
+              variant="primary"
+              :class="!containsInvalidCharacters(pdfName) && pdfName.length > 0 ? '' : 'disabled'"
+              :disabled.sync="cvExportPending"
+              @click.prevent="startCvExport()"
+            >
+              Export
+            </b-button>
+          </template>
+        </b-modal>
       </div>
       <b-button-group
         v-for="languageButton in languageButtons"
@@ -46,13 +116,9 @@
         :languages="languages"
       />
       <div v-if="projectsLoaded">
-        <CvToolWorkExperience
-          :profile-projects="projects"
-        />
+        <CvToolWorkExperience :profile-projects="projects" />
       </div>
-      <CvToolOtherInfo
-        :profile="profile"
-      />
+      <CvToolOtherInfo :profile="profile" />
     </b-col>
   </b-row>
 </template>
@@ -61,7 +127,6 @@ import clone from 'lodash/clone'
 import { mapGetters, mapActions } from 'vuex'
 import format from 'date-fns/format'
 
-import { newCv } from '@/utils/api/api'
 import LANGUAGE_ENUM from '@/utils/constants'
 
 import CvToolProfile from './CvToolProfile.vue'
@@ -69,21 +134,26 @@ import CvToolSkills from './CvToolSkills.vue'
 import CvToolWorkExperience from './CvToolWorkExperience.vue'
 import CvToolOtherInfo from './CvToolOtherInfo.vue'
 
+import LoadingSpinner from '@/components/helpers/LoadingSpinner.vue'
+
 export default {
   name: 'CvTool',
   components: {
     CvToolProfile,
     CvToolSkills,
     CvToolWorkExperience,
-    CvToolOtherInfo
+    CvToolOtherInfo,
+    LoadingSpinner
   },
   props: {
-    'profile': Object
+    profile: Object
   },
   data () {
     return {
       isIntroductionValid: false,
-      showButtonInfo: true
+      showButtonInfo: true,
+      pdfName: '',
+      invalidFilenameCharacters: '/:*?"<>|.'
     }
   },
   computed: {
@@ -100,24 +170,33 @@ export default {
       'cvIntroduction',
       'cvOtherInfo',
       'topSkills',
-      'topProjects'
+      'topProjects',
+      'cvExportPending'
     ]),
     languageButtons: function () {
       return LANGUAGE_ENUM.LANGUAGES.map(item => ({ ...item, state: item.id === this.currentLanguage }))
     },
     skillsAndLanguages: function () {
       const profileSkills = this.profileSkillsByProfileId(this.profile.id)
-      return profileSkills ? profileSkills.filter(skill => skill.visibleInCV && skill.knows > 0).map(skill => this.joinSkillCategory(skill)) : []
+      return profileSkills
+        ? profileSkills
+          .filter(skill => skill.visibleInCV && skill.knows > 0)
+          .map(skill => this.joinSkillCategory(skill))
+        : []
     },
     skills: function () {
-      return this.skillsAndLanguages.filter(skill => skill.skillGroup !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME)
+      return this.skillsAndLanguages.filter(
+        skill => skill.skillGroup !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
+      )
     },
     languages: function () {
-      return this.skillsAndLanguages.filter(skill => skill.skillGroup === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME)
+      return this.skillsAndLanguages.filter(
+        skill => skill.skillGroup === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
+      )
     },
     projects: function () {
-      return this.profileProjectsByProfileId(this.profile.id)
-        .map(profileProject => {
+      return this.profileProjectsByProfileId(this.profile.id).map(
+        profileProject => {
           const project = this.projectById(profileProject.projectId)
           if (project) {
             Object.assign(profileProject, {
@@ -128,32 +207,67 @@ export default {
             })
           }
           return profileProject
-        })
+        }
+      )
     },
     projectsLoaded: function () {
-      return this.projects.length > 0 ? this.projects.every(project => project.hasOwnProperty('duration')) : false
+      return this.projects.length > 0
+        ? this.projects.every(project => project.hasOwnProperty('duration'))
+        : false
+    },
+    defaultPDFName: function () {
+      return `Codento CV ${this.profile.firstName} ${this.profile.lastName} [${
+        this.currentLanguage
+      }]`
     },
     allRequiredFieldsFilled: {
       get: function () {
-        return (this.topSkills.length > 0 && this.isIntroductionValid && this.topProjects.length > 0)
+        return (
+          this.topSkills.length > 0 &&
+          this.isIntroductionValid &&
+          this.topProjects.length > 0
+        )
       },
       set: function () {}
     },
     disabledButtonInfo: function () {
       const missingInfo = []
-      if (!this.isIntroductionValid) { missingInfo.push('profile description') }
-      if (!this.topProjects.length) { missingInfo.push('relevant projects') }
-      if (!this.topSkills.length) { missingInfo.push('top skills') }
+      if (!this.isIntroductionValid) {
+        missingInfo.push('profile description')
+      }
+      if (!this.topProjects.length) {
+        missingInfo.push('relevant projects')
+      }
+      if (!this.topSkills.length) {
+        missingInfo.push('top skills')
+      }
       return 'Required info missing: '.concat(missingInfo.join(', '))
     }
   },
+  mounted () {
+    this.pdfName = this.defaultPDFName
+  },
   methods: {
-    ...mapActions(['changeLanguage']),
+    ...mapActions(['changeLanguage', 'downloadCv']),
+    containsInvalidCharacters (text) {
+      // Escape special characters for regexp
+      const escapedCharacters = this.invalidFilenameCharacters.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        '\\$&'
+      )
+      const pattern = new RegExp('[' + escapedCharacters + ']')
+      return pattern.test(text)
+    },
     toggleLanguage: function (languageKey) {
       this.changeLanguage(languageKey)
+      this.pdfName = this.defaultPDFName
     },
     getProjectDuration: function (project) {
-      return format(project.startDate, 'MM/YYYY') + '-' + format(project.endDate, 'MM/YYYY')
+      return (
+        format(project.startDate, 'MM/YYYY') +
+        '-' +
+        format(project.endDate, 'MM/YYYY')
+      )
     },
     cvIntroductionUpdated: function (inputState) {
       this.isIntroductionValid = inputState
@@ -170,8 +284,10 @@ export default {
       }
       return profileSkillCopy
     },
-    createPDF: function (event) {
-      event.preventDefault()
+    hideModal () {
+      this.$refs['create-cv-modal'].hide()
+    },
+    generateCvData () {
       function mapSkill (skillObj) {
         return {
           skillId: skillObj.skillId,
@@ -191,21 +307,18 @@ export default {
           projectDuration: projectObj.duration
         }
       }
-      const cvLanguages = this.languages
-        .map(skill => {
-          return {
-            languageName: skill.skillName,
-            languageLevel: skill.knows
-          }
-        })
+      const cvLanguages = this.languages.map(skill => {
+        return {
+          languageName: skill.skillName,
+          languageLevel: skill.knows
+        }
+      })
 
-      const cvSkills = this.skills
-        .map(skill => mapSkill(skill))
+      const cvSkills = this.skills.map(skill => mapSkill(skill))
 
-      const cvProjects = this.projects
-        .map(project => mapProject(project))
+      const cvProjects = this.projects.map(project => mapProject(project))
 
-      const data = {
+      return {
         employeeName: this.profile.firstName + ' ' + this.profile.lastName,
         employeePicture: this.profile.photoPath,
         jobTitle: this.profile.title,
@@ -218,13 +331,20 @@ export default {
         otherInfo: this.cvOtherInfo,
         born: this.profile.birthYear
       }
-      newCv(data)
+    },
+    async startCvExport () {
+      this.downloadCv({ cvData: this.generateCvData(), pdfName: this.pdfName })
         .then(response => {
-          const blob = new Blob([response.data], { type: 'application/pdf' })
-          const link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
-          link.download = `Codento CV ${this.profile.firstName} ${this.profile.lastName}.pdf`
-          link.click()
+          this.$toasted.global.rytmi_success({
+            message: `${this.pdfName}.pdf succesfully downloaded`
+          })
+          this.hideModal()
+        })
+        .catch(error => {
+          this.$toasted.global.rytmi_error({
+            message: error
+          })
+          this.hideModal()
         })
     }
   }
