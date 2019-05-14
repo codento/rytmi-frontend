@@ -36,23 +36,21 @@
               >
                 Enter filename for PDF
               </label>
-              <b-input-group append=".pdf">
-                <b-form-input
-                  id="pdf-name-input"
-                  v-model="pdfName"
-                  type="text"
-                  :state="!containsInvalidCharacters(pdfName) && pdfName.length > 0"
-                  required
-                />
-                <b-form-invalid-feedback>
-                  <p v-if="containsInvalidCharacters(pdfName)">
-                    Filename must not contain following characters: {{ invalidFilenameCharacters }}
-                  </p>
-                  <p v-if="pdfName.length === 0">
-                    Filename cannot be empty
-                  </p>
-                </b-form-invalid-feedback>
-              </b-input-group>
+              <b-form-input
+                id="pdf-name-input"
+                v-model="pdfName"
+                type="text"
+                :state="!containsInvalidCharacters(pdfName) && pdfName.length > 0"
+                required
+              />
+              <b-form-invalid-feedback>
+                <p v-if="containsInvalidCharacters(pdfName)">
+                  Filename must not contain following characters: {{ invalidFilenameCharacters }}
+                </p>
+                <p v-if="pdfName.length === 0">
+                  Filename cannot be empty
+                </p>
+              </b-form-invalid-feedback>
             </b-col>
             <b-col
               cols="12"
