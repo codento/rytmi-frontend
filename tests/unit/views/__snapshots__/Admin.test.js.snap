@@ -59,6 +59,7 @@ exports[`Admin.vue Template is correct 1`] = `
         >
           <div
             class="list-group-item"
+            name="select-user"
           >
             
       Abr Ofo
@@ -75,6 +76,7 @@ exports[`Admin.vue Template is correct 1`] = `
         >
           <div
             class="list-group-item"
+            name="select-user"
           >
             
       Bar Foo
@@ -93,6 +95,7 @@ exports[`Admin.vue Template is correct 1`] = `
         >
           <div
             class="list-group-item"
+            name="select-user"
           >
             
       Oof Rab
@@ -111,6 +114,7 @@ exports[`Admin.vue Template is correct 1`] = `
         >
           <div
             class="list-group-item"
+            name="select-user"
           >
             
       Rba Off

@@ -2,7 +2,7 @@
 
 exports[`ProjectRow.test.js Template is correct 1`] = `
 <div>
-  <div class="row mb-1">
+  <div name="show-row" class="row mb-1">
     <div class="col-sm-12">
       <router-link to="[object Object]" class="no-underline-router-link"><span class="project-header"> </span></router-link>
     </div>

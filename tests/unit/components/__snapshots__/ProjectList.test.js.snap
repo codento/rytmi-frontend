@@ -9,6 +9,7 @@ exports[`ProjectList.vue Template is correct 1`] = `
   </h2>
    
   <b-input-stub
+    name="project-filter"
     placeholder="Filter projects (by name or project code)"
     type="text"
     value=""

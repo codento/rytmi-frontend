@@ -46,6 +46,7 @@ exports[`UserList.vue Template is correct 1`] = `
   >
     <div
       class="list-group-item"
+      name="select-user"
     >
       
       Aaa Foo
@@ -64,6 +65,7 @@ exports[`UserList.vue Template is correct 1`] = `
   >
     <div
       class="list-group-item"
+      name="select-user"
     >
       
       Bbb Rab
@@ -82,6 +84,7 @@ exports[`UserList.vue Template is correct 1`] = `
   >
     <div
       class="list-group-item"
+      name="select-user"
     >
       
       Ccc Foo
@@ -98,6 +101,7 @@ exports[`UserList.vue Template is correct 1`] = `
   >
     <div
       class="list-group-item"
+      name="select-user"
     >
       
       Ddd Baru
