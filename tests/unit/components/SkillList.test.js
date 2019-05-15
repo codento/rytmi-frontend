@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
 import { mount, createLocalVue } from '@vue/test-utils'
-import { SkillList, EditSkill } from '@/components/Skills/'
+import { SkillList } from '@/components/Skills/'
 import { format } from 'date-fns'
 
 const localVue = createLocalVue()
@@ -93,23 +93,5 @@ describe('SkillList.vue', () => {
     const wrapper = createWrapper()
     const tableRows = wrapper.find('#skill-list-table').findAll('tr')
     expect(tableRows).toHaveLength(3)
-  })
-
-  it('Should open modal to edit skill when skill is clicked', () => {
-    const wrapper = createWrapper()
-    const firstRow = wrapper.find('#skill-list-table').findAll('tr').at(1)
-    expect(wrapper.find(EditSkill).exists()).toBeFalsy()
-    firstRow.trigger('click')
-    expect(wrapper.vm.selectedSkill.name).toBe('C')
-    expect(wrapper.find(EditSkill).exists()).toBeTruthy()
-  })
-
-  it('Should hide the EditSkillModal', () => {
-    const wrapper = createWrapper()
-    wrapper.setData({ selectedSkill: mockSkills[1] })
-    expect(wrapper.find(EditSkill).exists()).toBeTruthy()
-    wrapper.vm.closeEditModal()
-    expect(wrapper.vm.selectedSkill).toBe(null)
-    expect(wrapper.find(EditSkill).exists()).toBeFalsy()
   })
 })
