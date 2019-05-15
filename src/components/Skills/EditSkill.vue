@@ -48,7 +48,10 @@
             md="2"
             cols="3"
           >
-            <b-button name="cancel" @click="close">
+            <b-button
+              name="cancel"
+              @click="close"
+            >
               Cancel
             </b-button>
           </b-col>

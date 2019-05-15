@@ -62,7 +62,10 @@
             <i class="fa fa-edit" /> Edit Profile
           </b-dropdown-item>
           <b-dropdown-divider />
-          <b-dropdown-item @click="logout" id="account-dropdown-item-signout">
+          <b-dropdown-item
+            id="account-dropdown-item-signout"
+            @click="logout"
+          >
             <i class="fa fa-lock" /> Sign Out
           </b-dropdown-item>
         </b-dropdown>

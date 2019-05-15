@@ -48,7 +48,10 @@
         md="1"
         class="profile-open-button"
       >
-        <b-button id="open-profile" @click="openProfile(profile)">
+        <b-button
+          id="open-profile"
+          @click="openProfile(profile)"
+        >
           <i
             style="font-size: 76px; color: gray;"
             class="fa fa-5x fa-angle-right"
