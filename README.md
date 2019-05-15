@@ -72,28 +72,75 @@ Add to User/Workspace settings
 
 
 ## Git Workflow
+This repo has a dev (default) and a master branch. New features are developed in a feature branch branched off from the dev branch. Feature branches are merged back to the dev branch. The only commits to the master branch should be merged from release or hotfix branches.
 
-This repo has a dev (default) and a master branches. All features are developed in a feature branch and merged to the dev branch.
+Dev branch is auto deployed to the staging server and master branch to the production server.
 
-Dev-branch is auto deployed to the staging server and master branch to the production server.
-
+### Making a new release
+ Create a new feature branch from dev.
 ```bash
 git checkout dev
+git pull
 git checkout -b feature-branch
-# do your job
-git push -U origin feature-branch
-# When done with the feature create a pull request to the dev branch at github.
-# Someone merges the PR.
+# Do your stuff
+git push -u origin feature-branch
+# When done with the feature create a pull request to the dev branch at github
+# Someone merges the PR
+```
+After the feature branch is merged to dev, check that everything works in staging environment: s.rytmi.codento.com
 
-# When time to release.
+Versions follow semantic versioning (https://semver.org/):
+* MAJOR.MINOR.PATCH
+* MAJOR version when you make incompatible API changes,
+* MINOR version when you add functionality in a backwards-compatible manner, and
+* PATCH version when you make backwards-compatible bug fixes.
+
+Create a new release branch from dev with a new version number (release-X.Y). Version number of the application (found in package.json file) is updated in the release branch with a separate commit. It is also possible to fix bugs in the release branch at this stage.
+```bash
 git checkout dev
-# bump version in package.json
+git pull
+git checkout -b release-X.Y
+# bump new version in package.json, then:
 git add package.json
-git commit -m "bump version"
-git push
+git commit -m "Bump version to X.Y.0"
+git push -u origin release-X.Y
 
-# Make a pull request from dev to master.
-# Merge the PR.
-# Make a tag and release in Github.
+# Make a pull request from release-X.Y to master
+# Merge the PR
+# Make a tag and release in Github (see section below: Tagging)
+
+# Finally make a pull request from release-X.Y to dev and merge the PR
 ```
 
+#### Tagging
+After the release branch is succesfully merged to master and the new version is running in production, tag the latest commit in master with the new version number. Annotate the tag with "Release X.Y.Z"
+```bash
+# Checkout to the latest commit in master
+git checkout 283ab30
+
+# The following step is optional: temporarily set the date to the date of the HEAD commit
+# This is needed when tag is created later than the actual commit was made
+GIT_COMMITTER_DATE="$(git show --format=%aD | head -1)"
+# Add the tag
+git tag -a 3.1.0 -m"Release 3.1.0"
+
+# Tags need to be pushed separately, use --no-verify to skip tests (as no files have been changed)
+git push origin 3.1.0 --no-verify
+
+# Set HEAD back to where you want
+git checkout dev
+```
+
+### Making a hotfix
+```bash
+git checkout release-X.Y
+git checkout -b hotfix-X.Y.Z
+
+# Fix issues, then:
+gid add edited_files
+git push -u origin hotfix-X.Y.Z
+
+# Make a pull request from hotfix-X.Y.Z to release-X.Y.
+# Merge the PR.
+# Follow steps described in Making a new release
+```

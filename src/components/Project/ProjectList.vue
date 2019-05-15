@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     openProject (project) {
-      this.$router.push({ name: 'Project', params: { id: project.id } })
+      this.$router.push({ name: 'project', params: { id: project.id } })
     }
   }
 }

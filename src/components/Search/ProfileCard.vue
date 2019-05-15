@@ -40,14 +40,8 @@
           v-bind="skill"
           :highlight="skillHighlight.includes(skill.skillId)"
           :show-skills-only="showSkillsOnly"
+          disable-tooltip
         />
-        <b-row
-          v-if="skillHighlight.length > 1"
-          align-h="end"
-          no-gutters
-        >
-          {{ `Sum of selected skills: ${highlightedSum}` }}
-        </b-row>
       </b-col>
       <b-col
         cols="12"
@@ -79,7 +73,8 @@ export default {
     showSkillsOnly: {
       type: Boolean,
       default: false
-    }
+    },
+    showAllSkills: Boolean
   },
   computed: {
     ...mapGetters([
@@ -87,13 +82,7 @@ export default {
       'profileSkillsByProfileId',
       'skillById',
       'futureProjectsOfProfile'
-    ]),
-    highlightedSum: function () {
-      const highlightedSkills = this.skillHighlight.map(skillId => {
-        return this.profileSkillsByProfileId(this.profile.id).find(skill => skill.skillId === skillId).knows
-      })
-      return highlightedSkills.reduce((a, b) => a + b)
-    }
+    ])
   },
   methods: {
     openProfile (profile) {
@@ -113,6 +102,12 @@ export default {
           return -1
         }
         return 0
+      }).filter(skill => {
+        if (this.showAllSkills) {
+          return true
+        } else {
+          return this.skillHighlight.length > 0 ? this.skillHighlight.find(skillId => skillId === skill.skillId) : true
+        }
       })
     }
   }

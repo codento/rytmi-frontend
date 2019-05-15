@@ -1,5 +1,5 @@
+import { generateCv } from '../../../utils/api/api'
 import * as types from '../../mutation-types'
-import { newCv } from '@/utils/api/api'
 
 export const actions = {
   updateCvIntroduction ({ commit }, params) {
@@ -14,12 +14,22 @@ export const actions = {
   updateTopProjects ({ commit }, params) {
     commit(types.UPDATE_TOP_PROJECTS, params)
   },
-  addCV ({ commit }, data) {
+  downloadCv ({ commit }, params) {
+    commit(types.EXPORT_CV_PENDING, true)
     return new Promise((resolve, reject) => {
-      newCv(data).then(response => {
-        console.log(response)
-      })
-        .catch(err => reject(err))
+      generateCv(params.cvData)
+        .then(response => {
+          const blob = new Blob([response.data], { type: 'application/pdf' })
+          const link = document.createElement('a')
+          link.href = window.URL.createObjectURL(blob)
+          link.download = params.pdfName
+          link.click()
+          commit(types.EXPORT_CV_PENDING, false)
+          resolve()
+        }).catch(err => {
+          commit(types.EXPORT_CV_PENDING, false)
+          reject(err)
+        })
     })
   }
 }

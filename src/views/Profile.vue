@@ -59,8 +59,6 @@ export default {
       }
     }
   },
-  methods: {
-  },
   beforeRouteEnter (to, from, next) {
     store.dispatch('fetchPPsOfProfile', to.params.id)
     next()

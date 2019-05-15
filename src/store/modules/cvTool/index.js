@@ -6,7 +6,8 @@ const initialState = {
   cvIntroduction: '',
   cvOtherInfo: '',
   topSkills: [],
-  topProjects: []
+  topProjects: [],
+  cvExportPending: false
 }
 
 export default {

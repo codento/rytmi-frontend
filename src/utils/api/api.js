@@ -97,11 +97,14 @@ export function deleteProfileSkill (data) {
     .catch(handleError)
 }
 
-export function newCv (data) {
+export function generateCv (data) {
   return axios.post(
     CV_API_URL,
     data,
-    getAuthHeaders())
+    {
+      responseType: 'blob',
+      ...getAuthHeaders()
+    })
     .catch(handleError)
 }
 

@@ -49,6 +49,7 @@ const mockProfile = {
   firstName: 'Foo',
   lastName: 'Bar',
   role: 'Employee role',
+  birthYear: 1984,
   title: 'Title',
   phone: 1234,
   cvDescriptions: [
@@ -72,9 +73,10 @@ describe('ProfileForm.vue', () => {
     const inputWrappers = wrapper.findAll('input')
     expect(inputWrappers.at(0).vm.value).toBe(mockProfile.firstName)
     expect(inputWrappers.at(1).vm.value).toBe(mockProfile.lastName)
-    expect(inputWrappers.at(3).vm.value).toBe(mockProfile.title)
-    expect(inputWrappers.at(4).vm.value).toBe(mockProfile.email)
-    expect(inputWrappers.at(5).vm.value).toBe(mockProfile.phone)
+    expect(inputWrappers.at(3).vm.value).toBe(mockProfile.birthYear)
+    expect(inputWrappers.at(4).vm.value).toBe(mockProfile.title)
+    expect(inputWrappers.at(5).vm.value).toBe(mockProfile.email)
+    expect(inputWrappers.at(6).vm.value).toBe(mockProfile.phone)
     const textAreaWrappers = wrapper.findAll('textarea')
     expect(textAreaWrappers.at(0).vm.value).toBe(mockProfile.cvDescriptions[0].description)
     expect(textAreaWrappers.at(1).vm.value).toBe(mockProfile.cvDescriptions[1].description)

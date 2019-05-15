@@ -26,6 +26,12 @@
       <div v-else>
         <b-row class="no-gutters mt-1">
           <b-col
+            cols="12"
+            class="mb-2"
+          >
+            <consultant-utilization-list />
+          </b-col>
+          <b-col
             :cols="12"
             :md="8"
           >
@@ -85,6 +91,7 @@ import SkillChart from './SkillChart'
 import TopSkillChart from './TopSkillChart'
 import MostWillingnessChart from './MostWillingnessChart'
 import ConsultantUtilizationChart from './ConsultantUtilizationChart'
+import ConsultantUtilizationList from './ConsultantUtilizationList'
 
 const calculateAverage = (arr) => {
   if (arr && arr.length > 0) {
@@ -99,6 +106,7 @@ export default {
     TopSkillChart,
     MostWillingnessChart,
     ConsultantUtilizationChart,
+    ConsultantUtilizationList,
     vSelect
   },
   data () {
@@ -173,17 +181,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-#spinner-container {
-  text-align: center;
-}
-.card-box {
-  border:1px solid black
-}
-.fa {
-  font-size: 24px;
-  color: grey;
-}
-
-</style>

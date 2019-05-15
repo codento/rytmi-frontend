@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import merge from 'lodash/merge'
 import { mapGetters } from 'vuex'
 import LineChart from '@/components/Charts/LineChart'
 import moment from 'moment'
@@ -34,6 +35,10 @@ export default {
     fillColor: {
       type: String,
       default: 'rgb(97, 176, 32)'
+    },
+    overrideOptions: {
+      type: Object,
+      default: undefined
     }
   },
   data () {
@@ -51,7 +56,7 @@ export default {
       return `height: ${this.height};`
     },
     chartOptions () {
-      return {
+      const options = {
         chartArea: {
           backgroundColor: this.backgroundColor
         },
@@ -102,6 +107,10 @@ export default {
           }
         }
       }
+      if (this.overrideOptions) {
+        merge(options, this.overrideOptions)
+      }
+      return options
     },
     chartData () {
       const dates = new Set([this.minDate])
@@ -147,9 +156,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .UserProfile {
-    position: relative;
-  }
-</style>

@@ -37,44 +37,7 @@ function createWrapper (overrideMountingOptions) {
   return mount(ProjectForm, mergedMountingOptions)
 }
 
-const mockProject = {
-  id: 1,
-  descriptions: [
-    {
-      description: 'Mock description',
-      language: 'en',
-      name: 'Mock project'
-    },
-    {
-      description: 'Projektin kuvaus',
-      language: 'fi',
-      name: 'Projektin nimi'
-    }
-  ],
-  startDate: '2018-10-01',
-  endDate: '2018-10-11'
-}
-
 describe('ProjectForm.test.js', () => {
-  it('Shows Add project when project id is unknown', () => {
-    const propsData = { editableProject: null }
-    const wrapper = createWrapper({ propsData })
-    expect(wrapper.find('h3').text()).toContain('Add a new project')
-  })
-
-  it('Shows Edit project when project id is known', () => {
-    const propsData = { editableProject: mockProject }
-    const wrapper = createWrapper({ propsData })
-    expect(wrapper.find('h3').text()).toContain('Edit project')
-  })
-
-  it('Shows the form when heading is clicked', () => {
-    const wrapper = createWrapper()
-    expect(wrapper.find('form').isVisible()).toBeFalsy()
-    wrapper.find('h3').find('span').trigger('click')
-    expect(wrapper.find('form').isVisible()).toBeTruthy()
-  })
-
   it('Shows error message when update project fails', async () => {
     const apiError = {
       response: {

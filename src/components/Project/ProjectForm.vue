@@ -1,20 +1,6 @@
 <template>
   <div>
-    <h3 style="text-align: center">
-      {{ editableProject ? 'Edit project' : 'Add a new project' }}
-      <span @click="showProjectForm = !showProjectForm">
-        <i
-          v-if="!showProjectForm"
-          class="fa fa-chevron-down"
-        />
-        <i
-          v-else
-          class="fa fa-chevron-up"
-        />
-      </span>
-    </h3>
     <b-form
-      v-show="showProjectForm"
       id="project_form"
       class="animated fadeIn"
       @submit="onSubmit"
@@ -156,7 +142,6 @@ export default {
   },
   data () {
     return {
-      showProjectForm: false,
       showError: false,
       errorDetails: [],
       project: {}
@@ -193,7 +178,6 @@ export default {
               message: 'Project updated!'
             })
             this.showError = false
-            this.showProjectForm = false
           })
           .catch(err => {
             this.errorDetails = err.response.data.error.details
@@ -207,7 +191,6 @@ export default {
             })
             document.getElementById('project_form').reset()
             this.showError = false
-            this.showProjectForm = false
           }).catch(err => {
             if (Array.isArray(err.data.error.details)) {
               this.errorDetails = err.data.error.details
@@ -250,8 +233,4 @@ export default {
 .project-creation-error {
   color: red;
 }
-.project-form-chevron {
-  float: right;
-}
-
 </style>

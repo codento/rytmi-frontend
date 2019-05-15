@@ -5,6 +5,7 @@ import SkillChart from '@/components/Dashboard/SkillChart'
 import TopSkillChart from '@/components/Dashboard/TopSkillChart'
 import MostWillingnessChart from '@/components/Dashboard/MostWillingnessChart'
 import ConsultantUtilizationChart from '@/components/Dashboard/ConsultantUtilizationChart'
+import ConsultantUtilizationList from '@/components/Dashboard/ConsultantUtilizationList'
 import { createShallowWrapper } from './setup/setup'
 
 const storeConfig = {
@@ -30,17 +31,8 @@ const storeConfig = {
         photoPath: '',
         employeeRoles: [2],
         title: 'software developer',
-        accounts: [
-          {
-            address: 'twitter.com/foo'
-          },
-          {
-            address: 'github.com/bar'
-          }
-        ],
         email: 'foo.bar@foo.com',
-        phone: '1354',
-        description: 'fdas'
+        phone: '1354'
       }
     },
     skillGroupBySkillId: () => (id) => mockSkillGroups[id]
@@ -98,6 +90,7 @@ describe('ChartBoard.vue', () => {
     expect(wrapper.find(TopSkillChart).isVisible()).toBeTruthy()
     expect(wrapper.find(MostWillingnessChart).isVisible()).toBeTruthy()
     expect(wrapper.find(SkillChart).isVisible()).toBeTruthy()
+    expect(wrapper.find(ConsultantUtilizationList).isVisible()).toBeTruthy()
     const utilizationChart = wrapper.find(ConsultantUtilizationChart)
     expect(utilizationChart.isVisible()).toBeTruthy()
     expect(utilizationChart.vm.activeRoleSelection.length).toEqual(2)

@@ -65,7 +65,7 @@ export default new Router({
     },
     {
       path: '/projects/:id',
-      name: 'Project',
+      name: 'project',
       component: Project,
       beforeEnter: requireAuth
     },

@@ -98,7 +98,7 @@ export default {
       return this.profileSkillsByProfileId(this.profile.userId)
     },
     sortSkills (param) {
-      return this.$lodash.orderBy(this.skills, ['wantsTo', 'name'], ['desc', 'asc']) // TODO Figure out how lodash should be handled in tests
+      return this.$lodash.orderBy(this.skills, ['wantsTo', 'name'], ['desc', 'asc'])
     },
     skillName (skillId) {
       return this.skillById(skillId).name

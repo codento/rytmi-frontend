@@ -6,7 +6,12 @@
       @click="show = !show"
     >
       <div class="col-sm-12">
-        <span class="project-header">{{ project.name }} </span>
+        <router-link
+          class="no-underline-router-link"
+          :to="{ name: 'project', params: { id: '' + project.id }}"
+        >
+          <span class="project-header">{{ project.name }} </span>
+        </router-link>
       </div>
       <div class="col-sm-12 duration-container">
         <span class="duration-item">
@@ -80,5 +85,8 @@ small {
   color: hsl(39, 98%, 51%);
   font-weight: 500;
   font-size: 1.5em;
+}
+.no-underline-router-link:hover {
+  text-decoration: none;
 }
 </style>

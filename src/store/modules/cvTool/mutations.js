@@ -12,5 +12,8 @@ export const mutations = {
   },
   [types.UPDATE_TOP_PROJECTS]: (state, projects) => {
     state.topProjects = projects
+  },
+  [types.EXPORT_CV_PENDING] (state, boolean) {
+    state.cvExportPending = boolean
   }
 }

@@ -2,13 +2,14 @@
   <div>
     <b-form
       id="project-profile-form"
+      class="mx-2 my-2"
       @submit="onSubmit"
       @reset="onReset"
     >
       <b-form-group
         v-show="profileVisible"
         id="consultantLabel"
-        label="Consultant:"
+        label="Consultant"
         label-for="consultant"
       >
         <b-form-select
@@ -150,6 +151,10 @@ export default {
     toggleForm: {
       type: Function,
       default: null
+    },
+    noRedirect: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -218,7 +223,14 @@ export default {
       this.show = false
       this.showError = false
       this.$nextTick(() => { this.show = true })
-      this.redirect()
+      if (this.noRedirect) {
+        this.profileProject = {}
+        this.profileProject.projectId = null
+        this.profileProject.profileId = this.profileId
+        this.profileProject.descriptions = this.getEmptyDescriptions()
+      } else {
+        this.redirect()
+      }
     },
     redirect () {
       if (this.profileId) {

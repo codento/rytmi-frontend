@@ -70,5 +70,6 @@ export default {
 <style scoped>
 .profile-editor {
   margin: 0 auto;
+  padding: 1em;
 }
 </style>
