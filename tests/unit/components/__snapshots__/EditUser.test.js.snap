@@ -180,6 +180,7 @@ exports[`EditUser.vue Template is correct 1`] = `
               >
                 <button
                   class="btn btn-success"
+                  name="update"
                   type="button"
                 >
                   
@@ -193,6 +194,7 @@ exports[`EditUser.vue Template is correct 1`] = `
               >
                 <button
                   class="btn btn-danger"
+                  name="delete"
                   type="button"
                 >
                   

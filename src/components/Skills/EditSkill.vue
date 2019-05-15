@@ -5,6 +5,7 @@
       <h2>
         Edit skill
         <button
+          name="close"
           type="button"
           class="close"
           @click="close"
@@ -47,7 +48,10 @@
             md="2"
             cols="3"
           >
-            <b-button @click="close">
+            <b-button
+              name="cancel"
+              @click="close"
+            >
               Cancel
             </b-button>
           </b-col>

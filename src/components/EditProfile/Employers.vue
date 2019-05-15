@@ -34,6 +34,7 @@
       <b-col>
         <div>
           <span
+            name="employer"
             class="employer-name clickable"
             @click="employerClicked(employer)"
           >

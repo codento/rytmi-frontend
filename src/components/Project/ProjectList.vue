@@ -3,6 +3,7 @@
     <h2>Projects</h2>
     <b-input
       v-model="projectFilterTerm"
+      name="project-filter"
       type="text"
       placeholder="Filter projects (by name or project code)"
     />

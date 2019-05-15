@@ -17,6 +17,7 @@
           slot-scope="profileId"
         >
           <span
+            name="open-profile"
             class="clickable"
             @click.stop="openProfile(profileId.value)"
           >
@@ -64,6 +65,7 @@
           slot-scope="remove"
         >
           <b-btn
+            name="remove-member"
             size="sm"
             class="mr-1"
             variant="danger"

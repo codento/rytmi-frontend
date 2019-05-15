@@ -5,6 +5,7 @@
     style="max-width: 20rem;"
   >
     <b-button-close
+      name="close-skill"
       class="top-right"
       @click="$emit('removeSkill', skill.id)"
     />

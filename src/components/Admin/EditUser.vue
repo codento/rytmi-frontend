@@ -33,6 +33,7 @@
           <b-row>
             <b-col sm="3">
               <b-button
+                name="update"
                 variant="success"
                 @click="submit"
               >
@@ -44,6 +45,7 @@
               offset-sm="6"
             >
               <b-button
+                name="delete"
                 variant="danger"
                 @click="del"
               >

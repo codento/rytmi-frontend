@@ -71,6 +71,7 @@
             slot-scope="remove"
           >
             <b-btn
+              name="remove-skill"
               size="sm"
               class="mr-1"
               variant="danger"

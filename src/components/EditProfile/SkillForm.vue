@@ -66,12 +66,14 @@
         >
       </b-form-group>
       <b-button
+        id="submit-skill"
         type="submit"
         variant="primary"
       >
         Submit
       </b-button>
       <b-button
+        id="clear-skill"
         variant="danger"
         @click="onReset"
       >

@@ -51,7 +51,7 @@ exports[`ProjectForm.test.js Template is correct 1`] = `
     </b-row>
     <b-row>
       <b-col>
-        <b-button type="submit" primary="" class="form-control">
+        <b-button id="submit-project" type="submit" primary="" class="form-control">
           Submit
         </b-button>
       </b-col>

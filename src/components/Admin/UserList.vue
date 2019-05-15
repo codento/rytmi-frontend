@@ -15,6 +15,7 @@
     >
       <b-list-group-item
         :active="isUserSelected(user.id)"
+        name="select-user"
         @click="selectUser(user.id)"
       >
         {{ user.firstName + ' ' + user.lastName }}

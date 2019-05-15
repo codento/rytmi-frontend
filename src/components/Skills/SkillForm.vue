@@ -27,6 +27,7 @@
         :options="getSkillCategoryTitles"
       />
       <b-button
+        name="submit"
         primary
         type="submit"
       >

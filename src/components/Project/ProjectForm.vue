@@ -108,6 +108,7 @@
       <b-row>
         <b-col>
           <b-button
+            id="submit-project"
             class="form-control"
             type="submit"
             primary
