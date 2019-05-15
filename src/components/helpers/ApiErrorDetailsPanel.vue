@@ -5,7 +5,7 @@
       :key="detail"
       class="error-detail-row"
     >
-      {{ parseErrorDetail(detail) }}
+      {{ detail ? parseErrorDetail(detail) : '' }}
     </li>
   </ul>
 </template>
