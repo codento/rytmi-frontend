@@ -148,16 +148,16 @@ export default {
               this.$toasted.global.rytmi_success({
                 message: 'A new employer created!'
               })
-              const profileEmployer = {...this.employer, employerId: this.getEmployerId(this.employer.name)}
+              const profileEmployer = { ...this.employer, employerId: this.getEmployerId(this.employer.name) }
               this.updateOrCreateProfileEmployer(profileEmployer)
             })
         } else {
-          const profileEmployer = {...this.employer, employerId: this.selectedExistingEmployer.id}
+          const profileEmployer = { ...this.employer, employerId: this.selectedExistingEmployer.id }
           this.updateOrCreateProfileEmployer(profileEmployer)
         }
       }
     },
-    updateOrCreateProfileEmployer(profileEmployer) {
+    updateOrCreateProfileEmployer (profileEmployer) {
       // If the profileEmployer has an existing ID, update it; otherwise create a new profileEmployer
       if (this.shouldUpdateProfileEmployer()) {
         this.updateProfileEmployer(profileEmployer).then(() => {
@@ -179,7 +179,7 @@ export default {
       return this.employer.id
     },
     shouldCreateANewEmployer () {
-      return this.selectedExistingEmployer ? false : true
+      return !this.selectedExistingEmployer
     },
     isDataValidForSubmit () {
       let isDataValid = true

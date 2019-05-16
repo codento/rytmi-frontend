@@ -40,9 +40,9 @@
           >
             {{ employer ? getEmployerName(employer.employerId) : '' }}</span> <span>{{ getFormatedDate(employer.startDate) + ' - ' + getFormatedDate(employer.endDate) }}</span>
           <i
-            @click="employerClicked(employer)"
             v-b-modal="'delete-modal'"
             class="fa fa-trash icon"
+            @click="employerClicked(employer)"
           />
         </div>
         <div class="details">
@@ -70,7 +70,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { format, getDate, getMonth, getYear, parse } from 'date-fns'
+import { format, getDate, getMonth, parse } from 'date-fns'
 import { orderBy, cloneDeep } from 'lodash'
 import EditEmployer from './EditEmployer'
 
