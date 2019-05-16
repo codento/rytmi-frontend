@@ -70,7 +70,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { format, getDate, getMonth, parse } from 'date-fns'
+import { format, parse } from 'date-fns'
 import { orderBy, cloneDeep } from 'lodash'
 import EditEmployer from './EditEmployer'
 
