@@ -244,7 +244,7 @@ export default {
       return 'Required info missing: '.concat(missingInfo.join(', '))
     }
   },
-  mounted () {
+  updated () {
     this.pdfName = this.defaultPDFName
   },
   methods: {

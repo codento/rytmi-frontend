@@ -55,7 +55,10 @@ export default new Router({
       path: '/profile/:id',
       name: 'profile',
       component: Profile,
-      beforeEnter: requireAuth
+      beforeEnter: requireAuth,
+      props: (route) => {
+        return { profile: store.getters.profileById(route.params.id) }
+      }
     },
     {
       path: '/projects',
