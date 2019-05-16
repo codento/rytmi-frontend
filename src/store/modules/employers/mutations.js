@@ -12,5 +12,8 @@ export const mutations = {
   },
   [types.DELETE_EMPLOYER] (state, employer) {
     Vue.delete(state.employers, employer.id)
+  },
+  [types.CREATE_EMPLOYER] (state, employer) {
+    Vue.set(state.employers, employer.id, employer)
   }
 }

@@ -4,15 +4,24 @@
     @submit="onSubmit"
   >
     <b-row>
-      <b-col>
-        <small for="employer-name">Employer name</small>
+      <b-col cols="6">
+        <small for="employer-select">Select an existing employer</small>
+        <v-select
+          id="employer-select"
+          v-model="selectedExistingEmployer"
+          :options="existingEmployers"
+        />
+        <small>Or enter a new employer name</small>
         <b-input
           id="employer-name"
           v-model="employer.name"
           type="text"
-          placeholder="Employer name"
+          placeholder="New employer name"
+          @input="selectedExistingEmployer = null"
         />
       </b-col>
+    </b-row>
+    <b-row>
       <b-col>
         <small for="employer-start-date">Start date</small>
         <Datepicker
@@ -35,7 +44,7 @@
         <small for="title-fi">Title (Finnish)</small>
         <b-input
           id="title-fi"
-          v-model="descriptionFi.title"
+          v-model="employer.title['fi']"
           type="text"
           placeholder="Title (fi)"
         />
@@ -44,7 +53,7 @@
         <small for="title-en">Title (English)</small>
         <b-input
           id="title-en"
-          v-model="descriptionEn.title"
+          v-model="employer.title['en']"
           type="text"
           placeholder="Title (en)"
         />
@@ -55,7 +64,7 @@
         <small for="description-fi">Description (Finnish)</small>
         <b-textarea
           id="description-fi"
-          v-model="descriptionFi.description"
+          v-model="employer.description['fi']"
           type="text"
           placeholder="Description (fi)"
         />
@@ -64,20 +73,20 @@
         <small for="description-en">Description (English)</small>
         <b-textarea
           id="description-en"
-          v-model="descriptionEn.description"
+          v-model="employer.description['en']"
           type="text"
           placeholder="Description (en)"
         />
       </b-col>
     </b-row>
-    <b-row>
+    <b-row class="mt-2">
       <b-col>
         <b-button
           class="form-control"
           type="submit"
           primary
         >
-          {{ shouldUpdateEmployer() ? 'Update employer' : 'Create new employer' }}
+          {{ shouldUpdateProfileEmployer() ? 'Update work history entry' : 'Create a new work history entry' }}
         </b-button>
       </b-col>
     </b-row>
@@ -88,80 +97,95 @@
 import { mapActions, mapGetters } from 'vuex'
 import { isEmpty, isDate } from 'lodash'
 import Datepicker from '../helpers/Datepicker'
+import vSelect from 'vue-select'
+import sortBy from 'lodash/sortBy'
 
 export default {
   name: 'EditEmployer',
-  components: { Datepicker },
+  components: { Datepicker, vSelect },
   props: {
     'employer': Object
   },
   data () {
     return {
-      showError: false,
-      errorDetails: []
+      selectedExistingEmployer: null
     }
   },
   computed: {
-    ...mapGetters([]),
-    descriptionFi () {
-      return this.getEmployerDescriptionByLanguage(this.employer, 'fi')
+    ...mapGetters(['employers']),
+    existingEmployers () {
+      return sortBy(Object.values(this.employers).map(employer => ({
+        label: employer.name,
+        id: employer.id
+      })),
+      ['label'])
+    }
+  },
+  watch: {
+    employer: function (val, oldVal) {
+      this.selectedExistingEmployer = this.existingEmployers.find(employer => employer.id === val.employerId)
     },
-    descriptionEn () {
-      return this.getEmployerDescriptionByLanguage(this.employer, 'en')
+    selectedExistingEmployer: function (val, oldVal) {
+      this.employer.name = ''
     }
   },
   methods: {
     ...mapActions([
       'createEmployer',
-      'updateEmployer'
+      'updateEmployer',
+      'createProfileEmployer',
+      'updateProfileEmployer'
     ]),
-    getEmployerDescriptionByLanguage (employer, language) {
-      return employer.descriptions.find(description => description.language === language)
+    getEmployerId (employerName) {
+      return Object.values(this.employers).find(employer => employer.name === employerName).id
     },
     onSubmit (evt) {
       evt.preventDefault()
       if (this.isDataValidForSubmit()) {
-        this.errorDetails = []
-        // If the employer has an ID, update; otherwise create a new employer
-        if (this.shouldUpdateEmployer()) {
-          this.updateEmployer(this.employer)
-            .then((data) => {
+        if (this.shouldCreateANewEmployer()) {
+          this.createEmployer({ name: this.employer.name })
+            .then(() => {
               this.$toasted.global.rytmi_success({
-                message: 'Employer updated!'
+                message: 'A new employer created!'
               })
-              this.showError = false
-            })
-            .catch(err => {
-              this.errorDetails = err.response.data.error.details
-              this.showError = true
+              const profileEmployer = {...this.employer, employerId: this.getEmployerId(this.employer.name)}
+              this.updateOrCreateProfileEmployer(profileEmployer)
             })
         } else {
-          this.createEmployer(this.employer)
-            .then((data) => {
-              this.$toasted.global.rytmi_success({
-                message: 'Employer added!'
-              })
-              document.getElementById('employer-form').reset()
-              this.showError = false
-            }).catch(err => {
-              if (Array.isArray(err.data.error.details)) {
-                this.errorDetails = err.data.error.details
-              } else {
-                this.errorDetails.push(err.data.error.message)
-              }
-              this.showError = true
-            })
+          const profileEmployer = {...this.employer, employerId: this.selectedExistingEmployer.id}
+          this.updateOrCreateProfileEmployer(profileEmployer)
         }
       }
     },
-    shouldUpdateEmployer () {
+    updateOrCreateProfileEmployer(profileEmployer) {
+      // If the profileEmployer has an existing ID, update it; otherwise create a new profileEmployer
+      if (this.shouldUpdateProfileEmployer()) {
+        this.updateProfileEmployer(profileEmployer).then(() => {
+          this.$toasted.global.rytmi_success({
+            message: 'Work history entry updated!'
+          })
+          document.getElementById('employer-form').reset()
+        })
+      } else {
+        this.createProfileEmployer(profileEmployer).then(() => {
+          this.$toasted.global.rytmi_success({
+            message: 'A new work history entry created!'
+          })
+          document.getElementById('employer-form').reset()
+        })
+      }
+    },
+    shouldUpdateProfileEmployer () {
       return this.employer.id
+    },
+    shouldCreateANewEmployer () {
+      return this.selectedExistingEmployer ? false : true
     },
     isDataValidForSubmit () {
       let isDataValid = true
-      if (isEmpty(this.employer.name)) {
+      if (!this.selectedExistingEmployer && isEmpty(this.employer.name)) {
         this.$toasted.global.rytmi_error({
-          message: 'Employer name must be given.'
+          message: 'An existing employer must be chosen or the name of a new employer must be given.'
         })
         isDataValid = false
       }
@@ -171,9 +195,9 @@ export default {
         })
         isDataValid = false
       }
-      if (!isDate(this.employer.endDate)) {
+      if (this.employer.endDate && !isDate(this.employer.endDate)) {
         this.$toasted.global.rytmi_error({
-          message: 'End date must be given and it must be a valid date.'
+          message: 'End date must be a valid date.'
         })
         isDataValid = false
       }

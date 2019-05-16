@@ -16,6 +16,7 @@ const PATH_SKILLCATEGORIES = '/skillcategories'
 const PATH_SKILLGROUPS = '/skillgroups'
 const PATH_EMPLOYEEROLES = '/employeeroles'
 const PATH_EMPLOYERS = '/employers'
+const PATH_PROFILEEMPLOYERS = '/profileemployers'
 const PATH_PROJECTSKILLS = '/projectskills'
 
 export function login (token) {
@@ -271,6 +272,35 @@ export function deleteEmployer (data) {
 export function getEmployers () {
   return axios.get(
     API_URL + PATH_EMPLOYERS,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function newProfileEmployer (data) {
+  return axios.post(
+    API_URL + PATH_PROFILEEMPLOYERS,
+    denormalize(data, [employer]),
+    getAuthHeaders())
+}
+
+export function alterProfileEmployer (data) {
+  return axios.put(
+    API_URL + PATH_PROFILEEMPLOYERS + '/' + data.id,
+    denormalize(data, [employer]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function deleteProfileEmployer (data) {
+  return axios.delete(
+    API_URL + PATH_PROFILEEMPLOYERS + '/' + data.id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getProfileEmployers () {
+  return axios.get(
+    API_URL + PATH_PROFILEEMPLOYERS,
     getAuthHeaders())
     .catch(handleError)
 }

@@ -10,7 +10,7 @@ export function createEmployer ({ commit }, data) {
   return new Promise((resolve, reject) => {
     newEmployer(data)
       .then(response => {
-        commit(types.UPDATE_EMPLOYER, response.data)
+        commit(types.CREATE_EMPLOYER, response.data)
         resolve(response)
       }).catch(err => reject(err.response))
   })

@@ -10,25 +10,26 @@
       centered
       ok-title="Delete"
       cancel-title="Cancel"
-      @ok="deleteEmployer"
+      @ok="deleteProfileEmployer"
     >
       <div>
         <b-row>
           <b-col>
-            Are you sure you want to delete this employer record?:
+            Are you sure you want to delete this work history entry?:
           </b-col>
         </b-row>
         <b-row>
           <b-col>
-            <span class="employer-name">{{ selectedEmployer ? selectedEmployer.name : '' }}</span> <span>{{ getFormatedDate(selectedEmployer.startDate) + ' - ' + getFormatedDate(selectedEmployer.endDate) }}</span>
+            <span class="employer-name">{{ selectedProfileEmployer ? getEmployerName(selectedProfileEmployer.employerId) : '' }}</span>
+            <span>{{ getFormatedDate(selectedProfileEmployer.startDate) + ' - ' + getFormatedDate(selectedProfileEmployer.endDate) }}</span>
           </b-col>
         </b-row>
       </div>
     </b-modal>
-    <h1>Previous employers</h1>
+    <h1>Previous and current employers</h1>
     <hr>
     <b-row
-      v-for="employer in employers"
+      v-for="employer in profileEmployers"
       :key="employer.id"
     >
       <b-col>
@@ -37,8 +38,9 @@
             class="employer-name clickable"
             @click="employerClicked(employer)"
           >
-            {{ employer ? employer.name : '' }}</span> <span>{{ getFormatedDate(employer.startDate) + ' - ' + getFormatedDate(employer.endDate) }}</span>
+            {{ employer ? getEmployerName(employer.employerId) : '' }}</span> <span>{{ getFormatedDate(employer.startDate) + ' - ' + getFormatedDate(employer.endDate) }}</span>
           <i
+            @click="employerClicked(employer)"
             v-b-modal="'delete-modal'"
             class="fa fa-trash icon"
           />
@@ -54,14 +56,14 @@
       </b-col>
     </b-row>
     <b-button
-      v-show="selectedEmployer.id"
+      v-show="selectedProfileEmployer.id"
       id="add-new-employer-button"
-      @click="addNewEmployer"
+      @click="addNewProfileEmployer"
     >
       Add new employer
     </b-button>
     <EditEmployer
-      :employer="selectedEmployer"
+      :employer="selectedProfileEmployer"
     />
   </form>
 </template>
@@ -82,68 +84,66 @@ export default {
   },
   data () {
     return {
-      selectedEmployer: this.getEmptyEmployer()
+      selectedProfileEmployer: this.getEmptyProfileEmployer()
     }
   },
   computed: {
     ...mapGetters([
-      'employersByProfileId',
-      'currentLanguage'
+      'profileEmployersByProfileId',
+      'currentLanguage',
+      'employers'
     ]),
-    employers () {
-      const employers = this.employersByProfileId(this.profileId).map(employer => ({
+    profileEmployers () {
+      const employers = this.profileEmployersByProfileId(this.profileId).map(employer => ({
         ...employer,
-        startDate: parse(employer.startDate),
-        endDate: parse(employer.endDate)
+        startDate: employer.startDate ? parse(employer.startDate) : null,
+        endDate: employer.endDate ? parse(employer.endDate) : null
       }))
       return orderBy(employers, ['startDate'], ['desc'])
     }
   },
   methods: {
-    ...mapActions(['removeEmployer']),
+    ...mapActions(['removeProfileEmployer']),
     getFormatedDate (date) {
-      return format(date, 'YYYY/MM')
+      return date ? format(date, 'YYYY/MM') : ''
     },
     getEmployerDescriptionInCurrentLanguage (employer) {
-      return employer.descriptions.find(description => description.language === this.currentLanguage)
+      return employer.description[this.currentLanguage]
     },
     employerClicked (employer) {
-      const clonedEmployer = cloneDeep(employer)
-      clonedEmployer.startDate = new Date(getYear(clonedEmployer.startDate), getMonth(clonedEmployer.startDate), getDate(clonedEmployer.startDate))
-      clonedEmployer.endDate = new Date(getYear(clonedEmployer.endDate), getMonth(clonedEmployer.endDate), getDate(clonedEmployer.endDate))
-      this.selectedEmployer = clonedEmployer
+      this.selectedProfileEmployer = cloneDeep(employer)
     },
-    addNewEmployer () {
-      this.selectedEmployer = this.getEmptyEmployer()
+    addNewProfileEmployer () {
+      this.selectedProfileEmployer = this.getEmptyProfileEmployer()
     },
-    getEmptyEmployer () {
+    getEmployerName (employerId) {
+      const employer = Object.values(this.employers).find(employer => employer.id === employerId)
+      return employer ? employer.name : ''
+    },
+    getEmptyProfileEmployer () {
       return {
-        descriptions: [
-          {
-            description: '',
-            title: '',
-            language: 'fi'
-          },
-          {
-            description: '',
-            title: '',
-            language: 'en'
-          }
-        ],
-        endDate: null,
         id: null,
-        name: '',
         profileId: this.profileId,
-        startDate: null
+        employerId: null,
+        description: {
+          fi: '',
+          en: ''
+        },
+        title: {
+          fi: '',
+          en: ''
+        },
+        startDate: null,
+        endDate: null
       }
     },
-    deleteEmployer () {
-      this.removeEmployer(this.selectedEmployer)
+    deleteProfileEmployer () {
+      this.removeProfileEmployer(this.selectedProfileEmployer)
         .then((data) => {
           this.$toasted.global.rytmi_success({
-            message: 'Employer record deleted.'
+            message: 'Work history entry deleted.'
           })
-          this.selectedEmployer = this.getEmptyEmployer()
+          this.selectedProfileEmployer = this.getEmptyProfileEmployer()
           document.getElementById('employers-form').reset()
         })
     }
