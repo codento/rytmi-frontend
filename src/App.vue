@@ -91,7 +91,8 @@ export default {
       'requestAuth',
       'clearLoginData',
       'fetchUsers',
-      'fetchEmployers'
+      'fetchEmployers',
+      'fetchProfileEmployers'
     ]),
     ...mapMutations({
       setAppInitialized: SET_APP_INITIALIZED,
@@ -122,7 +123,8 @@ export default {
           this.fetchSkillGroups(),
           this.fetchEmployeeRoles(),
           this.fetchUsers(),
-          this.fetchEmployers()
+          this.fetchEmployers(),
+          this.fetchProfileEmployers()
         ])
           .catch(error => {
             this.setAppInitializeError(error)
