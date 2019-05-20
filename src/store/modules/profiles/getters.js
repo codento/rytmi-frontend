@@ -1,4 +1,4 @@
-import { isEmpty, cloneDeep } from 'lodash'
+import { isEmpty } from 'lodash'
 
 export const getters = {
   futureProjectsOfProfile: (state, getters, rootState) => (profileId) => {
@@ -9,17 +9,7 @@ export const getters = {
   profileId: (state) => state.profileId,
   profiles: (state) => state.profiles,
   profileList: (state) => state.profileList,
-  profileById: (state, getters, rootState) => (id) => {
-    let profile = cloneDeep(state.profiles[id])
-    if (profile && profile.cvDescriptions.length > 0) {
-      const descriptions = profile.cvDescriptions.filter(item => item.language === rootState.siteSettings.currentLanguage)
-      const introduction = descriptions.find(item => item.type === 'introduction')
-      const otherInfo = descriptions.find(item => item.type === 'other')
-      if (introduction) { profile = Object.assign(profile, { introduction: introduction.description }) }
-      if (otherInfo) { profile = Object.assign(profile, { otherInfo: otherInfo.description }) }
-    }
-    return profile
-  },
+  profileById: (state) => (id) => state.profiles[id],
   profileByUserId: (state) => (userId) => state.profiles[userId],
   skillProfiles: (state) => state.profileSkills,
   profileSkillsByProfileId: (state, getters) => (profileId) => {

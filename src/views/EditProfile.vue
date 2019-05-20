@@ -9,13 +9,16 @@
         :profile="profile"
         @profileUpdated="profileUpdated()"
       />
+      <CvInfo
+        :profile="profile"
+      />
       <Employers :profile-id="profile.id" />
       <EditLinks
         :profile="profile"
         @profileUpdated="profileUpdated()"
       />
-      <edit-skills :profile-id="profile.id" />
-      <edit-projects :profile-id="profile.id" />
+      <EditSkills :profile-id="profile.id" />
+      <EditProjects :profile-id="profile.id" />
     </template>
   </div>
 </template>
@@ -27,7 +30,8 @@ import {
   EditSkills,
   EditProjects,
   ProfileForm,
-  Employers
+  Employers,
+  CvInfo
 } from '../components/EditProfile'
 import store from '../store'
 
@@ -38,7 +42,8 @@ export default {
     EditLinks,
     EditSkills,
     EditProjects,
-    Employers
+    Employers,
+    CvInfo
   },
   props: {
     profileId: {
