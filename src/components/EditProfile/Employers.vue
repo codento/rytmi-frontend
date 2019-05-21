@@ -4,8 +4,8 @@
     class="animated fadeIn"
   >
     <b-modal
-      :id="'delete-modal'"
-      name="delete-modal"
+      :id="'delete-work-history-entry-modal'"
+      name="delete-work-history-entry-modal"
       hide-header
       centered
       ok-title="Delete"
@@ -26,33 +26,67 @@
         </b-row>
       </div>
     </b-modal>
+    <b-modal
+      title="Add a new project"
+      :id="'add-employer-project-modal'"
+      name="add-employer-project-modal"
+      ok-only
+      ok-title="Close without saving"
+    >
+      <div>
+        <ProjectForm
+          v-if="employers"
+          :editable-project="{ employerId: selectedProfileEmployer.employerId }"
+          no-redirect
+        />
+        <div v-else>Loading employers...</div>
+      </div>
+    </b-modal>
     <h1>Previous and current employers</h1>
     <hr>
     <b-row
-      v-for="employer in profileEmployers"
-      :key="employer.id"
+      v-for="profileEmployer in profileEmployers"
+      :key="profileEmployer.id"
     >
       <b-col>
         <div>
           <span
             name="employer"
             class="employer-name clickable"
-            @click="employerClicked(employer)"
+            @click="profileEmployerClicked(profileEmployer)"
           >
-            {{ employer ? getEmployerName(employer.employerId) : '' }}</span> <span>{{ getFormatedDate(employer.startDate) + ' - ' + getFormatedDate(employer.endDate) }}</span>
+            {{ profileEmployer ? getEmployerName(profileEmployer.employerId) : '' }}</span> <span>{{ getFormatedDate(profileEmployer.startDate) + ' - ' + getFormatedDate(profileEmployer.endDate) }}</span>
           <i
-            v-b-modal="'delete-modal'"
+            v-b-modal="'delete-work-history-entry-modal'"
             class="fa fa-trash icon"
-            @click="employerClicked(employer)"
+            @click="profileEmployerClicked(profileEmployer)"
           />
         </div>
         <div class="details">
           <div class="title">
-            {{ getEmployerDescriptionInCurrentLanguage(employer) ? getEmployerDescriptionInCurrentLanguage(employer).title : '' }}
+            {{ profileEmployer ? profileEmployer.title[currentLanguage] : '' }}
           </div>
           <div class="description">
-            {{ getEmployerDescriptionInCurrentLanguage(employer) ? getEmployerDescriptionInCurrentLanguage(employer).description : '' }}
+            {{ profileEmployer ? profileEmployer.description[currentLanguage] : '' }}
           </div>
+          <div class="employer-profile-projects">
+            <small class="projects-label">Projects</small>
+            <div
+              v-for="profileProjectWithProjectData in profileProjectsWithProjectData.filter(ppwpd => ppwpd.project.employerId === profileEmployer.employerId)"
+              :key="profileProjectWithProjectData.profileProject.id"
+            >
+              <EmployersProfileProject
+                :profileProject="profileProjectWithProjectData.profileProject"
+                :project="profileProjectWithProjectData.project"
+              />
+            </div>
+          </div>
+          <b-button
+            v-b-modal="'add-employer-project-modal'"
+            @click="profileEmployerClicked(profileEmployer)"
+          >
+            Add a new project
+          </b-button>
         </div>
       </b-col>
     </b-row>
@@ -61,10 +95,10 @@
       id="add-new-employer-button"
       @click="addNewProfileEmployer"
     >
-      Add new employer
+      Add new work history entry
     </b-button>
-    <EditEmployer
-      :employer="selectedProfileEmployer"
+    <EditProfileEmployer
+      :profile-employer="selectedProfileEmployer"
     />
   </form>
 </template>
@@ -73,12 +107,16 @@
 import { mapActions, mapGetters } from 'vuex'
 import { format, parse } from 'date-fns'
 import { orderBy, cloneDeep } from 'lodash'
-import EditEmployer from './EditEmployer'
+import EditProfileEmployer from './EditProfileEmployer'
+import EmployersProfileProject from './EmployersProfileProject'
+import { ProjectForm } from '../Project'
 
 export default {
   name: 'Employers',
   components: {
-    EditEmployer
+    EditProfileEmployer,
+    ProjectForm,
+    EmployersProfileProject
   },
   props: {
     'profileId': Number
@@ -92,7 +130,9 @@ export default {
     ...mapGetters([
       'profileEmployersByProfileId',
       'currentLanguage',
-      'employers'
+      'employers',
+      'profileProjectsByProfileId',
+      'projects'
     ]),
     profileEmployers () {
       const employers = this.profileEmployersByProfileId(this.profileId).map(employer => ({
@@ -101,6 +141,12 @@ export default {
         endDate: employer.endDate ? parse(employer.endDate) : null
       }))
       return orderBy(employers, ['startDate'], ['desc'])
+    },
+    profileProjectsWithProjectData () {
+      return this.profileProjectsByProfileId(this.profileId).map(pp => ({
+        profileProject: pp,
+        project: Object.values(this.projects).find(project => project.id === pp.projectId)
+      }))
     }
   },
   methods: {
@@ -108,11 +154,8 @@ export default {
     getFormatedDate (date) {
       return date ? format(date, 'YYYY/MM') : ''
     },
-    getEmployerDescriptionInCurrentLanguage (employer) {
-      return employer.description[this.currentLanguage]
-    },
-    employerClicked (employer) {
-      this.selectedProfileEmployer = cloneDeep(employer)
+    profileEmployerClicked (profileEmployer) {
+      this.selectedProfileEmployer = cloneDeep(profileEmployer)
     },
     addNewProfileEmployer () {
       this.selectedProfileEmployer = this.getEmptyProfileEmployer()
@@ -169,6 +212,10 @@ export default {
   padding-left: 15px;
   padding-bottom: 15px;
 }
+.employer-profile-projects {
+  padding-left: 15px;
+  padding-bottom: 15px;
+}
 .clickable {
   cursor: pointer;
 }
@@ -178,7 +225,13 @@ export default {
 .icon {
   margin-left: 15px;
 }
-.icon:hover {
+.icon.fa-trash:hover {
   color: red;
+}
+.icon.fa-plus:hover {
+  color: green;
+}
+.projects-label {
+  text-decoration: underline;
 }
 </style>

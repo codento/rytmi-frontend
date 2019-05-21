@@ -14,8 +14,8 @@
         :profile="profile"
         @profileUpdated="profileUpdated()"
       />
-      <edit-skills :profile-id="profile.id" />
-      <edit-projects :profile-id="profile.id" />
+      <EditSkills :profile-id="profile.id" />
+      <EditProjects :profile-id="profile.id" />
     </template>
   </div>
 </template>

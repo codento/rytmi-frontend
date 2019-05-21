@@ -7,6 +7,19 @@
     >
       <b-row>
         <b-col>
+          <small>Employer</small>
+          <v-select
+            v-if="employers"
+            id="employer-select"
+            :value="selectedEmployer"
+            :options="employerList"
+            @input="employerSelected"
+            label="name"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
           <small>Project code</small>
           <b-input
             v-model="project.code"
@@ -128,14 +141,18 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
 import Datepicker from '../helpers/Datepicker'
+import vSelect from 'vue-select'
+import sortBy from 'lodash/sortBy'
+
 export default {
   name: 'ProjectForm',
   components: {
     Datepicker,
-    ApiErrorDetailsPanel
+    ApiErrorDetailsPanel,
+    vSelect
   },
   props: {
     editableProject: Object
@@ -144,22 +161,22 @@ export default {
     return {
       showError: false,
       errorDetails: [],
-      project: {}
+      project: {},
+      selectedEmployer: null
+    }
+  },
+  computed: {
+    ...mapGetters(['employers']),
+    employerList () {
+      return sortBy(Object.values(this.employers), ['name'])
     }
   },
   mounted () {
-    if (this.editableProject) {
-      this.project = this.editableProject
-      this.project.endDate = new Date(this.editableProject.endDate)
-      this.project.startDate = new Date(this.editableProject.startDate)
-    } else {
-      this.project = {
-        code: null,
-        startDate: null,
-        endDate: null,
-        isSecret: false,
-        descriptions: []
-      }
+    this.setProject()
+  },
+  watch: {
+    editableProject: function () {
+      this.setProject()
     }
   },
   methods: {
@@ -167,6 +184,24 @@ export default {
       'createProject',
       'updateProject'
     ]),
+    employerSelected (selectedValue) {
+      this.project.employerId = selectedValue.id
+    },
+    setProject () {
+      this.project = {
+        code: this.editableProject && this.editableProject.code ? this.editableProject.code : null,
+        startDate: this.editableProject && this.editableProject.startDate ? new Date(this.editableProject.startDate) : null,
+        endDate: this.editableProject && this.editableProject.endDate ? new Date(this.editableProject.endDate) : null,
+        isSecret: this.editableProject && this.editableProject.isSecret ? this.editableProject.isSecret : false,
+        descriptions: this.editableProject && this.editableProject.descriptions ? this.editableProject.descriptions : [],
+        employerId: this.editableProject && this.editableProject.employerId ? this.editableProject.employerId : null
+      }
+
+      this.selectedEmployer =
+        this.project && this.project.employerId
+          ? this.employerList.find(employer => employer.id === this.project.employerId)
+          : null
+    },
     onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []
