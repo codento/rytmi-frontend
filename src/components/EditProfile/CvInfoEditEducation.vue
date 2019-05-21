@@ -4,19 +4,18 @@
       <b-col cols="12">
         <h2>Education</h2>
       </b-col>
-      <b-col class="col-12 education-table">
+      <b-col class="col-12">
         <b-table
+          id="education-table"
           :items="tableItems"
           :fields="fields"
-          fixed
-          caption-top
           stacked="sm"
         >
           <template
             slot="school"
             slot-scope="data"
           >
-            {{ data.value }}
+            <span class="table-cell-text text-truncate"> {{ data.value }} </span>
           </template>
 
           <template
@@ -37,49 +36,46 @@
             slot="degree"
             slot-scope="data"
           >
-            {{ data.value }}
+            <span class="table-cell-text text-truncate"> {{ data.value }} </span>
           </template>
 
           <template
             slot="major"
             slot-scope="data"
           >
-            {{ data.value }}
+            <span class="table-cell-text text-truncate"> {{ data.value }} </span>
           </template>
 
           <template
             slot="minor"
             slot-scope="data"
           >
-            {{ data.value }}
+            <span class="table-cell-text text-truncate"> {{ data.value }} </span>
           </template>
 
           <template
-            slot="edit"
+            slot="actions"
             slot-scope="data"
           >
-            <b-btn
-              size="sm"
-              class="mr-1 table-button"
-              variant="success"
-              @click="openEditModal(data)"
-            >
-              Edit
-            </b-btn>
-          </template>
-          <template
-            slot="remove"
-            slot-scope="data"
-          >
-            <b-btn
-              name="remove"
-              size="sm"
-              class="mr-1 table-button"
-              variant="danger"
-              @click.stop="removeEducation(data)"
-            >
-              Remove
-            </b-btn>
+            <b-button-group>
+              <b-btn
+                size="sm"
+                class="mr-1 table-button"
+                variant="success"
+                @click="openEditModal(data)"
+              >
+                Edit
+              </b-btn>
+              <b-btn
+                name="remove"
+                size="sm"
+                class="mr-1 table-button"
+                variant="danger"
+                @click.stop="removeEducation(data)"
+              >
+                Remove
+              </b-btn>
+            </b-button-group>
           </template>
         </b-table>
       </b-col>
@@ -90,7 +86,7 @@
           variant="success"
           @click="openEditModal()"
         >
-          Add
+          Add new education
         </b-button>
       </b-col>
     </b-row>
@@ -101,10 +97,8 @@
       hide-footer
       hide-header
     >
-      <h3>Edit education data</h3>
       <CvInfoEditEducationForm
         :initial-values="editedEducationItem"
-        :labels="fields.filter(item => item.label)"
         @cancel="closeEditModal()"
         @submit="submitEducationForm"
       />
@@ -113,6 +107,7 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import CvInfoEditEducationForm from './CvInfoEditEducationForm'
 
@@ -150,11 +145,10 @@ export default {
         { key: 'degree', label: 'Degree' },
         { key: 'major', label: 'Major' },
         { key: 'minor', label: 'Minor' },
-        'edit',
-        'remove'
+        'actions'
       ],
       editedEducation: this.profile.education ? this.profile.education : [],
-      editedEducationItem: Object.assign({}, educationTemplate),
+      editedEducationItem: cloneDeep(educationTemplate),
       editedItemIndex: -1
     }
   },
@@ -184,10 +178,10 @@ export default {
     },
     openEditModal (item = null) {
       if (item) {
-        this.editedEducationItem = Object.assign({}, this.editedEducation[item.index])
+        this.editedEducationItem = cloneDeep(this.editedEducation[item.index])
         this.editedItemIndex = item.index
       } else {
-        this.editedEducationItem = Object.assign({}, educationTemplate)
+        this.editedEducationItem = cloneDeep(educationTemplate)
         this.editedItemIndex = -1
       }
       this.$refs['edit-education-modal'].show()
@@ -197,14 +191,14 @@ export default {
     },
     submitEducationForm (submittedData) {
       if (this.editedItemIndex >= 0) {
-        this.editedEducation[this.editedItemIndex] = Object.assign({},submittedData)
+        this.editedEducation[this.editedItemIndex] = cloneDeep(submittedData)
       } else {
         this.editedEducation.push(submittedData)
       }
       this.callUpdateProfileAction()
     },
     callUpdateProfileAction () {
-      const editedProfile = Object.assign({}, this.profile)
+      const editedProfile = cloneDeep(this.profile)
       this.editedEducation.sort((a, b) => b.endYear - a.endYear)
       editedProfile.education = this.editedEducation
       this.updateProfile(editedProfile)
@@ -212,7 +206,7 @@ export default {
           this.$toasted.global.rytmi_success({
             message: 'Profile CV information updated.'
           })
-          this.editedEducationItem.data = Object.assign({}, educationTemplate)
+          this.editedEducationItem.data = cloneDeep(educationTemplate)
           this.$refs['edit-education-modal'].hide()
         })
         .catch((err) => {
@@ -228,6 +222,12 @@ export default {
 <style scoped >
 button.table-button {
   width: 100%;
+}
+.table-cell-text {
+  width: 0;
+  min-width: 100%;
+  display: inline-block;
+  max-width: 150px;
 }
 .modal-btn {
   margin-top: 0.5rem;

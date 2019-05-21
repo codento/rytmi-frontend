@@ -36,7 +36,7 @@
     <b-col cols="12">
       <b-button
         size="sm"
-        class="mr-1"
+        class="mb-4"
         variant="success"
         :disabled="!introductionIsValid(editedIntroductions.fi) || !introductionIsValid(editedIntroductions.en)"
         @click.prevent="callUpdateProfileAction()"
