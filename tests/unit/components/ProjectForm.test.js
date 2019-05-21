@@ -1,40 +1,25 @@
-import { mount, createLocalVue } from '@vue/test-utils'
-import BootstrapVue from 'bootstrap-vue'
-import Vuex from 'vuex'
 import { merge } from 'lodash'
 import flushPromises from 'flush-promises'
 import { ProjectForm } from '@/components/Project'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
-const localVue = createLocalVue()
-localVue.use(BootstrapVue)
-localVue.use(Vuex)
+import { createWrapper } from './setup/setup'
 
-function createStore (overrideConfig) {
-  const defaultStoreConfig = {
-    actions: {
-      createProject: jest.fn(() => []),
-      updateProject: jest.fn(() => [])
-    }
+const defaultStoreConfig = {
+  actions: {
+    createProject: jest.fn(() => []),
+    updateProject: jest.fn(() => [])
   }
-  const mergedConfig = merge(defaultStoreConfig, overrideConfig)
-  return new Vuex.Store(mergedConfig)
 }
 
-function createWrapper (overrideMountingOptions) {
-  const defaultMountingOptions = {
-    mocks: {
-      $toasted: {
-        global: {
-          rytmi_success: jest.fn()
-        }
+const defaultMountingOptions = {
+  mocks: {
+    $toasted: {
+      global: {
+        rytmi_success: jest.fn()
       }
-    },
-    localVue,
-    store: createStore()
+    }
   }
-  const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
-  return mount(ProjectForm, mergedMountingOptions)
 }
 
 describe('ProjectForm.test.js', () => {
@@ -59,8 +44,9 @@ describe('ProjectForm.test.js', () => {
     const actions = {
       updateProject: jest.fn(() => Promise.reject(apiError))
     }
-    const store = createStore({ actions })
-    const wrapper = createWrapper({ propsData, store })
+    const wrapper = createWrapper(ProjectForm,
+      merge({}, defaultStoreConfig, { actions }),
+      merge({}, defaultMountingOptions, { propsData }))
     wrapper.setData({
       showProjectForm: true
     })
@@ -81,6 +67,7 @@ describe('ProjectForm.test.js', () => {
         { customerName: '', name: '', description: '', language: 'en' }
       ]
     }
+
     const actions = {
       createProject: jest.fn((obj, project, dno) => Promise.resolve(project))
     }
@@ -88,8 +75,7 @@ describe('ProjectForm.test.js', () => {
     documentMock.mockImplementation(() => ({
       reset: jest.fn()
     }))
-    const store = createStore({ actions })
-    const wrapper = createWrapper({ store })
+    const wrapper = createWrapper(ProjectForm, merge({}, defaultStoreConfig, { actions }), defaultMountingOptions)
     wrapper.setData({ showProjectForm: true })
     wrapper.findAll('input').at(0).setValue(1234)
     wrapper.find('button').trigger('submit')
@@ -101,7 +87,6 @@ describe('ProjectForm.test.js', () => {
     const actions = {
       updateProject: jest.fn((obj, project, dno) => Promise.resolve(project))
     }
-    const store = createStore({ actions })
     const propsData = {
       editableProject: {
         id: 1,
@@ -110,7 +95,9 @@ describe('ProjectForm.test.js', () => {
         endDate: new Date('2018-02-01T00:00:00.000Z')
       }
     }
-    const wrapper = createWrapper({ store, propsData })
+    const wrapper = createWrapper(ProjectForm,
+      merge({}, defaultStoreConfig, { actions }),
+      merge({}, defaultMountingOptions, { propsData }))
     wrapper.setData({ showProjectForm: true })
     wrapper.findAll('input').at(0).setValue(1234)
     wrapper.find('button').trigger('submit')
@@ -122,7 +109,7 @@ describe('ProjectForm.test.js', () => {
   })
 
   it('Template is correct', () => {
-    let wrapper = mount(ProjectForm, {})
+    const wrapper = createWrapper(ProjectForm, defaultStoreConfig, defaultMountingOptions)
     expect(wrapper.html()).toMatchSnapshot()
   })
 })

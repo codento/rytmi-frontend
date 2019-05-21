@@ -6,7 +6,8 @@ import {
   EditLinks,
   EditSkills,
   EditProjects,
-  ProfileForm
+  ProfileForm,
+  CvInfo
 } from '@/components/EditProfile'
 import { merge } from 'lodash'
 
@@ -101,6 +102,7 @@ describe('EditProfile.vue', () => {
     })
     const wrapper = createWrapper({ propsData, store })
     expect(wrapper.find(ProfileForm).exists()).toBeFalsy()
+    expect(wrapper.find(CvInfo).exists()).toBeFalsy()
     expect(wrapper.find(EditLinks).exists()).toBeFalsy()
     expect(wrapper.find(EditSkills).exists()).toBeFalsy()
     expect(wrapper.find(EditProjects).exists()).toBeFalsy()
@@ -112,11 +114,14 @@ describe('EditProfile.vue', () => {
     }
     const wrapper = createWrapper({ propsData })
     const profileFormWrapper = wrapper.find(ProfileForm)
+    const cvInfoWrapper = wrapper.find(CvInfo)
     const editSkillsWrapper = wrapper.find(EditSkills)
     const editLinksWrapper = wrapper.find(EditLinks)
     const EditProjectsWrapper = wrapper.find(EditProjects)
     expect(profileFormWrapper.isVisible()).toBeTruthy()
     expect(profileFormWrapper.props().profile).toBe(mockProfile)
+    expect(cvInfoWrapper.isVisible()).toBeTruthy()
+    expect(cvInfoWrapper.props().profile).toBe(mockProfile)
     expect(editSkillsWrapper.isVisible()).toBeTruthy()
     expect(editSkillsWrapper.props().profileId).toBe(mockProfile.id)
     expect(editLinksWrapper.isVisible()).toBeTruthy()

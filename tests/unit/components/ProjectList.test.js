@@ -62,7 +62,7 @@ describe('ProjectList.vue', () => {
         projects: mockProjects
       }
     }
-    const wrapper = createShallowWrapper(ProjectList, _.merge(defaultStoreConfig, overrideStoreConfigs), {})
+    const wrapper = createShallowWrapper(ProjectList, _.merge({}, defaultStoreConfig, overrideStoreConfigs), {})
     expect(wrapper.vm.results.length).toEqual(3)
   })
 

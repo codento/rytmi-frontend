@@ -20,6 +20,10 @@ exports[`EditProfile.vue Should show correct components when profileId is not nu
     profile="[object Object]"
   />
    
+  <cvinfo-stub
+    profile="[object Object]"
+  />
+   
   <employers-stub
     profileid="5"
   />
@@ -28,11 +32,11 @@ exports[`EditProfile.vue Should show correct components when profileId is not nu
     profile="[object Object]"
   />
    
-  <edit-skills-stub
+  <editskills-stub
     profileid="5"
   />
    
-  <edit-projects-stub
+  <editprojects-stub
     profileid="5"
   />
 </div>
