@@ -2,61 +2,45 @@
 
 exports[`ProjectForm.test.js Template is correct 1`] = `
 <div>
-  <b-form id="project_form" class="animated fadeIn">
-    <b-row>
-      <b-col><small>Project code</small>
-        <b-input placeholder="Project code" required="" type="number" min="0" max="99999"></b-input>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col sm="6"><small>Project name (Finnish)</small>
-        <b-input placeholder="Project name (fi)" required="" type="text"></b-input>
-      </b-col>
-      <b-col sm="6"><small>Project name (English)</small>
-        <b-input placeholder="Project name (en)" required="" type="text"></b-input>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col><small>Start date</small>
+  <form id="project_form" class="animated fadeIn">
+    <div class="row">
+      <div class="col"><small>Project code</small> <input type="number" placeholder="Project code" required="required" min="0" max="99999" aria-required="true" class="form-control"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6"><small>Project name (Finnish)</small> <input type="text" placeholder="Project name (fi)" required="required" aria-required="true" class="form-control"></div>
+      <div class="col-sm-6"><small>Project name (English)</small> <input type="text" placeholder="Project name (en)" required="required" aria-required="true" class="form-control"></div>
+    </div>
+    <div class="row">
+      <div class="col"><small>Start date</small>
         <div><input id="project-start-date-datepicker" type="text" autocomplete="off" class="form-control"></div>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col><small>End date</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col"><small>End date</small>
         <div><input id="project-end-date-datepicker" type="text" autocomplete="off" class="form-control"></div>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col sm="6"><small>Customer name (Finnish)</small>
-        <b-input placeholder="Customer name (fi)" type="text"></b-input>
-      </b-col>
-      <b-col sm="6"><small>Customer name (English)</small>
-        <b-input placeholder="Customer name (en)" type="text"></b-input>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col sm="6"><small>Description (Finnish)</small>
-        <b-textarea placeholder="Project description (fi)" type="text" rows="5" class="form-control"></b-textarea>
-      </b-col>
-      <b-col sm="6"><small>Description (English)</small>
-        <b-textarea placeholder="Project description (en)" type="text" rows="5" class="form-control"></b-textarea>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col class="mt-2 mb-2">
-        <b-form-checkbox>
-          This is a secret project
-        </b-form-checkbox>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <b-button id="submit-project" type="submit" primary="" class="form-control">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6"><small>Customer name (Finnish)</small> <input type="text" placeholder="Customer name (fi)" class="form-control"></div>
+      <div class="col-sm-6"><small>Customer name (English)</small> <input type="text" placeholder="Customer name (en)" class="form-control"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6"><small>Description (Finnish)</small> <textarea placeholder="Project description (fi)" rows="5" wrap="soft" class="form-control form-control" type="text"></textarea></div>
+      <div class="col-sm-6"><small>Description (English)</small> <textarea placeholder="Project description (en)" rows="5" wrap="soft" class="form-control form-control" type="text"></textarea></div>
+    </div>
+    <div class="row">
+      <div class="mt-2 mb-2 col">
+        <div class="custom-control custom-checkbox"><input type="checkbox" autocomplete="off" class="custom-control-input" value="true"><label class="custom-control-label">
+            This is a secret project
+          </label></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col"><button id="submit-project" primary="" type="submit" class="btn form-control btn-secondary">
           Submit
-        </b-button>
-      </b-col>
-    </b-row>
-  </b-form>
+        </button></div>
+    </div>
+  </form>
   <!---->
 </div>
 `;

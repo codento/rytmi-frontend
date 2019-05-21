@@ -9,13 +9,17 @@ export const mockProfile = {
   description: 'Description about me Foo',
   email: 'foo.bar@barfoo.com',
   employeeRoles: [1],
-  cvDescriptions: [
-    { description: 'kuvaus1', language: 'fi', type: 'introduction' },
-    { description: 'desc1', language: 'en', type: 'introduction' },
-    { description: 'markdown kuvaus', language: 'fi', type: 'other' },
-    { description: 'markdown desc', language: 'en', type: 'other' }
+  introduction: {
+    fi: 'kuvaus1',
+    en: 'desc1'
+  },
+  education: [
+    { fi: { school: 'Yliopisto', degree: 'Joku tutkinto', major: null, minor: null },
+      en: { school: 'University', degree: 'Some degree', major: 'My major', minor: 'My minor' },
+      startYear: 2011,
+      endYear: 2015
+    }
   ],
-  introduction: 'kuvaus1',
   otherInfo: 'markdown kuvaus'
 }
 

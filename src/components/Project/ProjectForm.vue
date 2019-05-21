@@ -41,7 +41,7 @@
       <b-row>
         <b-col>
           <small>Start date</small>
-          <datepicker
+          <Datepicker
             v-model="project.startDate"
             name="project-start-date"
           />
@@ -50,7 +50,7 @@
       <b-row>
         <b-col>
           <small>End date</small>
-          <datepicker
+          <Datepicker
             v-model="project.endDate"
             name="project-end-date"
           />
@@ -128,9 +128,11 @@
   </div>
 </template>
 <script>
+import { cloneDeep } from 'lodash'
 import { mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
-import Datepicker from '../helpers/Datepicker'
+import Datepicker from '../helpers/Datepicker.vue'
+
 export default {
   name: 'ProjectForm',
   components: {
@@ -149,7 +151,7 @@ export default {
   },
   mounted () {
     if (this.editableProject) {
-      this.project = this.editableProject
+      this.project = cloneDeep(this.editableProject)
       this.project.endDate = new Date(this.editableProject.endDate)
       this.project.startDate = new Date(this.editableProject.startDate)
     } else {

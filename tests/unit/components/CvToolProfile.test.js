@@ -32,7 +32,7 @@ describe('CvToolProfile.test.js', () => {
     const wrapper = createWrapper(CvToolProfile, storeConfig, defaultMountingOptions)
     expect(wrapper.props().profile).toEqual(mockProfile)
     expect(wrapper.vm.fullName).toBe('Foo Bar')
-    expect(wrapper.vm.modifiedIntroduction).toBe(mockProfile.cvDescriptions[0].description)
+    expect(wrapper.vm.modifiedIntroduction).toBe(mockProfile.introduction.fi)
   })
 
   it('Shows top skills', () => {
