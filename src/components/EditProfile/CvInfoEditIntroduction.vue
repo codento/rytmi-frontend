@@ -10,6 +10,7 @@
     >
       <small>Introduction for CV main page (in {{ lang.label }})</small>
       <b-textarea
+        :id="'input-introduction-' + lang.key"
         v-model="editedIntroductions[lang.key]"
         placeholder="Introduction for CV main page"
         type="text"
@@ -38,6 +39,7 @@
         size="sm"
         class="mb-4"
         variant="success"
+        type="submit"
         :disabled="!introductionIsValid(editedIntroductions.fi) || !introductionIsValid(editedIntroductions.en)"
         @click.prevent="callUpdateProfileAction()"
       >
@@ -70,22 +72,21 @@ export default {
     introductionIsValid: function (introduction) {
       return introduction.length > 0 && introduction.length <= 360
     },
-    callUpdateProfileAction () {
+    async callUpdateProfileAction () {
       const editedProfile = Object.assign({}, this.profile)
       editedProfile.introduction = {}
       editedProfile.introduction.fi = this.editedIntroductions.fi
       editedProfile.introduction.en = this.editedIntroductions.en
-      this.updateProfile(editedProfile)
-        .then((response) => {
-          this.$toasted.global.rytmi_success({
-            message: 'Profile CV introduction updated.'
-          })
+      try {
+        await this.updateProfile(editedProfile)
+        this.$toasted.global.rytmi_success({
+          message: 'Profile CV introduction updated.'
         })
-        .catch((err) => {
-          this.$toasted.global.rytmi_error({
-            message: err
-          })
+      } catch (error) {
+        this.$toasted.global.rytmi_error({
+          message: error
         })
+      }
     }
   }
 }

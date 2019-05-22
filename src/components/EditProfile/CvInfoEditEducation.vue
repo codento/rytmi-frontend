@@ -59,6 +59,7 @@
           >
             <b-button-group>
               <b-btn
+                :id="'edit-education-item-btn-' + data.index"
                 size="sm"
                 class="mr-1 table-button"
                 variant="success"
@@ -67,6 +68,7 @@
                 Edit
               </b-btn>
               <b-btn
+                :id="'remove-education-item-btn-' + data.index"
                 name="remove"
                 size="sm"
                 class="mr-1 table-button"
@@ -81,6 +83,7 @@
       </b-col>
       <b-col cols="12">
         <b-button
+          id="add-education-btn"
           size="sm"
           class="mr-1"
           variant="success"
@@ -197,23 +200,21 @@ export default {
       }
       this.callUpdateProfileAction()
     },
-    callUpdateProfileAction () {
+    async callUpdateProfileAction () {
       const editedProfile = cloneDeep(this.profile)
       this.editedEducation.sort((a, b) => b.endYear - a.endYear)
       editedProfile.education = this.editedEducation
-      this.updateProfile(editedProfile)
-        .then((response) => {
-          this.$toasted.global.rytmi_success({
-            message: 'Profile CV information updated.'
-          })
-          this.editedEducationItem.data = cloneDeep(educationTemplate)
-          this.$refs['edit-education-modal'].hide()
+      try {
+        await this.updateProfile(editedProfile)
+        this.$toasted.global.rytmi_success({
+          message: 'Profile CV education updated.'
         })
-        .catch((err) => {
-          this.$toasted.global.rytmi_error({
-            message: err
-          })
+        this.$refs['edit-education-modal'].hide()
+      } catch (error) {
+        this.$toasted.global.rytmi_error({
+          message: error
         })
+      }
     }
   }
 }

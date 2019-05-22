@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { ProjectList } from '@/components/Project'
 import getters from '@/store/modules/projects/getters'
 import { createShallowWrapper } from './setup/setup'
@@ -33,7 +32,7 @@ const mockProjects = {
 const defaultStoreConfig = {
   getters: getters,
   state: {
-    projects: {}
+    projects: mockProjects
   }
 }
 
@@ -52,17 +51,16 @@ describe('ProjectList.vue', () => {
   })
 
   it('Template is correct', () => {
-    const wrapper = createShallowWrapper(ProjectList, defaultStoreConfig, {})
+    const overrideStoreConfig = {
+      getters: getters,
+      state: { projects: {} }
+    }
+    const wrapper = createShallowWrapper(ProjectList, overrideStoreConfig, {})
     expect(wrapper.element).toMatchSnapshot()
   })
 
   it('Shows all projects when filter is empty', () => {
-    const overrideStoreConfigs = {
-      state: {
-        projects: mockProjects
-      }
-    }
-    const wrapper = createShallowWrapper(ProjectList, _.merge({}, defaultStoreConfig, overrideStoreConfigs), {})
+    const wrapper = createShallowWrapper(ProjectList, defaultStoreConfig, {})
     expect(wrapper.vm.results.length).toEqual(3)
   })
 
