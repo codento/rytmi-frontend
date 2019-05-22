@@ -5,7 +5,7 @@ import {
   CvToolProfile,
   CvToolSkills,
   CvToolWorkExperience,
-  CvToolOtherInfo
+  CvToolEducation
 } from '@/components/Profile'
 import { getters } from '@/store/modules/cvTool/getters'
 
@@ -72,7 +72,6 @@ const mockGetters = {
 
 const initialState = {
   cvIntroduction: '',
-  cvOtherInfo: '',
   topSkills: [],
   topProjects: [],
   cvExportPending: false
@@ -80,7 +79,7 @@ const initialState = {
 
 const storeConfig = {
   state: initialState,
-  getters: _.merge(getters, mockGetters)
+  getters: _.merge({}, getters, mockGetters)
 }
 
 const additionalMountingOptions = {
@@ -93,15 +92,15 @@ describe('CvTool.test.js', () => {
   it('Should show correct components', () => {
     const wrapper = createShallowWrapper(CvTool, storeConfig, additionalMountingOptions)
     const profileWrapper = wrapper.find(CvToolProfile)
-    const SkillsWrapper = wrapper.find(CvToolSkills)
-    const ProjectsWrapper = wrapper.find(CvToolWorkExperience)
-    const OtherInfoWrapper = wrapper.find(CvToolOtherInfo)
+    const skillsWrapper = wrapper.find(CvToolSkills)
+    const projectsWrapper = wrapper.find(CvToolWorkExperience)
+    const educationWrapper = wrapper.find(CvToolEducation)
     expect(profileWrapper.isVisible()).toBeTruthy()
     expect(profileWrapper.props().profile).toEqual(mockProfile)
-    expect(SkillsWrapper.isVisible()).toBeTruthy()
-    expect(ProjectsWrapper.isVisible()).toBeTruthy()
-    expect(OtherInfoWrapper.isVisible()).toBeTruthy()
-    expect(OtherInfoWrapper.props().profile).toEqual(mockProfile)
+    expect(skillsWrapper.isVisible()).toBeTruthy()
+    expect(projectsWrapper.isVisible()).toBeTruthy()
+    expect(educationWrapper.isVisible()).toBeTruthy()
+    expect(educationWrapper.props().educationList).toEqual(mockProfile.education)
   })
 
   it('Should disable button if inputs are not valid', () => {
@@ -115,7 +114,6 @@ describe('CvTool.test.js', () => {
   const overrideState = {
     state: {
       cvIntroduction: 'Test introduction',
-      cvOtherInfo: 'Test information',
       topSkills: [
         {
           id: 1,
@@ -141,7 +139,7 @@ describe('CvTool.test.js', () => {
   }
 
   it('Should enable button if inputs are valid', () => {
-    const wrapper = createShallowWrapper(CvTool, _.merge(storeConfig, overrideState), additionalMountingOptions)
+    const wrapper = createShallowWrapper(CvTool, _.merge({}, storeConfig, overrideState), additionalMountingOptions)
     // isIntroductionValid is updated first when child component CvToolProfile is created -> mock by setting it manually here
     wrapper.setData({ isIntroductionValid: true })
     const openModalButton = wrapper.find('#open-create-cv-modal')

@@ -120,6 +120,7 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
@@ -135,7 +136,7 @@ export default {
       show: true,
       showError: false,
       errorDetails: [],
-      editedProfile: Object.assign({}, this.profile),
+      editedProfile: cloneDeep(this.profile),
       selectedEmployeeRoles: []
     }
   },
@@ -157,7 +158,7 @@ export default {
       this.editedProfile.employeeRoles = newRoles.map(role => role.id)
     },
     profile (newProfileValue) {
-      this.editedProfile = Object.assign({}, newProfileValue)
+      this.editedProfile = cloneDeep(newProfileValue)
     }
   },
   created () {

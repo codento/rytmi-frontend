@@ -4,7 +4,6 @@ import { getters } from './getters'
 
 const initialState = {
   cvIntroduction: '',
-  cvOtherInfo: '',
   topSkills: [],
   topProjects: [],
   cvExportPending: false

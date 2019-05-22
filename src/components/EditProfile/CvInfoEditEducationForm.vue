@@ -76,29 +76,10 @@
         :key="'preview-in-' + langKey"
         deck
       >
-        <b-card
-          class="my-2 education-preview"
-          no-header
-          no-body
-        >
-          <b-card-body>
-            <b-card-text>
-              <h4> {{ editedValues[langKey].school }} <span class="small"> {{ editedValues.startYear }} - {{ editedValues.endYear }}</span></h4>
-              <h5 v-if="editedValues[langKey].degree">
-                {{ editedValues[langKey].degree }}
-              </h5>
-              <p>
-                <span v-if="editedValues[langKey].major">
-                  Pääaine: {{ editedValues[langKey].major }}
-                </span>
-                <br>
-                <span v-if="editedValues[langKey].minor">
-                  Sivuaine: {{ editedValues[langKey].minor }}
-                </span>
-              </p>
-            </b-card-text>
-          </b-card-body>
-        </b-card>
+        <EducationCard
+          :education-data="editedValues"
+          :language="langKey"
+        />
       </b-card-group>
     </div>
     <b-btn
@@ -123,9 +104,11 @@
 
 <script>
 import { kebabCase, cloneDeep } from 'lodash'
+import { EducationCard } from '@/components/Common'
 
 export default {
   name: 'CvInfoEditEducationForm',
+  components: { EducationCard },
   props: {
     initialValues: {
       type: Object,
@@ -282,13 +265,7 @@ export default {
   font-size: 15px;
   text-transform: uppercase;
 }
-
 .step-title.current-step {
   font-weight: bolder;
 }
-
-.education-preview > h4 {
-  font-weight: bolder;
-}
-
 </style>
