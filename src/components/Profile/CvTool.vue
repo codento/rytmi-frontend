@@ -106,6 +106,7 @@
         </b-button>
       </b-button-group>
       <CvToolProfile
+        v-if="profile"
         :profile="profile"
         @update-introduction="cvIntroductionUpdated"
       />
@@ -118,7 +119,7 @@
       <div v-if="projectsLoaded">
         <CvToolWorkExperience :profile-projects="projects" />
       </div>
-      <CvToolOtherInfo :profile="profile" />
+      <CvToolEducation :education-list="profile.education ? profile.education : []" />
     </b-col>
   </b-row>
 </template>
@@ -132,7 +133,7 @@ import LANGUAGE_ENUM from '@/utils/constants'
 import CvToolProfile from './CvToolProfile.vue'
 import CvToolSkills from './CvToolSkills.vue'
 import CvToolWorkExperience from './CvToolWorkExperience.vue'
-import CvToolOtherInfo from './CvToolOtherInfo.vue'
+import CvToolEducation from './CvToolEducation.vue'
 
 import LoadingSpinner from '@/components/helpers/LoadingSpinner.vue'
 
@@ -142,7 +143,7 @@ export default {
     CvToolProfile,
     CvToolSkills,
     CvToolWorkExperience,
-    CvToolOtherInfo,
+    CvToolEducation,
     LoadingSpinner
   },
   props: {
@@ -153,7 +154,7 @@ export default {
       isIntroductionValid: false,
       showButtonInfo: true,
       pdfName: '',
-      invalidFilenameCharacters: '/:*?"<>|.'
+      invalidFilenameCharacters: '/:*?"<>|.[]'
     }
   },
   computed: {
@@ -168,7 +169,6 @@ export default {
       'profileProjectsByProfileId',
       'projectById',
       'cvIntroduction',
-      'cvOtherInfo',
       'topSkills',
       'topProjects',
       'cvExportPending'
@@ -216,9 +216,7 @@ export default {
         : false
     },
     defaultPDFName: function () {
-      return `Codento CV ${this.profile.firstName} ${this.profile.lastName} [${
-        this.currentLanguage
-      }]`
+      return `Codento CV ${this.profile.firstName} ${this.profile.lastName} ${this.currentLanguage.toUpperCase()}`
     },
     allRequiredFieldsFilled: {
       get: function () {
@@ -328,7 +326,7 @@ export default {
         languages: cvLanguages,
         projects: cvProjects,
         skills: cvSkills,
-        otherInfo: this.cvOtherInfo,
+        education: this.profile.education ? this.profile.education : [],
         born: this.profile.birthYear
       }
     },
