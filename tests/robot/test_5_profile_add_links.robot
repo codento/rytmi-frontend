@@ -1,7 +1,7 @@
 *** Variables ***
 ${URL}                  https://s.rytmi.codento.com/home
 ${BROWSER}              Firefox
-${DELAY}                0.5
+${DELAY}                1
 ${PAGE_TITLE}           Rytmi
 ${USER}                 user
 ${PASS}                 pass
@@ -12,6 +12,13 @@ ${LOGIN_SUBMIT_BTN}     passwordNext
 ${LOGIN_SUCCESS_CHECK}  Consultants
 ${LANDING_PAGE_URL}     https://s.rytmi.codento.com/home
 ${ADD_SKILL_CHECK}      Add a new skill
+${MODIFYING_PROFILE}    Basic Details
+${ACCOUNT_DROPDOWN_ID}  account-dropdown__BV_toggle_
+${ACCOUNT_EDIT_ID}      account-dropdown-item-edit
+${LINK_INPUT_ID}        linkInput
+${ADD_LINK_BUTTON_ID}   add
+${REMOVE_LINK_XPATH}    //*[@id="editLinks"]/div/div/ul/li/span
+${TEST_LINK}            http://robotframework.org/Selenium2Library/Selenium2Library.html
 *** Settings ***
 Library         SeleniumLibrary
 Suite Teardown  Close Browser
@@ -20,8 +27,8 @@ Suite Teardown  Close Browser
 Login Functionality Test
     Open Browser To Login Page
     Login With Credentials  ${USER}  ${PASS}
-Test Add Skill
-    Modify Skills
+Test Add Link
+    Modify Links
 
 *** Keywords ***
 Open Browser To Login Page
@@ -42,14 +49,17 @@ Login With Credentials
     Click Element       id=${LOGIN_SUBMIT_BTN}
     Login Was Successful
 
-Modify Skills
-    Click Element   xpath=/html/body/div/div/div/nav/section/ul/li[3]/a
-    Page Should Contain     ${ADD_SKILL_CHECK}
-    Input Text      id=__BVID__150  !ROBOT_TEST_SKILL
-    Input Text      id=__BVID__151  Robot test desc
-    Select From List By Index   id=__BVID__152  1
-    Click Button    name=submit
-    Page Should Contain !ROBOT_TEST_SKILL
+Modify Links
+    Click Element           id=${ACCOUNT_DROPDOWN_ID}
+    Click Element           id=${ACCOUNT_EDIT_ID}
+    Page Should Contain     ${MODIFYING_PROFILE}
+    Input Text              id=${LINK_INPUT_ID}  ${TEST_LINK}
+    Click Button            id=${ADD_LINK_BUTTON_ID}
+    Page Should Contain     ${TEST_LINK}
+
+    # Remove the added link
+    Click Element             xpath=${REMOVE_LINK_XPATH}
+    Page Should Not Contain   ${TEST_LINK}
 
 Go To Landing Page
     Go To   ${LANDING_PAGE_URL}
