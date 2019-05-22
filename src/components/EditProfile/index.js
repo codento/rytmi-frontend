@@ -4,6 +4,9 @@ import ProfileForm from './ProfileForm.vue'
 import EditProjects from './EditProjects.vue'
 import Employers from './Employers.vue'
 import CvInfo from './CvInfo.vue'
+import CvInfoEditIntroduction from './CvInfoEditIntroduction.vue'
+import CvInfoEditEducation from './CvInfoEditEducation.vue'
+import CvInfoEditEducationForm from './CvInfoEditEducationForm.vue'
 
 export {
   EditLinks,
@@ -11,5 +14,8 @@ export {
   ProfileForm,
   EditProjects,
   Employers,
-  CvInfo
+  CvInfo,
+  CvInfoEditIntroduction,
+  CvInfoEditEducation,
+  CvInfoEditEducationForm
 }
