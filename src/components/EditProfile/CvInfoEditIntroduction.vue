@@ -70,7 +70,7 @@ export default {
   methods: {
     ...mapActions(['updateProfile']),
     introductionIsValid: function (introduction) {
-      return introduction.length > 0 && introduction.length <= 360
+      return introduction.length > 0 && introduction.length <= this.maxIntroductionLength
     },
     async callUpdateProfileAction () {
       const editedProfile = Object.assign({}, this.profile)

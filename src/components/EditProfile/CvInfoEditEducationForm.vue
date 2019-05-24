@@ -61,7 +61,7 @@
               :id="'input-' + kebabCase(key)"
               v-model="editedValues[key]"
               type="number"
-              :min="1950"
+              :min="1970"
               :max="new Date().getFullYear()"
               :description="formData.find(item => item.key === key).descriptions[currentLanguage]"
               :state="editedValues[key] ? inputState[key].state : null"
@@ -213,8 +213,8 @@ export default {
     },
     isValidYear (year) {
       return {
-        state: year ? Number(year) >= 1940 && Number(year) <= new Date().getFullYear() : true,
-        feedback: `Invalid year, should be between 1940-${new Date().getFullYear()}`
+        state: year ? Number(year) >= 1970 && Number(year) <= new Date().getFullYear() : true,
+        feedback: `Invalid year, should be between 1970-${new Date().getFullYear()}`
       }
     },
     invalidFeedback (key, langKey = null) {

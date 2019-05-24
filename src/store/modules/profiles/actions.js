@@ -32,7 +32,6 @@ export const actions = {
     })
   },
   updateProfile ({ commit, state }, data) {
-    console.log(data)
     return new Promise((resolve, reject) => {
       alterProfile(data)
         .then(response => {
