@@ -20,6 +20,10 @@ exports[`EditProfile.vue Should show correct components when profileId is not nu
     profile="[object Object]"
   />
    
+  <cvinfo-stub
+    profile="[object Object]"
+  />
+   
   <employers-stub
     profileid="5"
   />

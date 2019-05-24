@@ -89,46 +89,6 @@
         type="tel"
       />
     </b-form-group>
-    <b-form-group
-      id="description"
-      label-cols-sm="3"
-      label="Description:"
-    >
-      <b-row>
-        <b-col sm="6">
-          <small>Introduction for CV main page (in Finnish)</small>
-          <b-textarea
-            v-model="getDescription('fi','introduction').description"
-            placeholder="Introduction for CV main page (fi)"
-            type="text"
-            rows="5"
-          />
-        </b-col>
-        <b-col sm="6">
-          <small>Introduction for CV main page (in English)</small>
-          <b-textarea
-            v-model="getDescription('en','introduction').description"
-            placeholder="Introduction for CV main page (en)"
-            type="text"
-            rows="5"
-          />
-        </b-col>
-      </b-row>
-      <EditOtherInfo
-        :input-text="getDescription('fi','other').description"
-        input-label="Other info for CV (in Finnish)"
-        language-key="fi"
-        :rows="5"
-        @input-updated="updateOtherInfo"
-      />
-      <EditOtherInfo
-        :input-text="getDescription('en','other').description"
-        input-label="Other info for CV (in English)"
-        language-key="en"
-        :rows="5"
-        @input-updated="updateOtherInfo"
-      />
-    </b-form-group>
     <b-button
       id="submit-basic-details"
       type="submit"
@@ -147,14 +107,14 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
-import { EditOtherInfo } from '@/components/Common'
 
 export default {
   name: 'ProfileForm',
-  components: { ApiErrorDetailsPanel, vSelect, EditOtherInfo },
+  components: { ApiErrorDetailsPanel, vSelect },
   props: {
     profile: Object
   },
@@ -163,7 +123,7 @@ export default {
       show: true,
       showError: false,
       errorDetails: [],
-      editedProfile: Object.assign({}, this.profile),
+      editedProfile: cloneDeep(this.profile),
       selectedEmployeeRoles: []
     }
   },
@@ -185,7 +145,7 @@ export default {
       this.editedProfile.employeeRoles = newRoles.map(role => role.id)
     },
     profile (newProfileValue) {
-      this.editedProfile = Object.assign({}, newProfileValue)
+      this.editedProfile = cloneDeep(newProfileValue)
     }
   },
   created () {
@@ -195,24 +155,6 @@ export default {
   },
   methods: {
     ...mapActions(['updateProfile']),
-    getDescription (language, type) {
-      const description = this.profile.cvDescriptions
-        .find(description => description.language === language && description.type === type)
-      if (!description) {
-        this.profile.cvDescriptions.push(
-          {
-            description: '',
-            language: language,
-            type: type
-          }
-        )
-      }
-      return this.profile.cvDescriptions
-        .find(description => description.language === language && description.type === type)
-    },
-    updateOtherInfo: function (updatedInfo, language) {
-      this.getDescription(language, 'other').description = updatedInfo
-    },
     async onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []

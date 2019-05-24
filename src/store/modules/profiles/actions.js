@@ -37,9 +37,7 @@ export const actions = {
         .then(response => {
           commit(types.UPDATE_PROFILE, response.data)
           resolve(response.data)
-        }).catch(error => {
-          reject(error.response.data.error)
-        })
+        }).catch(err => reject(err))
     })
   },
   addProfileSkill ({ commit, state }, data) {
@@ -47,9 +45,7 @@ export const actions = {
       newProfileSkill(data)
         .then(response => {
           commit(types.ADD_PROFILE_SKILL, response.data)
-        }).catch(error => {
-          reject(error)
-        })
+        }).catch(err => reject(err))
     })
   },
   removeProfileSkill ({ commit, state }, data) {
@@ -57,9 +53,7 @@ export const actions = {
       deleteProfileSkill(data)
         .then(response => {
           commit(types.REMOVE_PROFILE_SKILL, data.id)
-        }).catch(error => {
-          reject(error)
-        })
+        }).catch(err => reject(err))
     })
   },
   updateProfileSkill ({ commit, state }, data) {

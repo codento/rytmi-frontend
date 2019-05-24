@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import { CvToolWorkExperience } from '@/components/Profile'
 import { ProjectRow } from '@/components/Common'
 import { getters } from '@/store/modules/cvTool/getters'
@@ -9,14 +7,13 @@ import { createShallowWrapper } from './setup/setup'
 
 const initialState = {
   cvIntroduction: '',
-  cvOtherInfo: '',
   topSkills: [],
   topProjects: []
 }
 
 const storeConfig = {
   state: initialState,
-  getters: _.merge(getters, { skillFilter: () => { return [] } }),
+  getters: getters,
   actions: actions,
   mutations: mutations
 }

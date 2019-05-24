@@ -9,14 +9,13 @@ import { createShallowWrapper } from './setup/setup'
 
 const initialState = {
   cvIntroduction: '',
-  cvOtherInfo: '',
   topSkills: [],
   topProjects: []
 }
 
-const storeConfig = {
+const defaultStoreConfig = {
   state: initialState,
-  getters: _.merge(getters, { skillFilter: () => { return [] } }),
+  getters: getters,
   actions: actions,
   mutations: mutations
 }
@@ -38,13 +37,13 @@ const additionalMountingOptions = {
 
 describe('CvToolSkills.test.js', () => {
   it('Should show correct components', () => {
-    const wrapper = createShallowWrapper(CvToolSkills, storeConfig, additionalMountingOptions)
+    const wrapper = createShallowWrapper(CvToolSkills, defaultStoreConfig, additionalMountingOptions)
     expect(wrapper.findAll(SkillRow).length).toBe(6)
     expect(wrapper.findAll('input').length).toBe(3) // languages can't be selected
   })
 
   it('Should disable selection when maximum skills are selected', () => {
-    const wrapper = createShallowWrapper(CvToolSkills, storeConfig, additionalMountingOptions)
+    const wrapper = createShallowWrapper(CvToolSkills, defaultStoreConfig, additionalMountingOptions)
     wrapper.setData({ maxSelected: 2 })
     wrapper.setData({ selectedSkills: [1, 2] })
     expect(wrapper.vm.isNotSelectable(3)).toBeTruthy()
@@ -61,7 +60,7 @@ describe('CvToolSkills.test.js', () => {
         }
       }
     }
-    const overrideStoreConfigs = _.merge(storeConfig, skillFilter)
+    const overrideStoreConfigs = _.merge({}, defaultStoreConfig, skillFilter)
     const wrapper = createShallowWrapper(CvToolSkills, overrideStoreConfigs, additionalMountingOptions)
     expect(wrapper.vm.selectedSkills).toEqual([10, 20])
   })
@@ -77,13 +76,13 @@ describe('CvToolSkills.test.js', () => {
         }
       }
     }
-    const overrideStoreConfigs = _.merge(storeConfig, skillFilter)
+    const overrideStoreConfigs = _.merge({}, defaultStoreConfig, skillFilter)
     const wrapper = createShallowWrapper(CvToolSkills, overrideStoreConfigs, additionalMountingOptions)
     expect(wrapper.vm.selectedSkills).toEqual([20])
   })
 
   it('Computed property skillsByCategory should group skills by category', () => {
-    const wrapper = createShallowWrapper(CvToolSkills, storeConfig, additionalMountingOptions)
+    const wrapper = createShallowWrapper(CvToolSkills, defaultStoreConfig, additionalMountingOptions)
     expect(wrapper.vm.skillsByCategory.length).toEqual(2)
     expect(wrapper.vm.skillsByCategory.filter(item => item.category === 'A').length).toEqual(1)
     expect(wrapper.vm.skillsByCategory.find(item => item.category === 'A').skills.length).toEqual(2)

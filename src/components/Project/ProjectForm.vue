@@ -54,7 +54,7 @@
       <b-row>
         <b-col>
           <small>Start date</small>
-          <datepicker
+          <Datepicker
             v-model="project.startDate"
             name="project-start-date"
             required
@@ -64,7 +64,7 @@
       <b-row>
         <b-col>
           <small>End date</small>
-          <datepicker
+          <Datepicker
             v-model="project.endDate"
             name="project-end-date"
           />

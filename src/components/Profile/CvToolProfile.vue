@@ -148,7 +148,8 @@ export default {
   computed: {
     ...mapGetters([
       'topSkills',
-      'topProjects'
+      'topProjects',
+      'currentLanguage'
     ]),
     fullName: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
@@ -156,22 +157,12 @@ export default {
     orderedSkills: function () {
       return this.topSkills
     },
-    profileIntroduction: function () {
-      return this.profile.introduction ? this.profile.introduction : ''
-    },
     introductionIsValid: function () {
-      return this.modifiedIntroduction.length > 0 && this.modifiedIntroduction.length <= 360
+      return this.modifiedIntroduction.length > 0 && this.modifiedIntroduction.length <= this.maxIntroductionLength
     }
   },
-  watch: {
-    profileIntroduction: function () {
-      this.modifiedIntroduction = this.profileIntroduction
-      this.updateIntroduction()
-    }
-  },
-  mounted: function () {
-    this.modifiedIntroduction = this.profileIntroduction
-    this.updateIntroduction()
+  created () {
+    this.modifiedIntroduction = this.profile.introduction ? this.profile.introduction[this.currentLanguage] : ''
   },
   methods: {
     ...mapActions([

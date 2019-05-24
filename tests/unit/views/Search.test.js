@@ -32,7 +32,11 @@ function createStore (overrideConfig) {
           { id: 1, title: 'soft engineer' },
           { id: 2, title: 'hardcore soft engineer' }
         ]
-      }
+      },
+      skillFilter: () => []
+    },
+    actions: {
+      updateSkillFilter: jest.fn(() => [])
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)

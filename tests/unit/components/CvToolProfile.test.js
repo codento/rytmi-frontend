@@ -8,12 +8,11 @@ import { mockProfile } from './setup/mockData'
 
 const initialState = {
   cvIntroduction: '',
-  cvOtherInfo: '',
   topSkills: [],
   topProjects: []
 }
 
-const storeConfig = {
+const defaultStoreConfig = {
   state: initialState,
   getters: getters,
   actions: actions,
@@ -29,10 +28,11 @@ const defaultMountingOptions = {
 
 describe('CvToolProfile.test.js', () => {
   it('Renders correctly', () => {
-    const wrapper = createWrapper(CvToolProfile, storeConfig, defaultMountingOptions)
+    const expectedIntroduction = mockProfile.introduction.fi
+    const wrapper = createWrapper(CvToolProfile, defaultStoreConfig, defaultMountingOptions)
     expect(wrapper.props().profile).toEqual(mockProfile)
     expect(wrapper.vm.fullName).toBe('Foo Bar')
-    expect(wrapper.vm.modifiedIntroduction).toBe(mockProfile.cvDescriptions[0].description)
+    expect(wrapper.vm.modifiedIntroduction).toBe(expectedIntroduction)
   })
 
   it('Shows top skills', () => {
@@ -56,8 +56,8 @@ describe('CvToolProfile.test.js', () => {
         ]
       }
     }
-    const mergeStoreConfigs = _.merge(storeConfig, overrideStore)
-    const mergedMountingOptions = _.merge(defaultMountingOptions, overrideMountingOptions)
+    const mergeStoreConfigs = _.merge({}, defaultStoreConfig, overrideStore)
+    const mergedMountingOptions = _.merge({}, defaultMountingOptions, overrideMountingOptions)
     const wrapper = createShallowWrapper(CvToolProfile, mergeStoreConfigs, mergedMountingOptions)
     expect(wrapper.vm.orderedSkills.length).toEqual(1)
   })
