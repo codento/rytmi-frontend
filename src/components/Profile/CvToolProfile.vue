@@ -158,7 +158,7 @@ export default {
       return this.topSkills
     },
     introductionIsValid: function () {
-      return this.modifiedIntroduction.length > 0 && this.modifiedIntroduction.length <= 360
+      return this.modifiedIntroduction.length > 0 && this.modifiedIntroduction.length <= this.maxIntroductionLength
     }
   },
   created () {
