@@ -65,7 +65,7 @@
             :key="project.id"
             :value="project.id"
           >
-            {{ project.code }} - {{ getProjectName(project) }}
+            {{ project.code }} {{ project.code ? '-' : '' }} {{ getProjectName(project) }}
           </option>
         </b-form-select>
       </b-form-group>
@@ -177,8 +177,8 @@ export default {
     },
   },
   created () {
-    this.projectVisible = this.projectId === null
-    this.profileVisible = this.profileId === null
+    this.projectVisible = this.profileProject.projectId ? false : true
+    this.profileVisible = this.profileProject.profileId ? false : true
   },
   methods: {
     ...mapActions([

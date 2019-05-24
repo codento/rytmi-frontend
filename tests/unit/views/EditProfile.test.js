@@ -110,7 +110,13 @@ describe('EditProfile.vue', () => {
     const propsData = {
       profileId: 5
     }
-    const wrapper = createWrapper({ propsData })
+    const store = createStore({
+      getters: {
+        skills: () => mockSkills
+      }
+    })
+
+    const wrapper = createWrapper({ propsData, store })
     const profileFormWrapper = wrapper.find(ProfileForm)
     const editSkillsWrapper = wrapper.find(EditSkills)
     const editLinksWrapper = wrapper.find(EditLinks)

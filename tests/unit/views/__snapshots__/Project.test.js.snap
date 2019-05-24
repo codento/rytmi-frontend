@@ -61,9 +61,7 @@ exports[`Project.vue Template is correct 1`] = `
             </small>
             <br />
              
-            <b>
-              1
-            </b>
+            <!---->
           </span>
         </div>
          
@@ -86,9 +84,7 @@ exports[`Project.vue Template is correct 1`] = `
         class="project-members"
         tag="div"
       >
-        <projectmembertable-stub
-          members="[object Object]"
-        />
+        <projectmembertable-stub />
       </b-col-stub>
     </b-row-stub>
      
@@ -108,7 +104,7 @@ exports[`Project.vue Template is correct 1`] = `
       title="Add a consultant"
     >
       <projectprofileform-stub
-        projectid="5"
+        profileproject="[object Object]"
       />
     </collapsableitem-stub>
      

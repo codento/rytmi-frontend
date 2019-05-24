@@ -102,7 +102,6 @@ describe('Profile.vue shallowMount', () => {
       }
     }
     store = new Vuex.Store({ getters })
-
     cmp = shallowMount(View, {
       store,
       localVue,

@@ -10,11 +10,32 @@ const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 localVue.use(Vuex)
 
+const mockEmployers = {
+  1: {
+    createdAt: '2019-05-21T13:21:48.222Z',
+    id: 1,
+    name: 'Codento Oy',
+    updatedAt: '2019-05-21T13:21:48.222Z'
+  },
+  2: {
+    createdAt: '2019-05-21T13:21:56.034Z',
+    id: 2,
+    name: 'Macejkovic Inc',
+    updatedAt: '2019-05-21T13:21:56.034Z'
+  }
+}
+const getters = {
+  employers: () => mockEmployers
+}
+
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     actions: {
       createProject: jest.fn(() => []),
       updateProject: jest.fn(() => [])
+    },
+    getters: {
+      employers: jest.fn(() => {})
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -59,7 +80,7 @@ describe('ProjectForm.test.js', () => {
     const actions = {
       updateProject: jest.fn(() => Promise.reject(apiError))
     }
-    const store = createStore({ actions })
+    const store = createStore({ actions, getters })
     const wrapper = createWrapper({ propsData, store })
     wrapper.setData({
       showProjectForm: true
@@ -70,7 +91,7 @@ describe('ProjectForm.test.js', () => {
     expect(apiErrorDetailsWrapper.exists()).toBeTruthy()
   })
 
-  it('Submits the form and calls create project when submit is clicked and project id is uknown', async () => {
+  it('Submits the form and calls create project when submit is clicked and project id is unknown', async () => {
     const expectedResult = {
       code: '1234',
       startDate: null,
@@ -79,7 +100,10 @@ describe('ProjectForm.test.js', () => {
       descriptions: [
         { customerName: '', name: '', description: '', language: 'fi' },
         { customerName: '', name: '', description: '', language: 'en' }
-      ]
+      ],
+      employerId: 1,
+      isInternal: false,
+      id: null
     }
     const actions = {
       createProject: jest.fn((obj, project, dno) => Promise.resolve(project))
@@ -88,10 +112,15 @@ describe('ProjectForm.test.js', () => {
     documentMock.mockImplementation(() => ({
       reset: jest.fn()
     }))
-    const store = createStore({ actions })
-    const wrapper = createWrapper({ store })
+    const store = createStore({ actions, getters })
+    const propsData = {
+      editableProject: {
+        employerId: 1
+      }
+    }
+    const wrapper = createWrapper({ store, propsData })
     wrapper.setData({ showProjectForm: true })
-    wrapper.findAll('input').at(0).setValue(1234)
+    wrapper.findAll('input').at(1).setValue(1234)
     wrapper.find('button').trigger('submit')
     await flushPromises()
     expect(actions.createProject).toHaveBeenCalledWith(expect.anything(), expectedResult, undefined)
@@ -101,13 +130,20 @@ describe('ProjectForm.test.js', () => {
     const actions = {
       updateProject: jest.fn((obj, project, dno) => Promise.resolve(project))
     }
-    const store = createStore({ actions })
+    const store = createStore({ actions, getters })
     const propsData = {
       editableProject: {
         id: 1,
         code: '1234',
         startDate: new Date('2018-01-01T00:00:00.000Z'),
-        endDate: new Date('2018-02-01T00:00:00.000Z')
+        endDate: new Date('2018-02-01T00:00:00.000Z'),
+        isSecret: false,
+        descriptions: [
+          { customerName: '', name: '', description: '', language: 'fi' },
+          { customerName: '', name: '', description: '', language: 'en' }
+        ],
+        employerId: 1,
+        isInternal: false
       }
     }
     const wrapper = createWrapper({ store, propsData })
@@ -122,7 +158,26 @@ describe('ProjectForm.test.js', () => {
   })
 
   it('Template is correct', () => {
-    let wrapper = mount(ProjectForm, {})
+    const store = createStore({ getters })
+    let wrapper = mount(ProjectForm, {
+      store,
+      localVue,
+      propsData: {
+        editableProject: {
+          id: 1,
+          code: '1234',
+          startDate: new Date('2018-01-01T00:00:00.000Z'),
+          endDate: new Date('2018-02-01T00:00:00.000Z'),
+          isSecret: false,
+          descriptions: [
+            { customerName: '', name: '', description: '', language: 'fi' },
+            { customerName: '', name: '', description: '', language: 'en' }
+          ],
+          employerId: 1,
+          isInternal: false
+        }
+      }
+    })
     expect(wrapper.html()).toMatchSnapshot()
   })
 })

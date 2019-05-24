@@ -86,6 +86,7 @@
             v-model="getDescriptionByLanguage('fi').customerName"
             placeholder="Customer name (fi)"
             type="text"
+            required
           />
         </b-col>
         <b-col sm="6">
@@ -94,6 +95,7 @@
             v-model="getDescriptionByLanguage('en').customerName"
             placeholder="Customer name (en)"
             type="text"
+            required
           />
         </b-col>
       </b-row>
