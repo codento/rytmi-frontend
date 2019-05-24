@@ -155,7 +155,7 @@
           title="Join a project"
         >
           <ProjectProfileForm
-            :profile-id="profileId"
+            :profile-project="{ profileId }"
             no-redirect
           />
         </b-card>

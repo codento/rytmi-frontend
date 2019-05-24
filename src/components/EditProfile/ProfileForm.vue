@@ -65,19 +65,6 @@
       />
     </b-form-group>
     <b-form-group
-      id="titleLabel"
-      label-cols-sm="3"
-      label="Title:"
-      label-for="titleInput"
-    >
-      <b-form-input
-        id="titleInput"
-        v-model="editedProfile.title"
-        type="text"
-        placeholder="Enter title"
-      />
-    </b-form-group>
-    <b-form-group
       id="emailLabel"
       label-cols-sm="3"
       label="Email:"

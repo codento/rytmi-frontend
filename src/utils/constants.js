@@ -11,4 +11,6 @@ const LANGUAGE_ENUM = Object.freeze({
   LANGUAGES
 })
 
-export default LANGUAGE_ENUM
+const INTERNAL_COMPANY_NAME = 'Codento Oy'
+
+export default { LANGUAGE_ENUM, INTERNAL_COMPANY_NAME }

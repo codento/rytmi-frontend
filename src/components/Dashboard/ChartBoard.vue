@@ -86,12 +86,13 @@
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
 import vSelect from 'vue-select'
-import LANGUAGE_ENUM from '@/utils/constants'
 import SkillChart from './SkillChart'
 import TopSkillChart from './TopSkillChart'
 import MostWillingnessChart from './MostWillingnessChart'
 import ConsultantUtilizationChart from './ConsultantUtilizationChart'
 import ConsultantUtilizationList from './ConsultantUtilizationList'
+import constants from '@/utils/constants'
+const { LANGUAGE_ENUM } = constants
 
 const calculateAverage = (arr) => {
   if (arr && arr.length > 0) {

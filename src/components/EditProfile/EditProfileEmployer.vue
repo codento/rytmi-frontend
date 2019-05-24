@@ -144,7 +144,7 @@ export default {
       evt.preventDefault()
       if (this.isDataValidForSubmit()) {
         if (this.shouldCreateANewEmployer()) {
-          this.createEmployer({ name: this.employer.name })
+          this.createEmployer({ name: this.profileEmployer.newEmployerName })
             .then(() => {
               this.$toasted.global.rytmi_success({
                 message: 'A new employer created!'
@@ -153,7 +153,7 @@ export default {
               this.updateOrCreateProfileEmployer(profileEmployer)
             })
         } else {
-          const profileEmployer = { ...this.employer, employerId: this.selectedExistingEmployer.id }
+          const profileEmployer = { ...this.profileEmployer, employerId: this.selectedExistingEmployer.id }
           this.updateOrCreateProfileEmployer(profileEmployer)
         }
       }

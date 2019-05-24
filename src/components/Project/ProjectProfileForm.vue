@@ -14,7 +14,7 @@
       >
         <b-form-select
           id="consultant"
-          v-model="profileProject.profileId"
+          v-model="editableProfileProject.profileId"
           :disabled="!profileVisible"
           value-field="id"
           text-field="name"
@@ -46,7 +46,7 @@
       >
         <b-form-select
           id="project"
-          v-model="profileProject.projectId"
+          v-model="editableProfileProject.projectId"
           :disabled="!projectVisible"
           value-field="id"
           text-field="name"
@@ -72,7 +72,7 @@
 
       <b-row>
         <b-col>
-          <span>Title (Finnish)</span>
+          <span>Role (in Finnish)</span>
           <b-input
             v-model="descriptionFi.title"
             type="text"
@@ -80,7 +80,7 @@
           />
         </b-col>
         <b-col>
-          <span>Title (English)</span>
+          <span>Role (in English)</span>
           <b-input
             v-model="descriptionEn.title"
             type="text"
@@ -91,17 +91,17 @@
 
       <span>Start date</span>
       <Datepicker
-        v-model="profileProject.startDate"
+        v-model="editableProfileProject.startDate"
         name="profile-project-start-date"
       />
       <span>End date</span>
       <Datepicker
-        v-model="profileProject.endDate"
+        v-model="editableProfileProject.endDate"
         name="profile-project-end-date"
       />
       <span>Utilization percentage</span>
       <b-input
-        v-model="profileProject.workPercentage"
+        v-model="editableProfileProject.workPercentage"
         name="utilization"
         type="number"
         required
@@ -135,18 +135,14 @@
 import Datepicker from '../helpers/Datepicker'
 import { mapGetters, mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
+import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   name: 'ProjectProfileForm',
   components: { ApiErrorDetailsPanel, Datepicker },
   props: {
-    projectId: {
-      type: Number,
-      default: null
-    },
-    profileId: {
-      type: Number,
-      default: null
+    profileProject: {
+      type: Object
     },
     toggleForm: {
       type: Function,
@@ -162,13 +158,9 @@ export default {
       show: true,
       showError: false,
       errorDetails: [],
-      profileProject: {
-        projectId: this.projectId,
-        profileId: this.profileId,
-        descriptions: this.descriptions ? this.descriptions : this.getEmptyDescriptions()
-      },
       projectVisible: true,
-      profileVisible: false
+      profileVisible: false,
+      editableProfileProject: this.getEditableProfileProject()
     }
   },
   computed: {
@@ -182,27 +174,37 @@ export default {
     },
     descriptionEn () {
       return this.getProfileProjectDescriptionByLanguage('en')
-    }
+    },
   },
   created () {
     this.projectVisible = this.projectId === null
     this.profileVisible = this.profileId === null
   },
   methods: {
-    ...mapActions(['newProjectProfile']),
+    ...mapActions([
+      'newProjectProfile',
+      'updateProfileProject'
+    ]),
+    getEditableProfileProject () {
+      if (!this.profileProject.id) {
+        return {
+          ...this.profileProject,
+          descriptions: this.descriptions ? this.descriptions : this.getEmptyDescriptions()
+        }
+      }
+      return cloneDeep(this.profileProject)
+    },
     getProjectName (project) {
       const description = project.descriptions.find(description => description.language === this.currentLanguage)
       return description ? description.name : ''
     },
-    onSubmit (evt) {
-      evt.preventDefault()
-      this.errorDetails = []
-      this.showError = false
-      this.newProjectProfile(this.profileProject)
+    createNewProfileProject (profileProject) {
+      this.newProjectProfile(profileProject)
         .then((response) => {
           this.$toasted.global.rytmi_success({
             message: 'Profile added to the project!'
           })
+          this.$emit('profileProjectCreatedOrUpdated')
           document.getElementById('project-profile-form').reset()
           if (this.toggleForm !== null) {
             this.toggleForm()
@@ -217,6 +219,33 @@ export default {
           this.showError = true
         })
     },
+    callProfileProjectUpdate (profileProject) {
+      this.updateProfileProject(profileProject)
+        .then((response) => {
+          this.$toasted.global.rytmi_success({
+            message: 'Profile in the project updated.'
+          })
+          this.$emit('profileProjectCreatedOrUpdated')
+        })
+        .catch((err) => {
+          if (Array.isArray(err.response.data.error.details)) {
+            this.errorDetails = err.response.data.error.details
+          } else {
+            this.errorDetails.push(err.response.data.error.details)
+          }
+          this.showError = true
+        })
+    },
+    onSubmit (evt) {
+      evt.preventDefault()
+      this.errorDetails = []
+      this.showError = false
+      if (this.profileProject.id) {
+        this.callProfileProjectUpdate(this.editableProfileProject)
+      } else {
+        this.createNewProfileProject(this.editableProfileProject)
+      }
+    },
     onReset (evt) {
       evt.preventDefault()
       /* Trick to reset/clear native browser form validation state */
@@ -224,10 +253,10 @@ export default {
       this.showError = false
       this.$nextTick(() => { this.show = true })
       if (this.noRedirect) {
-        this.profileProject = {}
-        this.profileProject.projectId = null
-        this.profileProject.profileId = this.profileId
-        this.profileProject.descriptions = this.getEmptyDescriptions()
+        this.editableProfileProject = {}
+        this.editableProfileProject.projectId = null
+        this.editableProfileProject.profileId = this.profileId
+        this.editableProfileProject.descriptions = this.getEmptyDescriptions()
       } else {
         this.redirect()
       }
@@ -252,7 +281,7 @@ export default {
       ]
     },
     getProfileProjectDescriptionByLanguage (language) {
-      return this.profileProject.descriptions.find(description => description.language === language)
+      return this.editableProfileProject.descriptions.find(description => description.language === language)
     }
   }
 }

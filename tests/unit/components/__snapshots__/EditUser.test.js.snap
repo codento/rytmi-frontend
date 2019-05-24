@@ -19,7 +19,7 @@ exports[`EditUser.vue Template is correct 1`] = `
       <div>
         <fieldset
           class="form-group"
-          id="__BVID__6"
+          id="__BVID__4"
         >
           <!---->
           <div
@@ -32,13 +32,13 @@ exports[`EditUser.vue Template is correct 1`] = `
               <input
                 autocomplete="off"
                 class="custom-control-input"
-                id="__BVID__7"
+                id="__BVID__5"
                 type="checkbox"
                 value="true"
               />
               <label
                 class="custom-control-label"
-                for="__BVID__7"
+                for="__BVID__5"
               >
                 
           Is admin?
@@ -52,13 +52,13 @@ exports[`EditUser.vue Template is correct 1`] = `
               <input
                 autocomplete="off"
                 class="custom-control-input"
-                id="__BVID__8"
+                id="__BVID__6"
                 type="checkbox"
                 value="true"
               />
               <label
                 class="custom-control-label"
-                for="__BVID__8"
+                for="__BVID__6"
               >
                 
           Is active?
@@ -72,6 +72,7 @@ exports[`EditUser.vue Template is correct 1`] = `
         </fieldset>
          
         <div
+          aria-labelledby="roleLabel__BV_label_"
           class="form-row form-group"
           id="roleLabel"
           role="group"
@@ -165,7 +166,7 @@ exports[`EditUser.vue Template is correct 1`] = `
          
         <fieldset
           class="form-group"
-          id="__BVID__12"
+          id="__BVID__10"
         >
           <!---->
           <div

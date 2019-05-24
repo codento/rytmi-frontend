@@ -45,7 +45,7 @@
       <hr>
       <CollapsableItem title="Add a consultant">
         <ProjectProfileForm
-          :project-id="project.id"
+          :profile-project="{ projectId: project.id }"
         />
       </CollapsableItem>
       <hr>

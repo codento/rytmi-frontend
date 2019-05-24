@@ -18,7 +18,7 @@
           />
         </b-col>
       </b-row>
-      <b-row>
+      <b-row v-if="shouldShowCode()">
         <b-col>
           <small>Project code</small>
           <b-input
@@ -57,6 +57,7 @@
           <datepicker
             v-model="project.startDate"
             name="project-start-date"
+            required
           />
         </b-col>
       </b-row>
@@ -70,6 +71,15 @@
         </b-col>
       </b-row>
       <b-row>
+        <b-col class="mt-2 mb-2">
+          <b-form-checkbox
+            v-model="project.isInternal"
+          >
+            Internal project, not done for a customer
+          </b-form-checkbox>
+        </b-col>
+      </b-row>
+      <b-row v-if="shouldShowCustomerName()">
         <b-col sm="6">
           <small>Customer name (Finnish)</small>
           <b-input
@@ -126,7 +136,7 @@
             type="submit"
             primary
           >
-            Submit
+            {{ shouldUpdateProject() ? 'Update project' : 'Create a new project' }}
           </b-button>
         </b-col>
       </b-row>
@@ -146,6 +156,8 @@ import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
 import sortBy from 'lodash/sortBy'
+import constants from '@/utils/constants'
+const { INTERNAL_COMPANY_NAME } = constants
 
 export default {
   name: 'ProjectForm',
@@ -155,7 +167,11 @@ export default {
     vSelect
   },
   props: {
-    editableProject: Object
+    editableProject: Object,
+    createProfileProjectAfterProjectCreation: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
@@ -184,15 +200,24 @@ export default {
       'createProject',
       'updateProject'
     ]),
+    shouldShowCode () {
+      const selectedEmployer = this.employerList.find(employer => employer.id === this.project.employerId)
+      return this.project && this.employerList && selectedEmployer && selectedEmployer.name === INTERNAL_COMPANY_NAME
+    },
+    shouldShowCustomerName () {
+      return this.project && !this.project.isInternal
+    },
     employerSelected (selectedValue) {
       this.project.employerId = selectedValue.id
     },
     setProject () {
       this.project = {
+        id: this.editableProject && this.editableProject.id ? this.editableProject.id : null,
         code: this.editableProject && this.editableProject.code ? this.editableProject.code : null,
         startDate: this.editableProject && this.editableProject.startDate ? new Date(this.editableProject.startDate) : null,
         endDate: this.editableProject && this.editableProject.endDate ? new Date(this.editableProject.endDate) : null,
         isSecret: this.editableProject && this.editableProject.isSecret ? this.editableProject.isSecret : false,
+        isInternal: this.editableProject && this.editableProject.isInternal ? this.editableProject.isInternal : false,
         descriptions: this.editableProject && this.editableProject.descriptions ? this.editableProject.descriptions : [],
         employerId: this.editableProject && this.editableProject.employerId ? this.editableProject.employerId : null
       }
@@ -202,11 +227,19 @@ export default {
           ? this.employerList.find(employer => employer.id === this.project.employerId)
           : null
     },
+    shouldUpdateProject () {
+      return this.project.id ? true : false
+    },
     onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []
+
+      if (this.project.isInternal) {
+        this.project.descriptions.forEach(description => description.customerName = '')
+      }
+
       // If the project has an ID, update; otherwise create a new project
-      if (this.project.id) {
+      if (this.shouldUpdateProject()) {
         this.updateProject(this.project)
           .then((data) => {
             this.$toasted.global.rytmi_success({
@@ -226,6 +259,9 @@ export default {
             })
             document.getElementById('project_form').reset()
             this.showError = false
+            if(this.createProfileProjectAfterProjectCreation) {
+              this.$emit('projectCreated', { project: data.data })
+            }
           }).catch(err => {
             if (Array.isArray(err.data.error.details)) {
               this.errorDetails = err.data.error.details

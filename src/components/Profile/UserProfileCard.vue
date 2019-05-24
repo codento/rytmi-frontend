@@ -8,7 +8,6 @@
     </div>
     <div style="text-align: center; color:#869fac">
       <span class="profile-name"> {{ getNames }}</span><br>
-      <span class="profile-title">{{ profile.title }}</span>
       <a
         v-for="account in profile.accounts"
         :key="account.address"
@@ -67,9 +66,6 @@ export default {
 }
 .profile-card-detail-row {
     margin-top: 0.5em;
-}
-.profile-title {
-    font-size: 13px;
 }
 .profile-name {
     font-size: 32px;

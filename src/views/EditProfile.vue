@@ -14,7 +14,10 @@
         :profile="profile"
         @profileUpdated="profileUpdated()"
       />
-      <EditSkills :profile-id="profile.id" />
+      <EditSkills
+        v-if="Object.values(skills).length > 0"
+        :profile-id="profile.id"
+      />
       <EditProjects :profile-id="profile.id" />
     </template>
   </div>
@@ -47,7 +50,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['profileById']),
+    ...mapGetters(['profileById', 'skills']),
     profile () {
       return this.profileById(this.profileId)
     }

@@ -6,6 +6,7 @@
     <b-modal
       :id="'delete-work-history-entry-modal'"
       name="delete-work-history-entry-modal"
+      size="sm"
       hide-header
       centered
       ok-title="Delete"
@@ -28,18 +29,56 @@
     </b-modal>
     <b-modal
       title="Add a new project"
-      :id="'add-employer-project-modal'"
-      name="add-employer-project-modal"
+      :id="'project-modal'"
+      name="project-modal"
+      v-model="showProjectModal"
+      size="lg"
       ok-only
-      ok-title="Close without saving"
+      ok-title="Close"
+      no-close-on-backdrop
     >
       <div>
         <ProjectForm
-          v-if="employers"
-          :editable-project="{ employerId: selectedProfileEmployer.employerId }"
+          v-if="employers && activeProject"
+          :editable-project="activeProject"
+          :create-profile-project-after-project-creation="true"
+          @projectCreated="projectCreated($event)"
           no-redirect
         />
         <div v-else>Loading employers...</div>
+      </div>
+    </b-modal>
+    <b-modal
+      v-if="activeProject && activeProject.id"
+      :title="`Your role in the project: ${getDescriptionWithCurrentLanguage(activeProject).name}`"
+      :id="'profile-project-modal'"
+      name="profile-project-modal"
+      v-model="showProfileProjectModal"
+      size="lg"
+      ok-only
+      ok-title="Close"
+      no-close-on-backdrop
+    >
+      <div>
+        <ProjectProfileForm
+          :profile-project="activeProfileProject"
+          :key="activeProfileProject ? activeProfileProject.id : 0"
+          @profileProjectCreatedOrUpdated="profileProjectCreatedOrUpdated()"
+          no-redirect
+        />
+      </div>
+    </b-modal>
+    <b-modal
+      :title="selectedProfileEmployer.id ? 'Edit an existing work history entry' : 'Add a new work history entry'"
+      :id="'create-or-edit-profile-employer-modal'"
+      name="create-or-edit-profile-employer-modal"
+      size="lg"
+      ok-only
+      ok-title="Close"
+      no-close-on-backdrop
+    >
+      <div>
+        <EditProfileEmployer :profile-employer="selectedProfileEmployer" />
       </div>
     </b-modal>
     <h1>Previous and current employers</h1>
@@ -53,6 +92,7 @@
           <span
             name="employer"
             class="employer-name clickable"
+            v-b-modal="'create-or-edit-profile-employer-modal'"
             @click="profileEmployerClicked(profileEmployer)"
           >
             {{ profileEmployer ? getEmployerName(profileEmployer.employerId) : '' }}</span> <span>{{ getFormatedDate(profileEmployer.startDate) + ' - ' + getFormatedDate(profileEmployer.endDate) }}</span>
@@ -72,18 +112,27 @@
           <div class="employer-profile-projects">
             <small class="projects-label">Projects</small>
             <div
+              v-if="profileProjectsWithProjectData.filter(ppwpd => ppwpd.project.employerId === profileEmployer.employerId).length === 0"
+              class="no-projects"
+            >
+              No projects.
+            </div>
+            <div
+              v-else
               v-for="profileProjectWithProjectData in profileProjectsWithProjectData.filter(ppwpd => ppwpd.project.employerId === profileEmployer.employerId)"
               :key="profileProjectWithProjectData.profileProject.id"
             >
               <EmployersProfileProject
                 :profileProject="profileProjectWithProjectData.profileProject"
                 :project="profileProjectWithProjectData.project"
+                @projectClicked="projectClicked($event)"
+                @profileProjectClicked="profileProjectClicked($event)"
               />
             </div>
           </div>
           <b-button
-            v-b-modal="'add-employer-project-modal'"
-            @click="profileEmployerClicked(profileEmployer)"
+            v-b-modal="'project-modal'"
+            @click="addNewProjectClicked(profileEmployer)"
           >
             Add a new project
           </b-button>
@@ -91,15 +140,12 @@
       </b-col>
     </b-row>
     <b-button
-      v-show="selectedProfileEmployer.id"
       id="add-new-employer-button"
       @click="addNewProfileEmployer"
+      v-b-modal="'create-or-edit-profile-employer-modal'"
     >
-      Add new work history entry
+      Add a new work history entry
     </b-button>
-    <EditProfileEmployer
-      :profile-employer="selectedProfileEmployer"
-    />
   </form>
 </template>
 
@@ -110,20 +156,27 @@ import { orderBy, cloneDeep } from 'lodash'
 import EditProfileEmployer from './EditProfileEmployer'
 import EmployersProfileProject from './EmployersProfileProject'
 import { ProjectForm } from '../Project'
+import { ProjectProfileForm } from '../Project'
+import { constants } from 'fs';
 
 export default {
   name: 'Employers',
   components: {
     EditProfileEmployer,
     ProjectForm,
-    EmployersProfileProject
+    EmployersProfileProject,
+    ProjectProfileForm
   },
   props: {
     'profileId': Number
   },
   data () {
     return {
-      selectedProfileEmployer: this.getEmptyProfileEmployer()
+      selectedProfileEmployer: this.getEmptyProfileEmployer(),
+      activeProject: null,
+      showProjectModal: false,
+      showProfileProjectModal: false,
+      activeProfileProject: null
     }
   },
   computed: {
@@ -132,7 +185,8 @@ export default {
       'currentLanguage',
       'employers',
       'profileProjectsByProfileId',
-      'projects'
+      'projects',
+      'projectById'
     ]),
     profileEmployers () {
       const employers = this.profileEmployersByProfileId(this.profileId).map(employer => ({
@@ -156,6 +210,10 @@ export default {
     },
     profileEmployerClicked (profileEmployer) {
       this.selectedProfileEmployer = cloneDeep(profileEmployer)
+    },
+    addNewProjectClicked (profileEmployer) {
+      this.selectedProfileEmployer = cloneDeep(profileEmployer)
+      this.activeProject = { employerId: this.selectedProfileEmployer.employerId }
     },
     addNewProfileEmployer () {
       this.selectedProfileEmployer = this.getEmptyProfileEmployer()
@@ -181,6 +239,31 @@ export default {
         endDate: null
       }
     },
+    projectCreated (event) {
+      this.activeProject = event.project
+      this.activeProfileProject = {
+        projectId: this.activeProject.id,
+        profileId: this.profileId
+      }
+      this.showProjectModal = false
+      this.showProfileProjectModal = true
+    },
+    profileProjectCreatedOrUpdated () {
+      this.showProfileProjectModal = false
+    },
+    projectClicked (project) {
+      this.showProjectModal = true
+      this.activeProject = cloneDeep(project)
+    },
+    profileProjectClicked (profileProject) {
+      this.activeProject = this.projectById(profileProject.projectId)
+      this.activeProfileProject = {
+        ...profileProject,
+        startDate: parse(profileProject.startDate),
+        endDate: parse(profileProject.endDate)
+      }
+      this.showProfileProjectModal = true
+    },
     deleteProfileEmployer () {
       this.removeProfileEmployer(this.selectedProfileEmployer)
         .then((data) => {
@@ -190,6 +273,15 @@ export default {
           this.selectedProfileEmployer = this.getEmptyProfileEmployer()
           document.getElementById('employers-form').reset()
         })
+    },
+    getDescriptionWithCurrentLanguage (objectWithDescriptions) {
+      if (!objectWithDescriptions || !objectWithDescriptions.descriptions || !objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)) {
+        return {
+          language: this.currentLanguage,
+          name: ''
+        }
+      }
+      return objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)
     }
   }
 }
@@ -219,6 +311,9 @@ export default {
 .clickable {
   cursor: pointer;
 }
+.clickable:hover {
+  text-decoration: underline;
+}
 #add-new-employer-button {
   margin-bottom: 10px;
 }
@@ -233,5 +328,9 @@ export default {
 }
 .projects-label {
   text-decoration: underline;
+}
+.no-projects {
+  font-style: italic;
+  color: lightslategrey;
 }
 </style>

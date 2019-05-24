@@ -23,12 +23,6 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
     </span>
     <br />
      
-    <span
-      class="profile-title"
-    >
-      
-    </span>
-     
   </div>
    
   <div>
