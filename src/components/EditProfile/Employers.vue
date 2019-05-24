@@ -28,10 +28,10 @@
       </div>
     </b-modal>
     <b-modal
-      title="Add a new project"
       :id="'project-modal'"
-      name="project-modal"
       v-model="showProjectModal"
+      title="Add a new project"
+      name="project-modal"
       size="lg"
       ok-only
       ok-title="Close"
@@ -42,18 +42,20 @@
           v-if="employers && activeProject"
           :editable-project="activeProject"
           :create-profile-project-after-project-creation="true"
-          @projectCreated="projectCreated($event)"
           no-redirect
+          @projectCreated="projectCreated($event)"
         />
-        <div v-else>Loading employers...</div>
+        <div v-else>
+          Loading employers...
+        </div>
       </div>
     </b-modal>
     <b-modal
       v-if="activeProject && activeProject.id"
-      :title="`Your role in the project: ${getDescriptionWithCurrentLanguage(activeProject).name}`"
       :id="'profile-project-modal'"
-      name="profile-project-modal"
       v-model="showProfileProjectModal"
+      :title="`Your role in the project: ${getDescriptionWithCurrentLanguage(activeProject).name}`"
+      name="profile-project-modal"
       size="lg"
       ok-only
       ok-title="Close"
@@ -61,16 +63,16 @@
     >
       <div>
         <ProjectProfileForm
-          :profile-project="activeProfileProject"
           :key="activeProfileProject ? activeProfileProject.id : 0"
-          @profileProjectCreatedOrUpdated="profileProjectCreatedOrUpdated()"
+          :profile-project="activeProfileProject"
           no-redirect
+          @profileProjectCreatedOrUpdated="profileProjectCreatedOrUpdated()"
         />
       </div>
     </b-modal>
     <b-modal
-      :title="selectedProfileEmployer.id ? 'Edit an existing work history entry' : 'Add a new work history entry'"
       :id="'create-or-edit-profile-employer-modal'"
+      :title="selectedProfileEmployer.id ? 'Edit an existing work history entry' : 'Add a new work history entry'"
       name="create-or-edit-profile-employer-modal"
       size="lg"
       ok-only
@@ -90,9 +92,9 @@
       <b-col>
         <div>
           <span
+            v-b-modal="'create-or-edit-profile-employer-modal'"
             name="employer"
             class="employer-name clickable"
-            v-b-modal="'create-or-edit-profile-employer-modal'"
             @click="profileEmployerClicked(profileEmployer)"
           >
             {{ profileEmployer ? getEmployerName(profileEmployer.employerId) : '' }}</span> <span>{{ getFormatedDate(profileEmployer.startDate) + ' - ' + getFormatedDate(profileEmployer.endDate) }}</span>
@@ -118,12 +120,12 @@
               No projects.
             </div>
             <div
-              v-else
               v-for="profileProjectWithProjectData in profileProjectsWithProjectData.filter(ppwpd => ppwpd.project.employerId === profileEmployer.employerId)"
+              v-else
               :key="profileProjectWithProjectData.profileProject.id"
             >
               <EmployersProfileProject
-                :profileProject="profileProjectWithProjectData.profileProject"
+                :profile-project="profileProjectWithProjectData.profileProject"
                 :project="profileProjectWithProjectData.project"
                 @projectClicked="projectClicked($event)"
                 @profileProjectClicked="profileProjectClicked($event)"
@@ -141,8 +143,8 @@
     </b-row>
     <b-button
       id="add-new-employer-button"
-      @click="addNewProfileEmployer"
       v-b-modal="'create-or-edit-profile-employer-modal'"
+      @click="addNewProfileEmployer"
     >
       Add a new work history entry
     </b-button>
@@ -155,9 +157,7 @@ import { format, parse } from 'date-fns'
 import { orderBy, cloneDeep } from 'lodash'
 import EditProfileEmployer from './EditProfileEmployer'
 import EmployersProfileProject from './EmployersProfileProject'
-import { ProjectForm } from '../Project'
-import { ProjectProfileForm } from '../Project'
-import { constants } from 'fs';
+import { ProjectProfileForm, ProjectForm } from '../Project'
 
 export default {
   name: 'Employers',

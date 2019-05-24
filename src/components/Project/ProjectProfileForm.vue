@@ -174,11 +174,11 @@ export default {
     },
     descriptionEn () {
       return this.getProfileProjectDescriptionByLanguage('en')
-    },
+    }
   },
   created () {
-    this.projectVisible = this.profileProject.projectId ? false : true
-    this.profileVisible = this.profileProject.profileId ? false : true
+    this.projectVisible = !this.profileProject.projectId
+    this.profileVisible = !this.profileProject.profileId
   },
   methods: {
     ...mapActions([

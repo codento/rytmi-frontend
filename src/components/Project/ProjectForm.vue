@@ -13,8 +13,8 @@
             id="employer-select"
             :value="selectedEmployer"
             :options="employerList"
-            @input="employerSelected"
             label="name"
+            @input="employerSelected"
           />
         </b-col>
       </b-row>
@@ -189,13 +189,13 @@ export default {
       return sortBy(Object.values(this.employers), ['name'])
     }
   },
-  mounted () {
-    this.setProject()
-  },
   watch: {
     editableProject: function () {
       this.setProject()
     }
+  },
+  mounted () {
+    this.setProject()
   },
   methods: {
     ...mapActions([
@@ -230,14 +230,14 @@ export default {
           : null
     },
     shouldUpdateProject () {
-      return this.project.id ? true : false
+      return !!this.project.id
     },
     onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []
 
       if (this.project.isInternal) {
-        this.project.descriptions.forEach(description => description.customerName = '')
+        this.project.descriptions.forEach(description => { description.customerName = '' })
       }
 
       // If the project has an ID, update; otherwise create a new project
@@ -261,7 +261,7 @@ export default {
             })
             document.getElementById('project_form').reset()
             this.showError = false
-            if(this.createProfileProjectAfterProjectCreation) {
+            if (this.createProfileProjectAfterProjectCreation) {
               this.$emit('projectCreated', { project: data.data })
             }
           }).catch(err => {

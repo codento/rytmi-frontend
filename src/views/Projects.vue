@@ -1,8 +1,10 @@
 <template>
   <div class="animated fadeIn col-sm-12 col-md-8 project-list-container">
     <CollapsableItem title="Add a new project">
-      <ProjectForm v-if="Object.values(this.employers).length > 0" />
-      <div v-else>Loading employers...</div>
+      <ProjectForm v-if="Object.values(employers).length > 0" />
+      <div v-else>
+        Loading employers...
+      </div>
     </CollapsableItem>
     <ProjectList />
   </div>
@@ -23,11 +25,11 @@ export default {
     ProjectList,
     CollapsableItem
   },
-  mounted () {
-    document.title = 'Rytmi - Project List'
-  },
   computed: {
     ...mapGetters(['employers'])
+  },
+  mounted () {
+    document.title = 'Rytmi - Project List'
   }
 }
 </script>

@@ -40,10 +40,10 @@ export default {
       return objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)
     },
     projectClicked () {
-      this.$emit("projectClicked", this.project)
+      this.$emit('projectClicked', this.project)
     },
     profileProjectClicked () {
-      this.$emit("profileProjectClicked", this.profileProject)
+      this.$emit('profileProjectClicked', this.profileProject)
     }
   }
 }
