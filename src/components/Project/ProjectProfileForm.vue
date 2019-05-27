@@ -92,12 +92,12 @@
       <span>Start date</span>
       <Datepicker
         v-model="editableProfileProject.startDate"
-        name="profile-project-start-date"
+        :name="`profile-project-start-date${isInModal ? '-modal' : ''}`"
       />
       <span>End date</span>
       <Datepicker
         v-model="editableProfileProject.endDate"
-        name="profile-project-end-date"
+        :name="`profile-project-end-date${isInModal ? '-modal' : ''}`"
       />
       <span>Utilization percentage</span>
       <b-input
@@ -149,6 +149,10 @@ export default {
       default: null
     },
     noRedirect: {
+      type: Boolean,
+      default: false
+    },
+    isInModal: {
       type: Boolean,
       default: false
     }

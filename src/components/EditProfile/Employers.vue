@@ -66,6 +66,7 @@
           :key="activeProfileProject ? activeProfileProject.id : 0"
           :profile-project="activeProfileProject"
           no-redirect
+          is-in-modal
           @profileProjectCreatedOrUpdated="profileProjectCreatedOrUpdated()"
         />
       </div>
