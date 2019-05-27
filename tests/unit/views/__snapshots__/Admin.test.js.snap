@@ -16,23 +16,25 @@ exports[`Admin.vue Template is correct 1`] = `
     >
       <div>
         <fieldset
+          aria-labelledby="__BVID__5__BV_label_"
           class="form-group"
-          id="__BVID__7"
+          id="__BVID__5"
         >
           <legend
             class="col-form-label pt-0"
-            id="__BVID__7__BV_label_"
+            id="__BVID__5__BV_label_"
             tabindex="-1"
           >
             Filter by name
           </legend>
           <div
+            aria-labelledby="__BVID__5__BV_label_"
             role="group"
             tabindex="-1"
           >
             <input
               class="form-control"
-              id="__BVID__8"
+              id="__BVID__6"
               type="text"
             />
             <!---->
