@@ -80,7 +80,11 @@
       no-close-on-backdrop
     >
       <div>
-        <EditProfileEmployer :profile-employer="selectedProfileEmployer" />
+        <EditProfileEmployer
+          :profile-employer="selectedProfileEmployer"
+          :key="selectedProfileEmployer ? selectedProfileEmployer.id : 0"
+          :vue-selects-employers="vueSelectsEmployers"
+        />
       </div>
     </b-modal>
     <h1>Previous and current employers</h1>
@@ -158,6 +162,7 @@ import { orderBy, cloneDeep } from 'lodash'
 import EditProfileEmployer from './EditProfileEmployer'
 import EmployersProfileProject from './EmployersProfileProject'
 import { ProjectProfileForm, ProjectForm } from '../Project'
+import sortBy from 'lodash/sortBy'
 
 export default {
   name: 'Employers',
@@ -201,6 +206,13 @@ export default {
         profileProject: pp,
         project: Object.values(this.projects).find(project => project.id === pp.projectId)
       }))
+    },
+    vueSelectsEmployers () {
+      return sortBy(Object.values(this.employers).map(employer => ({
+        label: employer.name,
+        id: employer.id
+      })),
+      ['label'])
     }
   },
   methods: {
@@ -259,8 +271,8 @@ export default {
       this.activeProject = this.projectById(profileProject.projectId)
       this.activeProfileProject = {
         ...profileProject,
-        startDate: parse(profileProject.startDate),
-        endDate: parse(profileProject.endDate)
+        startDate: format(profileProject.startDate, 'yyyy-MM-dd'),
+        endDate: format(profileProject.endDate, 'yyyy-MM-dd')
       }
       this.showProfileProjectModal = true
     },

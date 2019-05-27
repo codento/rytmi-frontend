@@ -9,7 +9,7 @@
         <v-select
           id="employer-select"
           v-model="selectedExistingEmployer"
-          :options="existingEmployers"
+          :options="vueSelectsEmployers"
         />
         <small>Or enter a new employer name</small>
         <b-input
@@ -99,35 +99,25 @@ import { mapActions, mapGetters } from 'vuex'
 import { isEmpty, isDate } from 'lodash'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
-import sortBy from 'lodash/sortBy'
 
 export default {
   name: 'EditProfileEmployer',
   components: { Datepicker, vSelect },
   props: {
-    'profileEmployer': Object
+    'profileEmployer': Object,
+    'vueSelectsEmployers': Array
   },
   data () {
     return {
-      selectedExistingEmployer: null
+      selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId)
     }
   },
   computed: {
-    ...mapGetters(['employers']),
-    existingEmployers () {
-      return sortBy(Object.values(this.employers).map(employer => ({
-        label: employer.name,
-        id: employer.id
-      })),
-      ['label'])
-    }
+    ...mapGetters(['employers'])
   },
   watch: {
-    profileEmployer: function (val, oldVal) {
-      this.selectedExistingEmployer = this.existingEmployers.find(employer => employer.id === val.employerId)
-    },
-    selectedExistingEmployer: function (val, oldVal) {
-      this.profileEmployer.name = ''
+    selectedExistingEmployer: function () {
+      this.profileEmployer.newEmployerName = ''
     }
   },
   methods: {
