@@ -127,15 +127,13 @@
 import clone from 'lodash/clone'
 import { mapGetters, mapActions } from 'vuex'
 import format from 'date-fns/format'
-
-import LANGUAGE_ENUM from '@/utils/constants'
-
 import CvToolProfile from './CvToolProfile.vue'
 import CvToolSkills from './CvToolSkills.vue'
 import CvToolWorkExperience from './CvToolWorkExperience.vue'
 import CvToolEducation from './CvToolEducation.vue'
-
 import LoadingSpinner from '@/components/helpers/LoadingSpinner.vue'
+import constants from '@/utils/constants'
+const { LANGUAGE_ENUM } = constants
 
 export default {
   name: 'CvTool',

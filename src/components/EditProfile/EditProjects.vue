@@ -23,7 +23,7 @@
               class="clickable"
               @click.stop="openProject(data.item.projectId)"
             >
-              {{ projectById(data.item.projectId).code }}
+              {{ projectById(data.item.projectId) ? projectById(data.item.projectId).code : '' }}
             </span>
           </template>
 
@@ -35,7 +35,7 @@
               class="clickable"
               @click.stop="openProject(data.item.projectId)"
             >
-              {{ projectById(data.item.projectId).name }}
+              {{ projectById(data.item.projectId) ? projectById(data.item.projectId).name : '' }}
             </span>
           </template>
 
@@ -155,7 +155,7 @@
           title="Join a project"
         >
           <ProjectProfileForm
-            :profile-id="profileId"
+            :profile-project="{ profileId }"
             no-redirect
           />
         </b-card>

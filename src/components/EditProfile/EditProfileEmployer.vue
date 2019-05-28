@@ -9,12 +9,12 @@
         <v-select
           id="employer-select"
           v-model="selectedExistingEmployer"
-          :options="existingEmployers"
+          :options="vueSelectsEmployers"
         />
         <small>Or enter a new employer name</small>
         <b-input
-          id="employer-name"
-          v-model="employer.name"
+          id="new-employer-name"
+          v-model="profileEmployer.newEmployerName"
           type="text"
           placeholder="New employer name"
           @input="selectedExistingEmployer = null"
@@ -23,19 +23,19 @@
     </b-row>
     <b-row>
       <b-col>
-        <small for="employer-start-date">Start date</small>
+        <small for="profile-employer-start-date">Start date</small>
         <Datepicker
-          id="employer-start-date"
-          v-model="employer.startDate"
-          name="employer-start-date"
+          id="profile-employer-start-date"
+          v-model="profileEmployer.startDate"
+          name="profile-employer-start-date"
         />
       </b-col>
       <b-col>
-        <small for="employer-end-date">End date</small>
+        <small for="profile-employer-end-date">End date</small>
         <Datepicker
-          id="employer-end-date"
-          v-model="employer.endDate"
-          name="employer-end-date"
+          id="profile-employer-end-date"
+          v-model="profileEmployer.endDate"
+          name="profile-employer-end-date"
         />
       </b-col>
     </b-row>
@@ -44,7 +44,7 @@
         <small for="title-fi">Title (Finnish)</small>
         <b-input
           id="title-fi"
-          v-model="employer.title['fi']"
+          v-model="profileEmployer.title['fi']"
           type="text"
           placeholder="Title (fi)"
         />
@@ -53,7 +53,7 @@
         <small for="title-en">Title (English)</small>
         <b-input
           id="title-en"
-          v-model="employer.title['en']"
+          v-model="profileEmployer.title['en']"
           type="text"
           placeholder="Title (en)"
         />
@@ -64,7 +64,7 @@
         <small for="description-fi">Description (Finnish)</small>
         <b-textarea
           id="description-fi"
-          v-model="employer.description['fi']"
+          v-model="profileEmployer.description['fi']"
           type="text"
           placeholder="Description (fi)"
         />
@@ -73,7 +73,7 @@
         <small for="description-en">Description (English)</small>
         <b-textarea
           id="description-en"
-          v-model="employer.description['en']"
+          v-model="profileEmployer.description['en']"
           type="text"
           placeholder="Description (en)"
         />
@@ -99,35 +99,25 @@ import { mapActions, mapGetters } from 'vuex'
 import { isEmpty, isDate } from 'lodash'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
-import sortBy from 'lodash/sortBy'
 
 export default {
-  name: 'EditEmployer',
+  name: 'EditProfileEmployer',
   components: { Datepicker, vSelect },
   props: {
-    'employer': Object
+    'profileEmployer': Object,
+    'vueSelectsEmployers': Array
   },
   data () {
     return {
-      selectedExistingEmployer: null
+      selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId)
     }
   },
   computed: {
-    ...mapGetters(['employers']),
-    existingEmployers () {
-      return sortBy(Object.values(this.employers).map(employer => ({
-        label: employer.name,
-        id: employer.id
-      })),
-      ['label'])
-    }
+    ...mapGetters(['employers'])
   },
   watch: {
-    employer: function (val, oldVal) {
-      this.selectedExistingEmployer = this.existingEmployers.find(employer => employer.id === val.employerId)
-    },
-    selectedExistingEmployer: function (val, oldVal) {
-      this.employer.name = ''
+    selectedExistingEmployer: function () {
+      this.profileEmployer.newEmployerName = ''
     }
   },
   methods: {
@@ -144,16 +134,16 @@ export default {
       evt.preventDefault()
       if (this.isDataValidForSubmit()) {
         if (this.shouldCreateANewEmployer()) {
-          this.createEmployer({ name: this.employer.name })
+          this.createEmployer({ name: this.profileEmployer.newEmployerName })
             .then(() => {
               this.$toasted.global.rytmi_success({
                 message: 'A new employer created!'
               })
-              const profileEmployer = { ...this.employer, employerId: this.getEmployerId(this.employer.name) }
+              const profileEmployer = { ...this.profileEmployer, employerId: this.getEmployerId(this.profileEmployer.newEmployerName) }
               this.updateOrCreateProfileEmployer(profileEmployer)
             })
         } else {
-          const profileEmployer = { ...this.employer, employerId: this.selectedExistingEmployer.id }
+          const profileEmployer = { ...this.profileEmployer, employerId: this.selectedExistingEmployer.id }
           this.updateOrCreateProfileEmployer(profileEmployer)
         }
       }
@@ -177,26 +167,26 @@ export default {
       }
     },
     shouldUpdateProfileEmployer () {
-      return this.employer.id
+      return this.profileEmployer.id
     },
     shouldCreateANewEmployer () {
       return !this.selectedExistingEmployer
     },
     isDataValidForSubmit () {
       let isDataValid = true
-      if (!this.selectedExistingEmployer && isEmpty(this.employer.name)) {
+      if (!this.selectedExistingEmployer && isEmpty(this.profileEmployer.newEmployerName)) {
         this.$toasted.global.rytmi_error({
           message: 'An existing employer must be chosen or the name of a new employer must be given.'
         })
         isDataValid = false
       }
-      if (!isDate(this.employer.startDate)) {
+      if (!isDate(this.profileEmployer.startDate)) {
         this.$toasted.global.rytmi_error({
           message: 'Start date must be given and it must be a valid date.'
         })
         isDataValid = false
       }
-      if (this.employer.endDate && !isDate(this.employer.endDate)) {
+      if (this.profileEmployer.endDate && !isDate(this.profileEmployer.endDate)) {
         this.$toasted.global.rytmi_error({
           message: 'End date must be a valid date.'
         })

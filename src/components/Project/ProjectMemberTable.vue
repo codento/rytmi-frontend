@@ -88,7 +88,7 @@
       <h3>{{ printMember(editedProjectProfile.profileId) }}</h3>
       <b-row>
         <b-col>
-          <small>Title (Finnish)</small>
+          <small>Role (in Finnish)</small>
           <b-input
             v-model="descriptionFi.title"
             type="text"
@@ -96,7 +96,7 @@
           />
         </b-col>
         <b-col>
-          <small>Title (English)</small>
+          <small>Role (in English)</small>
           <b-input
             v-model="descriptionEn.title"
             type="text"

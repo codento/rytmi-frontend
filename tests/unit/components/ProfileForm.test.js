@@ -25,7 +25,6 @@ const mockProfile = {
   lastName: 'Bar',
   role: 'Employee role',
   birthYear: 1984,
-  title: 'Title',
   phone: 1234,
   information: {
     fi: 'kuvaus1',
@@ -64,9 +63,8 @@ describe('ProfileForm.vue', () => {
     expect(inputWrappers.at(0).vm.value).toBe(mockProfile.firstName)
     expect(inputWrappers.at(1).vm.value).toBe(mockProfile.lastName)
     expect(inputWrappers.at(3).vm.value).toBe(mockProfile.birthYear)
-    expect(inputWrappers.at(4).vm.value).toBe(mockProfile.title)
-    expect(inputWrappers.at(5).vm.value).toBe(mockProfile.email)
-    expect(inputWrappers.at(6).vm.value).toBe(mockProfile.phone)
+    expect(inputWrappers.at(4).vm.value).toBe(mockProfile.email)
+    expect(inputWrappers.at(5).vm.value).toBe(mockProfile.phone)
   })
 
   it('should submit entered details when submit is clicked', async () => {

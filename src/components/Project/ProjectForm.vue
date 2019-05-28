@@ -7,6 +7,19 @@
     >
       <b-row>
         <b-col>
+          <small>Employer</small>
+          <v-select
+            v-if="employers"
+            id="employer-select"
+            :value="selectedEmployer"
+            :options="employerList"
+            label="name"
+            @input="employerSelected"
+          />
+        </b-col>
+      </b-row>
+      <b-row v-if="shouldShowCode()">
+        <b-col>
           <small>Project code</small>
           <b-input
             v-model="project.code"
@@ -44,6 +57,7 @@
           <Datepicker
             v-model="project.startDate"
             name="project-start-date"
+            required
           />
         </b-col>
       </b-row>
@@ -57,12 +71,22 @@
         </b-col>
       </b-row>
       <b-row>
+        <b-col class="mt-2 mb-2">
+          <b-form-checkbox
+            v-model="project.isInternal"
+          >
+            Internal project, not done for a customer
+          </b-form-checkbox>
+        </b-col>
+      </b-row>
+      <b-row v-if="shouldShowCustomerName()">
         <b-col sm="6">
           <small>Customer name (Finnish)</small>
           <b-input
             v-model="getDescriptionByLanguage('fi').customerName"
             placeholder="Customer name (fi)"
             type="text"
+            required
           />
         </b-col>
         <b-col sm="6">
@@ -71,6 +95,7 @@
             v-model="getDescriptionByLanguage('en').customerName"
             placeholder="Customer name (en)"
             type="text"
+            required
           />
         </b-col>
       </b-row>
@@ -113,7 +138,7 @@
             type="submit"
             primary
           >
-            Submit
+            {{ shouldUpdateProject() ? 'Update project' : 'Create a new project' }}
           </b-button>
         </b-col>
       </b-row>
@@ -128,52 +153,95 @@
   </div>
 </template>
 <script>
-import { cloneDeep } from 'lodash'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import ApiErrorDetailsPanel from '../helpers/ApiErrorDetailsPanel.vue'
-import Datepicker from '../helpers/Datepicker.vue'
+import Datepicker from '../helpers/Datepicker'
+import vSelect from 'vue-select'
+import sortBy from 'lodash/sortBy'
+import constants from '@/utils/constants'
+const { INTERNAL_COMPANY_NAME } = constants
 
 export default {
   name: 'ProjectForm',
   components: {
     Datepicker,
-    ApiErrorDetailsPanel
+    ApiErrorDetailsPanel,
+    vSelect
   },
   props: {
-    editableProject: Object
+    editableProject: Object,
+    createProfileProjectAfterProjectCreation: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
       showError: false,
       errorDetails: [],
-      project: {}
+      project: {},
+      selectedEmployer: null
+    }
+  },
+  computed: {
+    ...mapGetters(['employers']),
+    employerList () {
+      return sortBy(Object.values(this.employers), ['name'])
+    }
+  },
+  watch: {
+    editableProject: function () {
+      this.setProject()
     }
   },
   mounted () {
-    if (this.editableProject) {
-      this.project = cloneDeep(this.editableProject)
-      this.project.endDate = new Date(this.editableProject.endDate)
-      this.project.startDate = new Date(this.editableProject.startDate)
-    } else {
-      this.project = {
-        code: null,
-        startDate: null,
-        endDate: null,
-        isSecret: false,
-        descriptions: []
-      }
-    }
+    this.setProject()
   },
   methods: {
     ...mapActions([
       'createProject',
       'updateProject'
     ]),
+    shouldShowCode () {
+      const selectedEmployer = this.employerList.find(employer => employer.id === this.project.employerId)
+      return this.project && this.employerList && selectedEmployer && selectedEmployer.name === INTERNAL_COMPANY_NAME
+    },
+    shouldShowCustomerName () {
+      return this.project && !this.project.isInternal
+    },
+    employerSelected (selectedValue) {
+      this.project.employerId = selectedValue.id
+    },
+    setProject () {
+      this.project = {
+        id: this.editableProject && this.editableProject.id ? this.editableProject.id : null,
+        code: this.editableProject && this.editableProject.code ? this.editableProject.code : null,
+        startDate: this.editableProject && this.editableProject.startDate ? new Date(this.editableProject.startDate) : null,
+        endDate: this.editableProject && this.editableProject.endDate ? new Date(this.editableProject.endDate) : null,
+        isSecret: this.editableProject && this.editableProject.isSecret ? this.editableProject.isSecret : false,
+        isInternal: this.editableProject && this.editableProject.isInternal ? this.editableProject.isInternal : false,
+        descriptions: this.editableProject && this.editableProject.descriptions ? this.editableProject.descriptions : [],
+        employerId: this.editableProject && this.editableProject.employerId ? this.editableProject.employerId : null
+      }
+
+      this.selectedEmployer =
+        this.project && this.project.employerId
+          ? this.employerList.find(employer => employer.id === this.project.employerId)
+          : null
+    },
+    shouldUpdateProject () {
+      return !!this.project.id
+    },
     onSubmit (evt) {
       evt.preventDefault()
       this.errorDetails = []
+
+      if (this.project.isInternal) {
+        this.project.descriptions.forEach(description => { description.customerName = '' })
+      }
+
       // If the project has an ID, update; otherwise create a new project
-      if (this.project.id) {
+      if (this.shouldUpdateProject()) {
         this.updateProject(this.project)
           .then((data) => {
             this.$toasted.global.rytmi_success({
@@ -193,6 +261,9 @@ export default {
             })
             document.getElementById('project_form').reset()
             this.showError = false
+            if (this.createProfileProjectAfterProjectCreation) {
+              this.$emit('projectCreated', { project: data.data })
+            }
           }).catch(err => {
             if (Array.isArray(err.data.error.details)) {
               this.errorDetails = err.data.error.details

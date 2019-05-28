@@ -37,13 +37,17 @@
       <hr>
       <CollapsableItem title="Edit project">
         <ProjectForm
+          v-if="Object.values(employers).length > 0"
           :editable-project="project"
         />
+        <div v-else>
+          Loading employers...
+        </div>
       </CollapsableItem>
       <hr>
       <CollapsableItem title="Add a consultant">
         <ProjectProfileForm
-          :project-id="project.id"
+          :profile-project="{ projectId: project.id }"
         />
       </CollapsableItem>
       <hr>
@@ -79,7 +83,8 @@ export default {
   computed: {
     ...mapGetters([
       'projectById',
-      'profileProjectsByProjectId'
+      'profileProjectsByProjectId',
+      'employers'
     ]),
     project () {
       return this.projectById(this.$route.params.id)

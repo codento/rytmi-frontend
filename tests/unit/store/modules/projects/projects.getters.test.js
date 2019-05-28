@@ -1,7 +1,8 @@
 import projectModule from '@/store/modules/projects'
 import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import LANGUAGE_ENUM from '@/utils/constants'
+import constants from '@/utils/constants'
+const { LANGUAGE_ENUM } = constants
 
 jest.mock('@/utils/api/api')
 

@@ -40,8 +40,10 @@ function createWrapper (overrideMountingOptions) {
 describe('ProjectProfileForm.vue', () => {
   it('shows consultant select when consultant profile is unknown', () => {
     const propsData = {
-      projectId: 1,
-      profileId: null
+      profileProject: {
+        projectId: 1,
+        profileId: null
+      }
     }
     const wrapper = createWrapper({ propsData })
     expect(wrapper.find('#consultantLabel').isVisible()).toBe(true)
@@ -50,8 +52,10 @@ describe('ProjectProfileForm.vue', () => {
 
   it('shows project select when project is unknown', () => {
     const propsData = {
-      projectId: null,
-      profileId: 1
+      profileProject: {
+        projectId: null,
+        profileId: 1
+      }
     }
     const wrapper = createWrapper({ propsData })
     expect(wrapper.find('#ProjectLabel').isVisible()).toBe(true)
@@ -60,8 +64,10 @@ describe('ProjectProfileForm.vue', () => {
 
   it('calls newProjectProfile when form is submitted', async () => {
     const propsData = {
-      projectId: null,
-      profileId: 1
+      profileProject: {
+        projectId: null,
+        profileId: 1
+      }
     }
 
     const actions = {
@@ -82,8 +88,10 @@ describe('ProjectProfileForm.vue', () => {
 
   it('closes the form when toggleForm is present and form is submitted', async () => {
     const propsData = {
-      projectId: null,
-      profileId: 1,
+      profileProject: {
+        projectId: null,
+        profileId: 1
+      },
       toggleForm: jest.fn()
     }
     const actions = {
@@ -103,8 +111,10 @@ describe('ProjectProfileForm.vue', () => {
 
   it('shows errors when form submit fails', async () => {
     const propsData = {
-      projectId: null,
-      profileId: 1
+      profileProject: {
+        projectId: null,
+        profileId: 1
+      }
     }
     const apiError = {
       response: {

@@ -4,8 +4,9 @@
     class="animated fadeIn"
   >
     <b-modal
-      :id="'delete-modal'"
-      name="delete-modal"
+      :id="'delete-work-history-entry-modal'"
+      name="delete-work-history-entry-modal"
+      size="sm"
       hide-header
       centered
       ok-title="Delete"
@@ -26,46 +27,132 @@
         </b-row>
       </div>
     </b-modal>
+    <b-modal
+      :id="'project-modal'"
+      v-model="showProjectModal"
+      title="Add a new project"
+      name="project-modal"
+      size="lg"
+      ok-only
+      ok-title="Close"
+      no-close-on-backdrop
+    >
+      <div>
+        <ProjectForm
+          v-if="employers && activeProject"
+          :editable-project="activeProject"
+          :create-profile-project-after-project-creation="true"
+          no-redirect
+          @projectCreated="projectCreated($event)"
+        />
+        <div v-else>
+          Loading employers...
+        </div>
+      </div>
+    </b-modal>
+    <b-modal
+      v-if="activeProject && activeProject.id"
+      :id="'profile-project-modal'"
+      v-model="showProfileProjectModal"
+      :title="`Your role in the project: ${getDescriptionWithCurrentLanguage(activeProject).name}`"
+      name="profile-project-modal"
+      size="lg"
+      ok-only
+      ok-title="Close"
+      no-close-on-backdrop
+    >
+      <div>
+        <ProjectProfileForm
+          :key="activeProfileProject ? activeProfileProject.id : 0"
+          :profile-project="activeProfileProject"
+          no-redirect
+          is-in-modal
+          @profileProjectCreatedOrUpdated="profileProjectCreatedOrUpdated()"
+        />
+      </div>
+    </b-modal>
+    <b-modal
+      :id="'create-or-edit-profile-employer-modal'"
+      :title="selectedProfileEmployer.id ? 'Edit an existing work history entry' : 'Add a new work history entry'"
+      name="create-or-edit-profile-employer-modal"
+      size="lg"
+      ok-only
+      ok-title="Close"
+      no-close-on-backdrop
+    >
+      <div>
+        <EditProfileEmployer
+          :profile-employer="selectedProfileEmployer"
+          :key="selectedProfileEmployer ? selectedProfileEmployer.id : 0"
+          :vue-selects-employers="vueSelectsEmployers"
+        />
+      </div>
+    </b-modal>
     <h1>Previous and current employers</h1>
     <hr>
     <b-row
-      v-for="employer in profileEmployers"
-      :key="employer.id"
+      v-for="profileEmployer in profileEmployers"
+      :key="profileEmployer.id"
     >
       <b-col>
         <div>
           <span
+            v-b-modal="'create-or-edit-profile-employer-modal'"
             name="employer"
             class="employer-name clickable"
-            @click="employerClicked(employer)"
+            @click="profileEmployerClicked(profileEmployer)"
           >
-            {{ employer ? getEmployerName(employer.employerId) : '' }}</span> <span>{{ getFormatedDate(employer.startDate) + ' - ' + getFormatedDate(employer.endDate) }}</span>
+            {{ profileEmployer ? getEmployerName(profileEmployer.employerId) : '' }}</span> <span>{{ getFormatedDate(profileEmployer.startDate) + ' - ' + getFormatedDate(profileEmployer.endDate) }}</span>
           <i
-            v-b-modal="'delete-modal'"
+            v-b-modal="'delete-work-history-entry-modal'"
             class="fa fa-trash icon"
-            @click="employerClicked(employer)"
+            @click="profileEmployerClicked(profileEmployer)"
           />
         </div>
         <div class="details">
           <div class="title">
-            {{ getEmployerDescriptionInCurrentLanguage(employer) ? getEmployerDescriptionInCurrentLanguage(employer).title : '' }}
+            {{ profileEmployer ? profileEmployer.title[currentLanguage] : '' }}
           </div>
           <div class="description">
-            {{ getEmployerDescriptionInCurrentLanguage(employer) ? getEmployerDescriptionInCurrentLanguage(employer).description : '' }}
+            {{ profileEmployer ? profileEmployer.description[currentLanguage] : '' }}
           </div>
+          <div class="employer-profile-projects">
+            <small class="projects-label">Projects</small>
+            <div
+              v-if="profileProjectsWithProjectData.filter(ppwpd => ppwpd.project.employerId === profileEmployer.employerId).length === 0"
+              class="no-projects"
+            >
+              No projects.
+            </div>
+            <div
+              v-for="profileProjectWithProjectData in profileProjectsWithProjectData.filter(ppwpd => ppwpd.project.employerId === profileEmployer.employerId)"
+              v-else
+              :key="profileProjectWithProjectData.profileProject.id"
+            >
+              <EmployersProfileProject
+                :profile-project="profileProjectWithProjectData.profileProject"
+                :project="profileProjectWithProjectData.project"
+                @projectClicked="projectClicked($event)"
+                @profileProjectClicked="profileProjectClicked($event)"
+              />
+            </div>
+          </div>
+          <b-button
+            v-b-modal="'project-modal'"
+            @click="addNewProjectClicked(profileEmployer)"
+          >
+            Add a new project
+          </b-button>
         </div>
       </b-col>
     </b-row>
     <b-button
-      v-show="selectedProfileEmployer.id"
       id="add-new-employer-button"
+      v-b-modal="'create-or-edit-profile-employer-modal'"
       @click="addNewProfileEmployer"
     >
-      Add new employer
+      Add a new work history entry
     </b-button>
-    <EditEmployer
-      :employer="selectedProfileEmployer"
-    />
   </form>
 </template>
 
@@ -73,26 +160,39 @@
 import { mapActions, mapGetters } from 'vuex'
 import { format, parse } from 'date-fns'
 import { orderBy, cloneDeep } from 'lodash'
-import EditEmployer from './EditEmployer'
+import EditProfileEmployer from './EditProfileEmployer'
+import EmployersProfileProject from './EmployersProfileProject'
+import { ProjectProfileForm, ProjectForm } from '../Project'
+import sortBy from 'lodash/sortBy'
 
 export default {
   name: 'Employers',
   components: {
-    EditEmployer
+    EditProfileEmployer,
+    ProjectForm,
+    EmployersProfileProject,
+    ProjectProfileForm
   },
   props: {
     'profileId': Number
   },
   data () {
     return {
-      selectedProfileEmployer: this.getEmptyProfileEmployer()
+      selectedProfileEmployer: this.getEmptyProfileEmployer(),
+      activeProject: null,
+      showProjectModal: false,
+      showProfileProjectModal: false,
+      activeProfileProject: null
     }
   },
   computed: {
     ...mapGetters([
       'profileEmployersByProfileId',
       'currentLanguage',
-      'employers'
+      'employers',
+      'profileProjectsByProfileId',
+      'projects',
+      'projectById'
     ]),
     profileEmployers () {
       const employers = this.profileEmployersByProfileId(this.profileId).map(employer => ({
@@ -101,6 +201,19 @@ export default {
         endDate: employer.endDate ? parse(employer.endDate) : null
       }))
       return orderBy(employers, ['startDate'], ['desc'])
+    },
+    profileProjectsWithProjectData () {
+      return this.profileProjectsByProfileId(this.profileId).map(pp => ({
+        profileProject: pp,
+        project: Object.values(this.projects).find(project => project.id === pp.projectId)
+      }))
+    },
+    vueSelectsEmployers () {
+      return sortBy(Object.values(this.employers).map(employer => ({
+        label: employer.name,
+        id: employer.id
+      })),
+      ['label'])
     }
   },
   methods: {
@@ -108,11 +221,12 @@ export default {
     getFormatedDate (date) {
       return date ? format(date, 'YYYY/MM') : ''
     },
-    getEmployerDescriptionInCurrentLanguage (employer) {
-      return employer.description[this.currentLanguage]
+    profileEmployerClicked (profileEmployer) {
+      this.selectedProfileEmployer = cloneDeep(profileEmployer)
     },
-    employerClicked (employer) {
-      this.selectedProfileEmployer = cloneDeep(employer)
+    addNewProjectClicked (profileEmployer) {
+      this.selectedProfileEmployer = cloneDeep(profileEmployer)
+      this.activeProject = { employerId: this.selectedProfileEmployer.employerId }
     },
     addNewProfileEmployer () {
       this.selectedProfileEmployer = this.getEmptyProfileEmployer()
@@ -138,6 +252,31 @@ export default {
         endDate: null
       }
     },
+    projectCreated (event) {
+      this.activeProject = event.project
+      this.activeProfileProject = {
+        projectId: this.activeProject.id,
+        profileId: this.profileId
+      }
+      this.showProjectModal = false
+      this.showProfileProjectModal = true
+    },
+    profileProjectCreatedOrUpdated () {
+      this.showProfileProjectModal = false
+    },
+    projectClicked (project) {
+      this.showProjectModal = true
+      this.activeProject = cloneDeep(project)
+    },
+    profileProjectClicked (profileProject) {
+      this.activeProject = this.projectById(profileProject.projectId)
+      this.activeProfileProject = {
+        ...profileProject,
+        startDate: format(profileProject.startDate, 'yyyy-MM-dd'),
+        endDate: format(profileProject.endDate, 'yyyy-MM-dd')
+      }
+      this.showProfileProjectModal = true
+    },
     deleteProfileEmployer () {
       this.removeProfileEmployer(this.selectedProfileEmployer)
         .then((data) => {
@@ -147,6 +286,15 @@ export default {
           this.selectedProfileEmployer = this.getEmptyProfileEmployer()
           document.getElementById('employers-form').reset()
         })
+    },
+    getDescriptionWithCurrentLanguage (objectWithDescriptions) {
+      if (!objectWithDescriptions || !objectWithDescriptions.descriptions || !objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)) {
+        return {
+          language: this.currentLanguage,
+          name: ''
+        }
+      }
+      return objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)
     }
   }
 }
@@ -169,8 +317,15 @@ export default {
   padding-left: 15px;
   padding-bottom: 15px;
 }
+.employer-profile-projects {
+  padding-left: 15px;
+  padding-bottom: 15px;
+}
 .clickable {
   cursor: pointer;
+}
+.clickable:hover {
+  text-decoration: underline;
 }
 #add-new-employer-button {
   margin-bottom: 10px;
@@ -178,7 +333,17 @@ export default {
 .icon {
   margin-left: 15px;
 }
-.icon:hover {
+.icon.fa-trash:hover {
   color: red;
+}
+.icon.fa-plus:hover {
+  color: green;
+}
+.projects-label {
+  text-decoration: underline;
+}
+.no-projects {
+  font-style: italic;
+  color: lightslategrey;
 }
 </style>

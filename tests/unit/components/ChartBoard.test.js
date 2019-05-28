@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import LANGUAGE_ENUM from '@/utils/constants'
 import ChartBoard from '@/components/Dashboard/ChartBoard'
 import SkillChart from '@/components/Dashboard/SkillChart'
 import TopSkillChart from '@/components/Dashboard/TopSkillChart'
@@ -7,6 +6,8 @@ import MostWillingnessChart from '@/components/Dashboard/MostWillingnessChart'
 import ConsultantUtilizationChart from '@/components/Dashboard/ConsultantUtilizationChart'
 import ConsultantUtilizationList from '@/components/Dashboard/ConsultantUtilizationList'
 import { createShallowWrapper } from './setup/setup'
+import constants from '@/utils/constants'
+const { LANGUAGE_ENUM } = constants
 
 const storeConfig = {
   actions: {

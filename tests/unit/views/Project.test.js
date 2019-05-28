@@ -49,11 +49,27 @@ const profileProjectMock = (projectId) => ([
   }
 ])
 
+const mockEmployers = {
+  1: {
+    createdAt: '2019-05-21T13:21:48.222Z',
+    id: 1,
+    name: 'Codento Oy',
+    updatedAt: '2019-05-21T13:21:48.222Z'
+  },
+  2: {
+    createdAt: '2019-05-21T13:21:56.034Z',
+    id: 2,
+    name: 'Macejkovic Inc',
+    updatedAt: '2019-05-21T13:21:56.034Z'
+  }
+}
+
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
       projectById: () => (projectId) => projectMock(projectId),
-      profileProjectsByProjectId: () => (projectId) => profileProjectMock(projectId)
+      profileProjectsByProjectId: () => (projectId) => profileProjectMock(projectId),
+      employers: () => mockEmployers
     },
     state: {
       siteSettings: { currentLanguage: 'fi' }
@@ -82,7 +98,8 @@ describe('Project.vue', () => {
   it('shows loading icon when project is being fetched', () => {
     const store = createStore({
       getters: {
-        projectById: () => (projectId) => null
+        projectById: () => (projectId) => null,
+        employers: () => mockEmployers
       }
     })
     const wrapper = createWrapper({ store })
@@ -108,7 +125,8 @@ describe('Project.vue', () => {
   it('does not show members field if there are no members', () => {
     const store = createStore({
       getters: {
-        profileProjectsByProjectId: () => (id) => null
+        profileProjectsByProjectId: () => (id) => null,
+        employers: () => mockEmployers
       }
     })
     const wrapper = createWrapper({ store })
@@ -116,7 +134,13 @@ describe('Project.vue', () => {
   })
 
   it('Template is correct', () => {
-    const wrapper = createWrapper()
+    const store = createStore({
+      getters: {
+        profileProjectsByProjectId: () => (id) => null,
+        employers: () => mockEmployers
+      }
+    })
+    const wrapper = createWrapper({ store })
     expect(wrapper.element).toMatchSnapshot()
   })
 })

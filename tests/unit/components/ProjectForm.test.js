@@ -1,18 +1,52 @@
-import { merge } from 'lodash'
+import { merge, cloneDeep } from 'lodash'
 import flushPromises from 'flush-promises'
-import { ProjectForm } from '@/components/Project'
+import { ProfileForm } from '@/components/EditProfile'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 import { createWrapper } from './setup/setup'
 
+const mockEmployeeRoles = [
+  { id: 1, title: 'somethinger' },
+  { id: 2, title: 'dunno lol' }
+]
+
 const defaultStoreConfig = {
   actions: {
-    createProject: jest.fn(() => []),
-    updateProject: jest.fn(() => [])
+    updateProfile: jest.fn(() => [])
+  },
+  getters: {
+    employeeRoles: jest.fn(() => mockEmployeeRoles)
   }
 }
 
+const mockProfile = {
+  id: 2,
+  firstName: 'Foo',
+  lastName: 'Bar',
+  role: 'Employee role',
+  birthYear: 1984,
+  title: 'Title',
+  phone: 1234,
+  information: {
+    fi: 'kuvaus1',
+    en: 'desc1'
+  },
+  education: [
+    { fi: { school: 'Yliopisto', degree: 'Joku tutkinto', major: null, minor: null },
+      en: { school: 'University', degree: 'Some degree', major: 'My major', minor: 'My minor' },
+      startYear: 2011,
+      endYear: 2015
+    }
+  ],
+  email: 'foo.bar@barfoo.com',
+  employeeRoles: [1],
+  links: ['http://christy.net', 'http://holly.biz', 'http://www.linkedin.com/username']
+}
+
 const defaultMountingOptions = {
+  propsData: {
+    profile: mockProfile
+  },
   mocks: {
     $toasted: {
       global: {
@@ -22,94 +56,86 @@ const defaultMountingOptions = {
   }
 }
 
-describe('ProjectForm.test.js', () => {
-  it('Shows error message when update project fails', async () => {
+describe('ProfileForm.vue', () => {
+  it('should should show profile details correctly', () => {
+    const wrapper = createWrapper(ProfileForm, defaultStoreConfig, defaultMountingOptions)
+    expect(wrapper.vm.editedProfile).toEqual(mockProfile)
+    const inputWrappers = wrapper.findAll('input')
+    expect(inputWrappers.at(0).vm.value).toBe(mockProfile.firstName)
+    expect(inputWrappers.at(1).vm.value).toBe(mockProfile.lastName)
+    expect(inputWrappers.at(3).vm.value).toBe(mockProfile.birthYear)
+    expect(inputWrappers.at(4).vm.value).toBe(mockProfile.email)
+    expect(inputWrappers.at(5).vm.value).toBe(mockProfile.phone)
+  })
+
+  it('should submit entered details when submit is clicked', async () => {
+    expect.assertions(3)
+    const editedProfile = cloneDeep(mockProfile)
+    editedProfile.firstName = 'Bar'
+
+    const mocks = {
+      $router: {
+        push: jest.fn()
+      }
+    }
+    const actions = {
+      updateProfile: jest.fn((mapActionsStuff, profile, undef) => Promise.resolve(profile))
+    }
+    const overrideStoreConfig = merge({}, defaultStoreConfig, { actions })
+    const overrideMountingOptions = merge({}, defaultMountingOptions, { mocks })
+    const wrapper = createWrapper(ProfileForm, overrideStoreConfig, overrideMountingOptions)
+    wrapper.find('#firstNameInput').setValue('Bar')
+    wrapper.find('button[type="submit"]').trigger('submit')
+    await flushPromises()
+    expect(actions.updateProfile).toHaveBeenCalledWith(
+      expect.anything(), editedProfile, undefined)
+    expect(wrapper.vm.showError).toBe(false)
+    expect(wrapper.vm.errorDetails).toHaveLength(0)
+  })
+
+  it('should go back to profile view when reset is clicked', () => {
+    expect.assertions(3)
+    const mocks = {
+      $router: {
+        push: jest.fn()
+      }
+    }
+    const wrapper = createWrapper(ProfileForm, defaultStoreConfig, merge({}, defaultMountingOptions, { mocks }))
+    wrapper.find('button[type="reset"]').trigger('reset')
+    expect(mocks.$router.push).toHaveBeenCalledWith(`/profile/${mockProfile.id}`)
+    expect(wrapper.vm.showError).toBe(false)
+    expect(wrapper.vm.errorDetails).toHaveLength(0)
+  })
+
+  it('shows error when submit fails', async () => {
+    expect.assertions(3)
+    const mocks = {
+      $router: {
+        push: jest.fn()
+      }
+    }
     const apiError = {
-      response: {
-        data: {
-          error: {
-            details: ['Failure']
-          }
-        }
-      }
-    }
-    const propsData = {
-      editableProject: {
-        id: 1,
-        code: '1234',
-        startDate: new Date('2018-01-01T00:00:00.000Z'),
-        endDate: new Date('2018-02-01T00:00:00.000Z')
-      }
+      details: ['Nope not today']
     }
     const actions = {
-      updateProject: jest.fn(() => Promise.reject(apiError))
+      updateProfile: jest.fn((mapActionsStuff, profile, undef) => Promise.reject(apiError))
     }
-    const wrapper = createWrapper(ProjectForm,
-      merge({}, defaultStoreConfig, { actions }),
-      merge({}, defaultMountingOptions, { propsData }))
-    wrapper.setData({
-      showProjectForm: true
-    })
-    wrapper.find('button').trigger('submit')
+    const editedProfile = cloneDeep(mockProfile)
+    editedProfile.firstName = 'Bar'
+
+    const overrideStoreConfig = merge({}, defaultStoreConfig, { actions })
+    const overrideMountingOptions = merge({}, defaultMountingOptions, { mocks })
+    const wrapper = createWrapper(ProfileForm, overrideStoreConfig, overrideMountingOptions)
+    wrapper.find('button[type="submit"]').trigger('submit')
     await flushPromises()
-    const apiErrorDetailsWrapper = wrapper.find(ApiErrorDetailsPanel)
-    expect(apiErrorDetailsWrapper.exists()).toBeTruthy()
+    expect(wrapper.vm.showError).toBe(true)
+    expect(wrapper.find(ApiErrorDetailsPanel).isVisible()).toBeTruthy()
+    expect(wrapper.vm.errorDetails).toHaveLength(1)
   })
 
-  it('Submits the form and calls create project when submit is clicked and project id is uknown', async () => {
-    const expectedResult = {
-      code: '1234',
-      startDate: null,
-      endDate: null,
-      isSecret: false,
-      descriptions: [
-        { customerName: '', name: '', description: '', language: 'fi' },
-        { customerName: '', name: '', description: '', language: 'en' }
-      ]
-    }
-
-    const actions = {
-      createProject: jest.fn((obj, project, dno) => Promise.resolve(project))
-    }
-    const documentMock = jest.spyOn(document, 'getElementById')
-    documentMock.mockImplementation(() => ({
-      reset: jest.fn()
-    }))
-    const wrapper = createWrapper(ProjectForm, merge({}, defaultStoreConfig, { actions }), defaultMountingOptions)
-    wrapper.setData({ showProjectForm: true })
-    wrapper.findAll('input').at(0).setValue(1234)
-    wrapper.find('button').trigger('submit')
-    await flushPromises()
-    expect(actions.createProject).toHaveBeenCalledWith(expect.anything(), expectedResult, undefined)
-  })
-
-  it('Submit the form and calls update project when submit is clicked and project id is known', async () => {
-    const actions = {
-      updateProject: jest.fn((obj, project, dno) => Promise.resolve(project))
-    }
-    const propsData = {
-      editableProject: {
-        id: 1,
-        code: '1234',
-        startDate: new Date('2018-01-01T00:00:00.000Z'),
-        endDate: new Date('2018-02-01T00:00:00.000Z')
-      }
-    }
-    const wrapper = createWrapper(ProjectForm,
-      merge({}, defaultStoreConfig, { actions }),
-      merge({}, defaultMountingOptions, { propsData }))
-    wrapper.setData({ showProjectForm: true })
-    wrapper.findAll('input').at(0).setValue(1234)
-    wrapper.find('button').trigger('submit')
-    await flushPromises()
-    expect(actions.updateProject).toHaveBeenCalledWith(
-      expect.anything(),
-      propsData.editableProject,
-      undefined)
-  })
-
-  it('Template is correct', () => {
-    const wrapper = createWrapper(ProjectForm, defaultStoreConfig, defaultMountingOptions)
-    expect(wrapper.html()).toMatchSnapshot()
+  it('returns correct employeeRoleList', () => {
+    const wrapper = createWrapper(ProfileForm, defaultStoreConfig, defaultMountingOptions)
+    wrapper.setData({ selectedEmployeeRoles: [] })
+    expect(wrapper.vm.employeeRoleList).toEqual([{ 'id': 1, 'label': 'somethinger' }, { 'id': 2, 'label': 'dunno lol' }])
   })
 })
