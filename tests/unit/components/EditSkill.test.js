@@ -1,13 +1,8 @@
-import Vuex from 'vuex'
-import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
-import { mount, createLocalVue } from '@vue/test-utils'
 import flushPromises from 'flush-promises'
-import { EditSkill } from '@/components/Skills/'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(BootstrapVue)
+import { createWrapper } from './setup/setup'
+import { SkillListEditSkill } from '@/components/Skills'
+import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 const mockSkill = {
   id: 1,
@@ -29,47 +24,70 @@ const mockSkillCategories = {
   }
 }
 
-function createStore (overrideConfig) {
-  const defaultStoreConfig = {
-    actions: {
-      updateSkill: jest.fn(),
-      deleteSkill: jest.fn()
-    }
+const defaultStoreConfig = {
+  actions: {
+    updateSkill: jest.fn(),
+    addSkill: jest.fn()
+  },
+  getters: {
+    skills: () => [],
+    skillCategories: () => mockSkillCategories
   }
-  const mergedConfig = merge(defaultStoreConfig, overrideConfig)
-  return new Vuex.Store(mergedConfig)
 }
 
-function createWrapper (overrideMountingOptions) {
-  const defaultMountingOptions = {
-    localVue,
-    propsData: {
-      skill: mockSkill,
-      skillCategories: mockSkillCategories,
-      close: jest.fn(),
-      peopleWithSkill: 2
-    },
-    store: createStore()
+const defaultMountingOptions = {
+  propsData: {
+    skill: mockSkill,
+    close: jest.fn()
+  },
+  mocks: {
+    $toasted: {
+      global: {
+        rytmi_success: jest.fn(),
+        rytmi_error: jest.fn()
+      }
+    }
   }
-  const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
-  return mount(EditSkill, mergedMountingOptions)
-};
+}
 
-describe('EditSkill.vue', () => {
+describe('SkillListEditSkill.vue', () => {
   it('Should show form with skill props data', () => {
-    const wrapper = createWrapper()
+    const wrapper = createWrapper(SkillListEditSkill, defaultStoreConfig, defaultMountingOptions)
     expect(wrapper.find('input[type="text"]').element.value).toBe(mockSkill.name)
-    expect(wrapper.vm.selectedSkillCategory).toBe(mockSkillCategories[1])
+    expect(wrapper.vm.selectedSkillCategoryId).toBe(mockSkillCategories[1].id)
     expect(wrapper.find('textarea').element.value).toBe(mockSkill.description)
   })
 
-  it('Should submit the edited skill and call close', async () => {
+  it('Should submit new skill if id is null', async () => {
     expect.assertions(3)
     const actions = {
-      updateSkill: jest.fn(() => Promise.resolve())
+      addSkill: jest.fn(() => Promise.resolve())
     }
     const propsData = {
-      close: jest.fn()
+      skill: { id: null }
+    }
+    const expected = {
+      name: 'New skill',
+      description: 'Some description',
+      skillCategoryId: 1
+    }
+    const mergedConfig = merge({}, defaultStoreConfig, { actions })
+    const mergedOptions = merge({}, defaultMountingOptions, { propsData })
+    const wrapper = createWrapper(SkillListEditSkill, mergedConfig, mergedOptions)
+    wrapper.find('input[type="text"]').setValue('New skill')
+    wrapper.find('textarea').setValue('Some description')
+    wrapper.setData({ selectedSkillCategoryId: 1 })
+    expect(wrapper.find('button[type="submit"]').html().includes('disabled')).toBeFalsy()
+    wrapper.find('button[type="submit"]').trigger('click')
+    await flushPromises()
+    expect(actions.addSkill).toHaveBeenCalledWith(expect.anything(), expected, undefined)
+    expect(defaultMountingOptions.propsData.close).toHaveBeenCalled()
+  })
+
+  it('Should submit the edited skill and call close', async () => {
+    expect.assertions(2)
+    const actions = {
+      updateSkill: jest.fn(() => Promise.resolve())
     }
     const expected = {
       id: 1,
@@ -77,33 +95,28 @@ describe('EditSkill.vue', () => {
       description: 'TypeScript is betterer',
       skillCategoryId: 1
     }
-    const store = createStore({ actions })
-    const wrapper = createWrapper({ store, propsData })
+    const mergedConfig = merge({}, defaultStoreConfig, { actions })
+    const wrapper = createWrapper(SkillListEditSkill, mergedConfig, defaultMountingOptions)
     wrapper.find('input[type="text"]').setValue('TypeScript')
     wrapper.find('textarea').setValue('TypeScript is betterer')
-    wrapper.find('button[type="submit"]').trigger('submit')
-    expect(wrapper.vm.loading).toBeTruthy()
+    wrapper.find('button[type="submit"]').trigger('click')
     await flushPromises()
     expect(actions.updateSkill).toHaveBeenCalledWith(expect.anything(), expected, undefined)
-    expect(propsData.close).toHaveBeenCalled()
+    expect(defaultMountingOptions.propsData.close).toHaveBeenCalled()
   })
 
   it('Should show error message when api call fails', async () => {
-    expect.assertions(4)
+    expect.assertions(3)
     const actions = {
-      updateSkill: jest.fn(() => Promise.reject(new Error('I errored')))
+      updateSkill: jest.fn((mapActionsStuff, profile, undef) => Promise.reject(new Error('I errored')))
     }
-    const propsData = {
-      close: jest.fn()
-    }
-    const store = createStore({ actions })
-    const wrapper = createWrapper({ store, propsData })
-    wrapper.find('button[type="submit"]').trigger('submit')
-    expect(wrapper.vm.loading).toBeTruthy()
+    const mergedConfig = merge({}, defaultStoreConfig, { actions })
+    const wrapper = createWrapper(SkillListEditSkill, mergedConfig, defaultMountingOptions)
+    wrapper.find('button[type="submit"]').trigger('click')
     await flushPromises()
     expect(actions.updateSkill).toHaveBeenCalled()
-    expect(wrapper.vm.loading).toBeFalsy()
-    expect(wrapper.find('#error-message').text()).toContain('I errored')
+    expect(wrapper.find(ApiErrorDetailsPanel).isVisible()).toBeTruthy()
+    expect(wrapper.vm.errorDetails).toHaveLength(1)
   })
 
   it('Should not submit skill when category is not selected', async () => {
@@ -111,40 +124,12 @@ describe('EditSkill.vue', () => {
     const actions = {
       updateSkill: jest.fn(() => Promise.resolve())
     }
-    const store = createStore({ actions })
-    const wrapper = createWrapper({ store })
-    wrapper.setData({ selectedSkillCategory: null })
+    const mergedConfig = merge({}, defaultStoreConfig, { actions })
+    const wrapper = createWrapper(SkillListEditSkill, mergedConfig, defaultMountingOptions)
+    wrapper.setData({ selectedSkillCategoryId: null })
+    expect(wrapper.find('button[type="submit"]').html().includes('disabled')).toBeTruthy()
     wrapper.find('button[type="submit"]').trigger('submit')
     await flushPromises()
-    expect(wrapper.vm.categoryNotSelected).toBe(true)
     expect(actions.updateSkill).not.toHaveBeenCalled()
-  })
-
-  it('Should show the confirm delete dialog adn close it when cancel is clicked', () => {
-    const wrapper = createWrapper()
-    expect(wrapper.find('#confirm-dialog').exists()).toBeFalsy()
-    wrapper.find('#delete-dialog-btn').trigger('click')
-    const confirmDialog = wrapper.find('#confirm-dialog')
-    expect(confirmDialog.exists()).toBeTruthy()
-    expect(confirmDialog.find('#confirm-message').text()).toContain(`There are currently 2 persons`)
-    wrapper.find('#cancel-confirm-delete-btn').trigger('click')
-    expect(wrapper.find('#confirm-dialog').exists()).toBeFalsy()
-  })
-
-  it('Should call the delete action the skill and call close', async () => {
-    expect.assertions(2)
-    const actions = {
-      deleteSkill: jest.fn(() => Promise.resolve())
-    }
-    const propsData = {
-      close: jest.fn()
-    }
-    const store = createStore({ actions })
-    const wrapper = createWrapper({ store, propsData })
-    wrapper.setData({ deleteDialogOpen: true })
-    wrapper.find('#confirm-delete-btn').trigger('click')
-    await flushPromises()
-    expect(actions.deleteSkill).toHaveBeenCalledWith(expect.anything(), mockSkill.id, undefined)
-    expect(propsData.close).toHaveBeenCalled()
   })
 })
