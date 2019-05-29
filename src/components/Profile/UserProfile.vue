@@ -84,7 +84,7 @@ export default {
       'profileProjectsByProfileId'
     ]),
     knowDesc () {
-      return proficiencyDesc.knows
+      return proficiencyDesc.knows['en']
     },
     wantDesc () {
       return proficiencyDesc.wants
