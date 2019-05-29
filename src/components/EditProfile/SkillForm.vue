@@ -109,7 +109,7 @@ export default {
     return {
       profileSkill: skillTemplate(),
       wantsToOptions: proficiencyDesc.wants,
-      knowsOptions: proficiencyDesc.knows
+      knowsOptions: proficiencyDesc.knows['en']
     }
   },
   computed: {
