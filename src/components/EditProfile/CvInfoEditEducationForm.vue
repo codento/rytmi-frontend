@@ -93,7 +93,8 @@
     </b-btn>
     <b-btn
       id="cancel"
-      variant="danger"
+      type="button"
+      variant="light"
       class="pull-right"
       @click="handleBackButton()"
     >
