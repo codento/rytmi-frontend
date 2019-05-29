@@ -1,7 +1,12 @@
 import * as types from '@/store/mutation-types'
 import { normalize } from 'normalizr'
 import { skillCategory } from '@/store/schema'
-import { getSkillCategories, newSkillCategory } from '@/utils/api/api'
+import {
+  getSkillCategories,
+  newSkillCategory,
+  alterSkillCategory,
+  deleteSkillCategory as apiDeleteSkillCategory
+} from '@/utils/api/api'
 
 export function fetchSkillCategories ({ commit, state }) {
   return new Promise((resolve, reject) => {
@@ -18,9 +23,9 @@ export function fetchSkillCategories ({ commit, state }) {
   })
 }
 
-export function addSkillCategory ({ commit, state }) {
+export function addSkillCategory ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
-    newSkillCategory()
+    newSkillCategory(data)
       .then(response => {
         commit(types.ADD_SKILLCATEGORY, response.data)
         resolve(response.data)
@@ -30,9 +35,21 @@ export function addSkillCategory ({ commit, state }) {
   })
 }
 
+export function updateSkillCategory ({ commit, state }, data) {
+  return new Promise((resolve, reject) => {
+    alterSkillCategory(data)
+      .then(response => {
+        commit(types.UPDATE_SKILLCATEGORY, response.data)
+        resolve(response.data)
+      }).catch(error => {
+        reject(error)
+      })
+  })
+}
+
 export function deleteSkillCategory ({ commit, state }) {
   return new Promise((resolve, reject) => {
-    deleteSkillCategory()
+    apiDeleteSkillCategory()
       .then(response => {
         commit(types.DELETE_SKILLCATEGORY, response.data)
         resolve(response.data)

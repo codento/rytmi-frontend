@@ -1,7 +1,7 @@
 import * as types from '@/store/mutation-types'
 import { normalize } from 'normalizr'
 import { skillGroup } from '@/store/schema'
-import { getSkillGroups, newSkillGroup } from '@/utils/api/api'
+import { getSkillGroups, newSkillGroup, alterSkillGroup, deleteSkillGroup as APIdeleteSkillGroup } from '@/utils/api/api'
 
 export function fetchSkillGroups ({ commit, state }) {
   return new Promise((resolve, reject) => {
@@ -18,9 +18,21 @@ export function fetchSkillGroups ({ commit, state }) {
   })
 }
 
-export function addSkillGroup ({ commit, state }) {
+export function addSkillGroup ({ commit, state }, data) {
   return new Promise((resolve, reject) => {
-    newSkillGroup()
+    newSkillGroup(data)
+      .then(response => {
+        commit(types.ADD_SKILLGROUP, response.data)
+        resolve(response.data)
+      }).catch(err => {
+        reject(err)
+      })
+  })
+}
+
+export function updateSkillGroup ({ commit, state }, data) {
+  return new Promise((resolve, reject) => {
+    alterSkillGroup(data)
       .then(response => {
         commit(types.ADD_SKILLGROUP, response.data)
         resolve(response.data)
@@ -32,7 +44,7 @@ export function addSkillGroup ({ commit, state }) {
 
 export function deleteSkillGroup ({ commit, state }) {
   return new Promise((resolve, reject) => {
-    deleteSkillGroup()
+    APIdeleteSkillGroup()
       .then(response => {
         commit(types.DELETE_SKILLGROUP, response.data)
         resolve(response.data)
