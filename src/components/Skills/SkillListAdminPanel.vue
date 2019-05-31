@@ -67,18 +67,18 @@ export default {
       'skillGroups'
     ]),
     sortedSkillCategories () {
-      const mappedCategories = Object.values(this.skillCategories).map(category => {
-        return { id: category.id, title: category.title, skillGroupId: category.skillGroupId }
+      const categoryArray = Object.values(this.skillCategories).map(category => {
+        return category
       }).sort((a, b) => a.title.localeCompare(b.title))
-      mappedCategories.unshift({ id: null, skillGroupId: null })
-      return mappedCategories
+      categoryArray.unshift({ id: null, skillGroupId: null })
+      return categoryArray
     },
     sortedSkillGroups () {
-      const mappedGroups = Object.values(this.skillGroups).map(group => {
-        return { id: group.id, title: group.title }
+      const groupArray = Object.values(this.skillGroups).map(group => {
+        return group
       }).sort((a, b) => a.title.localeCompare(b.title))
-      mappedGroups.unshift({ id: null, skillGroupId: null })
-      return mappedGroups
+      groupArray.unshift({ id: null, skillGroupId: null })
+      return groupArray
     }
   },
   methods: {

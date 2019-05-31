@@ -7,7 +7,7 @@
         class="my-2"
       >
         <b-button
-          id="add-skill"
+          id="add-skill-btn"
           variant="primary"
           class="mx-2"
           @click.prevent="openEditSkillModal()"
@@ -16,7 +16,7 @@
         </b-button>
         <b-button
           v-if="isAdmin"
-          id="edit-categories"
+          id="manage-categories-btn"
           variant="primary"
           class="mx-2"
           @click.prevent="openEditCategoryModal()"
