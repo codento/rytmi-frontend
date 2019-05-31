@@ -4,10 +4,12 @@
 
 $c-orange: hsl(39, 98%, 51%);
 $c-orange-light: lighten($c-orange, 15%);
+$c-light: rgb(240,240,240);
 
 $theme-colors: (
   primary:             $c-orange,
-  secondary:           $c-orange
+  secondary:           $c-orange,
+  light:               $c-light
 );
 
 $body-bg: $white;

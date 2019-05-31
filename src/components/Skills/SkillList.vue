@@ -194,7 +194,7 @@ export default {
         })
       })
     },
-    numPeopleWithSelectedSkill () {
+    numberOfProfilesWithSelectedSkill () {
       if (this.selectedSkill) {
         return this.skillProfiles.filter(profile => profile.skillId === this.selectedSkill.id).length
       }
@@ -216,14 +216,12 @@ export default {
       if (item) {
         this.selectedSkill = { ...item }
       } else {
-        this.selectedSkill = {
-          id: null
-        }
+        this.selectedSkill = { id: null }
       }
       this.$refs['edit-skill-modal'].show()
     },
     resetSelectedSkill () {
-      this.selectedSkill = null
+      this.selectedSkill = { id: null }
     },
     closeEditSkillModal () {
       this.resetSelectedSkill()
@@ -236,11 +234,15 @@ export default {
       this.$refs['edit-skill-category-modal'].hide()
     },
     confirmDelete (item) {
-      const message = `There are currently ${this.numPeopleWithSelectedSkill} ` +
-        'persons that have this skill in their CV.\n' +
-        'Are you sure you want to delete the skill?'
+      this.selectedSkill = item
+      const message = this.numberOfProfilesWithSelectedSkill > 0
+        ? `There are currently ${this.numberOfProfilesWithSelectedSkill} ` +
+        'persons who have this skill in their CV. ' +
+        `Are you sure you want to delete skill ${item.name}?`
+        : `Are you sure you want to delete skill ${item.name}?`
       const confirmation = confirm(message)
       if (confirmation) {
+        this.resetSelectedSkill()
         this.callDeleteSkillAction(item.id)
       }
     },
