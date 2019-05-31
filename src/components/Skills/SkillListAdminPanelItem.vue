@@ -26,8 +26,8 @@
         :key="idPrefix + '-' + item.id"
         class="clickable"
         @click="startEditMode(item)"
-        @mouseover="showByIndex = index"
-        @mouseout="showByIndex = null"
+        @mouseover="showEditIconByIndex = index"
+        @mouseout="showEditIconByIndex = null"
       >
         <b-row
           v-if="item.id === null"
@@ -104,7 +104,7 @@
             </b-badge>
           </b-col>
           <b-col
-            v-show="showByIndex === index"
+            v-show="showEditIconByIndex === index"
             cols="1"
           >
             <i class="fa fa-pencil pull-left" />
@@ -161,7 +161,7 @@ export default {
       selectedSkillGroupId: null,
       showFeedback: false,
       showCreateNewForm: false,
-      showByIndex: null,
+      showEditIconByIndex: null,
       lastUpdatedName: null,
       lastUpdatedLabel: null,
       errorDetails: []

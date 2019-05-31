@@ -13,18 +13,22 @@
           type="text"
           required
           :state="inputState.name.state"
+          @focus="showSimilarSkills = true"
         />
-        <small v-if="similarSkillNames.length > 0">
-          Existing skills with a similar name
-        </small>
-        <b-list-group>
-          <b-list-group-item
+        <div v-if="showSimilarSkills && similarSkillNames.length > 0">
+          <div class="mt-2">
+            <small>
+              Existing skills with a similar name
+            </small>
+          </div>
+          <div
             v-for="skillName in similarSkillNames"
             :key="skillName"
+            class="existing-skill-item mx-1 my-1"
           >
             {{ skillName }}
-          </b-list-group-item>
-        </b-list-group>
+          </div>
+        </div>
       </b-form-group>
       <small for="edit-skill-category">Skill category</small>
       <b-form-group
@@ -53,24 +57,17 @@
       <ApiErrorDetailsPanel :error-details="errorDetails" />
     </b-row>
     <b-row class="mt-3">
-      <b-col
-        md="2"
-        cols="3"
-      >
+      <b-col>
         <b-button
           id="save-edits"
           type="submit"
           variant="success"
+          class="mr-2"
           :disabled="!Object.values(inputState).every(item => item.state)"
           @click.prevent="submitSkill()"
         >
-          Submit
+          Save edits
         </b-button>
-      </b-col>
-      <b-col
-        md="2"
-        cols="3"
-      >
         <b-button
           id="cancel-edits"
           type="button"
@@ -106,6 +103,7 @@ export default {
       name: this.skill.name ? this.skill.name : '',
       description: this.skill.description ? this.skill.description : '',
       selectedSkillCategoryId: this.skill.skillCategoryId ? this.skill.skillCategoryId : null,
+      showSimilarSkills: false,
       errorDetails: []
     }
   },
@@ -117,7 +115,7 @@ export default {
     skillCategoryOptions () {
       return Object.values(this.skillCategories).map(category => {
         return { value: category.id, text: category.title }
-      }).sort((a, b) => a.title - b.title)
+      }).sort((a, b) => a.text.localeCompare(b.text))
     },
     similarSkillNames () {
       if (isEmpty(this.name)) {
@@ -163,6 +161,7 @@ export default {
         this.$toasted.global.rytmi_success({
           message: isNewSkill ? `Skill ${this.name} added` : 'Skill updated'
         })
+        this.showSimilarSkills = false
         this.close()
       } catch (error) {
         if (error.response) {
@@ -182,3 +181,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+.existing-skill-item {
+  float: left;
+  padding: 5px 10px;
+  background-color: $c-light;
+  border-radius: 10px;
+}
+</style>
