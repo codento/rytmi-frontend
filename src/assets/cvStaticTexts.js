@@ -9,5 +9,7 @@ export default {
   currentMomentText: { en: 'current moment', fi: 'nykyhetki' },
   jobExperienceTitle: { en: 'Job experience', fi: 'Työkokemus' },
   projectsTitle: { en: 'Projects', fi: 'Projektit' },
-  educationTitle: { en: 'Education', fi: 'Koulutus' }
+  educationTitle: { en: 'Education', fi: 'Koulutus' },
+  minorText: { en: 'Minor', fi: 'Sivuaine' },
+  majorText: { en: 'Major', fi: 'Pääaine' }
 }
