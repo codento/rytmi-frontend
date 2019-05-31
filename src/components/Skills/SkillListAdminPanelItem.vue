@@ -14,7 +14,7 @@
           type="submit"
           variant="success"
           class="pull-right mb-2"
-          @click.prevent="showCreateNewForm = true"
+          @click.prevent="startCreateMode()"
         >
           Add
         </b-button>
@@ -203,6 +203,10 @@ export default {
       this.selectedSkillGroupId = null
       this.showFeedback = false
       this.showCreateNewForm = false
+    },
+    startCreateMode () {
+      this.resetEditedItem()
+      this.showCreateNewForm = true
     },
     startEditMode (item) {
       if (this.editedId !== item.id) {
