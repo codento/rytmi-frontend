@@ -10,7 +10,7 @@
       </b-col>
       <b-col cols="3">
         <b-button
-          id="add-new"
+          :id="'add-new-' + idPrefix + '-btn'"
           type="submit"
           variant="success"
           class="pull-right mb-2"
@@ -72,7 +72,7 @@
           </b-col>
           <b-col cols="12">
             <b-button
-              :id="'save-' + idPrefix + '-edits'"
+              :id="'save-' + idPrefix + '-edits-btn'"
               type="submit"
               variant="success"
               class="mt-2"
@@ -82,7 +82,7 @@
               {{ item.id !== null ? 'Save edits' : 'Submit' }}
             </b-button>
             <b-button
-              :id="'cancel-' + idPrefix + '-edits'"
+              :id="'cancel-' + idPrefix + '-edits-btn'"
               type="button"
               variant="light"
               class="mt-2 ml-2"
@@ -134,7 +134,7 @@ export default {
   props: {
     isSkillCategory: {
       type: Boolean,
-      required: true
+      default: false
     },
     listItems: {
       type: Array,

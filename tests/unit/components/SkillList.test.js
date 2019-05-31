@@ -81,6 +81,20 @@ describe('SkillList.vue', () => {
     expect(tableRows).toHaveLength(3)
   })
 
+  it('Should not render manage categories button when user is admin', () => {
+    const wrapper = createWrapper(SkillList, defaultStoreConfig, defaultMountingOptions)
+    expect(wrapper.find('#manage-categories-btn').exists()).toBeFalsy()
+  })
+
+  it('Should render manage categories button when user is admin', () => {
+    const getters = {
+      isAdmin: () => true
+    }
+    const mergedConfig = merge({}, defaultStoreConfig, { getters })
+    const wrapper = createWrapper(SkillList, mergedConfig, defaultMountingOptions)
+    expect(wrapper.find('#manage-categories-btn').isVisible()).toBeTruthy()
+  })
+
   it('Should call the delete action if remove skill button is clicked', async () => {
     window.confirm = () => true
     const actions = {
