@@ -29,6 +29,24 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
     <div
       class="profileCardDetails profile-card-detail-row"
     >
+      <span>
+        
+        somethinger
+      
+      </span>
+    </div>
+     
+    <div
+      class="profileCardDetails profile-card-detail-row"
+    >
+      
+      
+    
+    </div>
+     
+    <div
+      class="profileCardDetails profile-card-detail-row"
+    >
       
       mail
     
@@ -43,14 +61,6 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
     </div>
      
     <br />
-     
-    <div
-      class="profileCardDetails profile-card-detail-row"
-    >
-      
-      
-    
-    </div>
      
     <!---->
   </div>
