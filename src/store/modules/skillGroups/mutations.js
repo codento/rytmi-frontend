@@ -11,8 +11,5 @@ export const mutations = {
   },
   [types.UPDATE_SKILLGROUP] (state, skillGroup) {
     Vue.set(state.skillGroups, skillGroup.id, skillGroup)
-  },
-  [types.DELETE_SKILLGROUP] (state, skillGroup) {
-    state.skillGroups[skillGroup.id] = null
   }
 }

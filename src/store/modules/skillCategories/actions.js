@@ -4,8 +4,7 @@ import { skillCategory } from '@/store/schema'
 import {
   getSkillCategories,
   newSkillCategory,
-  alterSkillCategory,
-  deleteSkillCategory as apiDeleteSkillCategory
+  alterSkillCategory
 } from '@/utils/api/api'
 
 export function fetchSkillCategories ({ commit, state }) {
@@ -43,18 +42,6 @@ export function updateSkillCategory ({ commit, state }, data) {
         resolve(response.data)
       }).catch(error => {
         reject(error)
-      })
-  })
-}
-
-export function deleteSkillCategory ({ commit, state }) {
-  return new Promise((resolve, reject) => {
-    apiDeleteSkillCategory()
-      .then(response => {
-        commit(types.DELETE_SKILLCATEGORY, response.data)
-        resolve(response.data)
-      }).catch(err => {
-        reject(err)
       })
   })
 }
