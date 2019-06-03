@@ -10,6 +10,8 @@ export const employeeRole = new schema.Entity('employeeRoles')
 
 export const profile = new schema.Entity('profiles')
 
+export const profileEmployer = new schema.Entity('profileEmployers')
+
 export const user = new schema.Entity('users')
 
 export const project = new schema.Entity('projects')
