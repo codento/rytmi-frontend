@@ -30,7 +30,7 @@
           </template>
           <option
             v-for="profile in profiles"
-            :key="profile.id"
+            :key="'profile-' + profile.id"
             :value="profile.id"
           >
             {{ profile.firstName + ' ' + profile.lastName }}
@@ -62,7 +62,7 @@
           </template>
           <option
             v-for="project in projects"
-            :key="project.id"
+            :key="'project-' + project.id"
             :value="project.id"
           >
             {{ project.code }} - {{ getProjectName(project) }}

@@ -49,6 +49,7 @@
       <hr>
       <CollapsableItem title="Related skills">
         <ProjectSkillForm
+          v-if="project.id"
           :project-id="project.id"
         />
       </CollapsableItem>
