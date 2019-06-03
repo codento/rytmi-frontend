@@ -3,9 +3,7 @@ import Vue from 'vue'
 
 export const mutations = {
   [types.FETCH_EMPLOYERS] (state, employers) {
-    employers.forEach((employer) => {
-      Vue.set(state.employers, employer.id, employer)
-    })
+    state.employers = employers
   },
   [types.UPDATE_EMPLOYER] (state, employer) {
     Vue.set(state.employers, employer.id, employer)

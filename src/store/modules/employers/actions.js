@@ -1,3 +1,5 @@
+import { normalize } from 'normalizr'
+import { employer } from '@/store/schema'
 import {
   newEmployer,
   getEmployers,
@@ -20,7 +22,7 @@ export function fetchEmployers ({ commit }) {
   return new Promise((resolve, reject) => {
     getEmployers()
       .then(response => {
-        commit(types.FETCH_EMPLOYERS, response.data)
+        commit(types.FETCH_EMPLOYERS, normalize(response.data, [employer]).entities.employers)
         resolve()
       })
       .catch(err => reject(err))
