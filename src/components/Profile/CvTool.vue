@@ -133,6 +133,7 @@ import CvToolWorkExperience from './CvToolWorkExperience.vue'
 import CvToolEducation from './CvToolEducation.vue'
 import LoadingSpinner from '@/components/helpers/LoadingSpinner.vue'
 import proficiencyDesc from '@/assets/proficiencyDesc'
+import staticTexts from '@/assets/cvStaticTexts'
 import constants from '@/utils/constants'
 const { LANGUAGE_ENUM } = constants
 
@@ -327,7 +328,9 @@ export default {
         skills: cvSkills,
         education: this.profile.education ? this.profile.education : [],
         born: this.profile.birthYear,
-        skillLevelDescriptions: proficiencyDesc.knows[this.currentLanguage]
+        skillLevelDescriptions: proficiencyDesc.knows[this.currentLanguage],
+        staticTexts: staticTexts,
+        currentLanguage: this.currentLanguage
       }
     },
     async startCvExport () {
