@@ -1,9 +1,7 @@
 <template>
   <div class="animated fadeIn">
-    <h1>Proficiencies</h1>
-    <hr>
     <b-row>
-      <b-col class="col-12 col-md-7">
+      <b-col class="col-12">
         <b-table
           :items="profileSkillsByProfileId(profileId)"
           :fields="fields"
@@ -12,7 +10,7 @@
           stacked="sm"
         >
           <template slot="table-caption">
-            Current proficiencies (click on value to update)
+            Click on value to update
           </template>
           <template
             slot="skillId"
@@ -82,7 +80,9 @@
           </template>
         </b-table>
       </b-col>
-      <b-col class="col-12 col-md-5">
+    </b-row>
+    <b-row>
+      <b-col class="col-12">
         <SkillForm :profile-id="profileId" />
       </b-col>
     </b-row>

@@ -149,6 +149,8 @@
           Cancel
         </b-btn>
       </b-modal>
+    </b-row>
+    <b-row>
       <b-col class="col-12 projects-form">
         <b-card
           class="newProject"
@@ -224,7 +226,7 @@ export default {
       this.editedProfileProject.name = this.projectById(item.item.projectId).name
       this.editedProfileProject.startDate = new Date(this.editedProfileProject.startDate)
       this.editedProfileProject.endDate = this.editedProfileProject.endDate ? new Date(this.editedProfileProject.endDate) : null
-      this.editedProfileProject.workPercentage = this.editedProfileProject.workPercentage
+      this.editedProfileProject.workPercentage = this.editedProfileProject.workPercentage // TODO why is this?
       this.editedProfileProject.index = item.index
       this.$refs.profileProjectEditModal.show()
     },
@@ -300,15 +302,6 @@ button {
 }
 .clickable:hover {
   font-weight: bolder;
-}
-
-@media screen and (min-width: 1400px) {
-  .projects-table {
-    max-width: 66.6%
-  }
-  .projects-form {
-    max-width: 33.2%
-  }
 }
 
 </style>

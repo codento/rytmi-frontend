@@ -19,22 +19,28 @@
     </div>
     <div>
       <div class="profileCardDetails profile-card-detail-row">
+        <span
+          v-for="role in employeeRoleList"
+          :key="role.id"
+        >
+          {{ role.title }}
+        </span>
+      </div>
+      <div class="profileCardDetails profile-card-detail-row">
+        {{ profile.birthYear }}
+      </div>
+      <div class="profileCardDetails profile-card-detail-row">
         {{ profile.email }}
       </div>
       <div class="profileCardDetails profile-card-detail-row">
         {{ profile.phone }}
       </div>
       <br>
-      <div class="profileCardDetails profile-card-detail-row">
-        {{ profile.description }}
-      </div>
       <div
-        v-if="profileId === profile.id || isAdmin"
-        class="profile-card-detail-row"
+        v-if="profile.introduction"
+        class="profileCardDetails profile-card-detail-row"
       >
-        <router-link :to="{ name: 'editProfile', params: { profileId: '' + profile.id }}">
-          Edit profile
-        </router-link>
+        {{ profile.introduction.en }}
       </div>
     </div>
   </div>
@@ -47,10 +53,18 @@ export default {
     'profile': Object
   },
   computed: {
+    ...mapGetters(['profileId', 'isAdmin', 'employeeRoles']),
     getNames: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
     },
-    ...mapGetters(['profileId', 'isAdmin'])
+    employeeRoleList: function () {
+      const employeeRolesArray = Object.keys(this.employeeRoles).map(key => this.employeeRoles[key])
+      return employeeRolesArray.filter(role => {
+        return this.profile.employeeRoles.some(roleid => {
+          return roleid === role.id
+        })
+      })
+    }
   },
   methods: {
     getFAClass: function (object) {
