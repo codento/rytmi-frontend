@@ -45,6 +45,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import LANGUAGE_ENUM from '@/utils/constants'
+
 import SkillListAdminPanelItem from './SkillListAdminPanelItem.vue'
 
 export default {
@@ -68,14 +70,22 @@ export default {
     ]),
     sortedSkillCategories () {
       const categoryArray = Object.values(this.skillCategories).map(category => {
-        return category
+        if ([LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, 'Uncategorized'].includes(category.title)) {
+          return { ...category, disabled: true }
+        } else {
+          return category
+        }
       }).sort((a, b) => a.title.localeCompare(b.title))
       categoryArray.unshift({ id: null, skillGroupId: null })
       return categoryArray
     },
     sortedSkillGroups () {
       const groupArray = Object.values(this.skillGroups).map(group => {
-        return group
+        if ([LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, 'Uncategorized'].includes(group.title)) {
+          return { ...group, disabled: true }
+        } else {
+          return group
+        }
       }).sort((a, b) => a.title.localeCompare(b.title))
       groupArray.unshift({ id: null, skillGroupId: null })
       return groupArray

@@ -34,7 +34,7 @@
         >
           <b-col><h5>Add a new {{ label.toLowerCase() }}</h5></b-col>
         </b-row>
-        <b-row v-if="item.id === editedId">
+        <b-row v-if="item.id === editedId && !item.disabled">
           <b-col cols="12">
             <small :for="'edit-' + idPrefix + '-name'">{{ label }} name</small>
             <b-input
@@ -94,9 +94,11 @@
         </b-row>
         <b-row v-else>
           <b-col>
-            {{ item.title }}
+            <span :class="item.disabled ? 'text-muted' : ''">
+              {{ item.title }}
+            </span>
             <b-badge
-              v-if="lastUpdatedName === item.title"
+              v-if="editedId === null && lastUpdatedName === item.title"
               pill
               variant="success"
             >
@@ -104,10 +106,16 @@
             </b-badge>
           </b-col>
           <b-col
-            v-show="showEditIconByIndex === index"
+            v-show="showEditIconByIndex === index && !item.disabled"
             cols="1"
           >
             <i class="fa fa-pencil pull-left" />
+          </b-col>
+          <b-col
+            v-show="item.disabled"
+            cols="1"
+          >
+            <i class="fa fa-lock pull-left text-muted" />
           </b-col>
         </b-row>
       </b-list-group-item>
