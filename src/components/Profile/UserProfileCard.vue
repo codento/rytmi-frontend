@@ -4,6 +4,8 @@
       <img
         alt="profile photo"
         :src="profile.photoPath"
+        height="128px"
+        width="128px"
       >
     </div>
     <div style="text-align: center; color:#869fac">

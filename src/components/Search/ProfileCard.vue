@@ -14,6 +14,8 @@
           <img
             :src="profile.photoPath"
             alt=""
+            height="96px"
+            width="96px"
           >
           <h3>{{ profile.firstName }} {{ profile.lastName }}</h3>
         </span>
