@@ -9,6 +9,7 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
     tag="div"
   >
     <b-col-stub
+      cols="12"
       tag="div"
     >
       <b-btn-stub
@@ -26,13 +27,18 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
       </b-btn-stub>
     </b-col-stub>
      
-    <userprofile-stub
-      profile="[object Object]"
-    />
-     
-    <cvtool-stub
-      profile="[object Object]"
-    />
+    <b-col-stub
+      cols="12"
+      tag="div"
+    >
+      <userprofile-stub
+        profile="[object Object]"
+      />
+       
+      <cvtool-stub
+        profile="[object Object]"
+      />
+    </b-col-stub>
   </b-row-stub>
 </b-container-stub>
 `;
