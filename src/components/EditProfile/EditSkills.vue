@@ -160,7 +160,7 @@ export default {
         { key: 'remove', label: ' ' }
       ],
       wantsToOptions: proficiencyDesc.wants,
-      knowsOptions: proficiencyDesc.knows,
+      knowsOptions: proficiencyDesc.knows['en'],
       editedSkill: {}
     }
   },

@@ -12,7 +12,7 @@
           triggers="hover focus"
         >
           <SkillExplanations
-            :know-desc="proficiencyDescriptions.knows"
+            :know-desc="proficiencyDescriptions.knows['en']"
             :want-desc="proficiencyDescriptions.wants"
           />
         </b-popover>

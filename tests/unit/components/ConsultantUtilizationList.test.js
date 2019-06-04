@@ -112,7 +112,7 @@ describe('ConsultantUtilizationList.vue', () => {
     const wrapper = createWrapper()
     expect(wrapper.vm.initiallyVisibleProfiles.length).toEqual(4)
     expect(wrapper.vm.initiallyVisibleProfiles[0].daysToZeroUtilization).toEqual(0)
-    expect(wrapper.vm.initiallyVisibleProfiles[3].daysToZeroUtilization).toEqual(30)
+    expect(wrapper.vm.initiallyVisibleProfiles[3].daysToZeroUtilization).toEqual(29)
   })
   it('Should list utilized consultants in initiallyHiddenProfiles, ordered by utilization', () => {
     const wrapper = createWrapper()

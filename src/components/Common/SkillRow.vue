@@ -98,7 +98,7 @@ export default {
       'skillName'
     ]),
     knowsToDesc: function () {
-      return proficiencyDesc.knows[this.knows]
+      return proficiencyDesc.knows['en'][this.knows]
     },
     wantsToDesc: function () {
       return proficiencyDesc.wants[this.wantsTo]

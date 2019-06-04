@@ -82,8 +82,8 @@
     >
       <div>
         <EditProfileEmployer
-          :profile-employer="selectedProfileEmployer"
           :key="selectedProfileEmployer ? selectedProfileEmployer.id : 0"
+          :profile-employer="selectedProfileEmployer"
           :vue-selects-employers="vueSelectsEmployers"
         />
       </div>

@@ -163,6 +163,7 @@ export default {
   },
   created () {
     this.modifiedIntroduction = this.profile.introduction ? this.profile.introduction[this.currentLanguage] : ''
+    this.updateIntroduction()
   },
   methods: {
     ...mapActions([

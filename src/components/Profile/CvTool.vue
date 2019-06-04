@@ -1,9 +1,46 @@
 <template>
-  <b-row>
-    <b-col
-      cols="12"
-      class="mb-2"
-    >
+  <b-modal
+    id="cv-tool-modal"
+    size="lg"
+  >
+    <b-row>
+      <b-col
+        cols="12"
+        class="mb-2"
+      >
+        <b-button-group
+          v-for="languageButton in languageButtons"
+          :key="languageButton.id"
+          class="pull-right"
+        >
+          <b-button
+            :id="languageButton.id"
+            class="language-button"
+            variant="outline-light"
+            :pressed.sync="languageButton.state"
+            @click="toggleLanguage(languageButton.id)"
+          >
+            {{ languageButton.label }}
+          </b-button>
+        </b-button-group>
+        <CvToolProfile
+          v-if="profile"
+          :profile="profile"
+          @update-introduction="cvIntroductionUpdated"
+        />
+      </b-col>
+      <b-col cols="12">
+        <CvToolSkills
+          :skills="skills"
+          :languages="languages"
+        />
+        <div v-if="projectsLoaded">
+          <CvToolWorkExperience :profile-projects="projects" />
+        </div>
+        <CvToolEducation :education-list="profile.education ? profile.education : []" />
+      </b-col>
+    </b-row>
+    <template v-slot:modal-footer>
       <div id="disabled-button-wrapper">
         <b-button
           id="open-create-cv-modal"
@@ -90,38 +127,8 @@
           </template>
         </b-modal>
       </div>
-      <b-button-group
-        v-for="languageButton in languageButtons"
-        :key="languageButton.id"
-        class="pull-right"
-      >
-        <b-button
-          :id="languageButton.id"
-          class="language-button"
-          variant="outline-light"
-          :pressed.sync="languageButton.state"
-          @click="toggleLanguage(languageButton.id)"
-        >
-          {{ languageButton.label }}
-        </b-button>
-      </b-button-group>
-      <CvToolProfile
-        v-if="profile"
-        :profile="profile"
-        @update-introduction="cvIntroductionUpdated"
-      />
-    </b-col>
-    <b-col cols="12">
-      <CvToolSkills
-        :skills="skills"
-        :languages="languages"
-      />
-      <div v-if="projectsLoaded">
-        <CvToolWorkExperience :profile-projects="projects" />
-      </div>
-      <CvToolEducation :education-list="profile.education ? profile.education : []" />
-    </b-col>
-  </b-row>
+    </template>
+  </b-modal>
 </template>
 <script>
 import clone from 'lodash/clone'
@@ -132,6 +139,8 @@ import CvToolSkills from './CvToolSkills.vue'
 import CvToolWorkExperience from './CvToolWorkExperience.vue'
 import CvToolEducation from './CvToolEducation.vue'
 import LoadingSpinner from '@/components/helpers/LoadingSpinner.vue'
+import proficiencyDesc from '@/assets/proficiencyDesc'
+import staticTexts from '@/assets/cvStaticTexts'
 import constants from '@/utils/constants'
 const { LANGUAGE_ENUM } = constants
 
@@ -325,7 +334,10 @@ export default {
         projects: cvProjects,
         skills: cvSkills,
         education: this.profile.education ? this.profile.education : [],
-        born: this.profile.birthYear
+        born: this.profile.birthYear,
+        skillLevelDescriptions: proficiencyDesc.knows[this.currentLanguage],
+        staticTexts: staticTexts,
+        currentLanguage: this.currentLanguage
       }
     },
     async startCvExport () {
