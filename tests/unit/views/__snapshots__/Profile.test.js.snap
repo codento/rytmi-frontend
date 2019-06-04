@@ -8,34 +8,31 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
   <b-row-stub
     tag="div"
   >
-    <b-tabs-stub
-      contentclass="mt-3 border-0"
+    <b-col-stub
       tag="div"
     >
-      <b-tab-stub
-        buttonid=""
-        href="#"
-        nobody="true"
-        tag="div"
-        title="Profile"
+      <b-btn-stub
+        class="open-cv-tool-button pull-right"
+        event="click"
+        routertag="a"
+        tag="button"
+        target="_self"
+        type="button"
+        variant="secondary"
       >
-        <userprofile-stub
-          profile="[object Object]"
-        />
-      </b-tab-stub>
-       
-      <b-tab-stub
-        buttonid=""
-        href="#"
-        nobody="true"
-        tag="div"
-        title="CV tool"
-      >
-        <cvtool-stub
-          profile="[object Object]"
-        />
-      </b-tab-stub>
-    </b-tabs-stub>
+        
+        Open CV tool
+      
+      </b-btn-stub>
+    </b-col-stub>
+     
+    <userprofile-stub
+      profile="[object Object]"
+    />
+     
+    <cvtool-stub
+      profile="[object Object]"
+    />
   </b-row-stub>
 </b-container-stub>
 `;

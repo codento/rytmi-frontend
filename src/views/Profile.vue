@@ -1,28 +1,22 @@
 <template>
   <b-container class="animated fadeIn profile mt-2">
-    <b-row>
-      <b-tabs content-class="mt-3 border-0">
-        <b-tab
-          no-body
-          title="Profile"
+    <loading v-if="!profile" />
+    <b-row v-else>
+      <b-col>
+        <b-btn
+          v-b-modal.cv-tool-modal
+          type="button"
+          class="open-cv-tool-button pull-right"
         >
-          <loading v-if="!profile" />
-          <UserProfile
-            v-else
-            :profile="profile"
-          />
-        </b-tab>
-        <b-tab
-          no-body
-          title="CV tool"
-        >
-          <loading v-if="!profile" />
-          <CvTool
-            v-else
-            :profile="profile"
-          />
-        </b-tab>
-      </b-tabs>
+          Open CV tool
+        </b-btn>
+      </b-col>
+      <UserProfile
+        :profile="profile"
+      />
+      <CvTool
+        :profile="profile"
+      />
     </b-row>
   </b-container>
 </template>
@@ -65,3 +59,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.open-cv-tool-button {
+  margin-bottom: 8px;
+}
+</style>

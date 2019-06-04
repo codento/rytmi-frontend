@@ -131,13 +131,6 @@
           <EditProjects :profile-id="profile.id" />
         </b-modal>
       </b-card>
-      <b-card header="Utilization">
-        <loading v-if="!profileProjects" />
-        <UtilizationChart
-          v-else
-          :projects="profileProjects"
-        />
-      </b-card>
       <CvToolEducation :education-list="profile.education ? profile.education : []">
         <template #custom-header>
           Education
@@ -183,7 +176,7 @@ import { mapGetters } from 'vuex'
 import proficiencyDesc from '@/assets/proficiencyDesc'
 import UserProfileCard from './UserProfileCard.vue'
 import EditBasicProfileInfo from '@/components/Profile/EditBasicProfileInfo'
-import { ProjectRow, SkillRow, SkillExplanations, UtilizationChart } from '@/components/Common'
+import { ProjectRow, SkillRow, SkillExplanations } from '@/components/Common'
 import { Employers, EditSkills, EditProjects } from '@/components/EditProfile'
 import CvToolEducation from '@/components/Profile/CvToolEducation'
 import CvInfoEditEducation from '@/components/EditProfile/CvInfoEditEducation'
@@ -194,7 +187,6 @@ export default {
     ProjectRow,
     SkillRow,
     SkillExplanations,
-    UtilizationChart,
     UserProfileCard,
     EditBasicProfileInfo,
     CvToolEducation,
