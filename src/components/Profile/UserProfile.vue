@@ -172,7 +172,17 @@
         />
       </b-modal>
       <b-card header="Employer history">
-        <Employers :profile-id="profile.id" />
+        <div slot="header">
+          Employer history
+          <span
+            v-if="profileId === profile.id || isAdmin"
+            v-b-modal="'TODO'"
+            class="pull-right"
+          >
+            <i class="fa fa-pencil clickable" />
+          </span>
+        </div>
+        <WorkHistoryEntryList :profile-id="profile.id" />
       </b-card>
     </b-col>
   </b-row>
@@ -184,7 +194,7 @@ import proficiencyDesc from '@/assets/proficiencyDesc'
 import UserProfileCard from './UserProfileCard.vue'
 import EditBasicProfileInfo from '@/components/Profile/EditBasicProfileInfo'
 import { ProjectRow, SkillRow, SkillExplanations, UtilizationChart } from '@/components/Common'
-import { Employers, EditSkills, EditProjects } from '@/components/EditProfile'
+import { WorkHistoryEntryList, EditSkills, EditProjects } from '@/components/EditProfile'
 import CvToolEducation from '@/components/Profile/CvToolEducation'
 import CvInfoEditEducation from '@/components/EditProfile/CvInfoEditEducation'
 
@@ -199,7 +209,7 @@ export default {
     EditBasicProfileInfo,
     CvToolEducation,
     CvInfoEditEducation,
-    Employers,
+    WorkHistoryEntryList,
     EditSkills,
     EditProjects
   },

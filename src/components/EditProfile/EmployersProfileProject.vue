@@ -1,7 +1,7 @@
 <template>
   <div>
     <span
-      class="clickable"
+      :class="editable ? 'clickable' : ''"
       @click="projectClicked"
     >
       {{ getDescriptionWithCurrentLanguage(project).name }}
@@ -10,7 +10,7 @@
       {{ '|' }}
     </span>
     <span
-      class="clickable"
+      :class="editable ? 'clickable' : ''"
       @click="profileProjectClicked"
     >
       {{ getDescriptionWithCurrentLanguage(profileProject).title }}
@@ -24,7 +24,11 @@ export default {
   name: 'EmployersProfileProject',
   props: {
     profileProject: Object,
-    project: Object
+    project: Object,
+    editable: {
+      type: Boolean,
+      default: true
+    },
   },
   computed: {
     ...mapGetters(['currentLanguage'])

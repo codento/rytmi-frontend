@@ -12,7 +12,7 @@
       <CvInfo
         :profile="profile"
       />
-      <Employers :profile-id="profile.id" />
+      <WorkHistoryEntryList :profile-id="profile.id" />
       <EditLinks
         :profile="profile"
         @profileUpdated="profileUpdated()"
@@ -33,7 +33,8 @@ import {
   EditSkills,
   EditProjects,
   ProfileForm,
-  Employers,
+  WorkHistoryEntryList,
+  WorkHistoryEntryEdit,
   CvInfo
 } from '../components/EditProfile'
 import store from '../store'
@@ -45,7 +46,8 @@ export default {
     EditLinks,
     EditSkills,
     EditProjects,
-    Employers,
+    WorkHistoryEntryList,
+    WorkHistoryEntryEdit,
     CvInfo
   },
   props: {

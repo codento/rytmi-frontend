@@ -3,156 +3,17 @@
     id="employers-form"
     class="animated fadeIn"
   >
-    <b-modal
-      :id="'delete-work-history-entry-modal'"
-      name="delete-work-history-entry-modal"
-      size="sm"
-      hide-header
-      centered
-      ok-title="Delete"
-      cancel-title="Cancel"
-      @ok="deleteProfileEmployer"
-    >
-      <div>
-        <b-row>
-          <b-col>
-            Are you sure you want to delete this work history entry?:
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <span class="employer-name">{{ selectedProfileEmployer ? getEmployerName(selectedProfileEmployer.employerId) : '' }}</span>
-            <span>{{ getFormatedDate(selectedProfileEmployer.startDate) + ' - ' + getFormatedDate(selectedProfileEmployer.endDate) }}</span>
-          </b-col>
-        </b-row>
-      </div>
-    </b-modal>
-    <b-modal
-      :id="'project-modal'"
-      v-model="showProjectModal"
-      title="Add a new project"
-      name="project-modal"
-      size="lg"
-      ok-only
-      ok-title="Close"
-      no-close-on-backdrop
-    >
-      <div>
-        <ProjectForm
-          v-if="employers && activeProject"
-          :editable-project="activeProject"
-          :create-profile-project-after-project-creation="true"
-          no-redirect
-          @projectCreated="projectCreated($event)"
-        />
-        <div v-else>
-          Loading employers...
-        </div>
-      </div>
-    </b-modal>
-    <b-modal
-      v-if="activeProject && activeProject.id"
-      :id="'profile-project-modal'"
-      v-model="showProfileProjectModal"
-      :title="`Your role in the project: ${getDescriptionWithCurrentLanguage(activeProject).name}`"
-      name="profile-project-modal"
-      size="lg"
-      ok-only
-      ok-title="Close"
-      no-close-on-backdrop
-    >
-      <div>
-        <ProjectProfileForm
-          :key="activeProfileProject ? activeProfileProject.id : 0"
-          :profile-project="activeProfileProject"
-          no-redirect
-          is-in-modal
-          @profileProjectCreatedOrUpdated="profileProjectCreatedOrUpdated()"
-        />
-      </div>
-    </b-modal>
-    <b-modal
-      :id="'create-or-edit-profile-employer-modal'"
-      :title="selectedProfileEmployer.id ? 'Edit an existing work history entry' : 'Add a new work history entry'"
-      name="create-or-edit-profile-employer-modal"
-      size="lg"
-      ok-only
-      ok-title="Close"
-      no-close-on-backdrop
-    >
-      <div>
-        <EditProfileEmployer
-          :profile-employer="selectedProfileEmployer"
-          :key="selectedProfileEmployer ? selectedProfileEmployer.id : 0"
-          :vue-selects-employers="vueSelectsEmployers"
-        />
-      </div>
-    </b-modal>
-    <h1>Previous and current employers</h1>
-    <hr>
     <b-row
       v-for="profileEmployer in profileEmployers"
       :key="profileEmployer.id"
     >
       <b-col>
-        <div>
-          <span
-            v-b-modal="'create-or-edit-profile-employer-modal'"
-            name="employer"
-            class="employer-name clickable"
-            @click="profileEmployerClicked(profileEmployer)"
-          >
-            {{ profileEmployer ? getEmployerName(profileEmployer.employerId) : '' }}</span> <span>{{ getFormatedDate(profileEmployer.startDate) + ' - ' + getFormatedDate(profileEmployer.endDate) }}</span>
-          <i
-            v-b-modal="'delete-work-history-entry-modal'"
-            class="fa fa-trash icon"
-            @click="profileEmployerClicked(profileEmployer)"
-          />
-        </div>
-        <div class="details">
-          <div class="title">
-            {{ profileEmployer ? profileEmployer.title[currentLanguage] : '' }}
-          </div>
-          <div class="description">
-            {{ profileEmployer ? profileEmployer.description[currentLanguage] : '' }}
-          </div>
-          <div class="employer-profile-projects">
-            <small class="projects-label">Projects</small>
-            <div
-              v-if="profileProjectsWithProjectData.filter(ppwpd => ppwpd.project.employerId === profileEmployer.employerId).length === 0"
-              class="no-projects"
-            >
-              No projects.
-            </div>
-            <div
-              v-for="profileProjectWithProjectData in profileProjectsWithProjectData.filter(ppwpd => ppwpd.project.employerId === profileEmployer.employerId)"
-              v-else
-              :key="profileProjectWithProjectData.profileProject.id"
-            >
-              <EmployersProfileProject
-                :profile-project="profileProjectWithProjectData.profileProject"
-                :project="profileProjectWithProjectData.project"
-                @projectClicked="projectClicked($event)"
-                @profileProjectClicked="profileProjectClicked($event)"
-              />
-            </div>
-          </div>
-          <b-button
-            v-b-modal="'project-modal'"
-            @click="addNewProjectClicked(profileEmployer)"
-          >
-            Add a new project
-          </b-button>
-        </div>
+        <WorkHistoryEntry
+          :profile-employer="profileEmployer"
+          :profileId="profileId"
+        />
       </b-col>
     </b-row>
-    <b-button
-      id="add-new-employer-button"
-      v-b-modal="'create-or-edit-profile-employer-modal'"
-      @click="addNewProfileEmployer"
-    >
-      Add a new work history entry
-    </b-button>
   </form>
 </template>
 
@@ -162,16 +23,18 @@ import { format, parse } from 'date-fns'
 import { orderBy, cloneDeep } from 'lodash'
 import EditProfileEmployer from './EditProfileEmployer'
 import EmployersProfileProject from './EmployersProfileProject'
+import WorkHistoryEntry from './WorkHistoryEntry'
 import { ProjectProfileForm, ProjectForm } from '../Project'
 import sortBy from 'lodash/sortBy'
 
 export default {
-  name: 'Employers',
+  name: 'WorkHistoryEntryList',
   components: {
     EditProfileEmployer,
     ProjectForm,
     EmployersProfileProject,
-    ProjectProfileForm
+    ProjectProfileForm,
+    WorkHistoryEntry
   },
   props: {
     'profileId': Number
@@ -186,13 +49,17 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      userProfileId: 'profileId'
+    }),
     ...mapGetters([
       'profileEmployersByProfileId',
       'currentLanguage',
       'employers',
       'profileProjectsByProfileId',
       'projects',
-      'projectById'
+      'projectById',
+      'isAdmin'
     ]),
     profileEmployers () {
       const employers = this.profileEmployersByProfileId(this.profileId).map(employer => ({
@@ -321,20 +188,11 @@ export default {
   padding-left: 15px;
   padding-bottom: 15px;
 }
-.clickable {
-  cursor: pointer;
-}
-.clickable:hover {
-  text-decoration: underline;
-}
 #add-new-employer-button {
   margin-bottom: 10px;
 }
 .icon {
   margin-left: 15px;
-}
-.icon.fa-trash:hover {
-  color: red;
 }
 .icon.fa-plus:hover {
   color: green;
@@ -345,5 +203,8 @@ export default {
 .no-projects {
   font-style: italic;
   color: lightslategrey;
+}
+.clickable:hover {
+  cursor: pointer;
 }
 </style>
