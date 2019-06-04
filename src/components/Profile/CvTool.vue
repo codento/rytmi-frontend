@@ -8,8 +8,8 @@
         <b-button
           id="open-create-cv-modal"
           v-b-modal.create-cv-modal
-          :disabled="!allRequiredFieldsFilled"
         >
+         <!--  :disabled="!allRequiredFieldsFilled" -->
           Create CV
         </b-button>
         <b-tooltip
@@ -171,7 +171,10 @@ export default {
       'cvIntroduction',
       'topSkills',
       'topProjects',
-      'cvExportPending'
+      'cvExportPending',
+      'employers',
+      'employerById',
+      'profileEmployersByProfileId'
     ]),
     languageButtons: function () {
       return LANGUAGE_ENUM.LANGUAGES.map(item => ({ ...item, state: item.id === this.currentLanguage }))
@@ -200,10 +203,13 @@ export default {
           const project = this.projectById(profileProject.projectId)
           if (project) {
             Object.assign(profileProject, {
-              duration: this.getProjectDuration(profileProject),
+              duration: this.getFormattedDuration(profileProject.startDate, profileProject.endDate),
               name: project.name,
               description: project.description,
-              customerName: project.customerName
+              customerName: project.customerName,
+              employerId: project.employerId,
+              isSecret: project.isSecret,
+              projectSkills: project.projectSkills
             })
           }
           return profileProject
@@ -260,12 +266,8 @@ export default {
       this.changeLanguage(languageKey)
       this.pdfName = this.defaultPDFName
     },
-    getProjectDuration: function (project) {
-      return (
-        format(project.startDate, 'MM/YYYY') +
-        '-' +
-        format(project.endDate, 'MM/YYYY')
-      )
+    getFormattedDuration: function (startDate, endDate) {
+      return `${format(startDate, 'MM/YYYY')}-${endDate ? format(endDate, 'MM/YYYY') : ''}`
     },
     cvIntroductionUpdated: function (inputState) {
       this.isIntroductionValid = inputState
@@ -297,12 +299,12 @@ export default {
       }
       function mapProject (projectObj) {
         return {
-          projectId: projectObj.projectId,
           projectTitle: projectObj.title,
-          projectName: projectObj.name,
+          projectName: projectObj.isSecret ? null : projectObj.name,
           projectDescription: projectObj.description,
-          projectCustomer: projectObj.customer,
-          projectDuration: projectObj.duration
+          projectCustomer: projectObj.isSecret ? 'Secret' : projectObj.customerName,
+          projectDuration: projectObj.duration,
+          projectSkills: projectObj.projectSkills.map(skill => this.skillById(skill.skillId))
         }
       }
       const cvLanguages = this.languages.map(skill => {
@@ -316,6 +318,20 @@ export default {
 
       const cvProjects = this.projects.map(project => mapProject(project))
 
+      const workHistory = this.profileEmployersByProfileId(this.profile.id)
+        .map(item => { return { ...item, employerName: this.employerById(item.employerId).name } })
+        .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
+        .map(item => {
+          return {
+            employerName: item.employerName,
+            jobTitle: item.title[this.currentLanguage],
+            jobDescription: item.description[this.currentLanguage],
+            jobDuration: this.getFormattedDuration(item.startDate, item.endDate),
+            projects: this.projects.filter(project => project.employerId === item.employerId)
+              .map(project => mapProject(project))
+          }
+        })
+
       return {
         employeeName: this.profile.firstName + ' ' + this.profile.lastName,
         employeePicture: this.profile.photoPath,
@@ -325,6 +341,7 @@ export default {
         topSkills: this.topSkills.map(skill => mapSkill(skill)),
         languages: cvLanguages,
         projects: cvProjects,
+        workHistory: workHistory,
         skills: cvSkills,
         education: this.profile.education ? this.profile.education : [],
         born: this.profile.birthYear,
@@ -334,7 +351,8 @@ export default {
       }
     },
     async startCvExport () {
-      this.downloadCv({ cvData: this.generateCvData(), pdfName: this.pdfName })
+      console.log(this.generateCvData())
+      /* this.downloadCv({ cvData: this.generateCvData(), pdfName: this.pdfName })
         .then(response => {
           this.$toasted.global.rytmi_success({
             message: `${this.pdfName}.pdf succesfully downloaded`
@@ -346,7 +364,7 @@ export default {
             message: error
           })
           this.hideModal()
-        })
+        }) */
     }
   }
 }
