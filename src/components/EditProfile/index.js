@@ -4,6 +4,7 @@ import ProfileForm from './ProfileForm.vue'
 import EditProjects from './EditProjects.vue'
 import WorkHistoryEntryEdit from './WorkHistoryEntryEdit.vue'
 import WorkHistoryEntryList from './WorkHistoryEntryList.vue'
+import WorkHistoryEntryEditList from './WorkHistoryEntryEditList'
 import CvInfo from './CvInfo.vue'
 import CvInfoEditIntroduction from './CvInfoEditIntroduction.vue'
 import CvInfoEditEducation from './CvInfoEditEducation.vue'
@@ -19,5 +20,6 @@ export {
   CvInfoEditIntroduction,
   CvInfoEditEducation,
   CvInfoEditEducationForm,
-  WorkHistoryEntryEdit
+  WorkHistoryEntryEdit,
+  WorkHistoryEntryEditList
 }
