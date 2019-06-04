@@ -162,7 +162,8 @@ import { format, parse } from 'date-fns'
 import { orderBy, cloneDeep } from 'lodash'
 import EditProfileEmployer from './EditProfileEmployer'
 import EmployersProfileProject from './EmployersProfileProject'
-import { ProjectProfileForm, ProjectForm } from '../Project'
+import { ProjectProfileForm } from '../Project'
+import { ProjectForm } from '@/components/Common'
 import sortBy from 'lodash/sortBy'
 
 export default {

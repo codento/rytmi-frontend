@@ -1,11 +1,11 @@
-import ProjectForm from './ProjectForm.vue'
+import ProjectFormWrapper from './ProjectFormWrapper.vue'
 import ProjectList from './ProjectList.vue'
 import ProjectProfileForm from './ProjectProfileForm.vue'
 import ProjectMemberTable from './ProjectMemberTable.vue'
 import ProjectSkillForm from './ProjectSkillForm.vue'
 
 export {
-  ProjectForm,
+  ProjectFormWrapper,
   ProjectList,
   ProjectProfileForm,
   ProjectMemberTable,
