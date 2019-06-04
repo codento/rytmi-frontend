@@ -100,6 +100,7 @@ export default {
   },
   data () {
     return {
+      originalName: this.skill.name ? this.skill.name : '',
       name: this.skill.name ? this.skill.name : '',
       description: this.skill.description ? this.skill.description : '',
       selectedSkillCategoryId: this.skill.skillCategoryId ? this.skill.skillCategoryId : null,
@@ -122,7 +123,7 @@ export default {
         return []
       }
       const skillNames = Object.values(this.skills).map(skill => skill.name)
-      const matchingSkillNames = skillNames.filter(skillName => skillName.toLowerCase().includes(this.name.toLowerCase()))
+      const matchingSkillNames = skillNames.filter(skillName => skillName.toLowerCase().includes(this.name.toLowerCase()) && skillName !== this.originalName)
       return matchingSkillNames.sort()
     },
     inputState () {

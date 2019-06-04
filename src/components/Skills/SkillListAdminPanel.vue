@@ -60,9 +60,6 @@ export default {
       required: true
     }
   },
-  data () {
-    return {}
-  },
   computed: {
     ...mapGetters([
       'skillCategories',
@@ -75,7 +72,9 @@ export default {
         } else {
           return category
         }
-      }).sort((a, b) => a.title.localeCompare(b.title))
+      }).sort((a, b) => {
+        return a.disabled ? 1 : b.disabled ? -1 : a.title.localeCompare(b.title)
+      })
       categoryArray.unshift({ id: null, skillGroupId: null })
       return categoryArray
     },
@@ -86,7 +85,9 @@ export default {
         } else {
           return group
         }
-      }).sort((a, b) => a.title.localeCompare(b.title))
+      }).sort((a, b) => {
+        return a.disabled ? 1 : b.disabled ? -1 : a.title.localeCompare(b.title)
+      })
       groupArray.unshift({ id: null, skillGroupId: null })
       return groupArray
     }
