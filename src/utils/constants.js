@@ -5,12 +5,10 @@ const LANGUAGES = [
 ]
 const LANGUAGE_GROUP_NAME = 'Language'
 
-const LANGUAGE_ENUM = Object.freeze({
+export const LANGUAGE_ENUM = Object.freeze({
   DEFAULT_LANGUAGE,
   LANGUAGE_GROUP_NAME,
   LANGUAGES
 })
 
-const INTERNAL_COMPANY_NAME = 'Codento Oy'
-
-export default { LANGUAGE_ENUM, INTERNAL_COMPANY_NAME }
+export const INTERNAL_COMPANY_NAME = 'Codento Oy'

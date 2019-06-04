@@ -25,8 +25,7 @@
 </template>
 
 <script>
-import constants from '@/utils/constants'
-const { LANGUAGE_ENUM } = constants
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 export default {
   name: 'EducationCard',
