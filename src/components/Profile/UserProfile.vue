@@ -213,9 +213,10 @@ import { ProjectRow, SkillRow, SkillExplanations } from '@/components/Common'
 import { WorkHistoryEntryList, EditSkills, EditProjects, WorkHistoryEntryEditList } from '@/components/EditProfile'
 import CvToolEducation from '@/components/Profile/CvToolEducation'
 import CvInfoEditEducation from '@/components/EditProfile/CvInfoEditEducation'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
-  name: 'Profile',
+  name: 'UserProfile',
   components: {
     ProjectRow,
     SkillRow,
@@ -243,7 +244,9 @@ export default {
       'profileSkillsByProfileId',
       'profileProjectsByProfileId',
       'isAdmin',
-      'profileId'
+      'profileId',
+      'projectById',
+      'employerByName'
     ]),
     knowDesc () {
       return proficiencyDesc.knows['en']
@@ -251,8 +254,15 @@ export default {
     wantDesc () {
       return proficiencyDesc.wants
     },
+    internalCompanyId () {
+      return this.employerByName(INTERNAL_COMPANY_NAME).id
+    },
     profileProjects () {
       return this.profileProjectsByProfileId(this.profile.id)
+        .filter(profileProject => {
+          const employerId = this.projectById(profileProject.projectId).employerId
+          return employerId === this.internalCompanyId
+        })
     }
   },
   methods: {

@@ -8,12 +8,10 @@
     >
       <b-form-group
         v-show="profileVisible"
-        id="consultantLabel"
-        label="Consultant"
-        label-for="consultant"
       >
+        <small for="project-select">Consultant</small>
         <b-form-select
-          id="consultant"
+          id="consultant-select"
           v-model="editableProfileProject.profileId"
           :disabled="!profileVisible"
           value-field="id"
@@ -40,12 +38,10 @@
 
       <b-form-group
         v-show="projectVisible"
-        id="ProjectLabel"
-        label="Project:"
-        label-for="project"
       >
+        <small for="project-select">Project</small>
         <b-form-select
-          id="project"
+          id="project-select"
           v-model="editableProfileProject.projectId"
           :disabled="!projectVisible"
           value-field="id"
@@ -72,35 +68,42 @@
 
       <b-row>
         <b-col>
-          <span>Role (in Finnish)</span>
+          <small for="project-role-fi-input">Your role in the project (in Finnish)</small>
           <b-input
+            id="project-role-fi-input"
             v-model="descriptionFi.title"
+            placeholder="esim. front-end kehittäjä, ohjelmistoarkkitehti"
             type="text"
             required
           />
         </b-col>
         <b-col>
-          <span>Role (in English)</span>
+          <small for="project-role-en-input">Your role in the project (in English)</small>
           <b-input
+            id="project-role-en-input"
             v-model="descriptionEn.title"
+            placeholder="e.g. front-end developer, database admin"
             type="text"
             required
           />
         </b-col>
       </b-row>
 
-      <span>Start date</span>
+      <small for="profile-project-start-date">Start date</small>
       <Datepicker
+        id="profile-project-start-date"
         v-model="editableProfileProject.startDate"
         :name="`profile-project-start-date${isInModal ? '-modal' : ''}`"
       />
-      <span>End date</span>
+      <small for="profile-project-end-date">End date</small>
       <Datepicker
+        id="profile-project-end-date"
         v-model="editableProfileProject.endDate"
         :name="`profile-project-end-date${isInModal ? '-modal' : ''}`"
       />
-      <span>Utilization percentage</span>
+      <small for="utilization-input">Utilization percentage</small>
       <b-input
+        id="utilization-input"
         v-model="editableProfileProject.workPercentage"
         name="utilization"
         type="number"
@@ -267,17 +270,17 @@ export default {
       if (this.noRedirect) {
         this.editableProfileProject = {}
         this.editableProfileProject.projectId = null
-        this.editableProfileProject.profileId = this.profileId
+        this.editableProfileProject.profileId = this.profileProject.profileId
         this.editableProfileProject.descriptions = this.getEmptyDescriptions()
       } else {
         this.redirect()
       }
     },
     redirect () {
-      if (this.profileId) {
-        this.$router.push('/profile/' + this.profileId)
-      } else if (this.projectId) {
-        this.$router.push('/projects/' + this.projectId)
+      if (this.profileProject.profileId) {
+        this.$router.push('/profile/' + this.profileProject.profileId)
+      } else if (this.profileProject.projectId) {
+        this.$router.push('/projects/' + this.profileProject.projectId)
       }
     },
     getEmptyDescriptions () {

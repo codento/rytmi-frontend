@@ -1,7 +1,5 @@
 <template>
   <div class="animated fadeIn">
-    <h1>Projects</h1>
-    <hr>
     <b-row>
       <b-col class="col-12 projects-table">
         <b-table
@@ -94,17 +92,19 @@
         <h3>{{ editedProfileProject.name }}</h3>
         <b-row>
           <b-col>
-            <small>Title (Finnish)</small>
+            <small>Your role in the project (in Finnish)</small>
             <b-input
               v-model="descriptionFi.title"
+              placeholder="esim. front-end kehittäjä, ohjelmistoarkkitehti"
               type="text"
               required
             />
           </b-col>
           <b-col>
-            <small>Title (English)</small>
+            <small>Your role in the project (in English)</small>
             <b-input
               v-model="descriptionEn.title"
+              placeholder="e.g. front-end developer, database admin"
               type="text"
               required
             />
@@ -137,6 +137,7 @@
         </b-btn>
         <b-btn
           id="cancel"
+          variant="light"
           class="modal-btn"
           @click="closeEditModal()"
         >
@@ -212,9 +213,6 @@ export default {
         this.removeProfileProject(item)
       }
     },
-    openProject (projectId) {
-      this.$router.push(`/projects/${projectId}`)
-    },
     openEditModal (item) {
       this.editedProfileProject = Object.assign({}, item.item)
       this.editedProfileProject.name = this.projectById(item.item.projectId).name
@@ -289,13 +287,6 @@ button {
 }
 .modal-btn {
   margin-top: 0.5rem;
-}
-
-.clickable {
-  cursor: pointer;
-}
-.clickable:hover {
-  font-weight: bolder;
 }
 
 </style>
