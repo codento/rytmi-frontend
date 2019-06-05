@@ -30,46 +30,21 @@
     <b-modal
       :id="'project-modal'"
       v-model="showProjectModal"
-      title="Add a new project"
       name="project-modal"
       size="lg"
-      ok-only
-      ok-title="Close"
+      hide-header
+      hide-footer
       no-close-on-backdrop
     >
-      <div>
-        <ProjectForm
-          v-if="employers && activeProject"
-          :editable-project="activeProject"
-          :create-profile-project-after-project-creation="true"
-          no-redirect
-          @projectCreated="projectCreated($event)"
-        />
-        <div v-else>
-          Loading employers...
-        </div>
-      </div>
-    </b-modal>
-    <b-modal
-      v-if="activeProject && activeProject.id"
-      :id="'profile-project-modal'"
-      v-model="showProfileProjectModal"
-      :title="`Your role in the project: ${getDescriptionWithCurrentLanguage(activeProject).name}`"
-      name="profile-project-modal"
-      size="lg"
-      ok-only
-      ok-title="Close"
-      no-close-on-backdrop
-    >
-      <div>
-        <ProjectProfileForm
-          :key="activeProfileProject ? activeProfileProject.id : 0"
-          :profile-project="activeProfileProject"
-          no-redirect
-          is-in-modal
-          @profileProjectCreatedOrUpdated="profileProjectCreatedOrUpdated()"
-        />
-      </div>
+      {{ activeProject }}
+      <WorkHistoryProjectFormWrapper
+        v-if="employers && activeProject"
+        :editable-project="activeProject"
+        :profile-project="activeProfileProject"
+        :current-employer-id="activeProject.employerId ? activeProject.employerId : selectedProfileEmployer.employerId"
+        @close-modal="closeProjectModal()"
+      />
+      <LoadingSpinner v-else />
     </b-modal>
     <b-modal
       :id="'create-or-edit-profile-employer-modal'"
@@ -133,7 +108,6 @@
                 :profile-project="profileProjectWithProjectData.profileProject"
                 :project="profileProjectWithProjectData.project"
                 @projectClicked="projectClicked($event)"
-                @profileProjectClicked="profileProjectClicked($event)"
               />
             </div>
           </div>
@@ -162,17 +136,15 @@ import { format, parse } from 'date-fns'
 import { orderBy, cloneDeep } from 'lodash'
 import EditProfileEmployer from './EditProfileEmployer'
 import EmployersProfileProject from './EmployersProfileProject'
-import { ProjectProfileForm } from '../Project'
-import { ProjectForm } from '@/components/Common'
+import WorkHistoryProjectFormWrapper from './WorkHistoryProjectFormWrapper'
 import sortBy from 'lodash/sortBy'
 
 export default {
   name: 'Employers',
   components: {
     EditProfileEmployer,
-    ProjectForm,
-    EmployersProfileProject,
-    ProjectProfileForm
+    WorkHistoryProjectFormWrapper,
+    EmployersProfileProject
   },
   props: {
     'profileId': Number
@@ -227,7 +199,8 @@ export default {
     },
     addNewProjectClicked (profileEmployer) {
       this.selectedProfileEmployer = cloneDeep(profileEmployer)
-      this.activeProject = { employerId: this.selectedProfileEmployer.employerId }
+      this.activeProject = { id: null }
+      this.activeProfileProject = { id: null, profileId: this.profileId }
     },
     addNewProfileEmployer () {
       this.selectedProfileEmployer = this.getEmptyProfileEmployer()
@@ -253,30 +226,15 @@ export default {
         endDate: null
       }
     },
-    projectCreated (event) {
-      this.activeProject = event.project
-      this.activeProfileProject = {
-        projectId: this.activeProject.id,
-        profileId: this.profileId
-      }
+    closeProjectModal () {
       this.showProjectModal = false
-      this.showProfileProjectModal = true
-    },
-    profileProjectCreatedOrUpdated () {
-      this.showProfileProjectModal = false
     },
     projectClicked (project) {
-      this.showProjectModal = true
       this.activeProject = cloneDeep(project)
-    },
-    profileProjectClicked (profileProject) {
-      this.activeProject = this.projectById(profileProject.projectId)
-      this.activeProfileProject = {
-        ...profileProject,
-        startDate: format(profileProject.startDate, 'yyyy-MM-dd'),
-        endDate: format(profileProject.endDate, 'yyyy-MM-dd')
-      }
-      this.showProfileProjectModal = true
+      this.activeProfileProject = this.profileProjectsWithProjectData
+        .filter(item => item.profileProject.projectId === project.id)
+        .map(item => item.profileProject)[0]
+      this.showProjectModal = true
     },
     deleteProfileEmployer () {
       this.removeProfileEmployer(this.selectedProfileEmployer)

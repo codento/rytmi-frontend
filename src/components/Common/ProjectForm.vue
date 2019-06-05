@@ -100,7 +100,7 @@
             placeholder="Customer name (fi)"
             required
             type="text"
-            :state="inputStates.customerName"
+            :state="inputStates.customerNameFi"
           />
         </b-form-group>
       </b-col>
@@ -115,7 +115,7 @@
             placeholder="Customer name (en)"
             required
             type="text"
-            :state="inputStates.customerName"
+            :state="inputStates.customerNameEn"
           />
         </b-form-group>
       </b-col>
@@ -126,7 +126,6 @@
         <b-textarea
           id="project-description-fi-input"
           v-model="getDescriptionByLanguage('fi').description"
-          class="form-control"
           placeholder="Project description (fi)"
           type="text"
           rows="5"
@@ -137,7 +136,6 @@
         <b-textarea
           id="project-description-en-input"
           v-model="getDescriptionByLanguage('en').description"
-          class="form-control"
           placeholder="Project description (en)"
           type="text"
           rows="5"
@@ -153,17 +151,26 @@
         </b-form-checkbox>
       </b-col>
     </b-row>
-    <b-row>
+    <slot name="custom-form" />
+    <b-row class="mt-4">
       <b-col>
         <b-button
-          id="submit-edited-project"
-          class="form-control"
+          id="submit-project-edits-btn"
+          class="mr-2"
           type="submit"
-          primary
           :disabled="!formIsValid"
           @click.prevent="onSubmit()"
         >
           {{ isNewProject ? 'Create a new project' : 'Update project' }}
+        </b-button>
+        <b-button
+          v-show="showCancel"
+          id="cancel-project-edits-btn"
+          type="button"
+          variant="light"
+          @click.prevent="$emit('cancel')"
+        >
+          Cancel
         </b-button>
       </b-col>
     </b-row>
@@ -192,6 +199,14 @@ export default {
     employerId: {
       type: Number,
       required: true
+    },
+    customFormValidation: {
+      type: Boolean,
+      default: true
+    },
+    showCancel: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -224,12 +239,12 @@ export default {
         startDate: new Date(this.editedProject.startDate) > 1000,
         projectNameFi: this.getDescriptionByLanguage('fi').name.length > 0,
         projectNameEn: this.getDescriptionByLanguage('en').name.length > 0,
-        CustomerNameFi: this.getDescriptionByLanguage('fi').customerName.length > 0,
-        CustomerNameEn: this.getDescriptionByLanguage('en').customerName.length > 0
+        customerNameFi: this.getDescriptionByLanguage('fi').customerName.length > 0,
+        customerNameEn: this.getDescriptionByLanguage('en').customerName.length > 0
       }
     },
     formIsValid () {
-      const stateArray = []
+      const stateArray = [this.customFormValidation]
       // Required always
       stateArray.push(this.inputStates.startDate, this.inputStates.projectNameFi, this.inputStates.projectNameEn)
       // Required sometimes

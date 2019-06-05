@@ -67,7 +67,6 @@ export default {
       if (project.isInternal) {
         project.descriptions.forEach(description => { description.customerName = '' })
       }
-      console.log(project)
       try {
         if (this.isNewProject) {
           await this.createProject(project)
