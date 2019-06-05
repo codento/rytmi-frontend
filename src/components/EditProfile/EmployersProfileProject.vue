@@ -1,18 +1,15 @@
 <template>
-  <div>
-    <span
-      :class="editable ? 'clickable' : ''"
-      @click="projectClicked"
-    >
+  <div
+    class="clickable"
+    @click="projectClicked"
+  >
+    <span>
       {{ getDescriptionWithCurrentLanguage(project).name }}
     </span>
     <span>
       {{ '|' }}
     </span>
-    <span
-      :class="editable ? 'clickable' : ''"
-      @click="profileProjectClicked"
-    >
+    <span>
       {{ getDescriptionWithCurrentLanguage(profileProject).title }}
     </span>
   </div>
@@ -44,10 +41,7 @@ export default {
       return objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)
     },
     projectClicked () {
-      this.$emit('projectClicked', this.project)
-    },
-    profileProjectClicked () {
-      this.$emit('profileProjectClicked', this.profileProject)
+      this.$emit('projectClicked', { project: this.project, profileProject: this.profileProject })
     }
   }
 }

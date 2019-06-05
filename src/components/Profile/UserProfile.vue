@@ -179,8 +179,10 @@
       </b-card>
       <b-modal
         id="workHistoryEntryEditListModal"
-        hide-footer
         size="lg"
+        ok-only
+        ok-title="Cancel"
+        ok-variant="light"
       >
         <template
           slot="modal-header"

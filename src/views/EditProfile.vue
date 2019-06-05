@@ -34,7 +34,6 @@ import {
   EditProjects,
   ProfileForm,
   WorkHistoryEntryList,
-  WorkHistoryEntryEdit,
   CvInfo
 } from '../components/EditProfile'
 import store from '../store'
@@ -47,7 +46,6 @@ export default {
     EditSkills,
     EditProjects,
     WorkHistoryEntryList,
-    WorkHistoryEntryEdit,
     CvInfo
   },
   props: {

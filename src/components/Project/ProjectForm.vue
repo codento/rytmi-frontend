@@ -55,8 +55,9 @@
         <b-col>
           <small>Start date</small>
           <Datepicker
+            :id="`project-start-date${editableProject.id}`"
             v-model="project.startDate"
-            name="project-start-date"
+            :name="`project-start-date${editableProject.id}`"
             required
           />
         </b-col>
@@ -65,8 +66,9 @@
         <b-col>
           <small>End date</small>
           <Datepicker
+            :id="`project-end-date${editableProject.id}`"
             v-model="project.endDate"
-            name="project-end-date"
+            :name="`project-end-date${editableProject.id}`"
           />
         </b-col>
       </b-row>

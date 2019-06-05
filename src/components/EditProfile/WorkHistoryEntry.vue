@@ -1,33 +1,5 @@
 <template>
   <div>
-    <b-modal
-      :id="`editWorkHistoryEntryModal${profileEmployer.id}`"
-      hide-footer
-    >
-      <template
-        slot="modal-header"
-        slot-scope="{ close }"
-      >
-        <h5 class="modal-header-text">
-          Edit employer history
-        </h5>
-        <i
-          class="fa fa-times fa-2x pull-right clickable"
-          @click="close()"
-        />
-      </template>
-      <WorkHistoryEntryEdit
-        :profile-id="profileId"
-        :profile-employer="profileEmployer"
-      />
-      <b-btn
-        class="pull-right"
-        @click="$bvModal.hide(`editWorkHistoryEntryModal${profileEmployer.id}`)"
-        variant="light"
-      >
-        Close
-      </b-btn>
-    </b-modal>
     <div>
       <span
         v-b-modal="'create-or-edit-profile-employer-modal'"
@@ -51,14 +23,12 @@ import { mapActions, mapGetters } from 'vuex'
 import { format, parse } from 'date-fns'
 import { orderBy, cloneDeep } from 'lodash'
 import EmployersProfileProject from './EmployersProfileProject'
-import { WorkHistoryEntryEdit } from '@/components/EditProfile'
 import sortBy from 'lodash/sortBy'
 
 export default {
   name: 'WorkHistoryEntry',
   components: {
-    EmployersProfileProject,
-    WorkHistoryEntryEdit
+    EmployersProfileProject
   },
   props: {
     profileEmployer: Object,

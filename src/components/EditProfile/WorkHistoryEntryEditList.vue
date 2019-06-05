@@ -3,17 +3,71 @@
     id="employers-form"
     class="animated fadeIn"
   >
-    <b-row
-      v-for="profileEmployer in profileEmployers"
-      :key="profileEmployer.id"
-    >
+    <b-row v-if="!shouldShowNewEmployerAddForm()">
       <b-col>
-        <WorkHistoryEntry
-          :profile-employer="profileEmployer"
-          :profileId="profileId"
-        />
+        <b-button
+          class="pull-right mb-2"
+          @click="addNewProfileEmployer"
+        >
+          Add a new work history entry
+        </b-button>
       </b-col>
     </b-row>
+    <b-list-group>
+      <b-list-group-item
+        v-if="shouldShowNewEmployerAddForm()"
+        class="clickable"
+      >
+        <b-row>
+          <b-col>
+            Add a new employer history entry
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <div>
+              <EditProfileEmployer
+                :profile-employer="selectedProfileEmployer"
+                :vue-selects-employers="vueSelectsEmployers"
+              />
+            </div>
+          </b-col>
+        </b-row>
+      </b-list-group-item>
+      <b-list-group-item
+        v-for="(profileEmployer, index) in profileEmployers"
+        :key="profileEmployer.id"
+        class="clickable"
+        @mouseover="showEditIconByIndex = index"
+        @mouseout="showEditIconByIndex = null"
+      >
+        <b-row @click="openOrCloseEmployerForEditing(profileEmployer)">
+          <b-col cols="11">
+            <WorkHistoryEntry
+              :profile-employer="profileEmployer"
+              :profileId="profileId"
+            />
+          </b-col>
+          <b-col
+            v-show="showEditIconByIndex === index"
+            cols="1"
+          >
+            <i class="fa fa-pencil pull-right" />
+          </b-col>
+        </b-row>
+        <b-row v-if="selectedProfileEmployer && selectedProfileEmployer.id === profileEmployer.id">
+          <b-col>
+            <div>
+              <EditProfileEmployer
+                :key="profileEmployer ? profileEmployer.id : 0"
+                :profile-employer="profileEmployer"
+                :vue-selects-employers="vueSelectsEmployers"
+              />
+            </div>
+          </b-col>
+        </b-row>
+      </b-list-group-item>
+    </b-list-group>
   </form>
 </template>
 
@@ -41,11 +95,12 @@ export default {
   },
   data () {
     return {
-      selectedProfileEmployer: this.getEmptyProfileEmployer(),
+      selectedProfileEmployer: null,
       activeProject: null,
       showProjectModal: false,
       showProfileProjectModal: false,
-      activeProfileProject: null
+      activeProfileProject: null,
+      showEditIconByIndex: null,
     }
   },
   computed: {
@@ -69,12 +124,6 @@ export default {
       }))
       return orderBy(employers, ['startDate'], ['desc'])
     },
-    profileProjectsWithProjectData () {
-      return this.profileProjectsByProfileId(this.profileId).map(pp => ({
-        profileProject: pp,
-        project: Object.values(this.projects).find(project => project.id === pp.projectId)
-      }))
-    },
     vueSelectsEmployers () {
       return sortBy(Object.values(this.employers).map(employer => ({
         label: employer.name,
@@ -88,19 +137,8 @@ export default {
     getFormatedDate (date) {
       return date ? format(date, 'YYYY/MM') : ''
     },
-    profileEmployerClicked (profileEmployer) {
-      this.selectedProfileEmployer = cloneDeep(profileEmployer)
-    },
-    addNewProjectClicked (profileEmployer) {
-      this.selectedProfileEmployer = cloneDeep(profileEmployer)
-      this.activeProject = { employerId: this.selectedProfileEmployer.employerId }
-    },
     addNewProfileEmployer () {
       this.selectedProfileEmployer = this.getEmptyProfileEmployer()
-    },
-    getEmployerName (employerId) {
-      const employer = Object.values(this.employers).find(employer => employer.id === employerId)
-      return employer ? employer.name : ''
     },
     getEmptyProfileEmployer () {
       return {
@@ -144,16 +182,6 @@ export default {
       }
       this.showProfileProjectModal = true
     },
-    deleteProfileEmployer () {
-      this.removeProfileEmployer(this.selectedProfileEmployer)
-        .then((data) => {
-          this.$toasted.global.rytmi_success({
-            message: 'Work history entry deleted.'
-          })
-          this.selectedProfileEmployer = this.getEmptyProfileEmployer()
-          document.getElementById('employers-form').reset()
-        })
-    },
     getDescriptionWithCurrentLanguage (objectWithDescriptions) {
       if (!objectWithDescriptions || !objectWithDescriptions.descriptions || !objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)) {
         return {
@@ -162,6 +190,12 @@ export default {
         }
       }
       return objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)
+    },
+    openOrCloseEmployerForEditing (profileEmployer) {
+      this.selectedProfileEmployer = this.selectedProfileEmployer && this.selectedProfileEmployer.id === profileEmployer.id ? null : profileEmployer
+    },
+    shouldShowNewEmployerAddForm () {
+      return this.selectedProfileEmployer && this.selectedProfileEmployer.id === null
     }
   }
 }

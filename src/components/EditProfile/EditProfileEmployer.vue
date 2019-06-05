@@ -23,19 +23,19 @@
     </b-row>
     <b-row>
       <b-col>
-        <small for="profile-employer-start-date">Start date</small>
+        <small :for="`profile-employer-start-date${profileEmployer.id}`">Start date</small>
         <Datepicker
-          id="profile-employer-start-date"
+          :id="`profile-employer-start-date${profileEmployer.id}`"
           v-model="profileEmployer.startDate"
-          name="profile-employer-start-date"
+          :name="`profile-employer-start-date${profileEmployer.id}`"
         />
       </b-col>
       <b-col>
-        <small for="profile-employer-end-date">End date</small>
+        <small :for="`profile-employer-end-date${profileEmployer.id}`">End date</small>
         <Datepicker
-          id="profile-employer-end-date"
+          :id="`profile-employer-end-date${profileEmployer.id}`"
           v-model="profileEmployer.endDate"
-          name="profile-employer-end-date"
+          :name="`profile-employer-end-date${profileEmployer.id}`"
         />
       </b-col>
     </b-row>
@@ -91,6 +91,29 @@
         </b-button>
       </b-col>
     </b-row>
+    <b-row v-if="profileEmployer.id">
+      <b-col>
+        <CollapsableItem title="Projects for this employer">
+          <div
+            v-if="profileProjectsWithProjectData.length === 0"
+            class="no-projects"
+          >
+            No projects.
+          </div>
+          <div
+            v-for="profileProjectWithProjectData in profileProjectsWithProjectData"
+            v-else
+            :key="profileProjectWithProjectData.profileProject.id"
+          >
+            <EmployersProfileProject
+              :profile-project="profileProjectWithProjectData.profileProject"
+              :project="profileProjectWithProjectData.project"
+              @projectClicked="projectClicked($event)"
+            />
+          </div>
+        </CollapsableItem>
+      </b-col>
+    </b-row>
   </b-form>
 </template>
 
@@ -99,13 +122,20 @@ import { mapActions, mapGetters } from 'vuex'
 import { isEmpty, isDate } from 'lodash'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
+import EmployersProfileProject from './EmployersProfileProject'
+import CollapsableItem from '@/components/Common/CollapsableItem'
 
 export default {
   name: 'EditProfileEmployer',
-  components: { Datepicker, vSelect },
+  components: {
+    Datepicker,
+    vSelect,
+    EmployersProfileProject,
+    CollapsableItem
+  },
   props: {
-    'profileEmployer': Object,
-    'vueSelectsEmployers': Array
+    profileEmployer: Object,
+    vueSelectsEmployers: Array
   },
   data () {
     return {
@@ -113,7 +143,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['employers'])
+    ...mapGetters([
+      'employers',
+      'projects',
+      'profileProjectsByProfileId'
+    ]),
+    profileProjectsWithProjectData () {
+      return this.profileProjectsByProfileId(this.profileEmployer.profileId).map(pp => ({
+        profileProject: pp,
+        project: Object.values(this.projects).find(project => project.id === pp.projectId)
+      })).filter(pp => pp.project.employerId === this.profileEmployer.employerId)
+    },
   },
   watch: {
     selectedExistingEmployer: function () {
@@ -148,14 +188,12 @@ export default {
         }
       }
     },
-    updateOrCreateProfileEmployer (profileEmployer) {
+    async updateOrCreateProfileEmployer (profileEmployer) {
       // If the profileEmployer has an existing ID, update it; otherwise create a new profileEmployer
       if (this.shouldUpdateProfileEmployer()) {
-        this.updateProfileEmployer(profileEmployer).then(() => {
-          this.$toasted.global.rytmi_success({
-            message: 'Work history entry updated!'
-          })
-          document.getElementById('employer-form').reset()
+        await this.updateProfileEmployer(profileEmployer)
+        this.$toasted.global.rytmi_success({
+          message: 'Work history entry updated!'
         })
       } else {
         this.createProfileEmployer(profileEmployer).then(() => {
@@ -193,6 +231,9 @@ export default {
         isDataValid = false
       }
       return isDataValid
+    },
+    projectClicked (profileProjectWithProjectData) {
+      // TODO
     }
   }
 }

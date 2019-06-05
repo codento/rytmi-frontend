@@ -2,7 +2,6 @@ import EditLinks from './EditLinks.vue'
 import EditSkills from './EditSkills.vue'
 import ProfileForm from './ProfileForm.vue'
 import EditProjects from './EditProjects.vue'
-import WorkHistoryEntryEdit from './WorkHistoryEntryEdit.vue'
 import WorkHistoryEntryList from './WorkHistoryEntryList.vue'
 import WorkHistoryEntryEditList from './WorkHistoryEntryEditList'
 import CvInfo from './CvInfo.vue'
@@ -20,6 +19,5 @@ export {
   CvInfoEditIntroduction,
   CvInfoEditEducation,
   CvInfoEditEducationForm,
-  WorkHistoryEntryEdit,
   WorkHistoryEntryEditList
 }
