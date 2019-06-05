@@ -21,7 +21,7 @@ export default {
     }
     filterString = filterString.toLowerCase()
     const filteredProjects = Object.values(state.projects).filter(project => {
-      if (project.code.toString().includes(filterString)) {
+      if (project.code !== null && project.code.toString().includes(filterString)) {
         return true
       }
       for (let i = 0; i < project.descriptions.length; i++) {

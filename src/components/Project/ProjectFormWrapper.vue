@@ -50,10 +50,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['employers']),
+    ...mapGetters(['employerByName']),
     internalCompanyId () {
-      const employerId = Object.values(this.employers).find(employer => employer.name === INTERNAL_COMPANY_NAME).id
-      return employerId
+      return this.employerByName(INTERNAL_COMPANY_NAME).id
     }
   },
   methods: {

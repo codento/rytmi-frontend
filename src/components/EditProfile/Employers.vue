@@ -36,7 +36,6 @@
       hide-footer
       no-close-on-backdrop
     >
-      {{ activeProject }}
       <WorkHistoryProjectFormWrapper
         v-if="employers && activeProject"
         :editable-project="activeProject"
