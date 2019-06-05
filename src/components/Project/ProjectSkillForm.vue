@@ -28,7 +28,7 @@
         <b-list-group>
           Click on a skill to add it to the project
           <b-list-group-item
-            v-for="skill of skillList"
+            v-for="skill of projectSkillList"
             :key="skill.id"
             name="skill"
             button
@@ -50,14 +50,11 @@ export default {
   props: {
     projectId: {
       type: Number,
-      default: null
+      required: true
     }
   },
   data () {
-    return {
-      newSkills: [],
-      projectSkillList: []
-    }
+    return {}
   },
   computed: {
     ...mapGetters([
@@ -65,7 +62,7 @@ export default {
       'skillById',
       'activeProjectSkills'
     ]),
-    skillList () {
+    projectSkillList () {
       if (this.skills) {
         return Object.values(this.skills)
           .filter(skill =>

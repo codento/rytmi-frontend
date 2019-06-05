@@ -7,9 +7,9 @@ export const mutations = {
     state.skillGroupList = Object.keys(state.skillGroups)
   },
   [types.ADD_SKILLGROUP] (state, skillGroup) {
-    Vue.set(state.skillCategories, skillGroup.id, skillGroup)
+    Vue.set(state.skillGroups, skillGroup.id, skillGroup)
   },
-  [types.DELETE_SKILLGROUP] (state, skillGroup) {
-    state.skillCategories[skillGroup.id] = null
+  [types.UPDATE_SKILLGROUP] (state, skillGroup) {
+    Vue.set(state.skillGroups, skillGroup.id, skillGroup)
   }
 }

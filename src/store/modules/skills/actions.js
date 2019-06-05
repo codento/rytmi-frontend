@@ -42,13 +42,16 @@ export function updateSkill ({ commit, state }, data) {
   })
 }
 
-export function deleteSkill ({ commit, state }, id) {
+export function deleteSkill ({ commit, dispatch, state }, id) {
   return new Promise((resolve, reject) => {
     apiDeleteSkill(id)
       .then(response => {
         commit(types.DELETE_SKILL, id)
+        dispatch('fetchProfileSkills')
+        dispatch('fetchActiveProjectSkills')
         resolve(response.data)
       }).catch(error => {
+        console.log(error)
         reject(error.response.data.error)
       })
   })
