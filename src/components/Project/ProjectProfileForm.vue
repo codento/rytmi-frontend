@@ -30,7 +30,7 @@
           </template>
           <option
             v-for="profile in profiles"
-            :key="profile.id"
+            :key="'profile-' + profile.id"
             :value="profile.id"
           >
             {{ profile.firstName + ' ' + profile.lastName }}
@@ -61,8 +61,8 @@
             </option>
           </template>
           <option
-            v-for="project in projects"
-            :key="project.id"
+            v-for="project in filteredProjects"
+            :key="'project-' + project.id"
             :value="project.id"
           >
             {{ project.code }} {{ project.code ? '-' : '' }} {{ getProjectName(project) }}
@@ -136,6 +136,7 @@ import Datepicker from '../helpers/Datepicker'
 import { mapGetters, mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 import cloneDeep from 'lodash/cloneDeep'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
   name: 'ProjectProfileForm',
@@ -171,13 +172,20 @@ export default {
     ...mapGetters([
       'profiles',
       'projects',
-      'currentLanguage'
+      'currentLanguage',
+      'employerByName'
     ]),
     descriptionFi () {
       return this.getProfileProjectDescriptionByLanguage('fi')
     },
     descriptionEn () {
       return this.getProfileProjectDescriptionByLanguage('en')
+    },
+    filteredProjects () {
+      const projectList = Object.keys(this.projects).map(key => this.projects[key])
+      return projectList.filter(project => {
+        return project.employerId === this.employerByName(INTERNAL_COMPANY_NAME).id
+      })
     }
   },
   created () {

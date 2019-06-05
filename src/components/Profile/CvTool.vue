@@ -141,8 +141,7 @@ import CvToolEducation from './CvToolEducation.vue'
 import LoadingSpinner from '@/components/helpers/LoadingSpinner.vue'
 import proficiencyDesc from '@/assets/proficiencyDesc'
 import staticTexts from '@/assets/cvStaticTexts'
-import constants from '@/utils/constants'
-const { LANGUAGE_ENUM } = constants
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 export default {
   name: 'CvTool',

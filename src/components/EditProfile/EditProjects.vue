@@ -19,10 +19,7 @@
             slot="projectId"
             slot-scope="data"
           >
-            <span
-              class="clickable"
-              @click.stop="openProject(data.item.projectId)"
-            >
+            <span>
               {{ projectById(data.item.projectId) ? projectById(data.item.projectId).code : '' }}
             </span>
           </template>
@@ -31,10 +28,7 @@
             slot="project"
             slot-scope="data"
           >
-            <span
-              class="clickable"
-              @click.stop="openProject(data.item.projectId)"
-            >
+            <span>
               {{ projectById(data.item.projectId) ? projectById(data.item.projectId).name : '' }}
             </span>
           </template>

@@ -3,15 +3,18 @@ import { insertProjectSkills, deleteProjectSkill, getActiveProjectSkills } from 
 
 export default {
   fetchActiveProjectSkills ({ commit, state }, activeProjectId) {
-    return new Promise((resolve, reject) => {
-      getActiveProjectSkills(activeProjectId)
-        .then(response => {
-          commit(types.SET_ACTIVE_PROJECTSKILLS, response.data)
-          resolve(response.data)
-        }).catch(error => {
-          reject(error)
-        })
-    })
+    if (activeProjectId) {
+      return new Promise((resolve, reject) => {
+        getActiveProjectSkills(activeProjectId)
+          .then(response => {
+            commit(types.SET_ACTIVE_PROJECTSKILLS, response.data)
+            resolve(response.data)
+          }).catch(error => {
+            reject(error)
+          })
+      })
+    }
+    return []
   },
   addProjectSkill ({ commit, state }, projectSkill) {
     return new Promise((resolve, reject) => {

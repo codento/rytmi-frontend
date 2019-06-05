@@ -93,7 +93,8 @@ export default {
     },
     addNewProjectClicked (profileEmployer) {
       this.selectedProfileEmployer = cloneDeep(profileEmployer)
-      this.activeProject = { employerId: this.selectedProfileEmployer.employerId }
+      this.activeProject = { id: null }
+      this.activeProfileProject = { id: null, profileId: this.profileId }
     },
     addNewProfileEmployer () {
       this.selectedProfileEmployer = this.getEmptyProfileEmployer()
@@ -119,30 +120,15 @@ export default {
         endDate: null
       }
     },
-    projectCreated (event) {
-      this.activeProject = event.project
-      this.activeProfileProject = {
-        projectId: this.activeProject.id,
-        profileId: this.profileId
-      }
+    closeProjectModal () {
       this.showProjectModal = false
-      this.showProfileProjectModal = true
-    },
-    profileProjectCreatedOrUpdated () {
-      this.showProfileProjectModal = false
     },
     projectClicked (project) {
-      this.showProjectModal = true
       this.activeProject = cloneDeep(project)
-    },
-    profileProjectClicked (profileProject) {
-      this.activeProject = this.projectById(profileProject.projectId)
-      this.activeProfileProject = {
-        ...profileProject,
-        startDate: format(profileProject.startDate, 'yyyy-MM-dd'),
-        endDate: format(profileProject.endDate, 'yyyy-MM-dd')
-      }
-      this.showProfileProjectModal = true
+      this.activeProfileProject = this.profileProjectsWithProjectData
+        .filter(item => item.profileProject.projectId === project.id)
+        .map(item => item.profileProject)[0]
+      this.showProjectModal = true
     },
     deleteProfileEmployer () {
       this.removeProfileEmployer(this.selectedProfileEmployer)

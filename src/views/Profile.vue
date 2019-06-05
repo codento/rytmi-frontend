@@ -2,7 +2,7 @@
   <b-container class="animated fadeIn profile mt-2">
     <loading v-if="!profile" />
     <b-row v-else>
-      <b-col>
+      <b-col cols="12">
         <b-btn
           v-b-modal.cv-tool-modal
           type="button"
@@ -11,12 +11,14 @@
           Open CV tool
         </b-btn>
       </b-col>
-      <UserProfile
-        :profile="profile"
-      />
-      <CvTool
-        :profile="profile"
-      />
+      <b-col cols="12">
+        <UserProfile
+          :profile="profile"
+        />
+        <CvTool
+          :profile="profile"
+        />
+      </b-col>
     </b-row>
   </b-container>
 </template>
