@@ -100,10 +100,10 @@ export default {
   },
   data () {
     return {
-      originalName: this.skill.name ? this.skill.name : '',
-      name: this.skill.name ? this.skill.name : '',
-      description: this.skill.description ? this.skill.description : '',
-      selectedSkillCategoryId: this.skill.skillCategoryId ? this.skill.skillCategoryId : null,
+      originalName: this.skill.name || '',
+      name: this.skill.name || '',
+      description: this.skill.description || '',
+      selectedSkillCategoryId: this.skill.skillCategoryId || null,
       showSimilarSkills: false,
       errorDetails: []
     }
