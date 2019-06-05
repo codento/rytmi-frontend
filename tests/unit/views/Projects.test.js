@@ -30,7 +30,7 @@ function createStore (overrideConfig) {
   return new Vuex.Store(mergedConfig)
 }
 
-describe('Profile.vue shallow', () => {
+describe('Project view shallow', () => {
   let localVue = createLocalVue()
   localVue.use(Vuex)
   localVue.use(BootstrapVue)
