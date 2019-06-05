@@ -24,14 +24,13 @@ import { orderBy, cloneDeep } from 'lodash'
 import EditProfileEmployer from './EditProfileEmployer'
 import EmployersProfileProject from './EmployersProfileProject'
 import WorkHistoryEntry from './WorkHistoryEntry'
-import { ProjectProfileForm, ProjectForm } from '../Project'
+import { ProjectProfileForm } from '../Project'
 import sortBy from 'lodash/sortBy'
 
 export default {
   name: 'WorkHistoryEntryList',
   components: {
     EditProfileEmployer,
-    ProjectForm,
     EmployersProfileProject,
     ProjectProfileForm,
     WorkHistoryEntry

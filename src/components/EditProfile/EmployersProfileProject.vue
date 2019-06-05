@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="clickable"
-    @click="projectClicked"
-  >
+  <div class="clickable">
     <span>
       {{ getDescriptionWithCurrentLanguage(project).name }}
     </span>
@@ -40,9 +37,6 @@ export default {
       }
       return objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)
     },
-    projectClicked () {
-      this.$emit('projectClicked', { project: this.project, profileProject: this.profileProject })
-    }
   }
 }
 </script>

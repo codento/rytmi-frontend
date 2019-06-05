@@ -152,7 +152,7 @@
       </b-col>
     </b-row>
     <slot name="custom-form" />
-    <b-row class="mt-4">
+    <b-row class="mt-4 pull-right">
       <b-col>
         <b-button
           id="submit-project-edits-btn"

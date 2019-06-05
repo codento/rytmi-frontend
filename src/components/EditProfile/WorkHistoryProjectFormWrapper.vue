@@ -7,7 +7,6 @@
       :is-new-project="isNewProject"
       :employer-id="currentEmployerId"
       :custom-form-validation="formIsValid"
-      show-cancel
       @on-submit="createOrUpdateProject"
       @cancel="$emit('close-modal')"
     >

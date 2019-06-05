@@ -91,7 +91,10 @@
         </b-button>
       </b-col>
     </b-row>
-    <b-row v-if="profileEmployer.id">
+    <b-row
+      class="mt-2"
+      v-if="profileEmployer.id"
+    >
       <b-col>
         <CollapsableItem title="Projects for this employer">
           <div
@@ -109,7 +112,23 @@
               :profile-project="profileProjectWithProjectData.profileProject"
               :project="profileProjectWithProjectData.project"
               @projectClicked="projectClicked($event)"
+              v-b-modal="`project-modal${profileProjectWithProjectData.profileProject.id}`"
             />
+            <b-modal
+              :id="`project-modal${profileProjectWithProjectData.profileProject.id}`"
+              size="lg"
+              hide-header
+              ok-only
+              ok-title="Close"
+              ok-variant="light"
+              no-close-on-backdrop
+            >
+              <WorkHistoryProjectFormWrapper
+                :editable-project="profileProjectWithProjectData.project"
+                :profile-project="profileProjectWithProjectData.profileProject"
+                :current-employer-id="profileProjectWithProjectData.project.employerId ? profileProjectWithProjectData.project.employerId : profileEmployer.employerId"
+              />
+            </b-modal>
           </div>
         </CollapsableItem>
       </b-col>
@@ -124,6 +143,7 @@ import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
 import EmployersProfileProject from './EmployersProfileProject'
 import CollapsableItem from '@/components/Common/CollapsableItem'
+import WorkHistoryProjectFormWrapper from './WorkHistoryProjectFormWrapper'
 
 export default {
   name: 'EditProfileEmployer',
@@ -131,7 +151,8 @@ export default {
     Datepicker,
     vSelect,
     EmployersProfileProject,
-    CollapsableItem
+    CollapsableItem,
+    WorkHistoryProjectFormWrapper
   },
   props: {
     profileEmployer: Object,
