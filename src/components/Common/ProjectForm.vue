@@ -7,7 +7,7 @@
       <b-col>
         <small for="project-code-input">Project code</small>
         <b-form-group
-          invalid-feedback="Required"
+          :invalid-feedback="inputStates.projectCode.filter(item => !item.state).map(item => item.feedback).join('\n')"
         >
           <b-form-input
             id="project-code-input"
@@ -17,7 +17,7 @@
             type="number"
             min="0"
             max="99999"
-            :state="inputStates.projectCode"
+            :state="inputStates.projectCode.every(item => item.state)"
           />
         </b-form-group>
       </b-col>
@@ -220,22 +220,39 @@ export default {
         isInternal: !this.isNewProject ? this.project.isInternal : false,
         descriptions: !this.isNewProject && this.project.descriptions ? this.project.descriptions : [],
         employerId: this.employerId
-      },
-      selectedEmployer: !this.isNewProject ? this.project.employerId : null
+      }
     }
   },
   computed: {
-    ...mapGetters(['employers']),
+    ...mapGetters([
+      'employerByName',
+      'projects'
+    ]),
+    internalCompanyId () {
+      return this.employerByName(INTERNAL_COMPANY_NAME).id
+    },
+    existingProjectCodes () {
+      const projectCodes = Object.values(this.projects).filter(project => project.employerId === this.internalCompanyId).map(project => project.code)
+      return this.isNewProject ? projectCodes : projectCodes.filter(projectCode => projectCode !== this.project.code)
+    },
     showProjectCode () {
-      const employerNameInProject = Object.values(this.employers).find(employer => employer.id === this.editedProject.employerId).title
-      return employerNameInProject === INTERNAL_COMPANY_NAME
+      return this.editedProject.employerId === this.internalCompanyId
     },
     showCustomerName () {
       return !this.editedProject.isInternal
     },
     inputStates () {
       return {
-        projectCode: this.editedProject.code !== null,
+        projectCode: [
+          {
+            state: this.editedProject.code !== null,
+            feedback: 'Required'
+          },
+          {
+            state: this.editedProject.code ? !this.existingProjectCodes.includes(parseInt(this.editedProject.code)) : true,
+            feedback: 'Project code already exists, code must be unique'
+          }
+        ],
         startDate: new Date(this.editedProject.startDate) > 1000,
         projectNameFi: this.getDescriptionByLanguage('fi').name.length > 0,
         projectNameEn: this.getDescriptionByLanguage('en').name.length > 0,
@@ -248,11 +265,11 @@ export default {
       // Required always
       stateArray.push(this.inputStates.startDate, this.inputStates.projectNameFi, this.inputStates.projectNameEn)
       // Required sometimes
-      if (this.inputStates.showProjectCode) {
-        stateArray.push(this.inputStates.projectCode)
+      if (this.showProjectCode) {
+        Array.prototype.push.apply(stateArray, this.inputStates.projectCode.map(item => item.state))
       }
-      if (this.inputStates.showCustomerName) {
-        stateArray.push(this.inputStates.CustomerNameFi, this.inputStates.CustomerNameEn)
+      if (this.showCustomerName) {
+        stateArray.push(this.inputStates.customerNameFi, this.inputStates.customerNameEn)
       }
       return stateArray.every(item => item)
     }
@@ -260,6 +277,21 @@ export default {
   methods: {
     onSubmit () {
       this.$emit('on-submit', this.editedProject)
+      if (this.isNewProject) {
+        this.resetProject()
+      }
+    },
+    resetProject () {
+      this.editedProject = {
+        id: !this.isNewProject ? this.project.id : null,
+        code: !this.isNewProject ? this.project.code : null,
+        startDate: !this.isNewProject ? new Date(this.project.startDate) : null,
+        endDate: !this.isNewProject && this.project.endDate ? new Date(this.project.endDate) : null,
+        isSecret: !this.isNewProject ? this.project.isSecret : false,
+        isInternal: !this.isNewProject ? this.project.isInternal : false,
+        descriptions: !this.isNewProject && this.project.descriptions ? this.project.descriptions : [],
+        employerId: this.employerId
+      }
     },
     getDescriptionByLanguage (language) {
       if (this.editedProject && this.editedProject.descriptions) {

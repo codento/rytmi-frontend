@@ -45,7 +45,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import LANGUAGE_ENUM from '@/utils/constants'
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 import SkillListAdminPanelItem from './SkillListAdminPanelItem.vue'
 

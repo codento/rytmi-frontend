@@ -1,7 +1,6 @@
 <template>
   <div>
     <h3> {{ isNewProject ? 'Add a new project' : 'Edit project' }} </h3>
-    {{ editableProject }}
     <ProjectForm
       :form-id="formId"
       :project="editableProject"
@@ -84,19 +83,16 @@ export default {
       showError: false,
       errorDetails: [],
       formId: 'work-history-project-form',
-      descriptions: this.profileProject.descriptions ? this.profileProject.descriptions : []
+      inputStates: {
+        roleFi: true,
+        roleEn: true
+      }
     }
   },
   computed: {
     ...mapGetters(['employers']),
     isNewProject () {
       return this.editableProject.id === null
-    },
-    inputStates () {
-      return {
-        roleFi: this.getRoleByLanguage('fi').title.length > 0,
-        roleEn: this.getRoleByLanguage('en').title.length > 0
-      }
     },
     formIsValid () {
       return this.inputStates.roleFi && this.inputStates.roleEn
@@ -110,7 +106,10 @@ export default {
       'updateProfileProject'
     ]),
     getRoleByLanguage (language) {
-      if (this.profileProject && this.profileProject.descriptions) {
+      if (this.profileProject) {
+        if (!this.profileProject.descriptions) {
+          this.profileProject.descriptions = []
+        }
         const paramsWithTranslations = this.profileProject.descriptions.find(description => description.language === language)
         if (!paramsWithTranslations) {
           this.profileProject.descriptions.push(
@@ -120,7 +119,14 @@ export default {
             }
           )
         }
-        return this.profileProject.descriptions.find(description => description.language === language)
+        const description = this.profileProject.descriptions.find(description => description.language === language)
+        if (language === 'fi') {
+          this.inputStates.roleFi = description.title.length > 0
+        }
+        if (language === 'en') {
+          this.inputStates.roleEn = description.title.length > 0
+        }
+        return description
       }
       return { title: '' }
     },
@@ -158,7 +164,7 @@ export default {
         workPercentage: 100,
         startDate: project.startDate,
         endDate: project.endDate,
-        descriptions: this.descriptions
+        descriptions: this.profileProject.descriptions
       }
       try {
         if (this.isNewProject) {
