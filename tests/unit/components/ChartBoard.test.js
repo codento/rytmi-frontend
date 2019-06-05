@@ -6,8 +6,7 @@ import MostWillingnessChart from '@/components/Dashboard/MostWillingnessChart'
 import ConsultantUtilizationChart from '@/components/Dashboard/ConsultantUtilizationChart'
 import ConsultantUtilizationList from '@/components/Dashboard/ConsultantUtilizationList'
 import { createShallowWrapper } from './setup/setup'
-import constants from '@/utils/constants'
-const { LANGUAGE_ENUM } = constants
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 const storeConfig = {
   actions: {

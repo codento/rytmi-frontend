@@ -91,8 +91,7 @@ import TopSkillChart from './TopSkillChart'
 import MostWillingnessChart from './MostWillingnessChart'
 import ConsultantUtilizationChart from './ConsultantUtilizationChart'
 import ConsultantUtilizationList from './ConsultantUtilizationList'
-import constants from '@/utils/constants'
-const { LANGUAGE_ENUM } = constants
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 const calculateAverage = (arr) => {
   if (arr && arr.length > 0) {

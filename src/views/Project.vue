@@ -36,7 +36,7 @@
       </b-row>
       <hr>
       <CollapsableItem title="Edit project">
-        <ProjectForm
+        <ProjectFormWrapper
           v-if="Object.values(employers).length > 0"
           :editable-project="project"
         />
@@ -68,7 +68,7 @@ import { CollapsableItem } from '../components/Common'
 import {
   ProjectProfileForm,
   ProjectMemberTable,
-  ProjectForm,
+  ProjectFormWrapper,
   ProjectSkillForm
 } from '../components/Project'
 
@@ -77,7 +77,7 @@ export default {
   components: {
     ProjectProfileForm,
     ProjectMemberTable,
-    ProjectForm,
+    ProjectFormWrapper,
     ProjectSkillForm,
     CollapsableItem
   },

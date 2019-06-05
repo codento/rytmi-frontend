@@ -9,10 +9,7 @@
     <span>
       {{ '|' }}
     </span>
-    <span
-      class="clickable"
-      @click="profileProjectClicked"
-    >
+    <span>
       {{ getDescriptionWithCurrentLanguage(profileProject).title }}
     </span>
   </div>
@@ -41,9 +38,6 @@ export default {
     },
     projectClicked () {
       this.$emit('projectClicked', this.project)
-    },
-    profileProjectClicked () {
-      this.$emit('profileProjectClicked', this.profileProject)
     }
   }
 }
