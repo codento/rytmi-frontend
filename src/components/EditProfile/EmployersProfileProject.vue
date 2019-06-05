@@ -1,5 +1,9 @@
 <template>
-  <div class="clickable">
+  <div
+    class="mt-2 mb-2"
+    @mouseover="showEditIcon = true"
+    @mouseout="showEditIcon = false"
+  >
     <span>
       {{ getDescriptionWithCurrentLanguage(project).name }}
     </span>
@@ -8,6 +12,9 @@
     </span>
     <span>
       {{ getDescriptionWithCurrentLanguage(profileProject).title }}
+    </span>
+    <span v-show="showEditIcon">
+      <i class="fa fa-pencil pull-right" />
     </span>
   </div>
 </template>
@@ -23,6 +30,11 @@ export default {
       type: Boolean,
       default: true
     },
+  },
+  data () {
+    return {
+      showEditIcon: false
+    }
   },
   computed: {
     ...mapGetters(['currentLanguage'])
@@ -42,10 +54,5 @@ export default {
 </script>
 
 <style scoped >
-.clickable {
-  cursor: pointer;
-}
-.clickable:hover {
-  text-decoration: underline;
-}
+
 </style>

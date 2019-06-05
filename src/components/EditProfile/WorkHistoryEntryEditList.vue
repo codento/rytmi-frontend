@@ -9,6 +9,7 @@
           class="pull-right mb-2"
           @click="addNewProfileEmployer"
         >
+          <i class="fa fa-plus" />
           Add a new work history entry
         </b-button>
       </b-col>

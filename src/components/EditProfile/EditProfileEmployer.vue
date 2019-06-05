@@ -83,7 +83,7 @@
       <b-col>
         <b-button
           id="submit"
-          class="form-control"
+          class="form-control wide-button"
           type="submit"
           primary
         >
@@ -91,12 +91,13 @@
         </b-button>
       </b-col>
     </b-row>
-    <b-row
+    <CollapsableItem
+      title="Projects for this employer"
       class="mt-2"
       v-if="profileEmployer.id"
     >
-      <b-col>
-        <CollapsableItem title="Projects for this employer">
+      <b-row>
+        <b-col>
           <div
             v-if="profileProjectsWithProjectData.length === 0"
             class="no-projects"
@@ -109,6 +110,7 @@
             :key="profileProjectWithProjectData.profileProject.id"
           >
             <EmployersProfileProject
+              class="clickable"
               :profile-project="profileProjectWithProjectData.profileProject"
               :project="profileProjectWithProjectData.project"
               @projectClicked="projectClicked($event)"
@@ -130,9 +132,37 @@
               />
             </b-modal>
           </div>
-        </CollapsableItem>
-      </b-col>
-    </b-row>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-button
+            class="pull-right mt-2"
+            v-b-modal="'new-project-modal'"
+          >
+            <i class="fa fa-plus" />
+            Add a project
+          </b-button>
+        </b-col>
+        <b-modal
+          :id="'new-project-modal'"
+          v-model="showNewProjectModal"
+          size="lg"
+          hide-header
+          ok-only
+          ok-title="Close"
+          ok-variant="light"
+          no-close-on-backdrop
+        >
+          <WorkHistoryProjectFormWrapper
+            :editable-project="emptyProfileProjectWithProjectData.project"
+            :profile-project="emptyProfileProjectWithProjectData.profileProject"
+            :current-employer-id="emptyProfileProjectWithProjectData.project.employerId"
+            @close-modal="closeNewProjectModal()"
+          />
+        </b-modal>
+      </b-row>
+    </CollapsableItem>
   </b-form>
 </template>
 
@@ -160,7 +190,13 @@ export default {
   },
   data () {
     return {
-      selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId)
+      showEditIconByIndex: null,
+      selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
+      emptyProfileProjectWithProjectData: {
+        project: { id: null, employerId: this.profileEmployer.employerId },
+        profileProject: { id: null, profileId: this.profileEmployer.profileId }
+      },
+      showNewProjectModal: false
     }
   },
   computed: {
@@ -253,15 +289,21 @@ export default {
       }
       return isDataValid
     },
-    projectClicked (profileProjectWithProjectData) {
-      // TODO
+    closeNewProjectModal () {
+      this.showNewProjectModal = false
     }
   }
 }
 </script>
 
 <style scoped >
-button {
+.wide-button {
   width: 100%;
+}
+.clickable {
+  cursor: pointer;
+}
+.clickable:hover {
+  text-decoration: underline;
 }
 </style>
