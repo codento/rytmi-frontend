@@ -29,7 +29,7 @@ export default {
     editable: {
       type: Boolean,
       default: true
-    },
+    }
   },
   data () {
     return {
@@ -48,7 +48,7 @@ export default {
         }
       }
       return objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)
-    },
+    }
   }
 }
 </script>

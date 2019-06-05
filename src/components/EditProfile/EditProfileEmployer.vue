@@ -92,9 +92,9 @@
       </b-col>
     </b-row>
     <CollapsableItem
+      v-if="profileEmployer.id"
       title="Projects for this employer"
       class="mt-2"
-      v-if="profileEmployer.id"
     >
       <b-row>
         <b-col>
@@ -110,11 +110,11 @@
             :key="profileProjectWithProjectData.profileProject.id"
           >
             <EmployersProfileProject
+              v-b-modal="`project-modal${profileProjectWithProjectData.profileProject.id}`"
               class="clickable"
               :profile-project="profileProjectWithProjectData.profileProject"
               :project="profileProjectWithProjectData.project"
               @projectClicked="projectClicked($event)"
-              v-b-modal="`project-modal${profileProjectWithProjectData.profileProject.id}`"
             />
             <b-modal
               :id="`project-modal${profileProjectWithProjectData.profileProject.id}`"
@@ -137,8 +137,8 @@
       <b-row>
         <b-col>
           <b-button
-            class="pull-right mt-2"
             v-b-modal="'new-project-modal'"
+            class="pull-right mt-2"
           >
             <i class="fa fa-plus" />
             Add a project
@@ -210,7 +210,7 @@ export default {
         profileProject: pp,
         project: Object.values(this.projects).find(project => project.id === pp.projectId)
       })).filter(pp => pp.project.employerId === this.profileEmployer.employerId)
-    },
+    }
   },
   watch: {
     selectedExistingEmployer: function () {
@@ -220,7 +220,6 @@ export default {
   methods: {
     ...mapActions([
       'createEmployer',
-      'updateEmployer',
       'createProfileEmployer',
       'updateProfileEmployer'
     ]),
@@ -305,5 +304,9 @@ export default {
 }
 .clickable:hover {
   text-decoration: underline;
+}
+.no-projects {
+  font-style: italic;
+  color: lightslategrey;
 }
 </style>

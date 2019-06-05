@@ -181,7 +181,7 @@
         id="workHistoryEntryEditListModal"
         size="lg"
         ok-only
-        ok-title="Cancel"
+        ok-title="Close"
         ok-variant="light"
       >
         <template

@@ -8,6 +8,7 @@
     >
       <b-form-group
         v-show="profileVisible"
+        id="consultantSelectFormGroup"
       >
         <small for="project-select">Consultant</small>
         <b-form-select
@@ -38,6 +39,7 @@
 
       <b-form-group
         v-show="projectVisible"
+        id="projectSelectFormGroup"
       >
         <small for="project-select">Project</small>
         <b-form-select
