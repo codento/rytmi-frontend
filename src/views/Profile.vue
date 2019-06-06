@@ -4,6 +4,7 @@
     <b-row v-else>
       <b-col cols="12">
         <b-btn
+          v-if="false"
           v-b-modal.cv-tool-modal
           type="button"
           class="open-cv-tool-button pull-right"

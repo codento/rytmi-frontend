@@ -12,19 +12,7 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
       cols="12"
       tag="div"
     >
-      <b-btn-stub
-        class="open-cv-tool-button pull-right"
-        event="click"
-        routertag="a"
-        tag="button"
-        target="_self"
-        type="button"
-        variant="secondary"
-      >
-        
-        Open CV tool
-      
-      </b-btn-stub>
+      <!---->
     </b-col-stub>
      
     <b-col-stub

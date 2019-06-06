@@ -82,7 +82,7 @@ small {
   color: black;
 }
 .project-header {
-  color: hsl(39, 98%, 51%);
+  color: black;
   font-weight: 500;
   font-size: 1.5em;
 }

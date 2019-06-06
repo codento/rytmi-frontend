@@ -22,15 +22,10 @@
         >
           <template
             slot="modal-header"
-            slot-scope="{ close }"
           >
             <h4 class="modal-header-text">
               Edit user information
             </h4>
-            <i
-              class="fa fa-times fa-2x pull-right clickable"
-              @click="close()"
-            />
           </template>
           <EditBasicProfileInfo
             :profile="profile"
@@ -74,19 +69,15 @@
         >
           <template
             slot="modal-header"
-            slot-scope="{ close }"
           >
             <h5 class="modal-header-text">
               Edit skills
             </h5>
-            <i
-              class="fa fa-times fa-2x pull-right clickable"
-              @click="close()"
-            />
           </template>
           <EditSkills :profile-id="profile.id" />
           <b-btn
             class="pull-right"
+            variant="light"
             @click="$bvModal.hide('editProfileSkillsModal')"
           >
             Close
@@ -113,20 +104,17 @@
         />
         <b-modal
           id="editProfileProjectsModal"
-          hide-footer
+          ok-only
+          ok-title="Close"
+          ok-variant="light"
           size="lg"
         >
           <template
             slot="modal-header"
-            slot-scope="{ close }"
           >
             <h4 class="modal-header-text">
               Edit projects
             </h4>
-            <i
-              class="fa fa-times fa-2x pull-right clickable"
-              @click="close()"
-            />
           </template>
           <EditProjects :profile-id="profile.id" />
         </b-modal>
@@ -145,20 +133,17 @@
       </CvToolEducation>
       <b-modal
         id="editEducationModal"
-        hide-footer
+        ok-only
+        ok-title="Close"
+        ok-variant="light"
         size="lg"
       >
         <template
           slot="modal-header"
-          slot-scope="{ close }"
         >
           <h4 class="modal-header-text">
             Edit education
           </h4>
-          <i
-            class="fa fa-times fa-2x pull-right clickable"
-            @click="close()"
-          />
         </template>
         <CvInfoEditEducation
           :profile="profile"
@@ -186,15 +171,10 @@
       >
         <template
           slot="modal-header"
-          slot-scope="{ close }"
         >
           <h4 class="modal-header-text">
             Edit work history
           </h4>
-          <i
-            class="fa fa-times fa-2x pull-right clickable"
-            @click="close()"
-          />
         </template>
         <WorkHistoryEntryEditList
           :profile-id="profile.id"

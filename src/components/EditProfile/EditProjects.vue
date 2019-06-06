@@ -136,12 +136,12 @@
           Save
         </b-btn>
         <b-btn
-          id="cancel"
+          id="close"
           variant="light"
           class="modal-btn"
           @click="closeEditModal()"
         >
-          Cancel
+          Close
         </b-btn>
       </b-modal>
     </b-row>

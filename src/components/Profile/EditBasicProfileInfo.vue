@@ -124,11 +124,11 @@
       <b-button
         id="reset-basic-details"
         type="button"
-        variant="danger"
+        variant="light"
         class="pull-right"
         @click="onCancel"
       >
-        Cancel
+        Close
       </b-button>
     </b-form>
   </div>

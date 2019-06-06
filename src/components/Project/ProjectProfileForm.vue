@@ -119,7 +119,7 @@
         name="submit"
         type="submit"
       >
-        Submit
+        {{ profileVisible ? 'Add consultant' : 'Join project' }}
       </b-button>
     </b-form>
     <div

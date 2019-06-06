@@ -105,9 +105,10 @@
       </b-btn>
       <b-btn
         class="modal-btn"
+        variant="light"
         @click="hideModals()"
       >
-        Cancel
+        Close
       </b-btn>
     </b-modal>
     <b-modal
@@ -129,9 +130,10 @@
       </b-btn>
       <b-btn
         class="modal-btn"
+        variant="light"
         @click="hideModals()"
       >
-        Cancel
+        Close
       </b-btn>
     </b-modal>
   </div>

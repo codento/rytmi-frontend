@@ -135,7 +135,7 @@
         class="modal-btn"
         @click="closeEditModal()"
       >
-        Cancel
+        Close
       </b-btn>
     </b-modal>
   </div>
