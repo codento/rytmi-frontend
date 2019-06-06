@@ -106,5 +106,6 @@ export default {
 <style scoped>
 .profile-icon {
   margin: 0 10px 0 -10px;
+  border-radius: 50%;
 }
 </style>
