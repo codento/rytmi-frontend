@@ -11,7 +11,7 @@
         >
           {{ skillById(skill.skillId).name }}
           <i
-            class="fa fa-trash"
+            class="fa fa-trash icon"
             @click="removeSkill(skill)"
           />
         </li>
@@ -119,5 +119,9 @@ button {
 }
 .fa {
   color: gray;
+}
+.icon:hover {
+  color: black;
+  cursor: pointer;
 }
 </style>

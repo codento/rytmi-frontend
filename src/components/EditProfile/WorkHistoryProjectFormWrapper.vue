@@ -41,6 +41,13 @@
             </b-form-group>
           </b-col>
         </b-row>
+        <b-row v-if="!isNewProject">
+          <b-col>
+            <CollapsableItem title="Project's related skills">
+              <ProjectSkillForm :project-id="editableProject.id" />
+            </CollapsableItem>
+          </b-col>
+        </b-row>
       </template>
     </ProjectForm>
     <div
@@ -55,13 +62,16 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel.vue'
-import { ProjectForm } from '@/components/Common'
+import { ProjectForm, CollapsableItem } from '@/components/Common'
+import { ProjectSkillForm } from '@/components/Project'
 
 export default {
   name: 'WorkHistoryProjectFormWrapper',
   components: {
     ProjectForm,
-    ApiErrorDetailsPanel
+    ApiErrorDetailsPanel,
+    ProjectSkillForm,
+    CollapsableItem
   },
   props: {
     editableProject: {
