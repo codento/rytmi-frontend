@@ -84,6 +84,7 @@
         <b-button
           id="submit"
           class="form-control"
+          block
           type="submit"
           variant="primary"
         >
@@ -94,7 +95,7 @@
     <CollapsableItem
       v-if="profileEmployer.id"
       title="Projects for this employer"
-      class="mt-2"
+      class="mt-4"
     >
       <b-row>
         <b-col>
@@ -155,9 +156,9 @@
           no-close-on-backdrop
         >
           <WorkHistoryProjectFormWrapper
-            :editable-project="emptyProfileProjectWithProjectData.project"
-            :profile-project="emptyProfileProjectWithProjectData.profileProject"
-            :current-employer-id="emptyProfileProjectWithProjectData.project.employerId"
+            :editable-project="{ id: null, employerId: profileEmployer.employerId }"
+            :profile-project="{ id: null, profileId: profileEmployer.profileId, employerId: profileEmployer.employerId, descriptions: [] }"
+            :current-employer-id="profileEmployer.employerId"
             @close-modal="closeNewProjectModal()"
           />
         </b-modal>
@@ -192,10 +193,6 @@ export default {
     return {
       showEditIconByIndex: null,
       selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
-      emptyProfileProjectWithProjectData: {
-        project: { id: null, employerId: this.profileEmployer.employerId },
-        profileProject: { id: null, profileId: this.profileEmployer.profileId }
-      },
       showNewProjectModal: false
     }
   },

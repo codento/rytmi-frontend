@@ -19,7 +19,7 @@
             >
               <b-form-input
                 id="project-role-fi-input"
-                v-model="getRoleByLanguage('fi').title"
+                v-model="getDescriptionByLanguage('fi').title"
                 placeholder="e.g. front-end developer, database admin, architect"
                 type="text"
                 :state="inputStates.roleFi"
@@ -33,7 +33,7 @@
             >
               <b-form-input
                 id="project-role-en-input"
-                v-model="getRoleByLanguage('en').title"
+                v-model="getDescriptionByLanguage('en').title"
                 placeholder="e.g. front-end developer, database admin, architect"
                 type="text"
                 :state="inputStates.roleEn"
@@ -60,6 +60,7 @@
   </div>
 </template>
 <script>
+import { cloneDeep } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel.vue'
 import { ProjectForm, CollapsableItem } from '@/components/Common'
@@ -92,10 +93,7 @@ export default {
       showError: false,
       errorDetails: [],
       formId: 'work-history-project-form',
-      inputStates: {
-        roleFi: true,
-        roleEn: true
-      }
+      editedProfileProject: cloneDeep(this.profileProject)
     }
   },
   computed: {
@@ -105,6 +103,17 @@ export default {
     },
     formIsValid () {
       return this.inputStates.roleFi && this.inputStates.roleEn
+    },
+    inputStates () {
+      return {
+        roleFi: this.getDescriptionByLanguage('fi').title.length > 0,
+        roleEn: this.getDescriptionByLanguage('en').title.length > 0
+      }
+    }
+  },
+  watch: {
+    profileProject () {
+      this.editedProfileProject = cloneDeep(this.profileProject)
     }
   },
   methods: {
@@ -114,28 +123,18 @@ export default {
       'newProjectProfile',
       'updateProfileProject'
     ]),
-    getRoleByLanguage (language) {
-      if (this.profileProject) {
-        if (!this.profileProject.descriptions) {
-          this.profileProject.descriptions = []
-        }
-        const paramsWithTranslations = this.profileProject.descriptions.find(description => description.language === language)
+    getDescriptionByLanguage (language) {
+      if (this.editedProfileProject) {
+        const paramsWithTranslations = this.editedProfileProject.descriptions.find(description => description.language === language)
         if (!paramsWithTranslations) {
-          this.profileProject.descriptions.push(
+          this.editedProfileProject.descriptions.push(
             {
               title: '',
               language: language
             }
           )
         }
-        const description = this.profileProject.descriptions.find(description => description.language === language)
-        if (language === 'fi') {
-          this.inputStates.roleFi = description.title.length > 0
-        }
-        if (language === 'en') {
-          this.inputStates.roleEn = description.title.length > 0
-        }
-        return description
+        return this.editedProfileProject.descriptions.find(description => description.language === language)
       }
       return { title: '' }
     },
@@ -173,7 +172,7 @@ export default {
         workPercentage: 100,
         startDate: project.startDate,
         endDate: project.endDate,
-        descriptions: this.profileProject.descriptions
+        descriptions: this.editedProfileProject.descriptions
       }
       try {
         if (this.isNewProject) {
