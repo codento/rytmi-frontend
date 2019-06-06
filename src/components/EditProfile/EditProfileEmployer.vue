@@ -233,23 +233,23 @@ export default {
       }
       if (this.shouldCreateANewEmployer()) {
         try {
-            await this.createEmployer({ name: this.profileEmployer.newEmployerName })
-          } catch (error) {
-            console.log(error)
-            this.$toasted.global.rytmi_error({
-              message: `Couldn\'t create a new employer. ${error}`
-            })
-            return
-          }
-          this.$toasted.global.rytmi_success({
-              message: 'A new employer created!'
-            })
-          const profileEmployer = { ...this.profileEmployer, employerId: this.getEmployerId(this.profileEmployer.newEmployerName) }
-          this.updateOrCreateProfileEmployer(profileEmployer)
-        } else {
-          const profileEmployer = { ...this.profileEmployer, employerId: this.selectedExistingEmployer.id }
-          this.updateOrCreateProfileEmployer(profileEmployer)
+          await this.createEmployer({ name: this.profileEmployer.newEmployerName })
+        } catch (error) {
+          console.log(error)
+          this.$toasted.global.rytmi_error({
+            message: `Couldn't create a new employer. ${error}`
+          })
+          return
         }
+        this.$toasted.global.rytmi_success({
+          message: 'A new employer created!'
+        })
+        const profileEmployer = { ...this.profileEmployer, employerId: this.getEmployerId(this.profileEmployer.newEmployerName) }
+        this.updateOrCreateProfileEmployer(profileEmployer)
+      } else {
+        const profileEmployer = { ...this.profileEmployer, employerId: this.selectedExistingEmployer.id }
+        this.updateOrCreateProfileEmployer(profileEmployer)
+      }
     },
     async updateOrCreateProfileEmployer (profileEmployer) {
       // If the profileEmployer has an existing ID, update it; otherwise create a new profileEmployer
@@ -261,7 +261,7 @@ export default {
           })
         } catch (error) {
           this.$toasted.global.rytmi_error({
-            message: `Work history entry couldn\'t be updated. Error: ${error}`
+            message: `Work history entry couldn't be updated. Error: ${error}`
           })
         }
       } else {
@@ -273,7 +273,7 @@ export default {
           document.getElementById('employer-form').reset()
         } catch (error) {
           this.$toasted.global.rytmi_error({
-            message: `A new work history entry couldn\'t be created. Error: ${error}`
+            message: `A new work history entry couldn't be created. Error: ${error}`
           })
         }
       }
