@@ -23,25 +23,25 @@
     </b-row>
     <b-row>
       <b-col>
-        <small for="profile-employer-start-date">Start date</small>
+        <small :for="`profile-employer-start-date${profileEmployer.id}`">Start date</small>
         <Datepicker
-          id="profile-employer-start-date"
+          :id="`profile-employer-start-date${profileEmployer.id}`"
           v-model="profileEmployer.startDate"
-          name="profile-employer-start-date"
+          :name="`profile-employer-start-date${profileEmployer.id}`"
         />
       </b-col>
       <b-col>
-        <small for="profile-employer-end-date">End date</small>
+        <small :for="`profile-employer-end-date${profileEmployer.id}`">End date</small>
         <Datepicker
-          id="profile-employer-end-date"
+          :id="`profile-employer-end-date${profileEmployer.id}`"
           v-model="profileEmployer.endDate"
-          name="profile-employer-end-date"
+          :name="`profile-employer-end-date${profileEmployer.id}`"
         />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <small for="title-fi">Title (Finnish)</small>
+        <small for="title-fi">Job title (in Finnish)</small>
         <b-input
           id="title-fi"
           v-model="profileEmployer.title['fi']"
@@ -50,7 +50,7 @@
         />
       </b-col>
       <b-col>
-        <small for="title-en">Title (English)</small>
+        <small for="title-en">Job title (in English)</small>
         <b-input
           id="title-en"
           v-model="profileEmployer.title['en']"
@@ -61,7 +61,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <small for="description-fi">Description (Finnish)</small>
+        <small for="description-fi">Job description (in Finnish)</small>
         <b-textarea
           id="description-fi"
           v-model="profileEmployer.description['fi']"
@@ -70,7 +70,7 @@
         />
       </b-col>
       <b-col>
-        <small for="description-en">Description (English)</small>
+        <small for="description-en">Job description (in English)</small>
         <b-textarea
           id="description-en"
           v-model="profileEmployer.description['en']"
@@ -84,13 +84,86 @@
         <b-button
           id="submit"
           class="form-control"
+          block
           type="submit"
-          primary
+          variant="primary"
         >
           {{ shouldUpdateProfileEmployer() ? 'Update work history entry' : 'Create a new work history entry' }}
         </b-button>
       </b-col>
     </b-row>
+    <CollapsableItem
+      v-if="profileEmployer.id"
+      title="Projects for this employer"
+      class="mt-4"
+    >
+      <b-row>
+        <b-col>
+          <div
+            v-if="profileProjectsWithProjectData.length === 0"
+            class="no-projects"
+          >
+            No projects.
+          </div>
+          <div
+            v-for="profileProjectWithProjectData in profileProjectsWithProjectData"
+            v-else
+            :key="profileProjectWithProjectData.profileProject.id"
+          >
+            <EmployersProfileProject
+              v-b-modal="`project-modal${profileProjectWithProjectData.profileProject.id}`"
+              class="clickable"
+              :profile-project="profileProjectWithProjectData.profileProject"
+              :project="profileProjectWithProjectData.project"
+              @projectClicked="projectClicked($event)"
+            />
+            <b-modal
+              :id="`project-modal${profileProjectWithProjectData.profileProject.id}`"
+              size="lg"
+              hide-header
+              ok-only
+              ok-title="Close"
+              ok-variant="light"
+              no-close-on-backdrop
+            >
+              <WorkHistoryProjectFormWrapper
+                :editable-project="profileProjectWithProjectData.project"
+                :profile-project="profileProjectWithProjectData.profileProject"
+                :current-employer-id="profileProjectWithProjectData.project.employerId ? profileProjectWithProjectData.project.employerId : profileEmployer.employerId"
+              />
+            </b-modal>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-button
+            v-b-modal="'new-project-modal'"
+            class="pull-right mt-2"
+          >
+            <i class="fa fa-plus" />
+            Add a project
+          </b-button>
+        </b-col>
+        <b-modal
+          :id="'new-project-modal'"
+          v-model="showNewProjectModal"
+          size="lg"
+          hide-header
+          ok-only
+          ok-title="Close"
+          ok-variant="light"
+          no-close-on-backdrop
+        >
+          <WorkHistoryProjectFormWrapper
+            :editable-project="{ id: null, employerId: profileEmployer.employerId }"
+            :profile-project="{ id: null, profileId: profileEmployer.profileId, employerId: profileEmployer.employerId, descriptions: [] }"
+            :current-employer-id="profileEmployer.employerId"
+            @close-modal="closeNewProjectModal()"
+          />
+        </b-modal>
+      </b-row>
+    </CollapsableItem>
   </b-form>
 </template>
 
@@ -99,21 +172,42 @@ import { mapActions, mapGetters } from 'vuex'
 import { isEmpty, isDate } from 'lodash'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
+import EmployersProfileProject from './EmployersProfileProject'
+import CollapsableItem from '@/components/Common/CollapsableItem'
+import WorkHistoryProjectFormWrapper from './WorkHistoryProjectFormWrapper'
 
 export default {
   name: 'EditProfileEmployer',
-  components: { Datepicker, vSelect },
+  components: {
+    Datepicker,
+    vSelect,
+    EmployersProfileProject,
+    CollapsableItem,
+    WorkHistoryProjectFormWrapper
+  },
   props: {
-    'profileEmployer': Object,
-    'vueSelectsEmployers': Array
+    profileEmployer: Object,
+    vueSelectsEmployers: Array
   },
   data () {
     return {
-      selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId)
+      showEditIconByIndex: null,
+      selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
+      showNewProjectModal: false
     }
   },
   computed: {
-    ...mapGetters(['employers'])
+    ...mapGetters([
+      'employers',
+      'projects',
+      'profileProjectsByProfileId'
+    ]),
+    profileProjectsWithProjectData () {
+      return this.profileProjectsByProfileId(this.profileEmployer.profileId).map(pp => ({
+        profileProject: pp,
+        project: Object.values(this.projects).find(project => project.id === pp.projectId)
+      })).filter(pp => pp.project.employerId === this.profileEmployer.employerId)
+    }
   },
   watch: {
     selectedExistingEmployer: function () {
@@ -123,47 +217,62 @@ export default {
   methods: {
     ...mapActions([
       'createEmployer',
-      'updateEmployer',
       'createProfileEmployer',
       'updateProfileEmployer'
     ]),
     getEmployerId (employerName) {
       return Object.values(this.employers).find(employer => employer.name === employerName).id
     },
-    onSubmit (evt) {
+    async onSubmit (evt) {
       evt.preventDefault()
-      if (this.isDataValidForSubmit()) {
-        if (this.shouldCreateANewEmployer()) {
-          this.createEmployer({ name: this.profileEmployer.newEmployerName })
-            .then(() => {
-              this.$toasted.global.rytmi_success({
-                message: 'A new employer created!'
-              })
-              const profileEmployer = { ...this.profileEmployer, employerId: this.getEmployerId(this.profileEmployer.newEmployerName) }
-              this.updateOrCreateProfileEmployer(profileEmployer)
-            })
-        } else {
-          const profileEmployer = { ...this.profileEmployer, employerId: this.selectedExistingEmployer.id }
-          this.updateOrCreateProfileEmployer(profileEmployer)
+      if (!this.isDataValidForSubmit()) {
+        return
+      }
+      if (this.shouldCreateANewEmployer()) {
+        try {
+          await this.createEmployer({ name: this.profileEmployer.newEmployerName })
+        } catch (error) {
+          console.log(error)
+          this.$toasted.global.rytmi_error({
+            message: `Couldn't create a new employer. ${error}`
+          })
+          return
         }
+        this.$toasted.global.rytmi_success({
+          message: 'A new employer created!'
+        })
+        const profileEmployer = { ...this.profileEmployer, employerId: this.getEmployerId(this.profileEmployer.newEmployerName) }
+        this.updateOrCreateProfileEmployer(profileEmployer)
+      } else {
+        const profileEmployer = { ...this.profileEmployer, employerId: this.selectedExistingEmployer.id }
+        this.updateOrCreateProfileEmployer(profileEmployer)
       }
     },
-    updateOrCreateProfileEmployer (profileEmployer) {
+    async updateOrCreateProfileEmployer (profileEmployer) {
       // If the profileEmployer has an existing ID, update it; otherwise create a new profileEmployer
       if (this.shouldUpdateProfileEmployer()) {
-        this.updateProfileEmployer(profileEmployer).then(() => {
+        try {
+          await this.updateProfileEmployer(profileEmployer)
           this.$toasted.global.rytmi_success({
             message: 'Work history entry updated!'
           })
-          document.getElementById('employer-form').reset()
-        })
+        } catch (error) {
+          this.$toasted.global.rytmi_error({
+            message: `Work history entry couldn't be updated. Error: ${error}`
+          })
+        }
       } else {
-        this.createProfileEmployer(profileEmployer).then(() => {
+        try {
+          await this.createProfileEmployer(profileEmployer)
           this.$toasted.global.rytmi_success({
             message: 'A new work history entry created!'
           })
           document.getElementById('employer-form').reset()
-        })
+        } catch (error) {
+          this.$toasted.global.rytmi_error({
+            message: `A new work history entry couldn't be created. Error: ${error}`
+          })
+        }
       }
     },
     shouldUpdateProfileEmployer () {
@@ -193,13 +302,23 @@ export default {
         isDataValid = false
       }
       return isDataValid
+    },
+    closeNewProjectModal () {
+      this.showNewProjectModal = false
     }
   }
 }
 </script>
 
 <style scoped >
-button {
-  width: 100%;
+.clickable {
+  cursor: pointer;
+}
+.clickable:hover {
+  text-decoration: underline;
+}
+.no-projects {
+  font-style: italic;
+  color: lightslategrey;
 }
 </style>

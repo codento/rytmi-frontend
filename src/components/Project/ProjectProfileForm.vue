@@ -8,12 +8,11 @@
     >
       <b-form-group
         v-show="profileVisible"
-        id="consultantLabel"
-        label="Consultant"
-        label-for="consultant"
+        id="consultantSelectFormGroup"
       >
+        <small for="project-select">Consultant</small>
         <b-form-select
-          id="consultant"
+          id="consultant-select"
           v-model="editableProfileProject.profileId"
           :disabled="!profileVisible"
           value-field="id"
@@ -40,12 +39,11 @@
 
       <b-form-group
         v-show="projectVisible"
-        id="ProjectLabel"
-        label="Project:"
-        label-for="project"
+        id="projectSelectFormGroup"
       >
+        <small for="project-select">Project</small>
         <b-form-select
-          id="project"
+          id="project-select"
           v-model="editableProfileProject.projectId"
           :disabled="!projectVisible"
           value-field="id"
@@ -61,7 +59,7 @@
             </option>
           </template>
           <option
-            v-for="project in projects"
+            v-for="project in filteredProjects"
             :key="'project-' + project.id"
             :value="project.id"
           >
@@ -72,35 +70,42 @@
 
       <b-row>
         <b-col>
-          <span>Role (in Finnish)</span>
+          <small for="project-role-fi-input">Your role in the project (in Finnish)</small>
           <b-input
+            id="project-role-fi-input"
             v-model="descriptionFi.title"
+            placeholder="esim. front-end kehittäjä, ohjelmistoarkkitehti"
             type="text"
             required
           />
         </b-col>
         <b-col>
-          <span>Role (in English)</span>
+          <small for="project-role-en-input">Your role in the project (in English)</small>
           <b-input
+            id="project-role-en-input"
             v-model="descriptionEn.title"
+            placeholder="e.g. front-end developer, database admin"
             type="text"
             required
           />
         </b-col>
       </b-row>
 
-      <span>Start date</span>
+      <small for="profile-project-start-date">Start date</small>
       <Datepicker
+        id="profile-project-start-date"
         v-model="editableProfileProject.startDate"
         :name="`profile-project-start-date${isInModal ? '-modal' : ''}`"
       />
-      <span>End date</span>
+      <small for="profile-project-end-date">End date</small>
       <Datepicker
+        id="profile-project-end-date"
         v-model="editableProfileProject.endDate"
         :name="`profile-project-end-date${isInModal ? '-modal' : ''}`"
       />
-      <span>Utilization percentage</span>
+      <small for="utilization-input">Utilization percentage</small>
       <b-input
+        id="utilization-input"
         v-model="editableProfileProject.workPercentage"
         name="utilization"
         type="number"
@@ -114,7 +119,7 @@
         name="submit"
         type="submit"
       >
-        Submit
+        {{ profileVisible ? 'Add consultant' : 'Join project' }}
       </b-button>
     </b-form>
     <div
@@ -136,6 +141,7 @@ import Datepicker from '../helpers/Datepicker'
 import { mapGetters, mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 import cloneDeep from 'lodash/cloneDeep'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
   name: 'ProjectProfileForm',
@@ -171,13 +177,20 @@ export default {
     ...mapGetters([
       'profiles',
       'projects',
-      'currentLanguage'
+      'currentLanguage',
+      'employerByName'
     ]),
     descriptionFi () {
       return this.getProfileProjectDescriptionByLanguage('fi')
     },
     descriptionEn () {
       return this.getProfileProjectDescriptionByLanguage('en')
+    },
+    filteredProjects () {
+      const projectList = Object.keys(this.projects).map(key => this.projects[key])
+      return projectList.filter(project => {
+        return project.employerId === this.employerByName(INTERNAL_COMPANY_NAME).id
+      })
     }
   },
   created () {
@@ -259,17 +272,17 @@ export default {
       if (this.noRedirect) {
         this.editableProfileProject = {}
         this.editableProfileProject.projectId = null
-        this.editableProfileProject.profileId = this.profileId
+        this.editableProfileProject.profileId = this.profileProject.profileId
         this.editableProfileProject.descriptions = this.getEmptyDescriptions()
       } else {
         this.redirect()
       }
     },
     redirect () {
-      if (this.profileId) {
-        this.$router.push('/profile/' + this.profileId)
-      } else if (this.projectId) {
-        this.$router.push('/projects/' + this.projectId)
+      if (this.profileProject.profileId) {
+        this.$router.push('/profile/' + this.profileProject.profileId)
+      } else if (this.profileProject.projectId) {
+        this.$router.push('/projects/' + this.profileProject.projectId)
       }
     },
     getEmptyDescriptions () {

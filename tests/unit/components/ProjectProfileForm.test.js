@@ -46,8 +46,8 @@ describe('ProjectProfileForm.vue', () => {
       }
     }
     const wrapper = createWrapper({ propsData })
-    expect(wrapper.find('#consultantLabel').isVisible()).toBe(true)
-    expect(wrapper.find('#ProjectLabel').element.style.display).toBe('none')
+    expect(wrapper.find('#consultantSelectFormGroup').isVisible()).toBe(true)
+    expect(wrapper.find('#projectSelectFormGroup').element.style.display).toBe('none')
   })
 
   it('shows project select when project is unknown', () => {
@@ -58,8 +58,8 @@ describe('ProjectProfileForm.vue', () => {
       }
     }
     const wrapper = createWrapper({ propsData })
-    expect(wrapper.find('#ProjectLabel').isVisible()).toBe(true)
-    expect(wrapper.find('#consultantLabel').element.style.display).toBe('none')
+    expect(wrapper.find('#projectSelectFormGroup').isVisible()).toBe(true)
+    expect(wrapper.find('#consultantSelectFormGroup').element.style.display).toBe('none')
   })
 
   it('calls newProjectProfile when form is submitted', async () => {

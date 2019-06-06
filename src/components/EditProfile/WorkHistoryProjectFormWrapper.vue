@@ -1,0 +1,208 @@
+<template>
+  <div>
+    <h3> {{ isNewProject ? 'Add a new project' : 'Edit project' }} </h3>
+    <ProjectForm
+      :form-id="formId"
+      :project="editableProject"
+      :is-new-project="isNewProject"
+      :employer-id="currentEmployerId"
+      :custom-form-validation="formIsValid"
+      @on-submit="createOrUpdateProject"
+      @cancel="$emit('close-modal')"
+    >
+      <template #custom-form>
+        <b-row>
+          <b-col sm="6">
+            <small for="project-role-fi-input">Your role in the project (in Finnish)</small>
+            <b-form-group
+              invalid-feedback="Required"
+            >
+              <b-form-input
+                id="project-role-fi-input"
+                v-model="getDescriptionByLanguage('fi').title"
+                placeholder="e.g. front-end developer, database admin, architect"
+                type="text"
+                :state="inputStates.roleFi"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col sm="6">
+            <small for="project-role-en-input">Your role in the project (in English)</small>
+            <b-form-group
+              invalid-feedback="Required"
+            >
+              <b-form-input
+                id="project-role-en-input"
+                v-model="getDescriptionByLanguage('en').title"
+                placeholder="e.g. front-end developer, database admin, architect"
+                type="text"
+                :state="inputStates.roleEn"
+              />
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row v-if="!isNewProject">
+          <b-col>
+            <CollapsableItem title="Project's related skills">
+              <ProjectSkillForm :project-id="editableProject.id" />
+            </CollapsableItem>
+          </b-col>
+        </b-row>
+      </template>
+    </ProjectForm>
+    <div
+      v-if="showError"
+      class="project-creation-error"
+    >
+      Creating a project failed because:
+      <ApiErrorDetailsPanel :error-details="errorDetails" />
+    </div>
+  </div>
+</template>
+<script>
+import { cloneDeep } from 'lodash'
+import { mapGetters, mapActions } from 'vuex'
+import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel.vue'
+import { ProjectForm, CollapsableItem } from '@/components/Common'
+import { ProjectSkillForm } from '@/components/Project'
+
+export default {
+  name: 'WorkHistoryProjectFormWrapper',
+  components: {
+    ProjectForm,
+    ApiErrorDetailsPanel,
+    ProjectSkillForm,
+    CollapsableItem
+  },
+  props: {
+    editableProject: {
+      type: Object,
+      required: true
+    },
+    profileProject: {
+      type: Object,
+      required: true
+    },
+    currentEmployerId: {
+      type: Number,
+      required: true
+    }
+  },
+  data () {
+    return {
+      showError: false,
+      errorDetails: [],
+      formId: 'work-history-project-form',
+      editedProfileProject: cloneDeep(this.profileProject)
+    }
+  },
+  computed: {
+    ...mapGetters(['employers']),
+    isNewProject () {
+      return this.editableProject.id === null
+    },
+    formIsValid () {
+      return this.inputStates.roleFi && this.inputStates.roleEn
+    },
+    inputStates () {
+      return {
+        roleFi: this.getDescriptionByLanguage('fi').title.length > 0,
+        roleEn: this.getDescriptionByLanguage('en').title.length > 0
+      }
+    }
+  },
+  watch: {
+    profileProject () {
+      this.editedProfileProject = cloneDeep(this.profileProject)
+    }
+  },
+  methods: {
+    ...mapActions([
+      'createProject',
+      'updateProject',
+      'newProjectProfile',
+      'updateProfileProject'
+    ]),
+    getDescriptionByLanguage (language) {
+      if (this.editedProfileProject) {
+        const paramsWithTranslations = this.editedProfileProject.descriptions.find(description => description.language === language)
+        if (!paramsWithTranslations) {
+          this.editedProfileProject.descriptions.push(
+            {
+              title: '',
+              language: language
+            }
+          )
+        }
+        return this.editedProfileProject.descriptions.find(description => description.language === language)
+      }
+      return { title: '' }
+    },
+    async createOrUpdateProject (project) {
+      this.errorDetails = []
+
+      if (project.isInternal) {
+        project.descriptions.forEach(description => { description.customerName = '' })
+      }
+      try {
+        let response
+        if (this.isNewProject) {
+          response = await this.createProject(project)
+        } else {
+          await this.updateProject(project)
+        }
+        this.createOrUpdateProfileProject(project.id ? project.id : response.data)
+      } catch (error) {
+        if (Array.isArray(error.data.error.details)) {
+          this.errorDetails = error.data.error.details
+        } else {
+          this.errorDetails.push(error.data.error.message)
+        }
+        this.$toasted.global.rytmi_error({
+          message: this.isNewProject ? `Error creating project: \n ${this.errorDetails}` : `Error updating project: \n ${this.errorDetails}`
+        })
+        this.showError = true
+      }
+    },
+    async createOrUpdateProfileProject (project) {
+      const profileProject = {
+        id: this.profileProject.id,
+        profileId: this.profileProject.profileId,
+        projectId: project.id,
+        workPercentage: 100,
+        startDate: project.startDate,
+        endDate: project.endDate,
+        descriptions: this.editedProfileProject.descriptions
+      }
+      try {
+        if (this.isNewProject) {
+          await this.newProjectProfile(profileProject)
+        } else {
+          await this.updateProfileProject(profileProject)
+        }
+        this.$toasted.global.rytmi_success({
+          message: this.isNewProject ? 'Project created!' : 'Project updated!'
+        })
+        this.showError = false
+        this.$emit('close-modal')
+      } catch (error) {
+        if (Array.isArray(error.data.error.details)) {
+          this.errorDetails = error.data.error.details
+        } else {
+          this.errorDetails.push(error.data.error.message)
+        }
+        this.$toasted.global.rytmi_error({
+          message: this.isNewProject ? `Error creating project: \n ${this.errorDetails}` : `Error updating project: \n ${this.errorDetails}`
+        })
+        this.showError = true
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.project-creation-error {
+  color: red;
+}
+</style>

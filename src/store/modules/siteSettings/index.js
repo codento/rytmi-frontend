@@ -1,6 +1,5 @@
 import * as types from '../../mutation-types'
-import constants from '@/utils/constants'
-const { LANGUAGE_ENUM } = constants
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 export const state = {
   currentLanguage: LANGUAGE_ENUM.DEFAULT_LANGUAGE

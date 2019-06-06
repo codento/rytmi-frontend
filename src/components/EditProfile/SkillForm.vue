@@ -70,14 +70,7 @@
         type="submit"
         variant="primary"
       >
-        Submit
-      </b-button>
-      <b-button
-        id="clear-skill"
-        variant="danger"
-        @click="onReset"
-      >
-        Clear
+        Add skill
       </b-button>
     </b-form>
   </b-card>
@@ -131,9 +124,6 @@ export default {
       evt.preventDefault()
       this.profileSkill.profileId = this.profileId
       this.addProfileSkill(this.profileSkill)
-      this.profileSkill = skillTemplate()
-    },
-    onReset () {
       this.profileSkill = skillTemplate()
     }
   }

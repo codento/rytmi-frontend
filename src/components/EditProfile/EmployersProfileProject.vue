@@ -1,19 +1,20 @@
 <template>
-  <div>
-    <span
-      class="clickable"
-      @click="projectClicked"
-    >
+  <div
+    class="mt-2 mb-2"
+    @mouseover="showEditIcon = true"
+    @mouseout="showEditIcon = false"
+  >
+    <span>
       {{ getDescriptionWithCurrentLanguage(project).name }}
     </span>
     <span>
       {{ '|' }}
     </span>
-    <span
-      class="clickable"
-      @click="profileProjectClicked"
-    >
+    <span>
       {{ getDescriptionWithCurrentLanguage(profileProject).title }}
+    </span>
+    <span v-show="showEditIcon">
+      <i class="fa fa-pencil pull-right" />
     </span>
   </div>
 </template>
@@ -24,7 +25,16 @@ export default {
   name: 'EmployersProfileProject',
   props: {
     profileProject: Object,
-    project: Object
+    project: Object,
+    editable: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data () {
+    return {
+      showEditIcon: false
+    }
   },
   computed: {
     ...mapGetters(['currentLanguage'])
@@ -38,22 +48,11 @@ export default {
         }
       }
       return objectWithDescriptions.descriptions.find(description => description.language === this.currentLanguage)
-    },
-    projectClicked () {
-      this.$emit('projectClicked', this.project)
-    },
-    profileProjectClicked () {
-      this.$emit('profileProjectClicked', this.profileProject)
     }
   }
 }
 </script>
 
 <style scoped >
-.clickable {
-  cursor: pointer;
-}
-.clickable:hover {
-  text-decoration: underline;
-}
+
 </style>

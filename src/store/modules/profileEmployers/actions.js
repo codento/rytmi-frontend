@@ -11,7 +11,9 @@ export function createProfileEmployer ({ commit }, data) {
     newProfileEmployer(data)
       .then(() => {
         fetchProfileEmployers({ commit })
-      }).catch(err => reject(err.response))
+        resolve()
+      })
+      .catch(err => reject(err))
   })
 }
 
@@ -31,6 +33,7 @@ export function removeProfileEmployer ({ commit }, data) {
     deleteProfileEmployer(data)
       .then(() => {
         fetchProfileEmployers({ commit })
+        resolve()
       })
       .catch(err => reject(err))
   })
@@ -41,6 +44,7 @@ export function updateProfileEmployer ({ commit }, data) {
     alterProfileEmployer(data)
       .then(() => {
         fetchProfileEmployers({ commit })
+        resolve()
       })
       .catch(err => reject(err))
   })

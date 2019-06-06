@@ -24,7 +24,7 @@ exports[`EditProfile.vue Should show correct components when profileId is not nu
     profile="[object Object]"
   />
    
-  <employers-stub
+  <workhistoryentrylist-stub
     profileid="5"
   />
    

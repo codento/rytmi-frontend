@@ -12,7 +12,8 @@ export function createEmployer ({ commit }, data) {
       .then(response => {
         commit(types.CREATE_EMPLOYER, response.data)
         resolve(response)
-      }).catch(err => reject(err.response))
+      })
+      .catch(err => reject(err))
   })
 }
 

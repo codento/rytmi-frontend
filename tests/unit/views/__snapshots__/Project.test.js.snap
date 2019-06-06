@@ -93,7 +93,7 @@ exports[`Project.vue Template is correct 1`] = `
     <collapsableitem-stub
       title="Edit project"
     >
-      <projectform-stub
+      <projectformwrapper-stub
         editableproject="[object Object]"
       />
     </collapsableitem-stub>

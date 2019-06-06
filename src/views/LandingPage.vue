@@ -9,12 +9,17 @@
       text-variant="primary"
       border-variant="dark"
     >
-      <span slot="header">Codento Rytmi</span>
       <template
         slot="lead"
       >
-        Please Sign in
+        <span
+          class="clickable"
+          @click="handleLogin"
+        >
+          Please Sign in
+        </span>
       </template>
+      <span slot="header">Codento Rytmi</span>
     </b-jumbotron>
     <div v-if="employeeRolesLoaded">
       <Dashboard
@@ -30,7 +35,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Dashboard from '@/components/Dashboard'
 
 export default {
@@ -49,6 +54,14 @@ export default {
   },
   mounted () {
     document.title = 'Rytmi'
+  },
+  methods: {
+    ...mapActions(['handleLogin'])
   }
 }
 </script>
+<style scoped>
+.clickable:hover {
+  cursor: pointer;
+}
+</style>

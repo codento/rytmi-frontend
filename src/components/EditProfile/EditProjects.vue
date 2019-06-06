@@ -1,7 +1,5 @@
 <template>
   <div class="animated fadeIn">
-    <h1>Projects</h1>
-    <hr>
     <b-row>
       <b-col class="col-12 projects-table">
         <b-table
@@ -19,10 +17,7 @@
             slot="projectId"
             slot-scope="data"
           >
-            <span
-              class="clickable"
-              @click.stop="openProject(data.item.projectId)"
-            >
+            <span>
               {{ projectById(data.item.projectId) ? projectById(data.item.projectId).code : '' }}
             </span>
           </template>
@@ -31,10 +26,7 @@
             slot="project"
             slot-scope="data"
           >
-            <span
-              class="clickable"
-              @click.stop="openProject(data.item.projectId)"
-            >
+            <span>
               {{ projectById(data.item.projectId) ? projectById(data.item.projectId).name : '' }}
             </span>
           </template>
@@ -100,17 +92,19 @@
         <h3>{{ editedProfileProject.name }}</h3>
         <b-row>
           <b-col>
-            <small>Title (Finnish)</small>
+            <small>Your role in the project (in Finnish)</small>
             <b-input
               v-model="descriptionFi.title"
+              placeholder="esim. front-end kehittäjä, ohjelmistoarkkitehti"
               type="text"
               required
             />
           </b-col>
           <b-col>
-            <small>Title (English)</small>
+            <small>Your role in the project (in English)</small>
             <b-input
               v-model="descriptionEn.title"
+              placeholder="e.g. front-end developer, database admin"
               type="text"
               required
             />
@@ -142,13 +136,16 @@
           Save
         </b-btn>
         <b-btn
-          id="cancel"
+          id="close"
+          variant="light"
           class="modal-btn"
           @click="closeEditModal()"
         >
-          Cancel
+          Close
         </b-btn>
       </b-modal>
+    </b-row>
+    <b-row>
       <b-col class="col-12 projects-form">
         <b-card
           class="newProject"
@@ -216,15 +213,12 @@ export default {
         this.removeProfileProject(item)
       }
     },
-    openProject (projectId) {
-      this.$router.push(`/projects/${projectId}`)
-    },
     openEditModal (item) {
       this.editedProfileProject = Object.assign({}, item.item)
       this.editedProfileProject.name = this.projectById(item.item.projectId).name
       this.editedProfileProject.startDate = new Date(this.editedProfileProject.startDate)
       this.editedProfileProject.endDate = this.editedProfileProject.endDate ? new Date(this.editedProfileProject.endDate) : null
-      this.editedProfileProject.workPercentage = this.editedProfileProject.workPercentage
+      this.editedProfileProject.workPercentage = this.editedProfileProject.workPercentage // TODO why is this?
       this.editedProfileProject.index = item.index
       this.$refs.profileProjectEditModal.show()
     },
@@ -293,22 +287,6 @@ button {
 }
 .modal-btn {
   margin-top: 0.5rem;
-}
-
-.clickable {
-  cursor: pointer;
-}
-.clickable:hover {
-  font-weight: bolder;
-}
-
-@media screen and (min-width: 1400px) {
-  .projects-table {
-    max-width: 66.6%
-  }
-  .projects-form {
-    max-width: 33.2%
-  }
 }
 
 </style>

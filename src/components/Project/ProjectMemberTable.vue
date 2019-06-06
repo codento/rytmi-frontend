@@ -131,10 +131,11 @@
       </b-btn>
       <b-btn
         id="cancel"
+        variant="light"
         class="modal-btn"
         @click="closeEditModal()"
       >
-        Cancel
+        Close
       </b-btn>
     </b-modal>
   </div>
