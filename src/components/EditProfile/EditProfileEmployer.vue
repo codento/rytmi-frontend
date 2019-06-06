@@ -41,7 +41,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <small for="title-fi">Title (Finnish)</small>
+        <small for="title-fi">Job title (in Finnish)</small>
         <b-input
           id="title-fi"
           v-model="profileEmployer.title['fi']"
@@ -50,7 +50,7 @@
         />
       </b-col>
       <b-col>
-        <small for="title-en">Title (English)</small>
+        <small for="title-en">Job title (in English)</small>
         <b-input
           id="title-en"
           v-model="profileEmployer.title['en']"
@@ -61,7 +61,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <small for="description-fi">Description (Finnish)</small>
+        <small for="description-fi">Job description (in Finnish)</small>
         <b-textarea
           id="description-fi"
           v-model="profileEmployer.description['fi']"
@@ -70,7 +70,7 @@
         />
       </b-col>
       <b-col>
-        <small for="description-en">Description (English)</small>
+        <small for="description-en">Job description (in English)</small>
         <b-textarea
           id="description-en"
           v-model="profileEmployer.description['en']"
@@ -83,9 +83,9 @@
       <b-col>
         <b-button
           id="submit"
-          class="form-control wide-button"
+          class="form-control"
           type="submit"
-          primary
+          variant="primary"
         >
           {{ shouldUpdateProfileEmployer() ? 'Update work history entry' : 'Create a new work history entry' }}
         </b-button>
@@ -226,38 +226,56 @@ export default {
     getEmployerId (employerName) {
       return Object.values(this.employers).find(employer => employer.name === employerName).id
     },
-    onSubmit (evt) {
+    async onSubmit (evt) {
       evt.preventDefault()
-      if (this.isDataValidForSubmit()) {
-        if (this.shouldCreateANewEmployer()) {
-          this.createEmployer({ name: this.profileEmployer.newEmployerName })
-            .then(() => {
-              this.$toasted.global.rytmi_success({
-                message: 'A new employer created!'
-              })
-              const profileEmployer = { ...this.profileEmployer, employerId: this.getEmployerId(this.profileEmployer.newEmployerName) }
-              this.updateOrCreateProfileEmployer(profileEmployer)
+      if (!this.isDataValidForSubmit()) {
+        return
+      }
+      if (this.shouldCreateANewEmployer()) {
+        try {
+            await this.createEmployer({ name: this.profileEmployer.newEmployerName })
+          } catch (error) {
+            console.log(error)
+            this.$toasted.global.rytmi_error({
+              message: `Couldn\'t create a new employer. ${error}`
             })
+            return
+          }
+          this.$toasted.global.rytmi_success({
+              message: 'A new employer created!'
+            })
+          const profileEmployer = { ...this.profileEmployer, employerId: this.getEmployerId(this.profileEmployer.newEmployerName) }
+          this.updateOrCreateProfileEmployer(profileEmployer)
         } else {
           const profileEmployer = { ...this.profileEmployer, employerId: this.selectedExistingEmployer.id }
           this.updateOrCreateProfileEmployer(profileEmployer)
         }
-      }
     },
     async updateOrCreateProfileEmployer (profileEmployer) {
       // If the profileEmployer has an existing ID, update it; otherwise create a new profileEmployer
       if (this.shouldUpdateProfileEmployer()) {
-        await this.updateProfileEmployer(profileEmployer)
-        this.$toasted.global.rytmi_success({
-          message: 'Work history entry updated!'
-        })
+        try {
+          await this.updateProfileEmployer(profileEmployer)
+          this.$toasted.global.rytmi_success({
+            message: 'Work history entry updated!'
+          })
+        } catch (error) {
+          this.$toasted.global.rytmi_error({
+            message: `Work history entry couldn\'t be updated. Error: ${error}`
+          })
+        }
       } else {
-        this.createProfileEmployer(profileEmployer).then(() => {
+        try {
+          await this.createProfileEmployer(profileEmployer)
           this.$toasted.global.rytmi_success({
             message: 'A new work history entry created!'
           })
           document.getElementById('employer-form').reset()
-        })
+        } catch (error) {
+          this.$toasted.global.rytmi_error({
+            message: `A new work history entry couldn\'t be created. Error: ${error}`
+          })
+        }
       }
     },
     shouldUpdateProfileEmployer () {
@@ -296,9 +314,6 @@ export default {
 </script>
 
 <style scoped >
-.wide-button {
-  width: 100%;
-}
 .clickable {
   cursor: pointer;
 }

@@ -11,7 +11,9 @@ export function createProfileEmployer ({ commit }, data) {
     newProfileEmployer(data)
       .then(() => {
         fetchProfileEmployers({ commit })
-      }).catch(err => reject(err.response))
+        resolve()
+      })
+      .catch(err => reject(err))
   })
 }
 
