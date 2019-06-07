@@ -14,6 +14,7 @@
           id="skill-select"
           v-model="profileSkill"
           :options="availableSkillsForVueSelect"
+          placeholder="Select skill"
         />
       </b-form-group>
       <b-form-group
@@ -70,13 +71,6 @@ import proficiencyDesc from '../../assets/proficiencyDesc'
 import { orderBy } from 'lodash'
 import vSelect from 'vue-select'
 
-const skillTemplate = () => {
-  return {
-    skillId: null,
-    label: ''
-  }
-}
-
 export default {
   name: 'SkillForm',
   components: {
@@ -90,7 +84,7 @@ export default {
   },
   data () {
     return {
-      profileSkill: skillTemplate(),
+      profileSkill: null,
       wantsToOptions: proficiencyDesc.wants,
       knowsOptions: proficiencyDesc.knows['en'],
       visibleInCV: true,
@@ -126,7 +120,7 @@ export default {
       }
       this.addProfileSkill(profileSkill)
 
-      this.profileSkill = skillTemplate()
+      this.profileSkill = null
       this.visibleInCV = true
       this.wantsTo = 0
       this.knows = 0
