@@ -10,23 +10,11 @@
         label="Skill:"
         label-for="skill"
       >
-        <b-form-select
-          id="skill"
-          v-model="profileSkill.skillId"
-          :options="availableSkills"
-          value-field="id"
-          text-field="name"
-          required
-        >
-          <template slot="first">
-            <option
-              :value="null"
-              disabled
-            >
-              -- Select skill --
-            </option>
-          </template>
-        </b-form-select>
+        <v-select
+          id="skill-select"
+          v-model="profileSkill"
+          :options="availableSkillsForVueSelect"
+        />
       </b-form-group>
       <b-form-group
         id="knowsLabel"
@@ -34,7 +22,7 @@
       >
         <b-form-radio-group
           id="knows"
-          v-model="profileSkill.knows"
+          v-model="knows"
           :options="knowsOptions"
           stacked
           plain
@@ -46,7 +34,7 @@
       >
         <b-form-radio-group
           id="wantsTo"
-          v-model="profileSkill.wantsTo"
+          v-model="wantsTo"
           :options="wantsToOptions"
           stacked
           name="wantsTo"
@@ -61,7 +49,7 @@
       >
         <input
           id="visibleInCV"
-          v-model="profileSkill.visibleInCV"
+          v-model="visibleInCV"
           type="checkbox"
         >
       </b-form-group>
@@ -80,18 +68,22 @@
 import { mapGetters, mapActions } from 'vuex'
 import proficiencyDesc from '../../assets/proficiencyDesc'
 import { filter } from 'lodash'
+import { orderBy } from 'lodash'
+import vSelect from 'vue-select'
+import { truncate } from 'fs';
 
 const skillTemplate = () => {
   return {
     skillId: null,
-    knows: 0,
-    wantsTo: 0,
-    visibleInCV: true
+    label: ''
   }
 }
 
 export default {
   name: 'SkillForm',
+  components: {
+    vSelect
+  },
   props: {
     'profileId': {
       type: Number,
@@ -102,7 +94,10 @@ export default {
     return {
       profileSkill: skillTemplate(),
       wantsToOptions: proficiencyDesc.wants,
-      knowsOptions: proficiencyDesc.knows['en']
+      knowsOptions: proficiencyDesc.knows['en'],
+      visibleInCV: true,
+      wantsTo: 0,
+      knows: 0
     }
   },
   computed: {
@@ -110,21 +105,33 @@ export default {
       'skills',
       'profileSkillsByProfileId'
     ]),
-    availableSkills () {
-      const existingSkills = this.profileSkillsByProfileId(this.profileId)
-        .map(profileSkill => profileSkill.skillId)
-      return filter(this.skills, (value, key) =>
-        existingSkills.indexOf(value.id) === -1
-      )
+    availableSkillsForVueSelect () {
+      const existingSkillsIds = this.profileSkillsByProfileId(this.profileId).map(profileSkill => profileSkill.skillId)
+      const allSkillsMappedForVueSelect = Object.values(this.skills).map(skill => ({
+        label: skill.name,
+        id: skill.id
+      }))
+      return orderBy(allSkillsMappedForVueSelect.filter(skill => !existingSkillsIds.includes(skill.id)), [skill => skill.label.toLowerCase()])
     }
   },
   methods: {
     ...mapActions(['addProfileSkill']),
     onSubmit (evt) {
       evt.preventDefault()
-      this.profileSkill.profileId = this.profileId
-      this.addProfileSkill(this.profileSkill)
+      const profileSkill = {
+        name: this.profileSkill.label,
+        skillId: this.profileSkill.id,
+        profileId: this.profileId,
+        visibleInCV: this.visibleInCV,
+        wantsTo: this.wantsTo,
+        knows: this.knows
+      }
+      this.addProfileSkill(profileSkill)
+
       this.profileSkill = skillTemplate()
+      this.visibleInCV = true
+      this.wantsTo = 0
+      this.knows = 0
     }
   }
 }
