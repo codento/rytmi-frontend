@@ -67,10 +67,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import proficiencyDesc from '../../assets/proficiencyDesc'
-import { filter } from 'lodash'
 import { orderBy } from 'lodash'
 import vSelect from 'vue-select'
-import { truncate } from 'fs';
 
 const skillTemplate = () => {
   return {
