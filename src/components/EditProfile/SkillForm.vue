@@ -15,18 +15,17 @@
           v-model="profileSkill"
           :options="availableSkillsForVueSelect"
           placeholder="Select skill"
+          select-on-tab
         />
       </b-form-group>
       <b-form-group
         id="knowsLabel"
         label="Proficiency level:"
       >
-        <b-form-radio-group
-          id="knows"
-          v-model="knows"
+        <SkillLevelSelect
           :options="knowsOptions"
-          stacked
-          plain
+          :initial-value="0"
+          @optionSelected="knowsOptionSelected($event)"
         />
       </b-form-group>
       <b-form-group
@@ -70,11 +69,13 @@ import { mapGetters, mapActions } from 'vuex'
 import proficiencyDesc from '../../assets/proficiencyDesc'
 import { orderBy } from 'lodash'
 import vSelect from 'vue-select'
+import SkillLevelSelect from '@/components/Skills/SkillLevelSelect'
 
 export default {
   name: 'SkillForm',
   components: {
-    vSelect
+    vSelect,
+    SkillLevelSelect
   },
   props: {
     'profileId': {
@@ -124,6 +125,9 @@ export default {
       this.visibleInCV = true
       this.wantsTo = 0
       this.knows = 0
+    },
+    knowsOptionSelected (newValue) {
+      this.knows = newValue
     }
   }
 }
