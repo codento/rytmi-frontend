@@ -7,7 +7,7 @@
       <b-col>
         <small for="project-code-input">Project code</small>
         <b-form-group
-          :invalid-feedback="inputStates.projectCode.filter(item => !item.state).map(item => item.feedback).join('\n')"
+          :invalid-feedback="projectCodeState.filter(item => { return item.state !== undefined ? item.state === false : false }).map(item => item.feedback).join('\n')"
         >
           <b-form-input
             id="project-code-input"
@@ -17,7 +17,7 @@
             type="number"
             min="0"
             max="99999"
-            :state="inputStates.projectCode.every(item => item.state)"
+            :state="isProjectCodeValid"
           />
         </b-form-group>
       </b-col>
@@ -63,7 +63,7 @@
           required
         />
         <small
-          v-if="!inputStates.startDate"
+          v-if="!inputStates.startDate && inputStates.startDate !== undefined"
           class="text-danger"
         >
           Required
@@ -122,24 +122,30 @@
     </b-row>
     <b-row>
       <b-col sm="6">
-        <small for="project-description-fi-input">Description (in Finnish)</small>
-        <b-textarea
-          id="project-description-fi-input"
-          v-model="getDescriptionByLanguage('fi').description"
-          placeholder="Project description (fi)"
-          type="text"
-          rows="5"
-        />
+        <b-form-group invalid-feedback="Required">
+          <small for="project-description-fi-input">Description (in Finnish)</small>
+          <b-textarea
+            id="project-description-fi-input"
+            v-model="getDescriptionByLanguage('fi').description"
+            placeholder="Project description (fi)"
+            type="text"
+            rows="5"
+            :state="inputStates.projectDescriptionFi"
+          />
+        </b-form-group>
       </b-col>
       <b-col sm="6">
-        <small for="project-description-en-input">Description (in English)</small>
-        <b-textarea
-          id="project-description-en-input"
-          v-model="getDescriptionByLanguage('en').description"
-          placeholder="Project description (en)"
-          type="text"
-          rows="5"
-        />
+        <b-form-group invalid-feedback="Required">
+          <small for="project-description-en-input">Description (in English)</small>
+          <b-textarea
+            id="project-description-en-input"
+            v-model="getDescriptionByLanguage('en').description"
+            placeholder="Project description (en)"
+            type="text"
+            rows="5"
+            :state="inputStates.projectDescriptionEn"
+          />
+        </b-form-group>
       </b-col>
     </b-row>
     <b-row>
@@ -158,7 +164,6 @@
           id="submit-project-edits-btn"
           class="mr-2"
           type="submit"
-          :disabled="!formIsValid"
           @click.prevent="onSubmit()"
         >
           {{ isNewProject ? 'Create a new project' : 'Update project' }}
@@ -220,7 +225,8 @@ export default {
         isInternal: !this.isNewProject ? this.project.isInternal : false,
         descriptions: !this.isNewProject && this.project.descriptions ? this.project.descriptions : [],
         employerId: this.employerId
-      }
+      },
+      validated: false
     }
   },
   computed: {
@@ -241,32 +247,46 @@ export default {
     showCustomerName () {
       return !this.editedProject.isInternal
     },
+    isProjectCodeValid () {
+      if (!this.validated) {
+        return undefined
+      } else {
+        return this.projectCodeState.every(item => item.state)
+      }
+    },
+    projectCodeState () {
+      return [
+        {
+          state: !!this.editedProject.code,
+          feedback: 'Required'
+        },
+        {
+          state: this.editedProject.code ? !this.existingProjectCodes.includes(parseInt(this.editedProject.code)) : undefined,
+          feedback: 'Project code already exists, code must be unique'
+        }
+      ]
+    },
     inputStates () {
       return {
-        projectCode: [
-          {
-            state: this.editedProject.code !== null,
-            feedback: 'Required'
-          },
-          {
-            state: this.editedProject.code ? !this.existingProjectCodes.includes(parseInt(this.editedProject.code)) : true,
-            feedback: 'Project code already exists, code must be unique'
-          }
-        ],
-        startDate: new Date(this.editedProject.startDate) > 1000,
-        projectNameFi: this.getDescriptionByLanguage('fi').name.length > 0,
-        projectNameEn: this.getDescriptionByLanguage('en').name.length > 0,
-        customerNameFi: this.getDescriptionByLanguage('fi').customerName.length > 0,
-        customerNameEn: this.getDescriptionByLanguage('en').customerName.length > 0
+        startDate: this.validated ? !!this.editedProject.startDate : undefined,
+        projectNameFi: this.validated ? this.getDescriptionByLanguage('fi').name.length > 0 : undefined,
+        projectNameEn: this.validated ? this.getDescriptionByLanguage('en').name.length > 0 : undefined,
+        customerNameFi: this.validated ? this.getDescriptionByLanguage('fi').customerName.length > 0 : undefined,
+        customerNameEn: this.validated ? this.getDescriptionByLanguage('en').customerName.length > 0 : undefined,
+        projectDescriptionFi: this.validated ? this.getDescriptionByLanguage('fi').description.length > 0 : undefined,
+        projectDescriptionEn: this.validated ? this.getDescriptionByLanguage('en').description.length > 0 : undefined
       }
     },
     formIsValid () {
       const stateArray = [this.customFormValidation]
       // Required always
-      stateArray.push(this.inputStates.startDate, this.inputStates.projectNameFi, this.inputStates.projectNameEn)
+      // stateArray.push(this.inputStates.every(item => item))
+      for (let entry of Object.entries(this.inputStates)) {
+        stateArray.push(entry[1])
+      }
       // Required sometimes
       if (this.showProjectCode) {
-        Array.prototype.push.apply(stateArray, this.inputStates.projectCode.map(item => item.state))
+        Array.prototype.push.apply(stateArray, this.projectCodeState.map(item => item.state))
       }
       if (this.showCustomerName) {
         stateArray.push(this.inputStates.customerNameFi, this.inputStates.customerNameEn)
@@ -276,9 +296,12 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.$emit('on-submit', this.editedProject)
-      if (this.isNewProject) {
-        this.resetProject()
+      this.validated = true
+      if (this.formIsValid) {
+        this.$emit('on-submit', this.editedProject)
+        if (this.isNewProject) {
+          this.resetProject()
+        }
       }
     },
     resetProject () {

@@ -2,10 +2,12 @@
   <div>
     <input
       :id="element"
+      ref="input"
       v-model="formattedValue"
       type="text"
       class="form-control"
       autocomplete="off"
+      @blur="onBlurEvent"
     >
   </div>
 </template>
@@ -48,6 +50,9 @@ export default {
     },
     onSelect () {
       this.$emit('input', this.pikaday.getDate())
+    },
+    onBlurEvent () {
+      this.$refs.input.value = format(this.pikaday.getDate(), 'D.M.YYYY')
     }
   }
 }
