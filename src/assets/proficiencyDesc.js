@@ -14,22 +14,22 @@ export default {
       {
         value: 2,
         text: 'Junior',
-        description: 'Some experience with the technology but help from other team members may be needed occasionally. Easier tasks can be completed with ease.'
+        description: 'Some experience with the technology but help from other team members may be needed occasionally. Easier tasks can be completed competently.'
       },
       {
         value: 3,
         text: 'Professional',
-        description: 'Technology has been used in several projects. Ability to work effectively individually.'
+        description: 'Technology has been used in several projects. Ability to work effectively independently.'
       },
       {
         value: 4,
         text: 'Senior',
-        description: 'Capable of handling challenging work in a lead developer\'s role. Significant experience with the technology.'
+        description: 'Capable of handling challenging work in a lead developer role. Significant experience with the technology.'
       },
       {
         value: 5,
         text: 'Guru',
-        description: 'An expert of the technology with years of experience and ability to teach other developers. Won\'t be fazed by even very difficult tasks.'
+        description: 'An expert in the technology with years of experience and ability to teach other developers. Won\'t be fazed by even very difficult tasks.'
       }
     ],
     fi: [
