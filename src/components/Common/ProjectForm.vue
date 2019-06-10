@@ -271,14 +271,14 @@ export default {
         startDate: this.validated ? !!this.editedProject.startDate : undefined,
         projectNameFi: this.validated ? this.getDescriptionByLanguage('fi').name.length > 0 : undefined,
         projectNameEn: this.validated ? this.getDescriptionByLanguage('en').name.length > 0 : undefined,
-        customerNameFi: this.validated ? this.getDescriptionByLanguage('fi').customerName.length > 0 : undefined,
-        customerNameEn: this.validated ? this.getDescriptionByLanguage('en').customerName.length > 0 : undefined,
+        customerNameFi: this.validated ? this.getDescriptionByLanguage('fi').customerName.length > 0 || this.editedProject.isInternal : undefined,
+        customerNameEn: this.validated ? this.getDescriptionByLanguage('en').customerName.length > 0 || this.editedProject.isInternal : undefined,
         projectDescriptionFi: this.validated ? this.getDescriptionByLanguage('fi').description.length > 0 : undefined,
         projectDescriptionEn: this.validated ? this.getDescriptionByLanguage('en').description.length > 0 : undefined
       }
     },
     formIsValid () {
-      const stateArray = [this.customFormValidation]
+      const stateArray = []
       // Required always
       // stateArray.push(this.inputStates.every(item => item))
       for (let entry of Object.entries(this.inputStates)) {
