@@ -11,6 +11,7 @@
         Education
       </slot>
     </div>
+    <slot name="custom-content" />
     <b-card-group
       v-for="(educationItem, index) in educationList"
       :key="'education-' + index"

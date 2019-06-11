@@ -55,12 +55,21 @@
           />
         </b-row>
         <b-row v-else>
-          <b-col class="col mb-1">
+          <b-col
+            v-if="profileSkillsByProfileId(profile.id).length > 0"
+            class="col mb-1"
+          >
             <SkillRow
               v-for="skill in profileSkillsByProfileId(profile.id)"
               :key="skill.id"
               v-bind="skill"
             />
+          </b-col>
+          <b-col
+            v-else
+            class="text-muted"
+          >
+            No skills added
           </b-col>
         </b-row>
         <b-modal
@@ -98,10 +107,16 @@
         <loading v-if="!profileProjects" />
         <ProjectRow
           v-for="profileProject in profileProjects"
-          v-else
+          v-else-if="profileProjects.length > 0"
           :key="profileProject.id"
           :profile-project="profileProject"
         />
+        <div
+          v-else
+          class="text-muted"
+        >
+          No projects joined
+        </div>
         <b-modal
           id="editProfileProjectsModal"
           ok-only
@@ -129,6 +144,14 @@
           >
             <i class="fa fa-pencil clickable" />
           </span>
+        </template>
+        <template
+          v-if="!profile.education || profile.education.length === 0"
+          #custom-content
+        >
+          <div class="text-muted">
+            No education added
+          </div>
         </template>
       </CvToolEducation>
       <b-modal
