@@ -101,9 +101,10 @@ exports[`Project.vue Template is correct 1`] = `
     <hr />
      
     <collapsableitem-stub
-      title="Add a consultant"
+      title="Join project"
     >
       <projectprofileform-stub
+        noredirect="true"
         profileproject="[object Object]"
       />
     </collapsableitem-stub>
