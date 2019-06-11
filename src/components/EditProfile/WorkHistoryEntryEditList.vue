@@ -118,6 +118,15 @@ export default {
       ['label'])
     }
   },
+  watch: {
+    profileEmployers () {
+      if (this.profileEmployerIdToOpenForEditing) {
+        const newlyCreatedProfileEmployer = this.profileEmployers.find(profileEmployer => profileEmployer.id === this.profileEmployerIdToOpenForEditing)
+        this.openOrCloseEmployerForEditing(newlyCreatedProfileEmployer)
+        this.profileEmployerIdToOpenForEditing = null
+      }
+    }
+  },
   methods: {
     addNewProfileEmployer () {
       this.selectedProfileEmployer = this.getEmptyProfileEmployer()
@@ -147,15 +156,6 @@ export default {
     },
     newProfileEmployerCreated (createdProfileEmployer) {
       this.profileEmployerIdToOpenForEditing = createdProfileEmployer.id
-    }
-  },
-  watch: {
-    profileEmployers () {
-      if (this.profileEmployerIdToOpenForEditing) {
-        const newlyCreatedProfileEmployer = this.profileEmployers.find(profileEmployer => profileEmployer.id === this.profileEmployerIdToOpenForEditing)
-        this.openOrCloseEmployerForEditing(newlyCreatedProfileEmployer)
-        this.profileEmployerIdToOpenForEditing = null
-      }
     }
   }
 }
