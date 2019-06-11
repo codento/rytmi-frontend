@@ -211,7 +211,6 @@ export default {
       })).filter(pp => pp.project.employerId === this.profileEmployer.employerId)
     },
     inputStates () {
-      console.log(this.profileEmployer.startDate)
       return {
         jobDescriptionFi: this.profileEmployer.description['fi'].length > 0,
         jobDescriptionEn: this.profileEmployer.description['en'].length > 0,

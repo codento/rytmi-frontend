@@ -281,7 +281,6 @@ export default {
     formIsValid () {
       const stateArray = []
       // Required always
-      // stateArray.push(this.inputStates.every(item => item))
       for (let entry of Object.entries(this.inputStates)) {
         stateArray.push(entry[1])
       }
