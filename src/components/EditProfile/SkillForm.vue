@@ -25,7 +25,7 @@
         <SkillLevelSelect
           :options="knowsOptions"
           :initial-value="0"
-          @optionSelected="knowsOptionSelected($event)"
+          @option-selected="knowsOptionSelected($event)"
         />
       </b-form-group>
       <b-form-group
