@@ -16,8 +16,7 @@
       </b-row>
       <b-row>
         <b-col
-          class="description"
-          :class="selectedOption === option.value ? 'selected-description' : ''"
+          :class="selectedOption === option.value ? 'description selected-description' : 'description'"
           @click="selectedOption = option.value"
         >
           {{ option.description }}
@@ -30,7 +29,7 @@
 <script>
 
 export default {
-  name: 'SkillsLevelSelect',
+  name: 'SkillLevelSelect',
   props: {
     options: {
       type: Array
@@ -46,7 +45,7 @@ export default {
   },
   watch: {
     selectedOption (value) {
-      this.$emit('optionSelected', value)
+      this.$emit('option-selected', value)
     }
   }
 }

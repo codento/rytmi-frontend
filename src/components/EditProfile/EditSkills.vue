@@ -119,7 +119,7 @@
       <SkillLevelSelect
         :options="knowsOptions"
         :initial-value="editedSkill.knows"
-        @optionSelected="knowsOptionSelected($event)"
+        @option-selected="knowsOptionSelected($event)"
       />
       <b-btn
         class="modal-btn"
