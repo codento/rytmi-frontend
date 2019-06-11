@@ -58,7 +58,7 @@
               size="sm"
               class="mr-1"
               variant="danger"
-              @click.stop="removeProfileProject(data.item)"
+              @click.stop="confirmDelete(data.item)"
             >
               Remove
             </b-btn>
@@ -195,7 +195,7 @@ export default {
       'removeProfileProject',
       'updateProfileProject'
     ]),
-    removeProfileProject (item) {
+    confirmDelete (item) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {
         this.removeProfileProject(item)
