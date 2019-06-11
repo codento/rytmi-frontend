@@ -7,8 +7,9 @@
       <b-form-group
         id="skillLabel"
         vertical
-        label="Skill:"
+        label="Skill"
         label-for="skill"
+        label-size="lg"
       >
         <v-select
           id="skill-select"
@@ -20,9 +21,10 @@
       </b-form-group>
       <b-form-group
         id="knowsLabel"
-        label="Proficiency level:"
+        label="Proficiency level"
+        label-size="lg"
       >
-        <SkillLevelSelect
+        <EditSkillsLevelSelect
           :options="knowsOptions"
           :initial-value="0"
           @option-selected="knowsOptionSelected($event)"
@@ -30,22 +32,21 @@
       </b-form-group>
       <b-form-group
         id="wantsToLabel"
-        label="Willingness level:"
+        label="Willingness level"
+        label-size="lg"
       >
-        <b-form-radio-group
-          id="wantsTo"
-          v-model="wantsTo"
+        <EditSkillsLevelSelect
           :options="wantsToOptions"
-          stacked
-          name="wantsTo"
-          plain
+          :initial-value="0"
+          @option-selected="wantsOptionSelected($event)"
         />
       </b-form-group>
       <b-form-group
         id="visibleInCVLabel"
         vertical
-        label="Show in CV:"
+        label="Show in CV"
         label-for="visibleInCV"
+        label-size="lg"
       >
         <input
           id="visibleInCV"
@@ -69,13 +70,13 @@ import { mapGetters, mapActions } from 'vuex'
 import proficiencyDesc from '../../assets/proficiencyDesc'
 import { orderBy } from 'lodash'
 import vSelect from 'vue-select'
-import SkillLevelSelect from '@/components/Skills/SkillLevelSelect'
+import EditSkillsLevelSelect from '@/components/EditProfile/EditSkillsLevelSelect'
 
 export default {
   name: 'SkillForm',
   components: {
     vSelect,
-    SkillLevelSelect
+    EditSkillsLevelSelect
   },
   props: {
     'profileId': {
@@ -128,7 +129,16 @@ export default {
     },
     knowsOptionSelected (newValue) {
       this.knows = newValue
+    },
+    wantsOptionSelected (newValue) {
+      this.wants = newValue
     }
   }
 }
 </script>
+
+<style scoped >
+.form-label {
+  font-weight: bold;
+}
+</style>

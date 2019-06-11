@@ -29,7 +29,7 @@
 <script>
 
 export default {
-  name: 'SkillLevelSelect',
+  name: 'EditSkillsLevelSelect',
   props: {
     options: {
       type: Array

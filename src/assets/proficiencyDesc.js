@@ -66,11 +66,11 @@ export default {
     ]
   },
   wants: [
-    { text: '0 - No way, no how', value: 0 },
-    { text: '1 - If I have to', value: 1 },
-    { text: "2 - I'd rather not", value: 2 },
-    { text: "3 - It's OK", value: 3 },
-    { text: "4 - It's fun!", value: 4 },
-    { text: '5 - Pick me, pick me!', value: 5 }
+    { text: 'No way, no how', value: 0, description: '' },
+    { text: 'If I have to', value: 1, description: '' },
+    { text: "I'd rather not", value: 2, description: '' },
+    { text: "It's OK", value: 3, description: '' },
+    { text: "It's fun!", value: 4, description: '' },
+    { text: 'Pick me, pick me!', value: 5, description: '' }
   ]
 }
