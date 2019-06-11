@@ -109,6 +109,7 @@
         <b-col
           v-for="({ profileProject, project }, index) in profileProjectsWithProjectData"
           :key="profileProject.id"
+          cols="12"
         >
           <div
             v-b-modal="`project-modal${profileProject.id}`"
@@ -116,35 +117,32 @@
             @mouseover="showEditIconByIndex = index"
             @mouseout="showEditIconByIndex = null"
           >
-            <span>
-              {{ project.name[currentLanguage] }}
+            <span class="project-name mr-2">
+              {{ project.name[currentLanguage] }} ({{ formatProjectDuration(profileProject.startDate, profileProject.endDate) }})
             </span>
-            <span>
-              {{ '|' }}
-            </span>
-            <span>
+            <span class="project-role">
               {{ profileProject.role[currentLanguage] }}
             </span>
             <span v-show="showEditIconByIndex === index">
               <i class="fa fa-pencil pull-right" />
             </span>
           </div>
+          <b-modal
+            :id="`project-modal${profileProject.id}`"
+            size="lg"
+            hide-header
+            ok-only
+            ok-title="Close"
+            ok-variant="light"
+            no-close-on-backdrop
+          >
+            <WorkHistoryProjectFormWrapper
+              :editable-project="project"
+              :profile-project="profileProject"
+              :current-employer-id="project.employerId ? project.employerId : profileEmployer.employerId"
+            />
+          </b-modal>
         </b-col>
-        <b-modal
-          :id="`project-modal${profileProjectWithProjectData.profileProject.id}`"
-          size="lg"
-          hide-header
-          ok-only
-          ok-title="Close"
-          ok-variant="light"
-          no-close-on-backdrop
-        >
-          <WorkHistoryProjectFormWrapper
-            :editable-project="profileProjectWithProjectData.project"
-            :profile-project="profileProjectWithProjectData.profileProject"
-            :current-employer-id="profileProjectWithProjectData.project.employerId ? profileProjectWithProjectData.project.employerId : profileEmployer.employerId"
-          />
-        </b-modal>
       </b-row>
       <b-row>
         <b-col>
@@ -181,6 +179,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { isEmpty, isDate } from 'lodash'
+import format from 'date-fns/format'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
 import CollapsableItem from '@/components/Common/CollapsableItem'
@@ -218,6 +217,7 @@ export default {
         profileProject: pp,
         project: Object.values(this.projects).find(project => project.id === pp.projectId)
       })).filter(pp => pp.project.employerId === this.profileEmployer.employerId)
+        .sort((a, b) => a.project.startDate - b.project.startDate)
     },
     inputStates () {
       return {
@@ -240,6 +240,10 @@ export default {
     ]),
     getEmployerId (employerName) {
       return Object.values(this.employers).find(employer => employer.name === employerName).id
+    },
+    formatProjectDuration (startDate, endDate) {
+      const formattedEndDate = endDate ? format(endDate, 'MM/YYYY') : ''
+      return format(startDate, 'MM/YYYY') + '-' + formattedEndDate
     },
     async onSubmit (evt) {
       evt.preventDefault()
@@ -344,5 +348,11 @@ export default {
 .notice {
   color: red;
   font-size: 150%;
+}
+.project-name {
+  font-weight: bold;
+}
+.project-role {
+  font-style: italic;
 }
 </style>
