@@ -36,7 +36,6 @@ describe('ProjectRow.test.js', () => {
         profileProject: mockProject
       }
     })
-    console.log(wrapper.html())
     expect(wrapper.html()).toMatchSnapshot()
   })
 })

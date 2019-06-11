@@ -55,8 +55,6 @@ export default {
       'currentLanguage'
     ]),
     project: function () {
-      console.log(
-        this.profileProject.projectId)
       return this.projectById(this.profileProject.projectId)
     }
   }

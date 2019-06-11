@@ -216,7 +216,6 @@ export default {
       if (this.isDataValid()) {
         try {
           await this.updateProfileProject(this.editedProfileProject)
-          console.log(this.editedProfileProject)
           this.$toasted.global.rytmi_success({
             message: 'Project information updated.'
           })
