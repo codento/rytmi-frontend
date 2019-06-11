@@ -3,6 +3,7 @@
     <b-row>
       <b-col class="col-12 projects-table">
         <b-table
+          v-if="projectList.length > 0"
           :items="projectList"
           :fields="fields"
           fixed
@@ -12,25 +13,6 @@
           <template slot="table-caption">
             Projects participated
           </template>
-
-          <!-- <template
-            slot="projectId"
-            slot-scope="data"
-          >
-            <span>
-              {{ data.item.code }}
-            </span>
-          </template>
-
-          <template
-            slot="project"
-            slot-scope="data"
-          >
-            <span>
-              {{ projectById(data.item.projectId) ? projectById(data.item.projectId).name[current] : '' }}
-            </span>
-          </template> -->
-
           <template
             slot="startDate"
             slot-scope="data"
@@ -76,7 +58,7 @@
               size="sm"
               class="mr-1"
               variant="danger"
-              @click.stop="removePP(data.item)"
+              @click.stop="removeProfileProject(data.item)"
             >
               Remove
             </b-btn>
@@ -213,7 +195,7 @@ export default {
       'removeProfileProject',
       'updateProfileProject'
     ]),
-    removePP (item) {
+    removeProfileProject (item) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {
         this.removeProfileProject(item)
