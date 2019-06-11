@@ -54,7 +54,7 @@
           >
             <img
               class="profile-icon"
-              :src="profileById(profileId) ? profileById(profileId).photoPath : null"
+              :src="profileById(profileId) ? profileById(profileId).photoPath : ''"
               height="20px"
               width="20px"
               alt="Profile picture"

@@ -3,12 +3,11 @@
     :id="formId"
     class="animated fadeIn"
   >
-    {{ editedProject }}
     <b-row v-if="showProjectCode">
       <b-col>
-        <small for="project-code-input">Project code</small>
+        <small for="project-code-input">Project code *</small>
         <b-form-group
-          :invalid-feedback="inputStates.projectCode.filter(item => !item.state).map(item => item.feedback).join('\n')"
+          :invalid-feedback="projectCodeState.filter(item => { return item.state !== undefined ? item.state === false : false }).map(item => item.feedback).join('\n')"
         >
           <b-form-input
             id="project-code-input"
@@ -18,14 +17,14 @@
             type="number"
             min="0"
             max="99999"
-            :state="inputStates.projectCode.every(item => item.state)"
+            :state="isProjectCodeValid"
           />
         </b-form-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col sm="6">
-        <small for="project-name-fi-input">Project name (in Finnish)</small>
+        <small for="project-name-fi-input">Project name (in Finnish) *</small>
         <b-form-group
           invalid-feedback="Required"
         >
@@ -40,7 +39,7 @@
         </b-form-group>
       </b-col>
       <b-col sm="6">
-        <small for="project-name-en-input">Project name (in English)</small>
+        <small for="project-name-en-input">Project name (in English) *</small>
         <b-form-group
           invalid-feedback="Required"
         >
@@ -57,14 +56,15 @@
     </b-row>
     <b-row>
       <b-col>
-        <small>Start date</small>
+        <small>Start date *</small>
         <Datepicker
           v-model="editedProject.startDate"
           name="project-start-date"
           required
+          :is-valid="inputStates.startDate"
         />
         <small
-          v-if="!inputStates.startDate"
+          v-if="!inputStates.startDate && inputStates.startDate !== undefined"
           class="text-danger"
         >
           Required
@@ -91,7 +91,7 @@
     </b-row>
     <b-row v-if="showCustomerName">
       <b-col sm="6">
-        <small for="project-customer-name-fi-input">Customer name (in Finnish)</small>
+        <small for="project-customer-name-fi-input">Customer name (in Finnish) *</small>
         <b-form-group
           invalid-feedback="Required if project is not internal"
         >
@@ -106,7 +106,7 @@
         </b-form-group>
       </b-col>
       <b-col sm="6">
-        <small for="project-customer-name-en-input">Customer name (in English)</small>
+        <small for="project-customer-name-en-input">Customer name (in English) *</small>
         <b-form-group
           invalid-feedback="Required if project is not internal"
         >
@@ -123,24 +123,30 @@
     </b-row>
     <b-row>
       <b-col sm="6">
-        <small for="project-description-fi-input">Description (in Finnish)</small>
-        <b-textarea
-          id="project-description-fi-input"
-          v-model="editedProject.description.fi"
-          placeholder="Project description (fi)"
-          type="text"
-          rows="5"
-        />
+        <b-form-group invalid-feedback="Required">
+          <small for="project-description-fi-input">Description (in Finnish) *</small>
+          <b-textarea
+            id="project-description-fi-input"
+            v-model="editedProject.description.fi"
+            placeholder="Project description (fi)"
+            type="text"
+            rows="5"
+            :state="inputStates.projectDescriptionFi"
+          />
+        </b-form-group>
       </b-col>
       <b-col sm="6">
-        <small for="project-description-en-input">Description (in English)</small>
-        <b-textarea
-          id="project-description-en-input"
-          v-model="editedProject.description.en"
-          placeholder="Project description (en)"
-          type="text"
-          rows="5"
-        />
+        <b-form-group invalid-feedback="Required">
+          <small for="project-description-en-input">Description (in English) *</small>
+          <b-textarea
+            id="project-description-en-input"
+            v-model="editedProject.description.en"
+            placeholder="Project description (en)"
+            type="text"
+            rows="5"
+            :state="inputStates.projectDescriptionEn"
+          />
+        </b-form-group>
       </b-col>
     </b-row>
     <b-row>
@@ -159,7 +165,6 @@
           id="submit-project-edits-btn"
           class="mr-2"
           type="submit"
-          :disabled="!formIsValid"
           @click.prevent="onSubmit()"
         >
           {{ isNewProject ? 'Create a new project' : 'Update project' }}
@@ -212,7 +217,8 @@ export default {
   },
   data () {
     return {
-      editedProject: this.initProject()
+      editedProject: this.initProject(),
+      validated: false
     }
   },
   computed: {
@@ -233,32 +239,45 @@ export default {
     showCustomerName () {
       return !this.editedProject.isInternal
     },
+    isProjectCodeValid () {
+      if (!this.validated) {
+        return undefined
+      } else {
+        return this.projectCodeState.every(item => item.state)
+      }
+    },
+    projectCodeState () {
+      return [
+        {
+          state: !!this.editedProject.code,
+          feedback: 'Required'
+        },
+        {
+          state: this.editedProject.code ? !this.existingProjectCodes.includes(parseInt(this.editedProject.code)) : undefined,
+          feedback: 'Project code already exists, code must be unique'
+        }
+      ]
+    },
     inputStates () {
       return {
-        projectCode: [
-          {
-            state: this.editedProject.code !== null,
-            feedback: 'Required'
-          },
-          {
-            state: this.editedProject.code ? !this.existingProjectCodes.includes(parseInt(this.editedProject.code)) : true,
-            feedback: 'Project code already exists, code must be unique'
-          }
-        ],
-        startDate: new Date(this.editedProject.startDate) > 1000,
-        projectNameFi: this.editedProject.name.fi.length > 0,
-        projectNameEn: this.editedProject.name.en.length > 0,
-        customerNameFi: this.editedProject.customerName.fi.length > 0,
-        customerNameEn: this.editedProject.customerName.en.length > 0
+        startDate: this.validated ? !!this.editedProject.startDate : undefined,
+        projectNameFi: this.validated ? this.editedProject.name.fi.length > 0 : undefined,
+        projectNameEn: this.validated ? this.editedProject.name.en.length > 0 : undefined,
+        customerNameFi: this.validated ? this.editedProject.customerName.fi.length > 0 || this.editedProject.isInternal : undefined,
+        customerNameEn: this.validated ? this.editedProject.customerName.en.length > 0 || this.editedProject.isInternal : undefined,
+        projectDescriptionFi: this.validated ? this.editedProject.description.fi.length > 0 : undefined,
+        projectDescriptionEn: this.validated ? this.editedProject.description.en.length > 0 : undefined
       }
     },
     formIsValid () {
-      const stateArray = [this.customFormValidation]
+      const stateArray = []
       // Required always
-      stateArray.push(this.inputStates.startDate, this.inputStates.projectNameFi, this.inputStates.projectNameEn)
+      for (let entry of Object.entries(this.inputStates)) {
+        stateArray.push(entry[1])
+      }
       // Required sometimes
       if (this.showProjectCode) {
-        Array.prototype.push.apply(stateArray, this.inputStates.projectCode.map(item => item.state))
+        Array.prototype.push.apply(stateArray, this.projectCodeState.map(item => item.state))
       }
       if (this.showCustomerName) {
         stateArray.push(this.inputStates.customerNameFi, this.inputStates.customerNameEn)
@@ -268,9 +287,14 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.$emit('on-submit', this.editedProject)
-      if (this.isNewProject) {
-        this.editedProject = this.initProject()
+      if (this.formIsValid) {
+        this.validated = undefined
+        this.$emit('on-submit', this.editedProject)
+        if (this.isNewProject) {
+          this.editedProject = this.initProject()
+        }
+      } else {
+        this.validated = true
       }
     },
     initProject () {

@@ -2,10 +2,12 @@
   <div>
     <input
       :id="element"
+      ref="input"
       v-model="formattedValue"
       type="text"
-      class="form-control"
+      :class="'form-control ' + validationClass"
       autocomplete="off"
+      @blur="onBlurEvent"
     >
   </div>
 </template>
@@ -19,7 +21,12 @@ export default {
   name: 'Datepicker',
   props: {
     name: String,
-    value: Date
+    value: Date,
+    isValid:
+      {
+        type: Boolean,
+        default: undefined
+      }
   },
   computed: {
     element: function () {
@@ -31,6 +38,16 @@ export default {
       },
       set: function () {
         return undefined
+      }
+    },
+    validationClass: function () {
+      switch (this.isValid) {
+        case true:
+          return 'is-valid'
+        case false:
+          return 'is-invalid'
+        default:
+          return ''
       }
     }
   },
@@ -48,6 +65,9 @@ export default {
     },
     onSelect () {
       this.$emit('input', this.pikaday.getDate())
+    },
+    onBlurEvent () {
+      this.$refs.input.value = format(this.pikaday.getDate(), 'D.M.YYYY')
     }
   }
 }

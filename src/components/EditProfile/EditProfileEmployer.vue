@@ -67,6 +67,7 @@
           v-model="profileEmployer.description['fi']"
           type="text"
           placeholder="Description (fi)"
+          :state="inputStates.jobDescriptionFi"
         />
       </b-col>
       <b-col>
@@ -76,6 +77,7 @@
           v-model="profileEmployer.description['en']"
           type="text"
           placeholder="Description (en)"
+          :state="inputStates.jobDescriptionEn"
         />
       </b-col>
     </b-row>
@@ -214,6 +216,13 @@ export default {
         profileProject: pp,
         project: Object.values(this.projects).find(project => project.id === pp.projectId)
       })).filter(pp => pp.project.employerId === this.profileEmployer.employerId)
+    },
+    inputStates () {
+      return {
+        jobDescriptionFi: this.profileEmployer.description['fi'].length > 0,
+        jobDescriptionEn: this.profileEmployer.description['en'].length > 0,
+        startDate: new Date(this.profileEmployer.startDate) > 1
+      }
     }
   },
   watch: {
