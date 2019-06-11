@@ -3,6 +3,7 @@
     :id="formId"
     class="animated fadeIn"
   >
+    {{ editedProject }}
     <b-row v-if="showProjectCode">
       <b-col>
         <small for="project-code-input">Project code</small>
@@ -30,7 +31,7 @@
         >
           <b-form-input
             id="project-name-fi-input"
-            v-model="getDescriptionByLanguage('fi').name"
+            v-model="editedProject.name.fi"
             placeholder="Project name (fi)"
             required
             type="text"
@@ -45,7 +46,7 @@
         >
           <b-form-input
             id="project-name-en-input"
-            v-model="getDescriptionByLanguage('en').name"
+            v-model="editedProject.name.en"
             placeholder="Project name (en)"
             required
             type="text"
@@ -96,7 +97,7 @@
         >
           <b-form-input
             id="project-customer-name-fi-input"
-            v-model="getDescriptionByLanguage('fi').customerName"
+            v-model="editedProject.customerName.fi"
             placeholder="Customer name (fi)"
             required
             type="text"
@@ -111,7 +112,7 @@
         >
           <b-form-input
             id="project-customer-name-en-input"
-            v-model="getDescriptionByLanguage('en').customerName"
+            v-model="editedProject.customerName.en"
             placeholder="Customer name (en)"
             required
             type="text"
@@ -125,7 +126,7 @@
         <small for="project-description-fi-input">Description (in Finnish)</small>
         <b-textarea
           id="project-description-fi-input"
-          v-model="getDescriptionByLanguage('fi').description"
+          v-model="editedProject.description.fi"
           placeholder="Project description (fi)"
           type="text"
           rows="5"
@@ -135,7 +136,7 @@
         <small for="project-description-en-input">Description (in English)</small>
         <b-textarea
           id="project-description-en-input"
-          v-model="getDescriptionByLanguage('en').description"
+          v-model="editedProject.description.en"
           placeholder="Project description (en)"
           type="text"
           rows="5"
@@ -211,16 +212,7 @@ export default {
   },
   data () {
     return {
-      editedProject: {
-        id: !this.isNewProject ? this.project.id : null,
-        code: !this.isNewProject ? this.project.code : null,
-        startDate: !this.isNewProject ? new Date(this.project.startDate) : null,
-        endDate: !this.isNewProject && this.project.endDate ? new Date(this.project.endDate) : null,
-        isSecret: !this.isNewProject ? this.project.isSecret : false,
-        isInternal: !this.isNewProject ? this.project.isInternal : false,
-        descriptions: !this.isNewProject && this.project.descriptions ? this.project.descriptions : [],
-        employerId: this.employerId
-      }
+      editedProject: this.initProject()
     }
   },
   computed: {
@@ -236,7 +228,7 @@ export default {
       return this.isNewProject ? projectCodes : projectCodes.filter(projectCode => projectCode !== this.project.code)
     },
     showProjectCode () {
-      return this.editedProject.employerId === this.internalCompanyId
+      return this.employerId === this.internalCompanyId
     },
     showCustomerName () {
       return !this.editedProject.isInternal
@@ -254,10 +246,10 @@ export default {
           }
         ],
         startDate: new Date(this.editedProject.startDate) > 1000,
-        projectNameFi: this.getDescriptionByLanguage('fi').name.length > 0,
-        projectNameEn: this.getDescriptionByLanguage('en').name.length > 0,
-        customerNameFi: this.getDescriptionByLanguage('fi').customerName.length > 0,
-        customerNameEn: this.getDescriptionByLanguage('en').customerName.length > 0
+        projectNameFi: this.editedProject.name.fi.length > 0,
+        projectNameEn: this.editedProject.name.en.length > 0,
+        customerNameFi: this.editedProject.customerName.fi.length > 0,
+        customerNameEn: this.editedProject.customerName.en.length > 0
       }
     },
     formIsValid () {
@@ -278,40 +270,21 @@ export default {
     onSubmit () {
       this.$emit('on-submit', this.editedProject)
       if (this.isNewProject) {
-        this.resetProject()
+        this.editedProject = this.initProject()
       }
     },
-    resetProject () {
-      this.editedProject = {
+    initProject () {
+      return {
         id: !this.isNewProject ? this.project.id : null,
         code: !this.isNewProject ? this.project.code : null,
         startDate: !this.isNewProject ? new Date(this.project.startDate) : null,
         endDate: !this.isNewProject && this.project.endDate ? new Date(this.project.endDate) : null,
         isSecret: !this.isNewProject ? this.project.isSecret : false,
         isInternal: !this.isNewProject ? this.project.isInternal : false,
-        descriptions: !this.isNewProject && this.project.descriptions ? this.project.descriptions : [],
+        name: !this.isNewProject && this.project.name ? { ...this.project.name } : { fi: '', en: '' },
+        description: !this.isNewProject && this.project.description ? { ...this.project.description } : { fi: '', en: '' },
+        customerName: !this.isNewProject && this.project.customerName ? { ...this.project.customerName } : { fi: '', en: '' },
         employerId: this.employerId
-      }
-    },
-    getDescriptionByLanguage (language) {
-      if (this.editedProject && this.editedProject.descriptions) {
-        const paramsWithTranslations = this.editedProject.descriptions.find(description => description.language === language)
-        if (!paramsWithTranslations) {
-          this.editedProject.descriptions.push(
-            {
-              name: '',
-              customerName: '',
-              description: '',
-              language: language
-            }
-          )
-        }
-        return this.editedProject.descriptions.find(description => description.language === language)
-      }
-      return {
-        name: '',
-        customerName: '',
-        description: ''
       }
     }
   }

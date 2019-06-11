@@ -18,6 +18,7 @@
   </div>
 </template>
 <script>
+import { cloneDeep } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel.vue'
 import LoadingSpinner from '@/components/helpers/LoadingSpinner'
@@ -61,16 +62,18 @@ export default {
       'updateProject'
     ]),
     async createOrUpdateProject (project) {
+      const editedProject = cloneDeep(project)
       this.errorDetails = []
 
-      if (project.isInternal) {
-        project.descriptions.forEach(description => { description.customerName = '' })
+      if (project.isInternal && editedProject.customerName) {
+        editedProject.customerName.fi = ''
+        editedProject.customerName.en = ''
       }
       try {
         if (this.isNewProject) {
-          await this.createProject(project)
+          await this.createProject(editedProject)
         } else {
-          await this.updateProject(project)
+          await this.updateProject(editedProject)
         }
         this.$toasted.global.rytmi_success({
           message: this.isNewProject ? 'Project created!' : 'Project updated!'

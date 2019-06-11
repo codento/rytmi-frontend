@@ -10,34 +10,35 @@ const mockProjects = {
     id: 11,
     code: 100,
     employerId: 1,
-    descriptions: [
-      { name: 'one', description: 'test', language: 'en' },
-      { name: 'yksi', description: 'testi', language: 'fi' }
-    ]
+    name: { fi: 'yksi', en: 'one' },
+    description: { fi: 'testi', en: 'test' },
+    customerName: { fi: 'asiakas', en: 'customer' },
+    isInternal: false
   },
   12: {
     id: 12,
     code: 200,
     employerId: 1,
-    descriptions: [
-      { name: 'two', language: 'en' },
-      { name: 'kaksi', language: 'fi' }
-    ]
+    name: { fi: 'kaksi', en: 'two' },
+    description: { fi: 'testi', en: 'test' },
+    customerName: { fi: '', en: '' },
+    isInternal: true
   },
   13: {
     id: 13,
     code: 300,
     employerId: 1,
-    descriptions: [
-      { name: 'three', language: 'en' },
-      { name: 'kolme', language: 'fi' }
-    ]
+    name: { fi: 'kolme', en: 'three' },
+    description: { fi: 'testi', en: 'test' },
+    customerName: { fi: '', en: '' },
+    isInternal: true
   },
   14: {
     id: 14,
     code: null,
     employerId: 2,
-    descriptions: []
+    name: { fi: 'neljä', en: 'four' },
+    description: { fi: 'testi', en: 'test' }
   }
 }
 

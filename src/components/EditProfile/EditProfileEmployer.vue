@@ -83,7 +83,6 @@
       <b-col>
         <b-button
           id="submit"
-          class="form-control"
           block
           type="submit"
           variant="primary"
@@ -97,43 +96,51 @@
       title="Projects for this employer"
       class="mt-4"
     >
-      <b-row>
-        <b-col>
+      <b-row v-if="profileProjectsWithProjectData.length === 0">
+        <b-col class="no-projects">
+          No projects.
+        </b-col>
+      </b-row>
+      <b-row v-else>
+        <b-col
+          v-for="({ profileProject, project }, index) in profileProjectsWithProjectData"
+          :key="profileProject.id"
+        >
           <div
-            v-if="profileProjectsWithProjectData.length === 0"
-            class="no-projects"
+            v-b-modal="`project-modal${profileProject.id}`"
+            class="clickable mt-2 mb-2"
+            @mouseover="showEditIconByIndex = index"
+            @mouseout="showEditIconByIndex = null"
           >
-            No projects.
-          </div>
-          <div
-            v-for="profileProjectWithProjectData in profileProjectsWithProjectData"
-            v-else
-            :key="profileProjectWithProjectData.profileProject.id"
-          >
-            <EmployersProfileProject
-              v-b-modal="`project-modal${profileProjectWithProjectData.profileProject.id}`"
-              class="clickable"
-              :profile-project="profileProjectWithProjectData.profileProject"
-              :project="profileProjectWithProjectData.project"
-              @projectClicked="projectClicked($event)"
-            />
-            <b-modal
-              :id="`project-modal${profileProjectWithProjectData.profileProject.id}`"
-              size="lg"
-              hide-header
-              ok-only
-              ok-title="Close"
-              ok-variant="light"
-              no-close-on-backdrop
-            >
-              <WorkHistoryProjectFormWrapper
-                :editable-project="profileProjectWithProjectData.project"
-                :profile-project="profileProjectWithProjectData.profileProject"
-                :current-employer-id="profileProjectWithProjectData.project.employerId ? profileProjectWithProjectData.project.employerId : profileEmployer.employerId"
-              />
-            </b-modal>
+            <span>
+              {{ project.name[currentLanguage] }}
+            </span>
+            <span>
+              {{ '|' }}
+            </span>
+            <span>
+              {{ profileProject.role[currentLanguage] }}
+            </span>
+            <span v-show="showEditIconByIndex === index">
+              <i class="fa fa-pencil pull-right" />
+            </span>
           </div>
         </b-col>
+        <b-modal
+          :id="`project-modal${profileProjectWithProjectData.profileProject.id}`"
+          size="lg"
+          hide-header
+          ok-only
+          ok-title="Close"
+          ok-variant="light"
+          no-close-on-backdrop
+        >
+          <WorkHistoryProjectFormWrapper
+            :editable-project="profileProjectWithProjectData.project"
+            :profile-project="profileProjectWithProjectData.profileProject"
+            :current-employer-id="profileProjectWithProjectData.project.employerId ? profileProjectWithProjectData.project.employerId : profileEmployer.employerId"
+          />
+        </b-modal>
       </b-row>
       <b-row>
         <b-col>
@@ -157,7 +164,7 @@
         >
           <WorkHistoryProjectFormWrapper
             :editable-project="{ id: null, employerId: profileEmployer.employerId }"
-            :profile-project="{ id: null, profileId: profileEmployer.profileId, employerId: profileEmployer.employerId, descriptions: [] }"
+            :profile-project="{ id: null, profileId: profileEmployer.profileId, employerId: profileEmployer.employerId, role: {en: '', fi: ''} }"
             :current-employer-id="profileEmployer.employerId"
             @close-modal="closeNewProjectModal()"
           />
@@ -172,7 +179,6 @@ import { mapActions, mapGetters } from 'vuex'
 import { isEmpty, isDate } from 'lodash'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
-import EmployersProfileProject from './EmployersProfileProject'
 import CollapsableItem from '@/components/Common/CollapsableItem'
 import WorkHistoryProjectFormWrapper from './WorkHistoryProjectFormWrapper'
 
@@ -181,7 +187,6 @@ export default {
   components: {
     Datepicker,
     vSelect,
-    EmployersProfileProject,
     CollapsableItem,
     WorkHistoryProjectFormWrapper
   },
@@ -193,14 +198,16 @@ export default {
     return {
       showEditIconByIndex: null,
       selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
-      showNewProjectModal: false
+      showNewProjectModal: false,
+      showEditIcon: []
     }
   },
   computed: {
     ...mapGetters([
       'employers',
       'projects',
-      'profileProjectsByProfileId'
+      'profileProjectsByProfileId',
+      'currentLanguage'
     ]),
     profileProjectsWithProjectData () {
       return this.profileProjectsByProfileId(this.profileEmployer.profileId).map(pp => ({

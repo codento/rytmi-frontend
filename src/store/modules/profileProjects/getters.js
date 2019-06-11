@@ -1,26 +1,10 @@
-function addTitle (profileProject, currentLanguage) {
-  if (profileProject.descriptions) {
-    const descriptions = profileProject.descriptions
-      .find(description => description.language === currentLanguage)
-    profileProject = Object.assign(profileProject, { title: descriptions.title })
-  }
-  return profileProject
-}
-
 export default {
   profileProjectsStatus: (state) => state.profileProjectsStatus,
-  profileProjectsByProjectId: (state, getters, rootState) => (projectId) => {
-    const profileProjectIds = rootState.projects.profileProjectList[projectId] || []
-    return profileProjectIds.map(profileProjectId => addTitle(
-      state.profileProjects[profileProjectId],
-      rootState.siteSettings.currentLanguage
-    ))
+  profileProjects: (state) => state.profileProjects,
+  profileProjectsByProjectId: (state) => projectId => {
+    return Object.values(state.profileProjects).filter(item => item.projectId === projectId)
   },
-  profileProjectsByProfileId: (state, getters, rootState) => (profileId) => {
-    const profileProjectIds = rootState.profiles.profileProjectList[profileId] || []
-    return profileProjectIds.map(profileProjectId => addTitle(
-      state.profileProjects[profileProjectId],
-      rootState.siteSettings.currentLanguage
-    ))
+  profileProjectsByProfileId: (state) => profileId => {
+    return Object.values(state.profileProjects).filter(item => item.projectId === profileId)
   }
 }
