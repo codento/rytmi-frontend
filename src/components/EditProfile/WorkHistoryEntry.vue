@@ -5,7 +5,6 @@
         v-b-modal="'create-or-edit-profile-employer-modal'"
         name="employer"
         class="employer-name"
-        @click="profileEmployerClicked(profileEmployer)"
       >
         {{ profileEmployer ? getEmployerName(profileEmployer.employerId) : '' }}
       </span>
