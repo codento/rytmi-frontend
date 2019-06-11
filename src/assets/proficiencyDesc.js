@@ -29,7 +29,7 @@ export default {
       {
         value: 5,
         text: 'Guru',
-        description: 'An expert in the technology with years of experience and ability to teach other developers. Won\'t be fazed by even very difficult tasks.'
+        description: 'An expert in the technology with years of experience and the ability to teach other developers. Won\'t be fazed by even very difficult tasks.'
       }
     ],
     fi: [

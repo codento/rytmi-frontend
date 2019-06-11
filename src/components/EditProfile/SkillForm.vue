@@ -26,7 +26,7 @@
       >
         <EditSkillsLevelSelect
           :options="knowsOptions"
-          :initial-value="0"
+          :initial-value="knows"
           @option-selected="knowsOptionSelected($event)"
         />
       </b-form-group>
@@ -37,7 +37,7 @@
       >
         <EditSkillsLevelSelect
           :options="wantsToOptions"
-          :initial-value="0"
+          :initial-value="wantsTo"
           @option-selected="wantsOptionSelected($event)"
         />
       </b-form-group>
@@ -124,14 +124,12 @@ export default {
 
       this.profileSkill = null
       this.visibleInCV = true
-      this.wantsTo = 0
-      this.knows = 0
     },
     knowsOptionSelected (newValue) {
       this.knows = newValue
     },
     wantsOptionSelected (newValue) {
-      this.wants = newValue
+      this.wantsTo = newValue
     }
   }
 }
