@@ -41,7 +41,6 @@ export default {
       }
     },
     validationClass: function () {
-      console.log(this.isValid)
       switch (this.isValid) {
         case true:
           return 'is-valid'
