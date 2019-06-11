@@ -5,80 +5,107 @@
   >
     <b-row>
       <b-col cols="6">
-        <small for="employer-select">Select an existing employer</small>
-        <v-select
-          id="employer-select"
-          v-model="selectedExistingEmployer"
-          :options="vueSelectsEmployers"
-        />
-        <small>Or enter a new employer name</small>
-        <b-input
-          id="new-employer-name"
-          v-model="profileEmployer.newEmployerName"
-          type="text"
-          placeholder="New employer name"
-          @input="selectedExistingEmployer = null"
-        />
+        <b-form-group invalid-feedback="An existing employer must be chosen or the name of a new employer must be given.">
+          <small for="employer-select">Select an existing employer</small>
+          <v-select
+            id="employer-select"
+            v-model="selectedExistingEmployer"
+            :options="vueSelectsEmployers"
+          />
+          <small>Or enter a new employer name</small>
+          <b-input
+            id="new-employer-name"
+            v-model="profileEmployer.newEmployerName"
+            type="text"
+            placeholder="New employer name"
+            :state="inputStates.employer"
+            @input="selectedExistingEmployer = null"
+          />
+        </b-form-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <small :for="`profile-employer-start-date${profileEmployer.id}`">Start date</small>
+        <small :for="`profile-employer-start-date${profileEmployer.id}`">Start date *</small>
         <Datepicker
           :id="`profile-employer-start-date${profileEmployer.id}`"
           v-model="profileEmployer.startDate"
           :name="`profile-employer-start-date${profileEmployer.id}`"
+          :is-valid="inputStates.startDate"
         />
+        <small
+          v-if="!inputStates.startDate && inputStates.startDate !== undefined"
+          class="text-danger"
+        >
+          Required
+        </small>
       </b-col>
       <b-col>
-        <small :for="`profile-employer-end-date${profileEmployer.id}`">End date</small>
+        <small :for="`profile-employer-end-date${profileEmployer.id}`">{{ endDateLabel }}</small>
         <Datepicker
           :id="`profile-employer-end-date${profileEmployer.id}`"
           v-model="profileEmployer.endDate"
           :name="`profile-employer-end-date${profileEmployer.id}`"
+          :is-valid="inputStates.endDate"
         />
+        <small
+          v-if="!inputStates.endDate && inputStates.endDate !== undefined"
+          class="text-danger"
+        >
+          Required
+        </small>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <small for="title-fi">Job title (in Finnish)</small>
-        <b-input
-          id="title-fi"
-          v-model="profileEmployer.title['fi']"
-          type="text"
-          placeholder="Title (fi)"
-        />
+        <b-form-group invalid-feedback="Required">
+          <small for="title-fi">Job title (in Finnish) *</small>
+          <b-input
+            id="title-fi"
+            v-model="profileEmployer.title['fi']"
+            type="text"
+            placeholder="Title (fi)"
+            :state="inputStates.titleFi"
+          />
+        </b-form-group>
       </b-col>
       <b-col>
-        <small for="title-en">Job title (in English)</small>
-        <b-input
-          id="title-en"
-          v-model="profileEmployer.title['en']"
-          type="text"
-          placeholder="Title (en)"
-        />
+        <b-form-group invalid-feedback="Required">
+          <small for="title-en">Job title (in English) *</small>
+          <b-input
+            id="title-en"
+            v-model="profileEmployer.title['en']"
+            type="text"
+            placeholder="Title (en)"
+            :state="inputStates.titleEn"
+          />
+        </b-form-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <small for="description-fi">Job description (in Finnish)</small>
-        <b-textarea
-          id="description-fi"
-          v-model="profileEmployer.description['fi']"
-          type="text"
-          placeholder="Description (fi)"
-          :state="inputStates.jobDescriptionFi"
-        />
+        <b-form-group invalid-feedback="Required">
+          <small for="description-fi">Job description (in Finnish) *</small>
+          <b-textarea
+            id="description-fi"
+            v-model="profileEmployer.description['fi']"
+            type="text"
+            placeholder="Description (fi)"
+            :state="inputStates.jobDescriptionFi"
+          />
+        </b-form-group>
       </b-col>
       <b-col>
-        <small for="description-en">Job description (in English)</small>
-        <b-textarea
-          id="description-en"
-          v-model="profileEmployer.description['en']"
-          type="text"
-          placeholder="Description (en)"
-          :state="inputStates.jobDescriptionEn"
-        />
+        <b-form-group invalid-feedback="Required">
+          <small for="description-en">Job description (in English) *</small>
+          <b-textarea
+            id="description-en"
+            v-model="profileEmployer.description['en']"
+            type="text"
+            placeholder="Description (en)"
+            :state="inputStates.jobDescriptionEn"
+          />
+        </b-form-group>
       </b-col>
     </b-row>
     <b-row class="mt-2">
@@ -178,11 +205,12 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { isEmpty, isDate } from 'lodash'
+import { isEmpty } from 'lodash'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
 import CollapsableItem from '@/components/Common/CollapsableItem'
 import WorkHistoryProjectFormWrapper from './WorkHistoryProjectFormWrapper'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
   name: 'EditProfileEmployer',
@@ -201,7 +229,8 @@ export default {
       showEditIconByIndex: null,
       selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
       showNewProjectModal: false,
-      showEditIcon: []
+      showEditIcon: [],
+      validated: false
     }
   },
   computed: {
@@ -211,6 +240,11 @@ export default {
       'profileProjectsByProfileId',
       'currentLanguage'
     ]),
+    endDateLabel () {
+      if (this.selectedExistingEmployer) {
+        return `End date${this.selectedExistingEmployer.label !== INTERNAL_COMPANY_NAME ? ' *' : ''}`
+      } else return 'End date *'
+    },
     profileProjectsWithProjectData () {
       return this.profileProjectsByProfileId(this.profileEmployer.profileId).map(pp => ({
         profileProject: pp,
@@ -218,11 +252,24 @@ export default {
       })).filter(pp => pp.project.employerId === this.profileEmployer.employerId)
     },
     inputStates () {
+      console.log(this.selectedExistingEmployer)
       return {
-        jobDescriptionFi: this.profileEmployer.description['fi'].length > 0,
-        jobDescriptionEn: this.profileEmployer.description['en'].length > 0,
-        startDate: new Date(this.profileEmployer.startDate) > 1
+        titleFi: this.validated ? this.profileEmployer.title.fi.length > 0 : undefined,
+        titleEn: this.validated ? this.profileEmployer.title.en.length > 0 : undefined,
+        jobDescriptionFi: this.validated ? this.profileEmployer.description['fi'].length > 0 : undefined,
+        jobDescriptionEn: this.validated ? this.profileEmployer.description['en'].length > 0 : undefined,
+        startDate: this.validated ? new Date(this.profileEmployer.startDate) > 1 : undefined,
+        endDate: this.validated && this.selectedExistingEmployer.label !== INTERNAL_COMPANY_NAME ? new Date(this.profileEmployer.endDate) > 1 : undefined,
+        employer: this.validated ? !(!this.selectedExistingEmployer && isEmpty(this.profileEmployer.newEmployerName)) : undefined
       }
+    },
+    formIsValid () {
+      const stateArray = []
+      // Required always
+      for (let entry of Object.entries(this.inputStates)) {
+        stateArray.push(entry[1])
+      }
+      return stateArray.every(item => item)
     }
   },
   watch: {
@@ -241,14 +288,15 @@ export default {
     },
     async onSubmit (evt) {
       evt.preventDefault()
-      if (!this.isDataValidForSubmit()) {
+      if (!this.formIsValid) {
+        this.validated = true
         return
       }
+      this.validated = undefined
       if (this.shouldCreateANewEmployer()) {
         try {
           await this.createEmployer({ name: this.profileEmployer.newEmployerName })
         } catch (error) {
-          console.log(error)
           this.$toasted.global.rytmi_error({
             message: `Couldn't create a new employer. ${error}`
           })
@@ -296,28 +344,6 @@ export default {
     },
     shouldCreateANewEmployer () {
       return !this.selectedExistingEmployer
-    },
-    isDataValidForSubmit () {
-      let isDataValid = true
-      if (!this.selectedExistingEmployer && isEmpty(this.profileEmployer.newEmployerName)) {
-        this.$toasted.global.rytmi_error({
-          message: 'An existing employer must be chosen or the name of a new employer must be given.'
-        })
-        isDataValid = false
-      }
-      if (!isDate(this.profileEmployer.startDate)) {
-        this.$toasted.global.rytmi_error({
-          message: 'Start date must be given and it must be a valid date.'
-        })
-        isDataValid = false
-      }
-      if (this.profileEmployer.endDate && !isDate(this.profileEmployer.endDate)) {
-        this.$toasted.global.rytmi_error({
-          message: 'End date must be a valid date.'
-        })
-        isDataValid = false
-      }
-      return isDataValid
     },
     closeNewProjectModal () {
       this.showNewProjectModal = false
