@@ -95,9 +95,11 @@
       v-if="profileEmployer.id"
       title="Projects for this employer"
       class="mt-4"
+      :initial-visibility="true"
     >
       <b-row v-if="profileProjectsWithProjectData.length === 0">
         <b-col class="no-projects">
+          <i class="fa fa-exclamation-circle notice" />
           No projects.
         </b-col>
       </b-row>
@@ -329,5 +331,9 @@ export default {
 .no-projects {
   font-style: italic;
   color: lightslategrey;
+}
+.notice {
+  color: red;
+  font-size: 150%;
 }
 </style>

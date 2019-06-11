@@ -93,7 +93,8 @@ export default {
   data () {
     return {
       selectedProfileEmployer: null,
-      showEditIconByIndex: null
+      showEditIconByIndex: null,
+      profileEmployerIdToOpenForEditing: null
     }
   },
   computed: {
@@ -145,17 +146,16 @@ export default {
       return this.selectedProfileEmployer && this.selectedProfileEmployer.id === null
     },
     newProfileEmployerCreated (createdProfileEmployer) {
-      console.log('newProfileEmployerCreated')
-      console.log(createdProfileEmployer)
-      console.log(this.profileEmployers)
-      // const newlyCreatedProfileEmployer = this.profileEmployers.find(profileEmployer => profileEmployer.id === createdProfileEmployer.id)
-      // this.openOrCloseEmployerForEditing(newlyCreatedProfileEmployer)
+      this.profileEmployerIdToOpenForEditing = createdProfileEmployer.id
     }
   },
   watch: {
     profileEmployers () {
-      console.log('watchi profileEmployers')
-      console.log(this.profileEmployers)
+      if (this.profileEmployerIdToOpenForEditing) {
+        const newlyCreatedProfileEmployer = this.profileEmployers.find(profileEmployer => profileEmployer.id === this.profileEmployerIdToOpenForEditing)
+        this.openOrCloseEmployerForEditing(newlyCreatedProfileEmployer)
+        this.profileEmployerIdToOpenForEditing = null
+      }
     }
   }
 }
