@@ -287,14 +287,13 @@ export default {
   },
   methods: {
     onSubmit () {
+      this.validated = true
       if (this.formIsValid) {
         this.validated = undefined
         this.$emit('on-submit', this.editedProject)
         if (this.isNewProject) {
           this.editedProject = this.initProject()
         }
-      } else {
-        this.validated = true
       }
     },
     initProject () {
