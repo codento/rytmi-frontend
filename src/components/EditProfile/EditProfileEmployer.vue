@@ -97,9 +97,11 @@
       v-if="profileEmployer.id"
       title="Projects for this employer"
       class="mt-4"
+      :initial-visibility="true"
     >
       <b-row v-if="profileProjectsWithProjectData.length === 0">
         <b-col class="no-projects">
+          <i class="fa fa-exclamation-circle notice" />
           No projects.
         </b-col>
       </b-row>
@@ -248,7 +250,6 @@ export default {
         try {
           await this.createEmployer({ name: this.profileEmployer.newEmployerName })
         } catch (error) {
-          console.log(error)
           this.$toasted.global.rytmi_error({
             message: `Couldn't create a new employer. ${error}`
           })
@@ -279,11 +280,14 @@ export default {
         }
       } else {
         try {
-          await this.createProfileEmployer(profileEmployer)
-          this.$toasted.global.rytmi_success({
-            message: 'A new work history entry created!'
-          })
-          document.getElementById('employer-form').reset()
+          this.createProfileEmployer(profileEmployer)
+            .then(response => {
+              this.$emit('new-profile-employer-created', response)
+              this.$toasted.global.rytmi_success({
+                message: 'A new work history entry created!'
+              })
+              document.getElementById('employer-form').reset()
+            })
         } catch (error) {
           this.$toasted.global.rytmi_error({
             message: `A new work history entry couldn't be created. Error: ${error}`
@@ -336,5 +340,9 @@ export default {
 .no-projects {
   font-style: italic;
   color: lightslategrey;
+}
+.notice {
+  color: red;
+  font-size: 150%;
 }
 </style>
