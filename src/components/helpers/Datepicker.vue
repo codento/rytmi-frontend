@@ -5,7 +5,7 @@
       ref="input"
       v-model="formattedValue"
       type="text"
-      class="form-control"
+      :class="'form-control ' + validationClass"
       autocomplete="off"
       @blur="onBlurEvent"
     >
@@ -21,7 +21,12 @@ export default {
   name: 'Datepicker',
   props: {
     name: String,
-    value: Date
+    value: Date,
+    isValid:
+      {
+        type: Boolean,
+        default: undefined
+      }
   },
   computed: {
     element: function () {
@@ -33,6 +38,17 @@ export default {
       },
       set: function () {
         return undefined
+      }
+    },
+    validationClass: function () {
+      console.log(this.isValid)
+      switch (this.isValid) {
+        case true:
+          return 'is-valid'
+        case false:
+          return 'is-invalid'
+        default:
+          return ''
       }
     }
   },
