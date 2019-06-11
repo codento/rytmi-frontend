@@ -252,7 +252,6 @@ export default {
       })).filter(pp => pp.project.employerId === this.profileEmployer.employerId)
     },
     inputStates () {
-      console.log(this.selectedExistingEmployer)
       return {
         titleFi: this.validated ? this.profileEmployer.title.fi.length > 0 : undefined,
         titleEn: this.validated ? this.profileEmployer.title.en.length > 0 : undefined,
