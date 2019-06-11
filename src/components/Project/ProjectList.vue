@@ -11,6 +11,8 @@
       id="project-table"
       :items="results"
       :fields="fields"
+      :sort-by.sync="sortBy"
+      class="clickable"
       striped
       fixed
       @row-clicked="openProject"
@@ -26,6 +28,7 @@ export default {
   data () {
     return {
       projectFilterTerm: '',
+      sortBy: 'code',
       fields: [
         {
           key: 'code',
@@ -43,8 +46,8 @@ export default {
   computed: {
     ...mapGetters([
       'projectFilter',
-      'projectById',
-      'employerByName'
+      'employerByName',
+      'currentLanguage'
     ]),
     internalCompanyId () {
       return this.employerByName(INTERNAL_COMPANY_NAME).id
@@ -52,7 +55,13 @@ export default {
     results () {
       const projects = this.projectFilter(this.projectFilterTerm)
       const thisCompanyProjects = Object.values(projects).filter(project => project.employerId === this.internalCompanyId)
-      return thisCompanyProjects.map(project => this.projectById(project.id))
+      return thisCompanyProjects.map(project => {
+        return {
+          id: project.id,
+          code: project.code,
+          name: project.name[this.currentLanguage]
+        }
+      })
     }
   },
   methods: {
