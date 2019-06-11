@@ -5,7 +5,7 @@
   >
     <b-row v-if="showProjectCode">
       <b-col>
-        <small for="project-code-input">Project code</small>
+        <small for="project-code-input">Project code *</small>
         <b-form-group
           :invalid-feedback="projectCodeState.filter(item => { return item.state !== undefined ? item.state === false : false }).map(item => item.feedback).join('\n')"
         >
@@ -24,7 +24,7 @@
     </b-row>
     <b-row>
       <b-col sm="6">
-        <small for="project-name-fi-input">Project name (in Finnish)</small>
+        <small for="project-name-fi-input">Project name (in Finnish) *</small>
         <b-form-group
           invalid-feedback="Required"
         >
@@ -39,7 +39,7 @@
         </b-form-group>
       </b-col>
       <b-col sm="6">
-        <small for="project-name-en-input">Project name (in English)</small>
+        <small for="project-name-en-input">Project name (in English) *</small>
         <b-form-group
           invalid-feedback="Required"
         >
@@ -56,11 +56,12 @@
     </b-row>
     <b-row>
       <b-col>
-        <small>Start date</small>
+        <small>Start date *</small>
         <Datepicker
           v-model="editedProject.startDate"
           name="project-start-date"
           required
+          :is-valid="inputStates.startDate"
         />
         <small
           v-if="!inputStates.startDate && inputStates.startDate !== undefined"
@@ -90,7 +91,7 @@
     </b-row>
     <b-row v-if="showCustomerName">
       <b-col sm="6">
-        <small for="project-customer-name-fi-input">Customer name (in Finnish)</small>
+        <small for="project-customer-name-fi-input">Customer name (in Finnish) *</small>
         <b-form-group
           invalid-feedback="Required if project is not internal"
         >
@@ -105,7 +106,7 @@
         </b-form-group>
       </b-col>
       <b-col sm="6">
-        <small for="project-customer-name-en-input">Customer name (in English)</small>
+        <small for="project-customer-name-en-input">Customer name (in English) *</small>
         <b-form-group
           invalid-feedback="Required if project is not internal"
         >
@@ -123,7 +124,7 @@
     <b-row>
       <b-col sm="6">
         <b-form-group invalid-feedback="Required">
-          <small for="project-description-fi-input">Description (in Finnish)</small>
+          <small for="project-description-fi-input">Description (in Finnish) *</small>
           <b-textarea
             id="project-description-fi-input"
             v-model="getDescriptionByLanguage('fi').description"
@@ -136,7 +137,7 @@
       </b-col>
       <b-col sm="6">
         <b-form-group invalid-feedback="Required">
-          <small for="project-description-en-input">Description (in English)</small>
+          <small for="project-description-en-input">Description (in English) *</small>
           <b-textarea
             id="project-description-en-input"
             v-model="getDescriptionByLanguage('en').description"
@@ -296,12 +297,14 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.validated = true
       if (this.formIsValid) {
+        this.validated = undefined
         this.$emit('on-submit', this.editedProject)
         if (this.isNewProject) {
           this.resetProject()
         }
+      } else {
+        this.validated = true
       }
     },
     resetProject () {
