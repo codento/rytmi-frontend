@@ -68,7 +68,8 @@ export default {
       this.$emit('input', this.pikaday.getDate())
     },
     onBlurEvent () {
-      this.$refs.input.value = format(this.pikaday.getDate(), 'D.M.YYYY')
+      // TODO Figure this out
+      // this.$refs.input.value = format(this.pikaday.getDate(), 'D.M.YYYY')
     }
   }
 }

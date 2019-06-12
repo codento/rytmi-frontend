@@ -41,19 +41,12 @@
         </small>
       </b-col>
       <b-col>
-        <small :for="`profile-employer-end-date${profileEmployer.id}`">{{ endDateLabel }}</small>
+        <small :for="`profile-employer-end-date${profileEmployer.id}`">End date</small>
         <Datepicker
           :id="`profile-employer-end-date${profileEmployer.id}`"
           v-model="profileEmployer.endDate"
           :name="`profile-employer-end-date${profileEmployer.id}`"
-          :is-valid="inputStates.endDate"
         />
-        <small
-          v-if="!inputStates.endDate && inputStates.endDate !== undefined"
-          class="text-danger"
-        >
-          Required
-        </small>
       </b-col>
     </b-row>
     <b-row>
@@ -242,11 +235,6 @@ export default {
       'profileProjectsByProfileId',
       'currentLanguage'
     ]),
-    endDateLabel () {
-      if (this.selectedExistingEmployer) {
-        return `End date${this.selectedExistingEmployer.label !== INTERNAL_COMPANY_NAME ? ' *' : ''}`
-      } else return 'End date *'
-    },
     profileProjectsWithProjectData () {
       return this.profileProjectsByProfileId(this.profileEmployer.profileId).map(pp => ({
         profileProject: pp,
@@ -261,7 +249,6 @@ export default {
         jobDescriptionFi: this.validated ? this.profileEmployer.description['fi'].length > 0 : undefined,
         jobDescriptionEn: this.validated ? this.profileEmployer.description['en'].length > 0 : undefined,
         startDate: this.validated ? new Date(this.profileEmployer.startDate) > 1 : undefined,
-        endDate: this.validated ? this.endDateValidation : undefined,
         employer: this.validated ? !(!this.selectedExistingEmployer && isEmpty(this.profileEmployer.newEmployerName)) : undefined
       }
     },
@@ -293,7 +280,6 @@ export default {
       'updateProfileEmployer'
     ]),
     getEmployerId (employerName) {
-      console.log(employerName)
       return Object.values(this.employers).find(employer => employer.name === employerName).id
     },
     formatProjectDuration (startDate, endDate) {
