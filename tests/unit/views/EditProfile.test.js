@@ -74,7 +74,8 @@ function createStore (overrideConfig) {
     profileById: () => () => mockProfile,
     skills: () => () => mockSkills,
     skillById: () => (id) => mockSkills[id],
-    profileSkillsByProfileId: () => (profileId) => mockProfileSkills.filter(skill => skill.profileId === profileId)
+    profileSkillsByProfileId: () => (profileId) => mockProfileSkills.filter(skill => skill.profileId === profileId),
+    skillGroupBySkillId: () => (id) => { return { title: 'Uncategorized' } }
   }
 
   const mergedStoreConfig = merge({ getters }, overrideConfig)
