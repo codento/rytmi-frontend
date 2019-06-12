@@ -29,6 +29,7 @@
           Click on a skill to add it to the project
           <b-input
             v-model="skillFilterText"
+            class="my-3"
             type="text"
             placeholder="Filter by skill name"
           />
