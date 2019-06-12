@@ -19,8 +19,8 @@
             >
               <b-form-input
                 id="project-role-fi-input"
-                v-model="getDescriptionByLanguage('fi').title"
-                placeholder="e.g. front-end developer, database admin, architect"
+                v-model="editedProfileProject.role.fi"
+                placeholder="esim. front-end kehittäjä, ohjelmistoarkkitehti"
                 type="text"
                 :state="inputStates.roleFi"
               />
@@ -33,7 +33,7 @@
             >
               <b-form-input
                 id="project-role-en-input"
-                v-model="getDescriptionByLanguage('en').title"
+                v-model="editedProfileProject.role.en"
                 placeholder="e.g. front-end developer, database admin, architect"
                 type="text"
                 :state="inputStates.roleEn"
@@ -106,16 +106,16 @@ export default {
     },
     inputStates () {
       return {
-        roleFi: this.getDescriptionByLanguage('fi').title.length > 0,
-        roleEn: this.getDescriptionByLanguage('en').title.length > 0
+        roleFi: this.editedProfileProject.role.fi.length > 0,
+        roleEn: this.editedProfileProject.role.en.length > 0
       }
     }
   },
-  watch: {
+  /* watch: {
     profileProject () {
       this.editedProfileProject = cloneDeep(this.profileProject)
     }
-  },
+  }, */
   methods: {
     ...mapActions([
       'createProject',
@@ -123,35 +123,24 @@ export default {
       'newProjectProfile',
       'updateProfileProject'
     ]),
-    getDescriptionByLanguage (language) {
-      if (this.editedProfileProject) {
-        const paramsWithTranslations = this.editedProfileProject.descriptions.find(description => description.language === language)
-        if (!paramsWithTranslations) {
-          this.editedProfileProject.descriptions.push(
-            {
-              title: '',
-              language: language
-            }
-          )
-        }
-        return this.editedProfileProject.descriptions.find(description => description.language === language)
-      }
-      return { title: '' }
-    },
     async createOrUpdateProject (project) {
+      const editedProject = cloneDeep(project)
       this.errorDetails = []
 
       if (project.isInternal) {
-        project.descriptions.forEach(description => { description.customerName = '' })
+        editedProject.customerName = {
+          fi: '',
+          en: ''
+        }
       }
       try {
         let response
         if (this.isNewProject) {
-          response = await this.createProject(project)
+          response = await this.createProject(editedProject)
         } else {
-          await this.updateProject(project)
+          await this.updateProject(editedProject)
         }
-        this.createOrUpdateProfileProject(project.id ? project.id : response.data)
+        this.createOrUpdateProfileProject(editedProject.id ? editedProject : response.data)
       } catch (error) {
         if (Array.isArray(error.data.error.details)) {
           this.errorDetails = error.data.error.details
@@ -164,15 +153,18 @@ export default {
         this.showError = true
       }
     },
-    async createOrUpdateProfileProject (project) {
+    async createOrUpdateProfileProject (relatedProject) {
       const profileProject = {
         id: this.profileProject.id,
         profileId: this.profileProject.profileId,
-        projectId: project.id,
+        projectId: relatedProject.id,
         workPercentage: 100,
-        startDate: project.startDate,
-        endDate: project.endDate,
-        descriptions: this.editedProfileProject.descriptions
+        startDate: relatedProject.startDate,
+        endDate: relatedProject.endDate,
+        role: {
+          fi: this.editedProfileProject.role.fi,
+          en: this.editedProfileProject.role.en
+        }
       }
       try {
         if (this.isNewProject) {

@@ -85,7 +85,6 @@
       <b-col>
         <b-button
           id="submit"
-          class="form-control"
           block
           type="submit"
           variant="primary"
@@ -98,43 +97,51 @@
       v-if="profileEmployer.id"
       title="Projects for this employer"
       class="mt-4"
+      :initial-visibility="true"
     >
-      <b-row>
-        <b-col>
+      <b-row v-if="profileProjectsWithProjectData.length === 0">
+        <b-col class="no-projects">
+          <i class="fa fa-exclamation-circle notice" />
+          No projects.
+        </b-col>
+      </b-row>
+      <b-row v-else>
+        <b-col
+          v-for="({ profileProject, project }, index) in profileProjectsWithProjectData"
+          :key="profileProject.id"
+          cols="12"
+        >
           <div
-            v-if="profileProjectsWithProjectData.length === 0"
-            class="no-projects"
+            v-b-modal="`project-modal${profileProject.id}`"
+            class="clickable mt-2 mb-2"
+            @mouseover="showEditIconByIndex = index"
+            @mouseout="showEditIconByIndex = null"
           >
-            No projects.
+            <span class="project-name mr-2">
+              {{ project.name[currentLanguage] }} ({{ formatProjectDuration(profileProject.startDate, profileProject.endDate) }})
+            </span>
+            <span class="project-role">
+              {{ profileProject.role[currentLanguage] }}
+            </span>
+            <span v-show="showEditIconByIndex === index">
+              <i class="fa fa-pencil pull-right" />
+            </span>
           </div>
-          <div
-            v-for="profileProjectWithProjectData in profileProjectsWithProjectData"
-            v-else
-            :key="profileProjectWithProjectData.profileProject.id"
+          <b-modal
+            :id="`project-modal${profileProject.id}`"
+            size="lg"
+            hide-header
+            ok-only
+            ok-title="Close"
+            ok-variant="light"
+            no-close-on-backdrop
           >
-            <EmployersProfileProject
-              v-b-modal="`project-modal${profileProjectWithProjectData.profileProject.id}`"
-              class="clickable"
-              :profile-project="profileProjectWithProjectData.profileProject"
-              :project="profileProjectWithProjectData.project"
-              @projectClicked="projectClicked($event)"
+            <WorkHistoryProjectFormWrapper
+              :editable-project="project"
+              :profile-project="profileProject"
+              :current-employer-id="project.employerId ? project.employerId : profileEmployer.employerId"
             />
-            <b-modal
-              :id="`project-modal${profileProjectWithProjectData.profileProject.id}`"
-              size="lg"
-              hide-header
-              ok-only
-              ok-title="Close"
-              ok-variant="light"
-              no-close-on-backdrop
-            >
-              <WorkHistoryProjectFormWrapper
-                :editable-project="profileProjectWithProjectData.project"
-                :profile-project="profileProjectWithProjectData.profileProject"
-                :current-employer-id="profileProjectWithProjectData.project.employerId ? profileProjectWithProjectData.project.employerId : profileEmployer.employerId"
-              />
-            </b-modal>
-          </div>
+          </b-modal>
         </b-col>
       </b-row>
       <b-row>
@@ -159,7 +166,7 @@
         >
           <WorkHistoryProjectFormWrapper
             :editable-project="{ id: null, employerId: profileEmployer.employerId }"
-            :profile-project="{ id: null, profileId: profileEmployer.profileId, employerId: profileEmployer.employerId, descriptions: [] }"
+            :profile-project="{ id: null, profileId: profileEmployer.profileId, employerId: profileEmployer.employerId, role: {en: '', fi: ''} }"
             :current-employer-id="profileEmployer.employerId"
             @close-modal="closeNewProjectModal()"
           />
@@ -172,9 +179,9 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { isEmpty, isDate } from 'lodash'
+import format from 'date-fns/format'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
-import EmployersProfileProject from './EmployersProfileProject'
 import CollapsableItem from '@/components/Common/CollapsableItem'
 import WorkHistoryProjectFormWrapper from './WorkHistoryProjectFormWrapper'
 
@@ -183,7 +190,6 @@ export default {
   components: {
     Datepicker,
     vSelect,
-    EmployersProfileProject,
     CollapsableItem,
     WorkHistoryProjectFormWrapper
   },
@@ -195,20 +201,23 @@ export default {
     return {
       showEditIconByIndex: null,
       selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
-      showNewProjectModal: false
+      showNewProjectModal: false,
+      showEditIcon: []
     }
   },
   computed: {
     ...mapGetters([
       'employers',
       'projects',
-      'profileProjectsByProfileId'
+      'profileProjectsByProfileId',
+      'currentLanguage'
     ]),
     profileProjectsWithProjectData () {
       return this.profileProjectsByProfileId(this.profileEmployer.profileId).map(pp => ({
         profileProject: pp,
         project: Object.values(this.projects).find(project => project.id === pp.projectId)
       })).filter(pp => pp.project.employerId === this.profileEmployer.employerId)
+        .sort((a, b) => a.project.startDate - b.project.startDate)
     },
     inputStates () {
       return {
@@ -232,6 +241,10 @@ export default {
     getEmployerId (employerName) {
       return Object.values(this.employers).find(employer => employer.name === employerName).id
     },
+    formatProjectDuration (startDate, endDate) {
+      const formattedEndDate = endDate ? format(endDate, 'MM/YYYY') : ''
+      return format(startDate, 'MM/YYYY') + '-' + formattedEndDate
+    },
     async onSubmit (evt) {
       evt.preventDefault()
       if (!this.isDataValidForSubmit()) {
@@ -241,7 +254,6 @@ export default {
         try {
           await this.createEmployer({ name: this.profileEmployer.newEmployerName })
         } catch (error) {
-          console.log(error)
           this.$toasted.global.rytmi_error({
             message: `Couldn't create a new employer. ${error}`
           })
@@ -272,11 +284,14 @@ export default {
         }
       } else {
         try {
-          await this.createProfileEmployer(profileEmployer)
-          this.$toasted.global.rytmi_success({
-            message: 'A new work history entry created!'
-          })
-          document.getElementById('employer-form').reset()
+          this.createProfileEmployer(profileEmployer)
+            .then(response => {
+              this.$emit('new-profile-employer-created', response)
+              this.$toasted.global.rytmi_success({
+                message: 'A new work history entry created!'
+              })
+              document.getElementById('employer-form').reset()
+            })
         } catch (error) {
           this.$toasted.global.rytmi_error({
             message: `A new work history entry couldn't be created. Error: ${error}`
@@ -329,5 +344,15 @@ export default {
 .no-projects {
   font-style: italic;
   color: lightslategrey;
+}
+.notice {
+  color: red;
+  font-size: 150%;
+}
+.project-name {
+  font-weight: bold;
+}
+.project-role {
+  font-style: italic;
 }
 </style>

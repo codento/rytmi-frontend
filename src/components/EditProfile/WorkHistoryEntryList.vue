@@ -14,6 +14,12 @@
         />
       </b-col>
     </b-row>
+    <div
+      v-if="profileEmployers.length === 0"
+      class="text-muted"
+    >
+      No work history added
+    </div>
   </form>
 </template>
 

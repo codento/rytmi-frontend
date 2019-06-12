@@ -8,7 +8,7 @@
       <b-row>
         <b-col class="project-details">
           <b>{{ project.code }}</b>
-          <h1>{{ project.name }}</h1>
+          <h1>{{ project.name[currentLanguage] }}</h1>
           <div class="detail-container">
             <span class="detail detail-start">
               <small>Start date</small><br>
@@ -25,7 +25,7 @@
           </div>
           <p>
             <small>Description</small><br>
-            {{ project.description }}
+            {{ project.description[currentLanguage] }}
           </p>
         </b-col>
       </b-row>
@@ -45,9 +45,10 @@
         </div>
       </CollapsableItem>
       <hr>
-      <CollapsableItem title="Add a consultant">
+      <CollapsableItem :title="isAdmin ? 'Add a consultant' : 'Join project'">
         <ProjectProfileForm
-          :profile-project="{ projectId: project.id }"
+          :profile-project="{ projectId: project.id, profileId: isAdmin ? null : profileId }"
+          no-redirect
         />
       </CollapsableItem>
       <hr>
@@ -83,9 +84,12 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'profileId',
       'projectById',
       'profileProjectsByProjectId',
-      'employers'
+      'employers',
+      'currentLanguage',
+      'isAdmin'
     ]),
     project () {
       return this.projectById(this.$route.params.id)

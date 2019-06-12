@@ -16,15 +16,9 @@ localVue.filter('dateFilter', value => {
 
 const projectMock = (projectId) => ({
   id: projectId,
-  name: 'Project Foo',
-  description: 'Foo Bar',
-  descriptions: [
-    {
-      name: 'Project Foo',
-      description: 'Foo Bar',
-      language: 'fi'
-    }
-  ],
+  name: { en: 'Project Foo', fi: 'Projekti Foo' },
+  description: { en: 'Foo Bar', fi: 'Foo Bar' },
+  customerName: { en: 'Customer', fi: 'Asiakas' },
   code: 50,
   startDate: new Date('2018-01-01'),
   endDate: new Date('2018-05-01')
@@ -37,15 +31,7 @@ const profileProjectMock = (projectId) => ([
     projectId: projectId,
     startDate: '2018-01-01',
     endDate: '2018-02-01',
-    name: 'Project Foo',
-    description: 'Foo Bar',
-    descriptions: [
-      {
-        name: 'Project Foo',
-        description: 'Foo Bar',
-        language: 'fi'
-      }
-    ]
+    role: { en: 'Developer', fi: 'Devaaja' }
   }
 ])
 
@@ -69,7 +55,10 @@ function createStore (overrideConfig) {
     getters: {
       projectById: () => (projectId) => projectMock(projectId),
       profileProjectsByProjectId: () => (projectId) => profileProjectMock(projectId),
-      employers: () => mockEmployers
+      employers: () => mockEmployers,
+      isAdmin: () => false,
+      profileId: () => 1,
+      currentLanguage: () => 'fi'
     },
     state: {
       siteSettings: { currentLanguage: 'fi' }
@@ -109,17 +98,17 @@ describe('Project.vue', () => {
 
   it('shows project information correctly', () => {
     const wrapper = createWrapper()
-    expect(wrapper.find('h1').text()).toContain('Project Foo')
+    expect(wrapper.find('h1').text()).toEqual(projectMock().name.fi)
     const bElements = wrapper.findAll('b')
     const projectCode = bElements.at(0)
     const startDate = wrapper.find('.project-start-date')
     const endDate = wrapper.find('.project-end-date')
     const numOfMembers = bElements.at(3)
-    expect(projectCode.text()).toContain(projectMock().code)
+    expect(projectCode.text()).toEqual(projectMock().code.toString())
     expect(startDate.text()).toBe(format(projectMock().startDate, 'D.M.YYYY'))
     expect(endDate.text()).toBe(format(projectMock().endDate, 'D.M.YYYY'))
     expect(numOfMembers.text()).toBe(profileProjectMock().length.toString())
-    expect(wrapper.find('p').text()).toContain(projectMock().description)
+    expect(wrapper.find('p').text()).toContain(projectMock().description.fi)
   })
 
   it('does not show members field if there are no members', () => {

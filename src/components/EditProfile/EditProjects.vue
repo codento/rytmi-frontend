@@ -3,7 +3,8 @@
     <b-row>
       <b-col class="col-12 projects-table">
         <b-table
-          :items="profileProjectsByProfileId(profileId)"
+          v-if="projectList.length > 0"
+          :items="projectList"
           :fields="fields"
           fixed
           caption-top
@@ -12,25 +13,6 @@
           <template slot="table-caption">
             Projects participated
           </template>
-
-          <template
-            slot="projectId"
-            slot-scope="data"
-          >
-            <span>
-              {{ projectById(data.item.projectId) ? projectById(data.item.projectId).code : '' }}
-            </span>
-          </template>
-
-          <template
-            slot="project"
-            slot-scope="data"
-          >
-            <span>
-              {{ projectById(data.item.projectId) ? projectById(data.item.projectId).name : '' }}
-            </span>
-          </template>
-
           <template
             slot="startDate"
             slot-scope="data"
@@ -76,7 +58,7 @@
               size="sm"
               class="mr-1"
               variant="danger"
-              @click.stop="removePP(data.item)"
+              @click.stop="confirmDelete(data.item)"
             >
               Remove
             </b-btn>
@@ -94,7 +76,7 @@
           <b-col>
             <small>Your role in the project (in Finnish)</small>
             <b-input
-              v-model="descriptionFi.title"
+              v-model="editedProfileProject.role.fi"
               placeholder="esim. front-end kehittäjä, ohjelmistoarkkitehti"
               type="text"
               required
@@ -103,7 +85,7 @@
           <b-col>
             <small>Your role in the project (in English)</small>
             <b-input
-              v-model="descriptionEn.title"
+              v-model="editedProfileProject.role.en"
               placeholder="e.g. front-end developer, database admin"
               type="text"
               required
@@ -130,7 +112,7 @@
         />
         <b-btn
           id="save"
-          class="modal-btn"
+          class="mt-2"
           @click="callUpdateProfileProjectAction()"
         >
           Save
@@ -138,7 +120,7 @@
         <b-btn
           id="close"
           variant="light"
-          class="modal-btn"
+          class="mt-2"
           @click="closeEditModal()"
         >
           Close
@@ -173,33 +155,39 @@ export default {
     Datepicker
   },
   props: {
-    'profileId': Number
+    profileId: Number
   },
   data () {
     return {
       fields: [
-        { key: 'projectId', label: 'Code' },
-        { key: 'project', label: 'Name' },
+        { key: 'code', label: 'Code' },
+        { key: 'name', label: 'Name' },
         { key: 'startDate', label: 'From' },
         { key: 'endDate', label: 'To' },
         { key: 'workPercentage', label: 'Utilization' },
         'edit',
         'remove'
       ],
-      editedProfileProject: {}
+      editedProfileProject: {
+        role: {}
+      }
     }
   },
   computed: {
     ...mapGetters([
       'profileProjectsByProfileId',
       'projectById',
-      'profileById'
+      'profileById',
+      'currentLanguage'
     ]),
-    descriptionFi () {
-      return this.getProfileProjectDescriptionByLanguage('fi')
-    },
-    descriptionEn () {
-      return this.getProfileProjectDescriptionByLanguage('en')
+    projectList () {
+      return this.profileProjectsByProfileId(this.profileId).map(profileProject => {
+        return {
+          ...profileProject,
+          code: this.projectById(profileProject.projectId).code,
+          name: this.projectById(profileProject.projectId).name[this.currentLanguage]
+        }
+      })
     }
   },
   methods: {
@@ -207,7 +195,7 @@ export default {
       'removeProfileProject',
       'updateProfileProject'
     ]),
-    removePP (item) {
+    confirmDelete (item) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {
         this.removeProfileProject(item)
@@ -218,40 +206,29 @@ export default {
       this.editedProfileProject.name = this.projectById(item.item.projectId).name
       this.editedProfileProject.startDate = new Date(this.editedProfileProject.startDate)
       this.editedProfileProject.endDate = this.editedProfileProject.endDate ? new Date(this.editedProfileProject.endDate) : null
-      this.editedProfileProject.workPercentage = this.editedProfileProject.workPercentage // TODO why is this?
       this.editedProfileProject.index = item.index
       this.$refs.profileProjectEditModal.show()
     },
     closeEditModal () {
       this.$refs.profileProjectEditModal.hide()
     },
-    callUpdateProfileProjectAction () {
+    async callUpdateProfileProjectAction () {
       if (this.isDataValid()) {
-        this.updateProfileProject(this.editedProfileProject)
-          .then((response) => {
-            this.$toasted.global.rytmi_success({
-              message: 'Project information updated.'
-            })
-            this.$refs.profileProjectEditModal.hide()
+        try {
+          await this.updateProfileProject(this.editedProfileProject)
+          this.$toasted.global.rytmi_success({
+            message: 'Project information updated.'
           })
-          .catch((err) => {
-            this.$toasted.global.rytmi_error({
-              message: err
-            })
+          this.$refs.profileProjectEditModal.hide()
+        } catch (err) {
+          this.$toasted.global.rytmi_error({
+            message: err
           })
-      }
-    },
-    getProfileProjectDescriptionByLanguage (language) {
-      if (!this.editedProfileProject.descriptions || !this.editedProfileProject.descriptions.find(description => description.language === language)) {
-        return {
-          language,
-          title: ''
         }
       }
-      return this.editedProfileProject.descriptions.find(description => description.language === language)
     },
     isDataValid () {
-      if (!this.editedProfileProject.workPercentage || !this.descriptionEn.title || !this.descriptionFi.title) {
+      if (!this.editedProfileProject.workPercentage || !this.editedProfileProject.fi.role || !this.editedProfileProject.en.role) {
         this.$toasted.global.rytmi_error({
           message: 'Not all fields have data, please fill them in.'
         })
@@ -280,13 +257,3 @@ export default {
   }
 }
 </script>
-
-<style scoped >
-button {
-  width: 100%;
-}
-.modal-btn {
-  margin-top: 0.5rem;
-}
-
-</style>

@@ -1,7 +1,6 @@
 import projectModule from '@/store/modules/projects'
 import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import { LANGUAGE_ENUM } from '@/utils/constants'
 
 jest.mock('@/utils/api/api')
 
@@ -10,32 +9,29 @@ localVue.use(Vuex)
 
 const initialProjectState = {
   siteSettings: {
-    currentLanguage: LANGUAGE_ENUM.DEFAULT_LANGUAGE
+    currentLanguage: 'fi'
   },
   projects: {
     1: {
       id: 1,
       code: 100,
-      descriptions: [
-        { name: 'one', description: 'descOne', customerName: 'customer1', language: 'en' },
-        { name: 'yksi', description: 'descYksi', customerName: 'asiakas1', language: 'fi' }
-      ]
+      name: { en: 'one', fi: 'yksi' },
+      description: { en: 'descOne', fi: 'kuvausYksi' },
+      customerName: { en: 'customer1', fi: 'asiakas1' }
     },
     2: {
       id: 2,
       code: 200,
-      descriptions: [
-        { name: 'two', description: 'descTwo', language: 'en' },
-        { name: 'kaksi', description: 'descKaksi', language: 'fi' }
-      ]
+      name: { en: 'two', fi: 'kaksi' },
+      description: { en: 'descTwo', fi: 'kuvausKaksi' },
+      customerName: { en: 'customer1', fi: 'asiakas1' }
     },
     3: {
       id: 3,
       code: 300,
-      descriptions: [
-        { name: 'almostOne', description: 'descAlmostOne', customerName: 'customer1', language: 'en' },
-        { name: 'kuinYksi', description: 'descKuinYksi', customerName: 'asiakas1', language: 'fi' }
-      ]
+      name: { en: 'almostOne', fi: 'kuinYksi' },
+      description: { en: 'descAlmostOne', fi: 'kuvausKuinYksi' },
+      customerName: { en: 'customer1', fi: 'asiakas1' }
     }
   },
   projectList: [],
@@ -52,15 +48,12 @@ describe('Projects.getters', () => {
   })
 
   it('should return the correct project with given id', () => {
-    const defaultDescriptions = initialProjectState.projects[1].descriptions
-      .find(description => description.language === LANGUAGE_ENUM.DEFAULT_LANGUAGE)
     expect(store.getters.projectById(1)).toEqual(
-      { code: 100,
-        id: 1,
-        name: defaultDescriptions.name,
-        customerName: defaultDescriptions.customerName,
-        description: defaultDescriptions.description,
-        descriptions: initialProjectState.projects[1].descriptions
+      { id: 1,
+        code: 100,
+        name: { en: 'one', fi: 'yksi' },
+        description: { en: 'descOne', fi: 'kuvausYksi' },
+        customerName: { en: 'customer1', fi: 'asiakas1' }
       }
     )
   })

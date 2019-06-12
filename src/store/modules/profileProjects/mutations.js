@@ -18,6 +18,6 @@ export default {
     Vue.set(state.profileProjects, profileProject.id, profileProject)
   },
   [types.REMOVE_PROFILEPROJECT] (state, profileProject) {
-    Vue.delete(state.profileProjects, profileProject.projectId)
+    Vue.delete(state.profileProjects, profileProject.id)
   }
 }

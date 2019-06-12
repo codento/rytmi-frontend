@@ -63,7 +63,7 @@
             :key="'project-' + project.id"
             :value="project.id"
           >
-            {{ project.code }} {{ project.code ? '-' : '' }} {{ getProjectName(project) }}
+            {{ project.code }} {{ project.code ? '-' : '' }} {{ project.name[currentLanguage] }}
           </option>
         </b-form-select>
       </b-form-group>
@@ -73,7 +73,7 @@
           <small for="project-role-fi-input">Your role in the project (in Finnish)</small>
           <b-input
             id="project-role-fi-input"
-            v-model="descriptionFi.title"
+            v-model="editableProfileProject.role.fi"
             placeholder="esim. front-end kehittäjä, ohjelmistoarkkitehti"
             type="text"
             required
@@ -83,7 +83,7 @@
           <small for="project-role-en-input">Your role in the project (in English)</small>
           <b-input
             id="project-role-en-input"
-            v-model="descriptionEn.title"
+            v-model="editableProfileProject.role.en"
             placeholder="e.g. front-end developer, database admin"
             type="text"
             required
@@ -115,8 +115,10 @@
       />
 
       <b-button
-        primary
+        variant="primary"
+        block
         name="submit"
+        class="mt-2"
         type="submit"
       >
         {{ profileVisible ? 'Add consultant' : 'Join project' }}
@@ -170,22 +172,16 @@ export default {
       errorDetails: [],
       projectVisible: true,
       profileVisible: false,
-      editableProfileProject: this.getEditableProfileProject()
+      editableProfileProject: this.initProfileProject()
     }
   },
   computed: {
     ...mapGetters([
       'profiles',
       'projects',
-      'currentLanguage',
-      'employerByName'
+      'employerByName',
+      'currentLanguage'
     ]),
-    descriptionFi () {
-      return this.getProfileProjectDescriptionByLanguage('fi')
-    },
-    descriptionEn () {
-      return this.getProfileProjectDescriptionByLanguage('en')
-    },
     filteredProjects () {
       const projectList = Object.keys(this.projects).map(key => this.projects[key])
       return projectList.filter(project => {
@@ -202,18 +198,14 @@ export default {
       'newProjectProfile',
       'updateProfileProject'
     ]),
-    getEditableProfileProject () {
+    initProfileProject () {
       if (!this.profileProject.id) {
         return {
           ...this.profileProject,
-          descriptions: this.descriptions ? this.descriptions : this.getEmptyDescriptions()
+          role: {}
         }
       }
       return cloneDeep(this.profileProject)
-    },
-    getProjectName (project) {
-      const description = project.descriptions.find(description => description.language === this.currentLanguage)
-      return description ? description.name : ''
     },
     createNewProfileProject (profileProject) {
       this.newProjectProfile(profileProject)
@@ -273,7 +265,7 @@ export default {
         this.editableProfileProject = {}
         this.editableProfileProject.projectId = null
         this.editableProfileProject.profileId = this.profileProject.profileId
-        this.editableProfileProject.descriptions = this.getEmptyDescriptions()
+        this.editableProfileProject.role = {}
       } else {
         this.redirect()
       }
@@ -284,28 +276,7 @@ export default {
       } else if (this.profileProject.projectId) {
         this.$router.push('/projects/' + this.profileProject.projectId)
       }
-    },
-    getEmptyDescriptions () {
-      return [
-        {
-          language: 'fi',
-          title: ''
-        },
-        {
-          language: 'en',
-          title: ''
-        }
-      ]
-    },
-    getProfileProjectDescriptionByLanguage (language) {
-      return this.editableProfileProject.descriptions.find(description => description.language === language)
     }
   }
 }
 </script>
-<style scoped>
-button {
-  width: 100%;
-  margin-top: 1em;
-}
-</style>

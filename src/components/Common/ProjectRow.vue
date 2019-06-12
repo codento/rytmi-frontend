@@ -10,7 +10,7 @@
           class="no-underline-router-link"
           :to="{ name: 'project', params: { id: '' + project.id }}"
         >
-          <span class="project-header">{{ project.name }} </span>
+          <span class="project-header">{{ project.name[currentLanguage] }} </span>
         </router-link>
       </div>
       <div class="col-sm-12 duration-container">
@@ -28,7 +28,7 @@
           v-if="show"
           class="col-sm-12"
         >
-          {{ project.description }}
+          {{ project.description[currentLanguage] }}
         </div>
       </transition>
     </div>
@@ -50,7 +50,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['projectById']),
+    ...mapGetters([
+      'projectById',
+      'currentLanguage'
+    ]),
     project: function () {
       return this.projectById(this.profileProject.projectId)
     }

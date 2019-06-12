@@ -17,6 +17,7 @@ exports[`ProjectList.vue Template is correct 1`] = `
    
   <b-table-stub
     apiurl=""
+    class="clickable"
     currentpage="1"
     emptyfilteredtext="There are no records matching your request"
     emptytext="There are no records to show"
@@ -30,6 +31,7 @@ exports[`ProjectList.vue Template is correct 1`] = `
     perpage="0"
     selectedvariant="primary"
     selectmode="multi"
+    sortby="code"
     sortdirection="asc"
     striped="true"
     value=""
