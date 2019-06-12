@@ -121,7 +121,7 @@
       </b-col>
     </b-row>
     <CollapsableItem
-      v-if="profileEmployer.id"
+      v-if="profileEmployer.id && profileEmployer.id !== getEmployerId(internalCompany)"
       title="Projects for this employer"
       class="mt-4"
       :initial-visibility="true"
@@ -231,7 +231,8 @@ export default {
       selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
       showNewProjectModal: false,
       showEditIcon: [],
-      validated: false
+      validated: false,
+      internalCompany: INTERNAL_COMPANY_NAME
     }
   },
   computed: {
@@ -292,6 +293,7 @@ export default {
       'updateProfileEmployer'
     ]),
     getEmployerId (employerName) {
+      console.log(employerName)
       return Object.values(this.employers).find(employer => employer.name === employerName).id
     },
     formatProjectDuration (startDate, endDate) {
