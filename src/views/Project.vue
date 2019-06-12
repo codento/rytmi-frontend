@@ -45,9 +45,10 @@
         </div>
       </CollapsableItem>
       <hr>
-      <CollapsableItem title="Add a consultant">
+      <CollapsableItem :title="isAdmin ? 'Add a consultant' : 'Join project'">
         <ProjectProfileForm
-          :profile-project="{ projectId: project.id }"
+          :profile-project="{ projectId: project.id, profileId: isAdmin ? null : profileId }"
+          no-redirect
         />
       </CollapsableItem>
       <hr>
@@ -83,10 +84,12 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'profileId',
       'projectById',
       'profileProjectsByProjectId',
       'employers',
-      'currentLanguage'
+      'currentLanguage',
+      'isAdmin'
     ]),
     project () {
       return this.projectById(this.$route.params.id)

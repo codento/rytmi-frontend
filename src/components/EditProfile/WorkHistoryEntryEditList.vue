@@ -30,6 +30,7 @@
               <EditProfileEmployer
                 :profile-employer="selectedProfileEmployer"
                 :vue-selects-employers="vueSelectsEmployers"
+                @new-profile-employer-created="newProfileEmployerCreated($event)"
               />
             </div>
           </b-col>
@@ -92,7 +93,8 @@ export default {
   data () {
     return {
       selectedProfileEmployer: null,
-      showEditIconByIndex: null
+      showEditIconByIndex: null,
+      profileEmployerIdToOpenForEditing: null
     }
   },
   computed: {
@@ -114,6 +116,15 @@ export default {
         id: employer.id
       })),
       ['label'])
+    }
+  },
+  watch: {
+    profileEmployers () {
+      if (this.profileEmployerIdToOpenForEditing) {
+        const newlyCreatedProfileEmployer = this.profileEmployers.find(profileEmployer => profileEmployer.id === this.profileEmployerIdToOpenForEditing)
+        this.openOrCloseEmployerForEditing(newlyCreatedProfileEmployer)
+        this.profileEmployerIdToOpenForEditing = null
+      }
     }
   },
   methods: {
@@ -142,6 +153,9 @@ export default {
     },
     shouldShowNewEmployerAddForm () {
       return this.selectedProfileEmployer && this.selectedProfileEmployer.id === null
+    },
+    newProfileEmployerCreated (createdProfileEmployer) {
+      this.profileEmployerIdToOpenForEditing = createdProfileEmployer.id
     }
   }
 }

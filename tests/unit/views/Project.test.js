@@ -56,6 +56,8 @@ function createStore (overrideConfig) {
       projectById: () => (projectId) => projectMock(projectId),
       profileProjectsByProjectId: () => (projectId) => profileProjectMock(projectId),
       employers: () => mockEmployers,
+      isAdmin: () => false,
+      profileId: () => 1,
       currentLanguage: () => 'fi'
     },
     state: {

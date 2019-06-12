@@ -111,11 +111,11 @@ export default {
       }
     }
   },
-  watch: {
+  /* watch: {
     profileProject () {
       this.editedProfileProject = cloneDeep(this.profileProject)
     }
-  },
+  }, */
   methods: {
     ...mapActions([
       'createProject',
@@ -127,9 +127,11 @@ export default {
       const editedProject = cloneDeep(project)
       this.errorDetails = []
 
-      if (project.isInternal && this.editedProject.customerName) {
-        this.editedProject.customerName.fi = ''
-        this.editedProject.customerName.en = ''
+      if (project.isInternal) {
+        editedProject.customerName = {
+          fi: '',
+          en: ''
+        }
       }
       try {
         let response

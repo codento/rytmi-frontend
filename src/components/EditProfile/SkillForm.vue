@@ -7,46 +7,46 @@
       <b-form-group
         id="skillLabel"
         vertical
-        label="Skill:"
+        label="Skill"
         label-for="skill"
+        label-size="lg"
       >
         <v-select
           id="skill-select"
           v-model="profileSkill"
           :options="availableSkillsForVueSelect"
           placeholder="Select skill"
+          select-on-tab
         />
       </b-form-group>
       <b-form-group
         id="knowsLabel"
-        label="Proficiency level:"
+        label="Proficiency level"
+        label-size="lg"
       >
-        <b-form-radio-group
-          id="knows"
-          v-model="knows"
+        <EditSkillsLevelSelect
           :options="knowsOptions"
-          stacked
-          plain
+          :initial-value="knows"
+          @option-selected="knowsOptionSelected($event)"
         />
       </b-form-group>
       <b-form-group
         id="wantsToLabel"
-        label="Willingness level:"
+        label="Willingness level"
+        label-size="lg"
       >
-        <b-form-radio-group
-          id="wantsTo"
-          v-model="wantsTo"
+        <EditSkillsLevelSelect
           :options="wantsToOptions"
-          stacked
-          name="wantsTo"
-          plain
+          :initial-value="wantsTo"
+          @option-selected="wantsOptionSelected($event)"
         />
       </b-form-group>
       <b-form-group
         id="visibleInCVLabel"
         vertical
-        label="Show in CV:"
+        label="Show in CV"
         label-for="visibleInCV"
+        label-size="lg"
       >
         <input
           id="visibleInCV"
@@ -70,11 +70,13 @@ import { mapGetters, mapActions } from 'vuex'
 import proficiencyDesc from '../../assets/proficiencyDesc'
 import { orderBy } from 'lodash'
 import vSelect from 'vue-select'
+import EditSkillsLevelSelect from '@/components/EditProfile/EditSkillsLevelSelect'
 
 export default {
   name: 'SkillForm',
   components: {
-    vSelect
+    vSelect,
+    EditSkillsLevelSelect
   },
   props: {
     'profileId': {
@@ -122,9 +124,19 @@ export default {
 
       this.profileSkill = null
       this.visibleInCV = true
-      this.wantsTo = 0
-      this.knows = 0
+    },
+    knowsOptionSelected (newValue) {
+      this.knows = newValue
+    },
+    wantsOptionSelected (newValue) {
+      this.wantsTo = newValue
     }
   }
 }
 </script>
+
+<style scoped >
+.form-label {
+  font-weight: bold;
+}
+</style>

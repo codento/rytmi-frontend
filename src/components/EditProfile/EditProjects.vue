@@ -3,7 +3,8 @@
     <b-row>
       <b-col class="col-12 projects-table">
         <b-table
-          :items="profileProjectsByProfileId(profileId)"
+          v-if="projectList.length > 0"
+          :items="projectList"
           :fields="fields"
           fixed
           caption-top
@@ -12,25 +13,6 @@
           <template slot="table-caption">
             Projects participated
           </template>
-
-          <template
-            slot="projectId"
-            slot-scope="data"
-          >
-            <span>
-              {{ projectById(data.item.projectId) ? projectById(data.item.projectId).code : '' }}
-            </span>
-          </template>
-
-          <template
-            slot="project"
-            slot-scope="data"
-          >
-            <span>
-              {{ projectById(data.item.projectId) ? projectById(data.item.projectId).name : '' }}
-            </span>
-          </template>
-
           <template
             slot="startDate"
             slot-scope="data"
@@ -76,7 +58,7 @@
               size="sm"
               class="mr-1"
               variant="danger"
-              @click.stop="removePP(data.item)"
+              @click.stop="confirmDelete(data.item)"
             >
               Remove
             </b-btn>
@@ -178,8 +160,8 @@ export default {
   data () {
     return {
       fields: [
-        { key: 'projectId', label: 'Code' },
-        { key: 'project', label: 'Name' },
+        { key: 'code', label: 'Code' },
+        { key: 'name', label: 'Name' },
         { key: 'startDate', label: 'From' },
         { key: 'endDate', label: 'To' },
         { key: 'workPercentage', label: 'Utilization' },
@@ -195,15 +177,25 @@ export default {
     ...mapGetters([
       'profileProjectsByProfileId',
       'projectById',
-      'profileById'
-    ])
+      'profileById',
+      'currentLanguage'
+    ]),
+    projectList () {
+      return this.profileProjectsByProfileId(this.profileId).map(profileProject => {
+        return {
+          ...profileProject,
+          code: this.projectById(profileProject.projectId).code,
+          name: this.projectById(profileProject.projectId).name[this.currentLanguage]
+        }
+      })
+    }
   },
   methods: {
     ...mapActions([
       'removeProfileProject',
       'updateProfileProject'
     ]),
-    removePP (item) {
+    confirmDelete (item) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {
         this.removeProfileProject(item)
@@ -220,20 +212,19 @@ export default {
     closeEditModal () {
       this.$refs.profileProjectEditModal.hide()
     },
-    callUpdateProfileProjectAction () {
+    async callUpdateProfileProjectAction () {
       if (this.isDataValid()) {
-        this.updateProfileProject(this.editedProfileProject)
-          .then((response) => {
-            this.$toasted.global.rytmi_success({
-              message: 'Project information updated.'
-            })
-            this.$refs.profileProjectEditModal.hide()
+        try {
+          await this.updateProfileProject(this.editedProfileProject)
+          this.$toasted.global.rytmi_success({
+            message: 'Project information updated.'
           })
-          .catch((err) => {
-            this.$toasted.global.rytmi_error({
-              message: err
-            })
+          this.$refs.profileProjectEditModal.hide()
+        } catch (err) {
+          this.$toasted.global.rytmi_error({
+            message: err
           })
+        }
       }
     },
     isDataValid () {
