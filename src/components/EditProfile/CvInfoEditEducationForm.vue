@@ -38,8 +38,7 @@
               :id="'input-'+ kebabCase(item.key) + '-' + currentLanguage"
               v-model="editedValues[currentLanguage][item.key]"
               type="text"
-              :required="item.key in requiredValues"
-              :state="inputState[item.key] ? inputState[item.key].state[currentLanguage] : null"
+              :state="inputStates[item.key] ? inputStates[item.key][currentLanguage].state : null"
               class="form-control"
             />
           </b-form-group>
@@ -64,7 +63,7 @@
               :min="1970"
               :max="new Date().getFullYear()"
               :description="formData.find(item => item.key === key).descriptions[currentLanguage]"
-              :state="editedValues[key] ? inputState[key].state : null"
+              :state="inputStates[key] ? inputStates[key].state : false"
             />
           </b-form-group>
         </b-col>
@@ -86,7 +85,6 @@
       id="save"
       class="pull-right"
       variant="success"
-      :disabled="!canContinue"
       @click="handleNextButton()"
     >
       {{ currentStep === steps.length - 1 ? 'Save' : 'Next' }}
@@ -118,8 +116,8 @@ export default {
   },
   data () {
     return {
+      validated: false,
       editedValues: cloneDeep(this.initialValues),
-      requiredValues: ['school'],
       currentStep: 0,
       usedLanguages: {
         fi: { label: 'Suomeksi' },
@@ -127,14 +125,14 @@ export default {
       },
       formData: [
         { key: 'school',
-          label: 'Place of education',
+          label: 'Place of education *',
           descriptions: {
             fi: 'Oppilaitoksen nimi, esim. Aalto-yliopisto',
             en: 'Name of the shool or institution, e.g. Aalto University'
           }
         },
         { key: 'degree',
-          label: 'Degree',
+          label: 'Degree *',
           descriptions: {
             fi: 'Tutkinnon nimi, esim. Tietotekniikan diplomi-insinööri',
             en: 'e.g. M.Sc. (tech) in Computer Science'
@@ -154,7 +152,7 @@ export default {
             en: 'Name of the minor studied, e.g. Geoinformatics'
           }
         },
-        { key: 'startYear', label: 'Starting year', descriptions: { fi: 'Aloitusvuosi', en: '' } },
+        { key: 'startYear', label: 'Starting year *', descriptions: { fi: 'Aloitusvuosi', en: '' } },
         { key: 'endYear', label: 'Finishing year', descriptions: { fi: 'Lopetusvupsi', en: '' } }
 
       ],
@@ -175,24 +173,29 @@ export default {
           state: this.editedValues.endYear ? Number(this.editedValues.startYear) <= Number(this.editedValues.endYear) : true,
           feedback: 'Starting year cannot be after finishing year'
         },
+        {
+          state: !!this.editedValues.startYear,
+          feedback: 'Starting year is required'
+        },
         this.isValidYear(this.editedValues.startYear)
       ]
       return {
-        state: rules.every(item => item.state),
+        state: this.validated ? rules.every(item => item.state) : undefined,
         feedback: rules.filter(item => !item.state).map(item => item.feedback).join('\n')
       }
     },
-    inputState () {
+    inputStates () {
       return {
         school: {
-          state: {
-            fi: this.editedValues.fi.school.length > 0,
-            en: this.editedValues.en.school.length > 0
-          },
-          feedback: 'Cannot be empty'
+          fi: { state: this.validated ? this.editedValues.fi.school.length > 0 : null, feedback: 'Required' },
+          en: { state: this.validated ? this.editedValues.en.school.length > 0 : null, feedback: 'Required' }
+        },
+        degree: {
+          fi: { state: this.validated ? this.editedValues.fi.degree.length > 0 : null, feedback: 'Required' },
+          en: { state: this.validated ? this.editedValues.en.degree.length > 0 : null, feedback: 'Required' }
         },
         startYear: this.startYearState,
-        endYear: this.isValidYear(this.editedValues.endYear)
+        endYear: this.editedValues.endYear && this.validated ? this.isValidYear(this.editedValues.endYear) : { state: undefined, feedback: '' }
       }
     },
     canContinue () {
@@ -214,37 +217,41 @@ export default {
     },
     isValidYear (year) {
       return {
-        state: year ? Number(year) >= 1970 && Number(year) <= new Date().getFullYear() : true,
+        state: year ? Number(year) >= 1970 && Number(year) <= new Date().getFullYear() : undefined,
         feedback: `Invalid year, should be between 1970-${new Date().getFullYear()}`
       }
     },
     invalidFeedback (key, langKey = null) {
-      if (this.inputState[key]) {
-        const state = this.inputState[key].state
+      if (this.inputStates[key] && this.inputStates[key].state !== undefined) {
+        const state = this.inputStates[key].state
         // Handle both cases: state.[lang] == true and state == true
         if (state[langKey] || state === true) {
           return ''
         } else {
-          return this.inputState[key].feedback
+          return this.inputStates[key].feedback
         }
+      } else if (!this.inputStates[key]) {
+        return ''
       }
-      return ''
+      return this.inputStates[key][langKey] ? this.inputStates[key][langKey].feedback : ''
     },
     formIsValidByLanguage (langKey) {
-      const statesForLanguage = Object.keys(this.inputState).map(key => {
-        const item = this.inputState[key]
-        if (item.state.hasOwnProperty(langKey)) {
-          return item.state[langKey]
+      const statesForLanguage = Object.keys(this.inputStates).map(key => {
+        const item = this.inputStates[key]
+        if (item.hasOwnProperty(langKey)) {
+          return !!item[langKey].state
         } else {
-          return item.state
+          return !!(item.state || item.state === undefined)
         }
       })
       return statesForLanguage.every(state => state)
     },
     handleNextButton () {
-      if (this.currentStep < this.steps.length - 1) {
+      this.validated = true
+      if (this.currentStep < this.steps.length - 1 && this.canContinue) {
         ++this.currentStep
-      } else {
+        this.validated = false
+      } else if (this.canContinue) {
         this.$emit('submit', this.editedValues)
       }
     },
