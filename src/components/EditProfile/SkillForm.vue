@@ -20,7 +20,7 @@
         />
       </b-form-group>
       <b-form-group
-        id="knowsLabel"
+        id="knows-label"
         label="Proficiency level"
         label-size="lg"
       >
@@ -31,7 +31,8 @@
         />
       </b-form-group>
       <b-form-group
-        id="wantsToLabel"
+        v-if="!isLanguageSkill"
+        id="wants-to-label"
         label="Willingness level"
         label-size="lg"
       >
@@ -42,14 +43,14 @@
         />
       </b-form-group>
       <b-form-group
-        id="visibleInCVLabel"
+        id="visible-in-cv-label"
         vertical
         label="Show in CV"
-        label-for="visibleInCV"
+        label-for="visible-in-cv"
         label-size="lg"
       >
         <input
-          id="visibleInCV"
+          id="visible-in-cv"
           v-model="visibleInCV"
           type="checkbox"
         >
@@ -67,10 +68,11 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import proficiencyDesc from '../../assets/proficiencyDesc'
+import proficiencyDesc from '@/assets/proficiencyDesc'
 import { orderBy } from 'lodash'
 import vSelect from 'vue-select'
 import EditSkillsLevelSelect from '@/components/EditProfile/EditSkillsLevelSelect'
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 export default {
   name: 'SkillForm',
@@ -88,7 +90,6 @@ export default {
     return {
       profileSkill: null,
       wantsToOptions: proficiencyDesc.wants,
-      knowsOptions: proficiencyDesc.knows['en'],
       visibleInCV: true,
       wantsTo: 0,
       knows: 0
@@ -97,8 +98,22 @@ export default {
   computed: {
     ...mapGetters([
       'skills',
-      'profileSkillsByProfileId'
+      'profileSkillsByProfileId',
+      'skillGroupBySkillId'
     ]),
+    isLanguageSkill () {
+      if (this.profileSkill && this.profileSkill.id) {
+        const skillGroup = this.skillGroupBySkillId(this.profileSkill.id)
+        return skillGroup ? skillGroup.title === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
+      }
+      return false
+    },
+    knowsOptions () {
+      if (this.isLanguageSkill) {
+        return proficiencyDesc.knowsLanguage['en']
+      }
+      return proficiencyDesc.knows['en']
+    },
     availableSkillsForVueSelect () {
       const existingSkillsIds = this.profileSkillsByProfileId(this.profileId).map(profileSkill => profileSkill.skillId)
       const allSkillsMappedForVueSelect = Object.values(this.skills).map(skill => ({

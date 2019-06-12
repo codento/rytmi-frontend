@@ -39,6 +39,7 @@
             slot-scope="wantsTo"
           >
             <span
+              v-show="!isLanguageSkill(wantsTo.item.skillId)"
               class="clickable"
               @click.stop="showWantsModal(wantsTo)"
             >
@@ -139,9 +140,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import proficiencyDesc from '../../assets/proficiencyDesc'
+import proficiencyDesc from '@/assets/proficiencyDesc'
 import SkillForm from './SkillForm'
 import EditSkillsLevelSelect from '@/components/EditProfile/EditSkillsLevelSelect'
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 export default {
   name: 'EditSkills',
@@ -150,7 +152,7 @@ export default {
     EditSkillsLevelSelect
   },
   props: {
-    'profileId': Number
+    profileId: Number
   },
   data () {
     return {
@@ -162,7 +164,6 @@ export default {
         { key: 'remove', label: ' ' }
       ],
       wantsToOptions: proficiencyDesc.wants,
-      knowsOptions: proficiencyDesc.knows['en'],
       editedSkill: {}
     }
   },
@@ -170,14 +171,31 @@ export default {
     ...mapGetters([
       'skills',
       'skillById',
-      'profileSkillsByProfileId'
-    ])
+      'profileSkillsByProfileId',
+      'skillGroupBySkillId'
+    ]),
+    currentSkillIsLanguage () {
+      if (this.editedSkill && this.editedSkill.skillId) {
+        return this.isLanguageSkill(this.editedSkill.skillId)
+      }
+      return false
+    },
+    knowsOptions () {
+      if (this.currentSkillIsLanguage) {
+        return proficiencyDesc.knowsLanguage['en']
+      }
+      return proficiencyDesc.knows['en']
+    }
   },
   methods: {
     ...mapActions([
       'removeProfileSkill',
       'updateProfileSkill'
     ]),
+    isLanguageSkill (skillId) {
+      const skillGroup = this.skillGroupBySkillId(skillId)
+      return skillGroup ? skillGroup.title === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
+    },
     removeSkillFromProfile (skillId) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {
