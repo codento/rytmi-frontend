@@ -72,5 +72,23 @@ export default {
     { text: "It's OK", value: 3, description: '' },
     { text: "It's fun!", value: 4, description: '' },
     { text: 'Pick me, pick me!', value: 5, description: '' }
-  ]
+  ],
+  knowsLanguage: {
+    en: [
+      { text: 'No proficiency', value: 0, description: '' },
+      { text: 'Elementary proficiency', value: 1, description: '' },
+      { text: 'Limited working proficiency', value: 2, description: '' },
+      { text: 'Professional working proficiency', value: 3, description: '' },
+      { text: 'Fluent', value: 4, description: '' },
+      { text: 'Native speaker', value: 5, description: '' }
+    ],
+    fi: [
+      { text: 'No proficiency', value: 0, description: '' },
+      { text: 'Alkeiskielitaito', value: 1, description: '' },
+      { text: 'Kohtalainen kielitaito', value: 2, description: '' },
+      { text: 'Hyvä kielitaito', value: 3, description: '' },
+      { text: 'Erinomainen kielitaito', value: 4, description: '' },
+      { text: 'Äidinkieli', value: 5, description: '' }
+    ]
+  }
 }
