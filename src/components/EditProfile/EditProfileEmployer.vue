@@ -121,7 +121,7 @@
       </b-col>
     </b-row>
     <CollapsableItem
-      v-if="profileEmployer.id && profileEmployer.id !== getEmployerId(internalCompany)"
+      v-if="profileEmployer.id && profileEmployer.id !== employerByName(internalCompany).id"
       title="Projects for this employer"
       class="mt-4"
       :initial-visibility="true"
@@ -240,7 +240,8 @@ export default {
       'employers',
       'projects',
       'profileProjectsByProfileId',
-      'currentLanguage'
+      'currentLanguage',
+      'employerByName'
     ]),
     endDateLabel () {
       if (this.selectedExistingEmployer) {
@@ -292,10 +293,6 @@ export default {
       'createProfileEmployer',
       'updateProfileEmployer'
     ]),
-    getEmployerId (employerName) {
-      console.log(employerName)
-      return Object.values(this.employers).find(employer => employer.name === employerName).id
-    },
     formatProjectDuration (startDate, endDate) {
       const formattedEndDate = endDate ? format(endDate, 'MM/YYYY') : ''
       return format(startDate, 'MM/YYYY') + '-' + formattedEndDate
@@ -319,7 +316,7 @@ export default {
         this.$toasted.global.rytmi_success({
           message: 'A new employer created!'
         })
-        const profileEmployer = { ...this.profileEmployer, employerId: this.getEmployerId(this.profileEmployer.newEmployerName) }
+        const profileEmployer = { ...this.profileEmployer, employerId: this.employerByName(this.profileEmployer.newEmployerName).id }
         this.updateOrCreateProfileEmployer(profileEmployer)
       } else {
         const profileEmployer = { ...this.profileEmployer, employerId: this.selectedExistingEmployer.id }

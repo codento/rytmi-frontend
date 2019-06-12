@@ -35,7 +35,10 @@
           :languages="languages"
         />
         <div v-if="projectsLoaded">
-          <CvToolWorkExperience :profile-projects="projects" />
+          <CvToolWorkExperience
+            :profile-id="profile.id"
+            :profile-projects="mappedProfileProjects"
+          />
         </div>
         <CvToolEducation :education-list="profile.education ? profile.education : []" />
       </b-col>
@@ -45,8 +48,8 @@
         <b-button
           id="open-create-cv-modal"
           v-b-modal.create-cv-modal
+          :disabled="!allRequiredFieldsFilled"
         >
-         <!--  :disabled="!allRequiredFieldsFilled" -->
           Create CV
         </b-button>
         <b-tooltip
@@ -141,7 +144,7 @@ import CvToolEducation from './CvToolEducation.vue'
 import LoadingSpinner from '@/components/helpers/LoadingSpinner.vue'
 import proficiencyDesc from '@/assets/proficiencyDesc'
 import staticTexts from '@/assets/cvStaticTexts'
-import { LANGUAGE_ENUM } from '@/utils/constants'
+import { LANGUAGE_ENUM, INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
   name: 'CvTool',
@@ -180,8 +183,12 @@ export default {
       'cvExportPending',
       'employers',
       'employerById',
+      'employerByName',
       'profileEmployersByProfileId'
     ]),
+    internalCompanyId () {
+      return this.employerByName(INTERNAL_COMPANY_NAME).id
+    },
     languageButtons: function () {
       return LANGUAGE_ENUM.LANGUAGES.map(item => ({ ...item, state: item.id === this.currentLanguage }))
     },
@@ -203,7 +210,7 @@ export default {
         skill => skill.skillGroup === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
       )
     },
-    projects: function () {
+    mappedProfileProjects: function () {
       return this.profileProjectsByProfileId(this.profile.id).map(
         profileProject => {
           const project = this.projectById(profileProject.projectId)
@@ -215,16 +222,16 @@ export default {
               customerName: project.customerName,
               employerId: project.employerId,
               isSecret: project.isSecret,
-              projectSkills: project.projectSkills
+              projectSkills: [...project.projectSkills]
             })
           }
           return profileProject
         }
-      )
+      ).sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
     },
     projectsLoaded: function () {
-      return this.projects.length > 0
-        ? this.projects.every(project => project.hasOwnProperty('duration'))
+      return this.mappedProfileProjects.length > 0
+        ? this.mappedProfileProjects.every(project => project.hasOwnProperty('duration'))
         : false
     },
     defaultPDFName: function () {
@@ -253,6 +260,9 @@ export default {
       }
       return 'Required info missing: '.concat(missingInfo.join(', '))
     }
+  },
+  created () {
+    this.pdfName = this.defaultPDFName
   },
   updated () {
     this.pdfName = this.defaultPDFName
@@ -293,26 +303,26 @@ export default {
     hideModal () {
       this.$refs['create-cv-modal'].hide()
     },
+    mapProjectForCV (projectObj) {
+      return {
+        projectRole: projectObj.role[this.currentLanguage],
+        projectName: projectObj.isSecret ? null : projectObj.name[this.currentLanguage],
+        projectDescription: projectObj.description[this.currentLanguage],
+        projectCustomer: projectObj.isSecret ? 'Secret' : projectObj.customerName[this.currentLanguage],
+        projectDuration: projectObj.duration,
+        projectSkills: projectObj.projectSkills.map(skill => this.mapSkillForCV(this.skillById(skill.skillId)))
+      }
+    },
+    mapSkillForCV (skillObj) {
+      return {
+        skillId: skillObj.skillId,
+        skillName: skillObj.skillName,
+        skillLevel: skillObj.knows,
+        skillCategory: skillObj.skillCategory,
+        skillGroup: skillObj.skillGroup
+      }
+    },
     generateCvData () {
-      function mapSkill (skillObj) {
-        return {
-          skillId: skillObj.skillId,
-          skillName: skillObj.skillName,
-          skillLevel: skillObj.knows,
-          skillCategory: skillObj.skillCategory,
-          skillGroup: skillObj.skillGroup
-        }
-      }
-      function mapProject (projectObj) {
-        return {
-          projectTitle: projectObj.title,
-          projectName: projectObj.isSecret ? null : projectObj.name,
-          projectDescription: projectObj.description,
-          projectCustomer: projectObj.isSecret ? 'Secret' : projectObj.customerName,
-          projectDuration: projectObj.duration,
-          projectSkills: projectObj.projectSkills.map(skill => this.skillById(skill.skillId))
-        }
-      }
       const cvLanguages = this.languages.map(skill => {
         return {
           languageName: skill.skillName,
@@ -320,9 +330,9 @@ export default {
         }
       })
 
-      const cvSkills = this.skills.map(skill => mapSkill(skill))
+      const cvSkills = this.skills.map(skill => this.mapSkillForCV(skill))
 
-      const cvProjects = this.projects.map(project => mapProject(project))
+      const cvProjects = this.mappedProfileProjects.map(project => this.mapProjectForCV(project))
 
       const workHistory = this.profileEmployersByProfileId(this.profile.id)
         .map(item => { return { ...item, employerName: this.employerById(item.employerId).name } })
@@ -333,18 +343,18 @@ export default {
             jobTitle: item.title[this.currentLanguage],
             jobDescription: item.description[this.currentLanguage],
             jobDuration: this.getFormattedDuration(item.startDate, item.endDate),
-            projects: this.projects.filter(project => project.employerId === item.employerId)
-              .map(project => mapProject(project))
+            projects: this.mappedProfileProjects.filter(project => project.employerId === item.employerId)
+              .map(project => this.mapProjectForCV(project))
           }
         })
 
       return {
         employeeName: this.profile.firstName + ' ' + this.profile.lastName,
         employeePicture: this.profile.photoPath,
-        jobTitle: this.profile.title,
+        jobTitle: workHistory.find(item => item.employerName === INTERNAL_COMPANY_NAME).jobTitle,
         employeeDescription: this.cvIntroduction,
-        topProjects: this.topProjects.map(project => mapProject(project)),
-        topSkills: this.topSkills.map(skill => mapSkill(skill)),
+        topProjects: this.topProjects.map(project => this.mapProjectForCV(project)),
+        topSkills: this.topSkills.map(skill => this.mapSkillForCV(skill)),
         languages: cvLanguages,
         projects: cvProjects,
         workHistory: workHistory,
@@ -357,8 +367,7 @@ export default {
       }
     },
     async startCvExport () {
-      console.log(this.generateCvData())
-      /* this.downloadCv({ cvData: this.generateCvData(), pdfName: this.pdfName })
+      this.downloadCv({ cvData: this.generateCvData(), pdfName: this.pdfName })
         .then(response => {
           this.$toasted.global.rytmi_success({
             message: `${this.pdfName}.pdf succesfully downloaded`
@@ -370,7 +379,7 @@ export default {
             message: error
           })
           this.hideModal()
-        }) */
+        })
     }
   }
 }

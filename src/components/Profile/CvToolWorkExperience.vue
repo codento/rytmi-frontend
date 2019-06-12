@@ -9,36 +9,39 @@
     >
       Work experience
     </h5>
-    <h3>Codento</h3>
-    <loading v-if="!profileProjects" />
-    <b-row
-      v-for="profileProject in profileProjects"
-      :key="profileProject.id"
+    <div
+      v-for="({ employerName, projects }, index) in projectsByEmployer"
+      :key="employerName + '-' + index"
     >
-      <b-col
-        cols="1"
-        align-self="center"
+      <h3>{{ employerName }}</h3>
+      <b-row
+        v-for="project in projects"
+        :key="project.projectId"
       >
-        <input
-          :id="'project-checkbox-' + profileProject.id"
-          v-model="selectedProjects"
-          type="checkbox"
-          :value="profileProject.projectId"
-          :disabled="isNotSelectable(profileProject.projectId)"
-          @change="updateSelectedProjects"
+        <b-col
+          cols="1"
+          align-self="center"
         >
-      </b-col>
-      <b-col>
-        <ProjectRow
-          :profile-project="profileProject"
-        />
-      </b-col>
-    </b-row>
-    <h3>Other</h3>
+          <input
+            :id="'project-checkbox-' + project.projectId"
+            v-model="selectedProjects"
+            type="checkbox"
+            :value="project.projectId"
+            :disabled="isNotSelectable(project.projectId)"
+            @change="updateSelectedProjects"
+          >
+        </b-col>
+        <b-col>
+          <ProjectRow
+            :profile-project="project"
+          />
+        </b-col>
+      </b-row>
+    </div>
   </b-card>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import ProjectRow from '@/components/Common/ProjectRow.vue'
 
 export default {
@@ -47,7 +50,14 @@ export default {
     ProjectRow
   },
   props: {
-    profileProjects: Array
+    profileId: {
+      type: Number,
+      required: true
+    },
+    profileProjects: {
+      type: Array,
+      required: true
+    }
   },
   data () {
     return {
@@ -55,13 +65,33 @@ export default {
       maxSelected: 3
     }
   },
+  computed: {
+    ...mapGetters([
+      'profileEmployersByProfileId',
+      'employerById'
+    ]),
+    projectsByEmployer () {
+      return this.profileEmployersByProfileId(this.profileId)
+        .map(item => { return { ...item, employerName: this.employerById(item.employerId).name } })
+        .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
+        .map(item => {
+          return {
+            employerName: item.employerName,
+            projects: this.profileProjects.filter(project => project.employerId === item.employerId)
+          }
+        })
+    }
+  },
   created: function () {
-    const sortedProjects = this.profileProjects
-      .sort((a, b) => {
-        const date1 = new Date(a.endDate)
-        const date2 = new Date(b.endDate)
-        return date1 > date2 ? -1 : date1 < date2 ? 1 : 0
-      })
+    const sortedProjects = []
+    for (let entry of Object.values(this.projectsByEmployer.map(item => item.projects))) {
+      Array.prototype.push.apply(sortedProjects, entry)
+    }
+    sortedProjects.sort((a, b) => {
+      const date1 = new Date(a.endDate)
+      const date2 = new Date(b.endDate)
+      return date1 > date2 ? -1 : date1 < date2 ? 1 : 0
+    })
     this.selectedProjects = sortedProjects.map(item => item.projectId).slice(0, this.maxSelected)
     this.updateSelectedProjects()
   },
@@ -71,9 +101,7 @@ export default {
       return this.selectedProjects.length >= this.maxSelected && !(this.selectedProjects.includes(projectId))
     },
     updateSelectedProjects: function () {
-      this.updateTopProjects(this.selectedProjects
-        .map(projectId => this.profileProjects
-          .find(profileProject => profileProject.projectId === projectId)))
+      this.updateTopProjects(this.profileProjects.filter(item => this.selectedProjects.includes(item.projectId)))
     }
   }
 }

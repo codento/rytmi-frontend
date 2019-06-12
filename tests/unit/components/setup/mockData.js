@@ -36,5 +36,9 @@ export const mockProject = {
   id: 11,
   name: { en: 'Project Foo (en)', fi: 'Projekti Foo (fi)' },
   customerName: { en: 'Customer', fi: 'Asiakas' },
-  description: { en: 'Foo Bar (en)', fi: 'Foo Bar (fi)' }
+  description: { en: 'Foo Bar (en)', fi: 'Foo Bar (fi)' },
+  projectSkills: [],
+  startDate: '2017-05-15',
+  endDate: '2017-06-16',
+  employerId: 1
 }
