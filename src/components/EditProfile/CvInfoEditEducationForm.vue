@@ -125,14 +125,14 @@ export default {
       },
       formData: [
         { key: 'school',
-          label: 'Place of education',
+          label: 'Place of education *',
           descriptions: {
             fi: 'Oppilaitoksen nimi, esim. Aalto-yliopisto',
             en: 'Name of the shool or institution, e.g. Aalto University'
           }
         },
         { key: 'degree',
-          label: 'Degree',
+          label: 'Degree *',
           descriptions: {
             fi: 'Tutkinnon nimi, esim. Tietotekniikan diplomi-insinööri',
             en: 'e.g. M.Sc. (tech) in Computer Science'
@@ -152,7 +152,7 @@ export default {
             en: 'Name of the minor studied, e.g. Geoinformatics'
           }
         },
-        { key: 'startYear', label: 'Starting year', descriptions: { fi: 'Aloitusvuosi', en: '' } },
+        { key: 'startYear', label: 'Starting year *', descriptions: { fi: 'Aloitusvuosi', en: '' } },
         { key: 'endYear', label: 'Finishing year', descriptions: { fi: 'Lopetusvupsi', en: '' } }
 
       ],
