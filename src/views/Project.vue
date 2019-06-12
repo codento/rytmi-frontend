@@ -8,7 +8,7 @@
       <b-row>
         <b-col class="project-details">
           <b>{{ project.code }}</b>
-          <h1>{{ project.name }}</h1>
+          <h1>{{ project.name[currentLanguage] }}</h1>
           <div class="detail-container">
             <span class="detail detail-start">
               <small>Start date</small><br>
@@ -25,7 +25,7 @@
           </div>
           <p>
             <small>Description</small><br>
-            {{ project.description }}
+            {{ project.description[currentLanguage] }}
           </p>
         </b-col>
       </b-row>
@@ -36,7 +36,7 @@
       </b-row>
       <hr>
       <CollapsableItem title="Edit project">
-        <ProjectForm
+        <ProjectFormWrapper
           v-if="Object.values(employers).length > 0"
           :editable-project="project"
         />
@@ -45,14 +45,16 @@
         </div>
       </CollapsableItem>
       <hr>
-      <CollapsableItem title="Add a consultant">
+      <CollapsableItem :title="isAdmin ? 'Add a consultant' : 'Join project'">
         <ProjectProfileForm
-          :profile-project="{ projectId: project.id }"
+          :profile-project="{ projectId: project.id, profileId: isAdmin ? null : profileId }"
+          no-redirect
         />
       </CollapsableItem>
       <hr>
       <CollapsableItem title="Related skills">
         <ProjectSkillForm
+          v-if="project.id"
           :project-id="project.id"
         />
       </CollapsableItem>
@@ -67,7 +69,7 @@ import { CollapsableItem } from '../components/Common'
 import {
   ProjectProfileForm,
   ProjectMemberTable,
-  ProjectForm,
+  ProjectFormWrapper,
   ProjectSkillForm
 } from '../components/Project'
 
@@ -76,15 +78,18 @@ export default {
   components: {
     ProjectProfileForm,
     ProjectMemberTable,
-    ProjectForm,
+    ProjectFormWrapper,
     ProjectSkillForm,
     CollapsableItem
   },
   computed: {
     ...mapGetters([
+      'profileId',
       'projectById',
       'profileProjectsByProjectId',
-      'employers'
+      'employers',
+      'currentLanguage',
+      'isAdmin'
     ]),
     project () {
       return this.projectById(this.$route.params.id)

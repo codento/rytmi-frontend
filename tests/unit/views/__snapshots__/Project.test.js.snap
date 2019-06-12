@@ -17,7 +17,7 @@ exports[`Project.vue Template is correct 1`] = `
         </b>
          
         <h1>
-          Project Foo
+          Projekti Foo
         </h1>
          
         <div
@@ -93,7 +93,7 @@ exports[`Project.vue Template is correct 1`] = `
     <collapsableitem-stub
       title="Edit project"
     >
-      <projectform-stub
+      <projectformwrapper-stub
         editableproject="[object Object]"
       />
     </collapsableitem-stub>
@@ -101,9 +101,10 @@ exports[`Project.vue Template is correct 1`] = `
     <hr />
      
     <collapsableitem-stub
-      title="Add a consultant"
+      title="Join project"
     >
       <projectprofileform-stub
+        noredirect="true"
         profileproject="[object Object]"
       />
     </collapsableitem-stub>

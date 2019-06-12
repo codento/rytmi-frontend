@@ -11,7 +11,7 @@
         >
           {{ skillById(skill.skillId).name }}
           <i
-            class="fa fa-trash"
+            class="fa fa-trash icon"
             @click="removeSkill(skill)"
           />
         </li>
@@ -27,8 +27,14 @@
       >
         <b-list-group>
           Click on a skill to add it to the project
+          <b-input
+            v-model="skillFilterText"
+            class="my-3"
+            type="text"
+            placeholder="Filter by skill name"
+          />
           <b-list-group-item
-            v-for="skill of skillList"
+            v-for="skill of projectSkillList"
             :key="skill.id"
             name="skill"
             button
@@ -44,19 +50,19 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import orderBy from 'lodash/orderBy'
 
 export default {
   name: 'ProjectSkillForm',
   props: {
     projectId: {
       type: Number,
-      default: null
+      required: true
     }
   },
   data () {
     return {
-      newSkills: [],
-      projectSkillList: []
+      skillFilterText: ''
     }
   },
   computed: {
@@ -65,15 +71,16 @@ export default {
       'skillById',
       'activeProjectSkills'
     ]),
-    skillList () {
+    projectSkillList () {
       if (this.skills) {
-        return Object.values(this.skills)
+        const unorderedSkills = Object.values(this.skills)
           .filter(skill =>
             !this.activeProjectSkills.map(projectSkill => projectSkill.skillId).includes(skill.id))
           .map(skill => ({
             label: skill.name,
             id: skill.id
           }))
+        return orderBy(unorderedSkills.filter(skill => skill.label.toLowerCase().includes(this.skillFilterText.toLowerCase())), [skill => skill.label.toLowerCase()])
       }
       return []
     }
@@ -108,6 +115,7 @@ export default {
         await this.addProjectSkill(projectSkill)
         await this.fetchActiveProjectSkills(this.projectId)
         this.$toasted.global.rytmi_success({ message: 'New project skill added succesfully!' })
+        this.skillFilterText = ''
       } catch (error) {
         this.$toasted.global.rytmi_error({ message: error.message })
       }
@@ -122,5 +130,9 @@ button {
 }
 .fa {
   color: gray;
+}
+.icon:hover {
+  color: black;
+  cursor: pointer;
 }
 </style>

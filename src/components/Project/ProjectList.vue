@@ -11,6 +11,8 @@
       id="project-table"
       :items="results"
       :fields="fields"
+      :sort-by.sync="sortBy"
+      class="clickable"
       striped
       fixed
       @row-clicked="openProject"
@@ -19,12 +21,14 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
   name: 'ProjectList',
   data () {
     return {
       projectFilterTerm: '',
+      sortBy: 'code',
       fields: [
         {
           key: 'code',
@@ -42,11 +46,22 @@ export default {
   computed: {
     ...mapGetters([
       'projectFilter',
-      'projectById'
+      'employerByName',
+      'currentLanguage'
     ]),
+    internalCompanyId () {
+      return this.employerByName(INTERNAL_COMPANY_NAME).id
+    },
     results () {
       const projects = this.projectFilter(this.projectFilterTerm)
-      return Object.keys(projects).map(projectId => this.projectById(projectId))
+      const thisCompanyProjects = Object.values(projects).filter(project => project.employerId === this.internalCompanyId)
+      return thisCompanyProjects.map(project => {
+        return {
+          id: project.id,
+          code: project.code,
+          name: project.name[this.currentLanguage]
+        }
+      })
     }
   },
   methods: {

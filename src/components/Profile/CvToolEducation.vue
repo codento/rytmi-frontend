@@ -3,12 +3,15 @@
     id="education"
     class="mt-2 mb-2"
   >
-    <h5
+    <div
       slot="header"
       class="mb-0"
     >
-      Education
-    </h5>
+      <slot name="custom-header">
+        Education
+      </slot>
+    </div>
+    <slot name="custom-content" />
     <b-card-group
       v-for="(educationItem, index) in educationList"
       :key="'education-' + index"

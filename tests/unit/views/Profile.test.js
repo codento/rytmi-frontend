@@ -15,12 +15,9 @@ jest.mock('lodash', () => ({
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import View from '../../../src/views/Profile.vue'
+import View from '@/views/Profile.vue'
 import lodash from 'lodash'
 import Loading from '@/components/helpers/LoadingSpinner'
-import { skill } from './../../../src/store/schema';
-
-
 /* eslint-enable */
 
 describe('Profile.vue shallowMount', () => {
@@ -57,7 +54,7 @@ describe('Profile.vue shallowMount', () => {
           ],
           email: 'foo.bar@foo.com',
           phone: '1354',
-          description: 'fdas'
+          introduction: { fi: 'intro in Finnish', en: 'intro in English' }
         }
       },
       skillById: () => (skillId) => {
@@ -92,12 +89,9 @@ describe('Profile.vue shallowMount', () => {
       projectById: () => (projectId) => {
         return {
           id: projectId,
-          descriptions: [
-            {
-              name: 'Project Foo',
-              description: 'Foo Bar'
-            }
-          ]
+          name: { en: 'Project Foo (en)', fi: 'Projekti Foo' },
+          customerName: { en: 'Customer', fi: 'Asiakas' },
+          description: { en: 'Foo Bar (en)', fi: 'Foo Bar' }
         }
       }
     }

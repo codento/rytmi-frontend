@@ -29,35 +29,12 @@ export const mockProfileProject = {
   projectId: 11,
   startDate: '2018-01-01',
   endDate: '2018-02-01',
-  title: 'Developer',
-  descriptions: [
-    {
-      title: 'Developer',
-      language: 'en'
-    },
-    {
-      title: 'Devaaja',
-      language: 'fi'
-    }
-  ]
+  role: { en: 'Developer', fi: 'Devaaja' }
 }
 
 export const mockProject = {
   id: 11,
-  name: 'Project Foo',
-  description: 'Foo Bar',
-  descriptions: [
-    {
-      name: 'Project Foo (en)',
-      customerName: 'Customer',
-      description: 'Foo Bar (en)',
-      language: 'en'
-    },
-    {
-      name: 'Projekti Foo (fi)',
-      customerName: 'Asiakas',
-      description: 'Foo Bar (fi)',
-      language: 'fi'
-    }
-  ]
+  name: { en: 'Project Foo (en)', fi: 'Projekti Foo (fi)' },
+  customerName: { en: 'Customer', fi: 'Asiakas' },
+  description: { en: 'Foo Bar (en)', fi: 'Foo Bar (fi)' }
 }

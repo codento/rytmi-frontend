@@ -90,7 +90,8 @@
         <b-col>
           <small>Role (in Finnish)</small>
           <b-input
-            v-model="descriptionFi.title"
+            v-model="editedProjectProfile.role.fi"
+            placeholder="esim. front-end kehittäjä, ohjelmistoarkkitehti"
             type="text"
             required
           />
@@ -98,7 +99,8 @@
         <b-col>
           <small>Role (in English)</small>
           <b-input
-            v-model="descriptionEn.title"
+            v-model="editedProjectProfile.role.en"
+            placeholder="e.g. front-end developer, database admin, architect"
             type="text"
             required
           />
@@ -131,15 +133,17 @@
       </b-btn>
       <b-btn
         id="cancel"
+        variant="light"
         class="modal-btn"
         @click="closeEditModal()"
       >
-        Cancel
+        Close
       </b-btn>
     </b-modal>
   </div>
 </template>
 <script>
+import { cloneDeep } from 'lodash'
 import Datepicker from '../helpers/Datepicker'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -158,17 +162,13 @@ export default {
         { key: 'edit', label: ' ' },
         { key: 'remove', label: ' ' }
       ],
-      editedProjectProfile: {}
+      editedProjectProfile: {
+        role: {}
+      }
     }
   },
   computed: {
-    ...mapGetters(['profileById']),
-    descriptionFi () {
-      return this.getProfileProjectDescriptionByLanguage('fi')
-    },
-    descriptionEn () {
-      return this.getProfileProjectDescriptionByLanguage('en')
-    }
+    ...mapGetters(['profileById'])
   },
   methods: {
     ...mapActions([
@@ -202,7 +202,7 @@ export default {
       }
     },
     openEditModal (item) {
-      this.editedProjectProfile = Object.assign({}, item.item)
+      this.editedProjectProfile = cloneDeep(item.item)
       this.editedProjectProfile.startDate = new Date(this.editedProjectProfile.startDate)
       this.editedProjectProfile.endDate = this.editedProjectProfile.endDate ? new Date(this.editedProjectProfile.endDate) : null
       this.editedProjectProfile.index = item.index
@@ -227,17 +227,8 @@ export default {
           })
       }
     },
-    getProfileProjectDescriptionByLanguage (language) {
-      if (!this.editedProjectProfile.descriptions || !this.editedProjectProfile.descriptions.find(description => description.language === language)) {
-        return {
-          language,
-          title: ''
-        }
-      }
-      return this.editedProjectProfile.descriptions.find(description => description.language === language)
-    },
     isDataValid () {
-      if (!this.editedProjectProfile.workPercentage || !this.descriptionEn.title || !this.descriptionFi.title) {
+      if (!this.editedProjectProfile.workPercentage || !this.editedProjectProfile.role.fi || !this.editedProjectProfile.role.en) {
         this.$toasted.global.rytmi_error({
           message: 'Not all fields have data, please fill them in.'
         })

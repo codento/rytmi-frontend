@@ -11,9 +11,11 @@ import {
 export function createProfileEmployer ({ commit }, data) {
   return new Promise((resolve, reject) => {
     newProfileEmployer(data)
-      .then(() => {
+      .then((response) => {
         fetchProfileEmployers({ commit })
-      }).catch(err => reject(err.response))
+        resolve(response.data)
+      })
+      .catch(err => reject(err))
   })
 }
 
@@ -33,6 +35,7 @@ export function removeProfileEmployer ({ commit }, data) {
     deleteProfileEmployer(data)
       .then(() => {
         fetchProfileEmployers({ commit })
+        resolve()
       })
       .catch(err => reject(err))
   })
@@ -43,6 +46,7 @@ export function updateProfileEmployer ({ commit }, data) {
     alterProfileEmployer(data)
       .then(() => {
         fetchProfileEmployers({ commit })
+        resolve()
       })
       .catch(err => reject(err))
   })

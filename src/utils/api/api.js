@@ -211,6 +211,14 @@ export function newSkillCategory (data) {
     .catch(handleError)
 }
 
+export function alterSkillCategory (data) {
+  return axios.put(
+    API_URL + PATH_SKILLCATEGORIES + '/' + data.id,
+    data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function getSkillGroups () {
   return axios.get(
     API_URL + PATH_SKILLGROUPS,
@@ -221,6 +229,14 @@ export function getSkillGroups () {
 export function newSkillGroup (data) {
   return axios.post(
     API_URL + PATH_SKILLGROUPS,
+    data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function alterSkillGroup (data) {
+  return axios.put(
+    API_URL + PATH_SKILLGROUPS + '/' + data.id,
     data,
     getAuthHeaders())
     .catch(handleError)

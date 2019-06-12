@@ -5,6 +5,7 @@ import CvToolEducation from './CvToolEducation.vue'
 import CvToolProfile from './CvToolProfile.vue'
 import CvToolSkills from './CvToolSkills.vue'
 import CvToolWorkExperience from './CvToolWorkExperience.vue'
+import EditBasicProfileInfo from './EditBasicProfileInfo.vue'
 
 export {
   UserProfile,
@@ -13,5 +14,6 @@ export {
   CvToolEducation,
   CvToolProfile,
   CvToolSkills,
-  CvToolWorkExperience
+  CvToolWorkExperience,
+  EditBasicProfileInfo
 }

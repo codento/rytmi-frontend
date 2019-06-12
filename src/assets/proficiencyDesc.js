@@ -9,27 +9,27 @@ export default {
       {
         value: 1,
         text: 'Basics',
-        description: 'Understanding of the basics of the technology. Some experience in small projects.'
+        description: 'Understanding of the basics of the technology. Some experiments with the technology or experience in small projects.'
       },
       {
         value: 2,
         text: 'Junior',
-        description: 'Some experience with the technology but help from other team members may be needed occasionally. Easier tasks can be completed with ease.'
+        description: 'Some experience with the technology and easier tasks can be completed competently.'
       },
       {
         value: 3,
         text: 'Professional',
-        description: 'Technology has been used in several projects. Ability to work effectively individually.'
+        description: 'Knows the technology well and is capable in effective independent development work.'
       },
       {
         value: 4,
         text: 'Senior',
-        description: 'Capable of handling challenging work in a lead developer\'s role. Significant experience with the technology.'
+        description: 'Capable of handling challenging development tasks and is capable to act in a lead developer role. In addition to effective independent development work is capable in helping other team members.'
       },
       {
         value: 5,
         text: 'Guru',
-        description: 'An expert of the technology with years of experience and ability to teach other developers. Won\'t be fazed by even very difficult tasks.'
+        description: 'An expert in the technology with the ability to teach others. Won\'t be fazed by even very difficult development tasks. Years of experience using the technology.'
       }
     ],
     fi: [
@@ -46,31 +46,49 @@ export default {
       {
         value: 2,
         text: 'Junior',
-        description: 'Jonkin verran kokemusta kyseisellä teknologialla, mutta välillä joutuu turvautumaan muun tiimin tukeen. Helpommat kehitystyöt sujuvat jo rutiinilla.'
+        description: 'Hieman kokemusta kyseisellä teknologialla ja helpommat kehitystyöt sujuvat jo rutiinilla.'
       },
       {
         value: 3,
         text: 'Ammattilainen',
-        description: 'On käyttänyt kyseistä teknologiaa useassa projektissa ja kykenee tehokkaaseen itsenäiseen työskentelyyn.'
+        description: 'Hallitsee teknologian hyvin ja kykenee tehokkaaseen itsenäiseen työskentelyyn.'
       },
       {
         value: 4,
         text: 'Senior',
-        description: 'Hallitsee vaativan kehitystyön ja pystyy kantamaan lead developerin roolin vankalla otteella. Merkittävää projektikokemusta kyseisellä teknologialla.'
+        description: 'Hallitsee vaativan kehitystyön ja pystyy tarvittaessa kantamaan lead developerin roolin tiimissä. Tehokkaan itsenäisen työskentelyn lisäksi pystyy opastamaan muita.'
       },
       {
         value: 5,
         text: 'Guru',
-        description: 'Teknologian syväosaaja vuosien kokemuksella. Pystyy opettamaan muita kehittäjiä. Sormi ei mene suuhun vaikeankaan tehtävän edessä.'
+        description: 'Teknologian syväosaaja vuosien kokemuksella, joka pystyy opettamaan muita kehittäjiä. Sormi ei mene suuhun vaikeankaan tehtävän edessä.'
       }
     ]
   },
   wants: [
-    { text: '0 - No way, no how', value: 0 },
-    { text: '1 - If I have to', value: 1 },
-    { text: "2 - I'd rather not", value: 2 },
-    { text: "3 - It's OK", value: 3 },
-    { text: "4 - It's fun!", value: 4 },
-    { text: '5 - Pick me, pick me!', value: 5 }
-  ]
+    { text: 'No way, no how', value: 0, description: '' },
+    { text: 'If I have to', value: 1, description: '' },
+    { text: "I'd rather not", value: 2, description: '' },
+    { text: "It's OK", value: 3, description: '' },
+    { text: "It's fun!", value: 4, description: '' },
+    { text: 'Pick me, pick me!', value: 5, description: '' }
+  ],
+  knowsLanguage: {
+    en: [
+      { text: 'No proficiency', value: 0, description: '' },
+      { text: 'Elementary proficiency', value: 1, description: '' },
+      { text: 'Limited working proficiency', value: 2, description: '' },
+      { text: 'Professional working proficiency', value: 3, description: '' },
+      { text: 'Fluent', value: 4, description: '' },
+      { text: 'Native speaker', value: 5, description: '' }
+    ],
+    fi: [
+      { text: 'No proficiency', value: 0, description: '' },
+      { text: 'Alkeiskielitaito', value: 1, description: '' },
+      { text: 'Kohtalainen kielitaito', value: 2, description: '' },
+      { text: 'Hyvä kielitaito', value: 3, description: '' },
+      { text: 'Erinomainen kielitaito', value: 4, description: '' },
+      { text: 'Äidinkieli', value: 5, description: '' }
+    ]
+  }
 }

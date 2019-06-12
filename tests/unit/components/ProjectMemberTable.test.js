@@ -112,18 +112,7 @@ function getMembersList () {
         startDate: new Date('2018-01-01'),
         endDate: new Date('2018-02-01'),
         workPercentage: 45,
-        descriptions: [
-          {
-            id: 1,
-            language: 'fi',
-            title: 'Koodaaja'
-          },
-          {
-            id: 2,
-            language: 'en',
-            title: 'Coder'
-          }
-        ]
+        role: { fi: 'Koodaaja', en: 'Coder' }
       }
     ]
   }

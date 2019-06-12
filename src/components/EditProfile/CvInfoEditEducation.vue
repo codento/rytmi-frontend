@@ -62,7 +62,7 @@
                 :id="'edit-education-item-btn-' + data.index"
                 size="sm"
                 class="mr-1 table-button"
-                variant="success"
+                variant="primary"
                 @click="openEditModal(data)"
               >
                 Edit
@@ -86,7 +86,7 @@
           id="add-education-btn"
           size="sm"
           class="mr-1"
-          variant="success"
+          variant="primary"
           @click="openEditModal()"
         >
           Add new education

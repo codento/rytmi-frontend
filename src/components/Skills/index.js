@@ -1,9 +1,11 @@
-import SkillForm from './SkillForm.vue'
 import SkillList from './SkillList.vue'
-import EditSkill from './EditSkill.vue'
+import SkillListEditSkill from './SkillListEditSkill.vue'
+import SkillListAdminPanel from './SkillListAdminPanel.vue'
+import SkillListAdminPanelItem from './SkillListAdminPanelItem.vue'
 
 export {
-  SkillForm,
   SkillList,
-  EditSkill
+  SkillListEditSkill,
+  SkillListAdminPanel,
+  SkillListAdminPanelItem
 }

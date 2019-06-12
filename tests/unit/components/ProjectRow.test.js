@@ -3,6 +3,14 @@ import { ProjectRow } from '@/components/Common'
 import Vuex from 'vuex'
 import { format } from 'date-fns'
 
+const mockProject = {
+  projectId: 1,
+  name: { fi: 'Testi prkkis' },
+  description: { fi: 'mail' },
+  startDate: '2017-05-15',
+  endDate: '2017-06-16'
+}
+
 describe('ProjectRow.test.js', () => {
   let localVue = createLocalVue()
   localVue.use(Vuex)
@@ -12,7 +20,8 @@ describe('ProjectRow.test.js', () => {
   let getters, state, store
   beforeEach(() => {
     getters = {
-      projectById: () => (arg) => arg
+      projectById: () => (arg) => mockProject,
+      currentLanguage: () => 'fi'
     }
     state = {
       siteSettings: { currentLanguage: 'fi' }
@@ -24,13 +33,7 @@ describe('ProjectRow.test.js', () => {
       store,
       localVue,
       propsData: {
-        profileProject: {
-          projectId: 1,
-          name: 'Testi prkkis',
-          description: 'mail',
-          startDate: '2017-05-15',
-          endDate: '2017-06-16'
-        }
+        profileProject: mockProject
       }
     })
     expect(wrapper.html()).toMatchSnapshot()

@@ -1,15 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Profile.vue shallow Template is correct 1`] = `
+exports[`Project view shallow Template is correct 1`] = `
 <div
   class="animated fadeIn col-sm-12 col-md-8 project-list-container"
 >
-  <collapsableitem-stub
-    title="Add a new project"
+  <b-container-stub
+    tag="div"
   >
-    <projectform-stub />
-  </collapsableitem-stub>
-   
-  <projectlist-stub />
+    <collapsableitem-stub
+      title="Add a new project"
+    >
+      <projectformwrapper-stub
+        isnewproject="true"
+      />
+    </collapsableitem-stub>
+     
+    <projectlist-stub />
+  </b-container-stub>
 </div>
 `;

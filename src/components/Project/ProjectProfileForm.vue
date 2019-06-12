@@ -8,12 +8,11 @@
     >
       <b-form-group
         v-show="profileVisible"
-        id="consultantLabel"
-        label="Consultant"
-        label-for="consultant"
+        id="consultantSelectFormGroup"
       >
+        <small for="project-select">Consultant</small>
         <b-form-select
-          id="consultant"
+          id="consultant-select"
           v-model="editableProfileProject.profileId"
           :disabled="!profileVisible"
           value-field="id"
@@ -30,7 +29,7 @@
           </template>
           <option
             v-for="profile in profiles"
-            :key="profile.id"
+            :key="'profile-' + profile.id"
             :value="profile.id"
           >
             {{ profile.firstName + ' ' + profile.lastName }}
@@ -40,12 +39,11 @@
 
       <b-form-group
         v-show="projectVisible"
-        id="ProjectLabel"
-        label="Project:"
-        label-for="project"
+        id="projectSelectFormGroup"
       >
+        <small for="project-select">Project</small>
         <b-form-select
-          id="project"
+          id="project-select"
           v-model="editableProfileProject.projectId"
           :disabled="!projectVisible"
           value-field="id"
@@ -61,46 +59,53 @@
             </option>
           </template>
           <option
-            v-for="project in projects"
-            :key="project.id"
+            v-for="project in filteredProjects"
+            :key="'project-' + project.id"
             :value="project.id"
           >
-            {{ project.code }} {{ project.code ? '-' : '' }} {{ getProjectName(project) }}
+            {{ project.code }} {{ project.code ? '-' : '' }} {{ project.name[currentLanguage] }}
           </option>
         </b-form-select>
       </b-form-group>
 
       <b-row>
         <b-col>
-          <span>Role (in Finnish)</span>
+          <small for="project-role-fi-input">Your role in the project (in Finnish)</small>
           <b-input
-            v-model="descriptionFi.title"
+            id="project-role-fi-input"
+            v-model="editableProfileProject.role.fi"
+            placeholder="esim. front-end kehittäjä, ohjelmistoarkkitehti"
             type="text"
             required
           />
         </b-col>
         <b-col>
-          <span>Role (in English)</span>
+          <small for="project-role-en-input">Your role in the project (in English)</small>
           <b-input
-            v-model="descriptionEn.title"
+            id="project-role-en-input"
+            v-model="editableProfileProject.role.en"
+            placeholder="e.g. front-end developer, database admin"
             type="text"
             required
           />
         </b-col>
       </b-row>
 
-      <span>Start date</span>
+      <small for="profile-project-start-date">Start date</small>
       <Datepicker
+        id="profile-project-start-date"
         v-model="editableProfileProject.startDate"
         :name="`profile-project-start-date${isInModal ? '-modal' : ''}`"
       />
-      <span>End date</span>
+      <small for="profile-project-end-date">End date</small>
       <Datepicker
+        id="profile-project-end-date"
         v-model="editableProfileProject.endDate"
         :name="`profile-project-end-date${isInModal ? '-modal' : ''}`"
       />
-      <span>Utilization percentage</span>
+      <small for="utilization-input">Utilization percentage</small>
       <b-input
+        id="utilization-input"
         v-model="editableProfileProject.workPercentage"
         name="utilization"
         type="number"
@@ -110,11 +115,13 @@
       />
 
       <b-button
-        primary
+        variant="primary"
+        block
         name="submit"
+        class="mt-2"
         type="submit"
       >
-        Submit
+        {{ profileVisible ? 'Add consultant' : 'Join project' }}
       </b-button>
     </b-form>
     <div
@@ -136,6 +143,7 @@ import Datepicker from '../helpers/Datepicker'
 import { mapGetters, mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 import cloneDeep from 'lodash/cloneDeep'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
   name: 'ProjectProfileForm',
@@ -164,20 +172,21 @@ export default {
       errorDetails: [],
       projectVisible: true,
       profileVisible: false,
-      editableProfileProject: this.getEditableProfileProject()
+      editableProfileProject: this.initProfileProject()
     }
   },
   computed: {
     ...mapGetters([
       'profiles',
       'projects',
+      'employerByName',
       'currentLanguage'
     ]),
-    descriptionFi () {
-      return this.getProfileProjectDescriptionByLanguage('fi')
-    },
-    descriptionEn () {
-      return this.getProfileProjectDescriptionByLanguage('en')
+    filteredProjects () {
+      const projectList = Object.keys(this.projects).map(key => this.projects[key])
+      return projectList.filter(project => {
+        return project.employerId === this.employerByName(INTERNAL_COMPANY_NAME).id
+      })
     }
   },
   created () {
@@ -189,18 +198,14 @@ export default {
       'newProjectProfile',
       'updateProfileProject'
     ]),
-    getEditableProfileProject () {
+    initProfileProject () {
       if (!this.profileProject.id) {
         return {
           ...this.profileProject,
-          descriptions: this.descriptions ? this.descriptions : this.getEmptyDescriptions()
+          role: {}
         }
       }
       return cloneDeep(this.profileProject)
-    },
-    getProjectName (project) {
-      const description = project.descriptions.find(description => description.language === this.currentLanguage)
-      return description ? description.name : ''
     },
     createNewProfileProject (profileProject) {
       this.newProjectProfile(profileProject)
@@ -259,40 +264,19 @@ export default {
       if (this.noRedirect) {
         this.editableProfileProject = {}
         this.editableProfileProject.projectId = null
-        this.editableProfileProject.profileId = this.profileId
-        this.editableProfileProject.descriptions = this.getEmptyDescriptions()
+        this.editableProfileProject.profileId = this.profileProject.profileId
+        this.editableProfileProject.role = {}
       } else {
         this.redirect()
       }
     },
     redirect () {
-      if (this.profileId) {
-        this.$router.push('/profile/' + this.profileId)
-      } else if (this.projectId) {
-        this.$router.push('/projects/' + this.projectId)
+      if (this.profileProject.profileId) {
+        this.$router.push('/profile/' + this.profileProject.profileId)
+      } else if (this.profileProject.projectId) {
+        this.$router.push('/projects/' + this.profileProject.projectId)
       }
-    },
-    getEmptyDescriptions () {
-      return [
-        {
-          language: 'fi',
-          title: ''
-        },
-        {
-          language: 'en',
-          title: ''
-        }
-      ]
-    },
-    getProfileProjectDescriptionByLanguage (language) {
-      return this.editableProfileProject.descriptions.find(description => description.language === language)
     }
   }
 }
 </script>
-<style scoped>
-button {
-  width: 100%;
-  margin-top: 1em;
-}
-</style>

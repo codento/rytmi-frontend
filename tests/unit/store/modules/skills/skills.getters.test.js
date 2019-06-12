@@ -3,8 +3,7 @@ import * as skillCategoryGetters from '@/store/modules/skillCategories/getters'
 import * as skillGroupGetters from '@/store/modules/skillGroups/getters'
 import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import constants from '@/utils/constants'
-const { LANGUAGE_ENUM } = constants
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 jest.mock('@/utils/api/api')
 
