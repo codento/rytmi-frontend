@@ -60,7 +60,8 @@ export default {
         field: document.getElementById(this.element),
         format: 'D.M.YYYY',
         keyboardInput: false,
-        onSelect: this.onSelect
+        onSelect: this.onSelect,
+        yearRange: 30
       })
     },
     onSelect () {

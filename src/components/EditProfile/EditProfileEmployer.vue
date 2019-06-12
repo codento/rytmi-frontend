@@ -260,9 +260,15 @@ export default {
         jobDescriptionFi: this.validated ? this.profileEmployer.description['fi'].length > 0 : undefined,
         jobDescriptionEn: this.validated ? this.profileEmployer.description['en'].length > 0 : undefined,
         startDate: this.validated ? new Date(this.profileEmployer.startDate) > 1 : undefined,
-        endDate: this.validated && this.selectedExistingEmployer.label !== INTERNAL_COMPANY_NAME ? new Date(this.profileEmployer.endDate) > 1 : undefined,
+        endDate: this.validated && this.isCompanyInternal ? new Date(this.profileEmployer.endDate) > 1 : undefined,
         employer: this.validated ? !(!this.selectedExistingEmployer && isEmpty(this.profileEmployer.newEmployerName)) : undefined
       }
+    },
+    isCompanyInternal () {
+      if (this.selectedExistingEmployer) {
+        return this.selectedExistingEmployer.label !== INTERNAL_COMPANY_NAME
+      }
+      return false
     },
     formIsValid () {
       const stateArray = []
