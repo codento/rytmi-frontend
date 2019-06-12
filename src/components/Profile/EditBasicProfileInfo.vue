@@ -4,78 +4,84 @@
       @submit="onSubmit"
     >
       <b-form-group
-        id="firstNameLabel"
-        label="First name:"
+        id="first-name-label"
+        label="First name *"
         label-cols-sm="3"
-        label-for="firstName"
+        label-for="first-name-input"
+        invalid-feedback="Required"
       >
         <b-form-input
-          id="firstNameInput"
+          id="first-name-input"
           v-model="editedProfile.firstName"
           type="text"
-          required
+          :state="inputStates.firstName"
         />
       </b-form-group>
       <b-form-group
-        id="lastNameLabel"
+        id="last-name-label"
         label-cols-sm="3"
-        label="Last name:"
-        label-for="lastNameInput"
+        label="Last name *"
+        label-for="last-name-input"
+        invalid-feedback="Required"
       >
         <b-form-input
-          id="lastNameInput"
+          id="last-name-input"
           v-model="editedProfile.lastName"
           type="text"
-          required
+          :state="inputStates.lastName"
         />
       </b-form-group>
       <b-form-group
-        id="roleLabel"
+        id="role-label"
         label-cols-sm="3"
-        label="Role:"
-        label-for="roleInput"
+        label="Role *"
+        label-for="role-input"
       >
         <v-select
-          id="roleInput"
+          id="role-input"
           v-model="selectedEmployeeRoles"
           :options="employeeRoleList"
           multiple
         />
       </b-form-group>
       <b-form-group
-        id="birthYearLabel"
+        id="birth-year-label"
         label-cols-sm="3"
-        label="Birth year:"
-        label-for="birthYearInput"
+        label="Year of birth *"
+        label-for="birth-year-input"
+        :invalid-feedback="birthYearState.filter(item => { return item.state !== undefined ? item.state === false : false }).map(item => item.feedback).join('\n')"
       >
         <b-form-input
-          id="birthYearInput"
+          id="birth-year-input"
           v-model="editedProfile.birthYear"
           type="number"
           placeholder="Enter year"
+          :state="isBirthYearValid"
         />
       </b-form-group>
       <b-form-group
-        id="emailLabel"
+        id="email-label"
         label-cols-sm="3"
-        label="Email:"
-        label-for="emailInput"
+        label="Email *"
+        label-for="email-input"
+        invalid-feedback="Required"
       >
         <b-form-input
-          id="emailInput"
+          id="email-input"
           v-model="editedProfile.email"
           type="email"
-          required
+          :state="inputStates.email"
         />
       </b-form-group>
       <b-form-group
-        id="PhonenumberLabel"
+        id="phone-number-label"
         label-cols-sm="3"
-        label="Phone number:"
-        label-for="PhonenumberInput"
+        label="Phone number"
+        label-for="phone-number-input"
+        class="mb-6"
       >
         <b-form-input
-          id="PhonenumberInput"
+          id="phone-number-input"
           v-model="editedProfile.phone"
           type="tel"
         />
@@ -83,20 +89,22 @@
       <b-form-group
         v-for="lang in descriptionLanguages"
         :key="'edit-introduction-elem-' + lang.key"
+        :label="`Introduction for CV main page (in ${lang.label}) *`"
+        :label-for="'introduction-input-' + lang.key"
         sm="6"
       >
         <b-col>
-          <small>Introduction for CV main page (in {{ lang.label }})</small>
           <b-textarea
-            :id="'input-introduction-' + lang.key"
+            :id="'introduction-input-' + lang.key"
             v-model="editedProfile.introduction[lang.key]"
-            placeholder="Introduction for CV main page"
+            :placeholder="`Describe shortly in ${lang.label} your work experience, strengths, interests and motivation`"
             type="text"
             rows="6"
             :state="introductionIsValid(lang.key)"
+            @focus="introductionEdited[lang.key] = true"
           />
           <b-form-invalid-feedback
-            :id="'input-introduction-feedback-' + lang.key"
+            :id="'introduction-input-feedback-' + lang.key"
             class="text-left"
           >
             <div v-if="editedProfile.introduction[lang.key].length === 0">
@@ -147,7 +155,10 @@ export default {
     return {
       maxIntroductionLength: 360,
       selectedEmployeeRoles: [],
-      editedProfile: JSON.parse(JSON.stringify(this.profile))
+      editedProfile: JSON.parse(JSON.stringify(this.profile)),
+      validated: false,
+      introductionEdited: { fi: undefined, en: undefined }
+
     }
   },
   computed: {
@@ -164,6 +175,43 @@ export default {
     },
     descriptionLanguages () {
       return [{ key: 'fi', label: 'Finnish' }, { key: 'en', label: 'English' }]
+    },
+    isBirthYearValid () {
+      if (!this.validated) {
+        return undefined
+      } else {
+        return this.birthYearState.every(item => item.state)
+      }
+    },
+    birthYearState () {
+      return [
+        {
+          state: !!this.editedProfile.birthYear,
+          feedback: 'Required'
+        },
+        {
+          state: this.editedProfile.birthYear
+            ? this.editedProfile.birthYear >= 1930 && this.editedProfile.birthYear < new Date().getFullYear() - 10 : undefined,
+          feedback: `Year of birth must be between 1930 and ${new Date().getFullYear() - 10}`
+        }
+      ]
+    },
+    inputStates () {
+      return {
+        firstName: this.validated ? this.editedProfile.firstName.length > 0 : undefined,
+        lastName: this.validated ? this.editedProfile.lastName.length > 0 : undefined,
+        email: this.validated ? this.editedProfile.lastName.length > 0 : undefined
+      }
+    },
+    formIsValid () {
+      const stateArray = []
+      for (let entry of Object.entries(this.inputStates)) {
+        stateArray.push(entry[1])
+      }
+      stateArray.push(this.introductionIsValid('fi'))
+      stateArray.push(this.introductionIsValid('en'))
+      Array.prototype.push.apply(stateArray, this.birthYearState.map(item => item.state))
+      return stateArray.every(item => item)
     }
   },
   watch: {
@@ -182,22 +230,29 @@ export default {
   },
   methods: {
     ...mapActions(['updateProfile']),
-    introductionIsValid: function (key) {
-      return this.editedProfile.introduction[key].length > 0 && this.editedProfile.introduction[key].length <= this.maxIntroductionLength
+    introductionIsValid (key) {
+      if (this.introductionEdited[key] || this.validated) {
+        return this.editedProfile.introduction[key].length > 0 && this.editedProfile.introduction[key].length <= this.maxIntroductionLength
+      }
+      return undefined
     },
     async onSubmit (evt) {
       evt.preventDefault()
-      try {
-        await this.updateProfile(this.editedProfile)
-        this.$emit('profileUpdated')
-        this.$toasted.global.rytmi_success({
-          message: 'Profile edited.'
-        })
-        this.$bvModal.hide('editProfileBasicInfoModal')
-      } catch (error) {
-        this.$toasted.global.rytmi_error({
-          message: error
-        })
+      this.validated = true
+      if (this.formIsValid) {
+        this.validated = undefined
+        try {
+          await this.updateProfile(this.editedProfile)
+          this.$emit('profileUpdated')
+          this.$toasted.global.rytmi_success({
+            message: 'Profile edited.'
+          })
+          this.$bvModal.hide('editProfileBasicInfoModal')
+        } catch (error) {
+          this.$toasted.global.rytmi_error({
+            message: error
+          })
+        }
       }
     },
     onCancel () {
