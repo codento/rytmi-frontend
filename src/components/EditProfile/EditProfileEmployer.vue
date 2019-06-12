@@ -64,7 +64,7 @@
             id="title-fi"
             v-model="profileEmployer.title['fi']"
             type="text"
-            placeholder="Title (fi)"
+            placeholder="Job title in Finnish"
             :state="inputStates.titleFi"
           />
         </b-form-group>
@@ -76,7 +76,7 @@
             id="title-en"
             v-model="profileEmployer.title['en']"
             type="text"
-            placeholder="Title (en)"
+            placeholder="Job title in English"
             :state="inputStates.titleEn"
           />
         </b-form-group>
@@ -90,7 +90,7 @@
             id="description-fi"
             v-model="profileEmployer.description['fi']"
             type="text"
-            placeholder="Description (fi)"
+            placeholder="Short description in Finnish about your role, tasks and projects while working for this employer"
             :state="inputStates.jobDescriptionFi"
           />
         </b-form-group>
@@ -102,7 +102,7 @@
             id="description-en"
             v-model="profileEmployer.description['en']"
             type="text"
-            placeholder="Description (en)"
+            placeholder="Short description in English about your role, tasks and projects while working for this employer"
             :state="inputStates.jobDescriptionEn"
           />
         </b-form-group>
