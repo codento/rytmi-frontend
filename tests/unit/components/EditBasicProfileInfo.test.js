@@ -1,7 +1,6 @@
 import { merge, cloneDeep } from 'lodash'
 import flushPromises from 'flush-promises'
-import { ProfileForm } from '@/components/EditProfile'
-import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
+import { EditBasicProfileInfo } from '@/components/Profile'
 
 import { createWrapper } from './setup/setup'
 
@@ -26,7 +25,7 @@ const mockProfile = {
   role: 'Employee role',
   birthYear: 1984,
   phone: 1234,
-  information: {
+  introduction: {
     fi: 'kuvaus1',
     en: 'desc1'
   },
@@ -55,9 +54,9 @@ const defaultMountingOptions = {
   }
 }
 
-describe('ProfileForm.vue', () => {
+describe('EditBasicProfileInfo.vue', () => {
   it('should should show profile details correctly', () => {
-    const wrapper = createWrapper(ProfileForm, defaultStoreConfig, defaultMountingOptions)
+    const wrapper = createWrapper(EditBasicProfileInfo, defaultStoreConfig, defaultMountingOptions)
     expect(wrapper.vm.editedProfile).toEqual(mockProfile)
     const inputWrappers = wrapper.findAll('input')
     expect(inputWrappers.at(0).vm.value).toBe(mockProfile.firstName)
@@ -65,10 +64,13 @@ describe('ProfileForm.vue', () => {
     expect(inputWrappers.at(3).vm.value).toBe(mockProfile.birthYear)
     expect(inputWrappers.at(4).vm.value).toBe(mockProfile.email)
     expect(inputWrappers.at(5).vm.value).toBe(mockProfile.phone)
+    const textAreaWrappers = wrapper.findAll('textarea')
+    expect(textAreaWrappers.at(0).vm.value).toBe(mockProfile.introduction.fi)
+    expect(textAreaWrappers.at(1).vm.value).toBe(mockProfile.introduction.en)
   })
 
   it('should submit entered details when submit is clicked', async () => {
-    expect.assertions(3)
+    expect.assertions(1)
     const editedProfile = cloneDeep(mockProfile)
     editedProfile.firstName = 'Bar'
 
@@ -82,58 +84,16 @@ describe('ProfileForm.vue', () => {
     }
     const overrideStoreConfig = merge({}, defaultStoreConfig, { actions })
     const overrideMountingOptions = merge({}, defaultMountingOptions, { mocks })
-    const wrapper = createWrapper(ProfileForm, overrideStoreConfig, overrideMountingOptions)
-    wrapper.find('#firstNameInput').setValue('Bar')
+    const wrapper = createWrapper(EditBasicProfileInfo, overrideStoreConfig, overrideMountingOptions)
+    wrapper.find('#first-name-input').setValue('Bar')
     wrapper.find('button[type="submit"]').trigger('submit')
     await flushPromises()
     expect(actions.updateProfile).toHaveBeenCalledWith(
       expect.anything(), editedProfile, undefined)
-    expect(wrapper.vm.showError).toBe(false)
-    expect(wrapper.vm.errorDetails).toHaveLength(0)
-  })
-
-  it('should go back to profile view when reset is clicked', () => {
-    expect.assertions(3)
-    const mocks = {
-      $router: {
-        push: jest.fn()
-      }
-    }
-    const wrapper = createWrapper(ProfileForm, defaultStoreConfig, merge({}, defaultMountingOptions, { mocks }))
-    wrapper.find('button[type="reset"]').trigger('reset')
-    expect(mocks.$router.push).toHaveBeenCalledWith(`/profile/${mockProfile.id}`)
-    expect(wrapper.vm.showError).toBe(false)
-    expect(wrapper.vm.errorDetails).toHaveLength(0)
-  })
-
-  it('shows error when submit fails', async () => {
-    expect.assertions(3)
-    const mocks = {
-      $router: {
-        push: jest.fn()
-      }
-    }
-    const apiError = {
-      details: ['Nope not today']
-    }
-    const actions = {
-      updateProfile: jest.fn((mapActionsStuff, profile, undef) => Promise.reject(apiError))
-    }
-    const editedProfile = cloneDeep(mockProfile)
-    editedProfile.firstName = 'Bar'
-
-    const overrideStoreConfig = merge({}, defaultStoreConfig, { actions })
-    const overrideMountingOptions = merge({}, defaultMountingOptions, { mocks })
-    const wrapper = createWrapper(ProfileForm, overrideStoreConfig, overrideMountingOptions)
-    wrapper.find('button[type="submit"]').trigger('submit')
-    await flushPromises()
-    expect(wrapper.vm.showError).toBe(true)
-    expect(wrapper.find(ApiErrorDetailsPanel).isVisible()).toBeTruthy()
-    expect(wrapper.vm.errorDetails).toHaveLength(1)
   })
 
   it('returns correct employeeRoleList', () => {
-    const wrapper = createWrapper(ProfileForm, defaultStoreConfig, defaultMountingOptions)
+    const wrapper = createWrapper(EditBasicProfileInfo, defaultStoreConfig, defaultMountingOptions)
     wrapper.setData({ selectedEmployeeRoles: [] })
     expect(wrapper.vm.employeeRoleList).toEqual([{ 'id': 1, 'label': 'somethinger' }, { 'id': 2, 'label': 'dunno lol' }])
   })
