@@ -8,6 +8,7 @@ import CvInfo from './CvInfo.vue'
 import CvInfoEditIntroduction from './CvInfoEditIntroduction.vue'
 import CvInfoEditEducation from './CvInfoEditEducation.vue'
 import CvInfoEditEducationForm from './CvInfoEditEducationForm.vue'
+import EditSkillsLevelSelect from './EditSkillsLevelSelect.vue'
 
 export {
   EditLinks,
@@ -19,5 +20,6 @@ export {
   CvInfoEditIntroduction,
   CvInfoEditEducation,
   CvInfoEditEducationForm,
-  WorkHistoryEntryEditList
+  WorkHistoryEntryEditList,
+  EditSkillsLevelSelect
 }

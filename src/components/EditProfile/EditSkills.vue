@@ -91,11 +91,10 @@
       title="Update skill willingness"
       hide-footer
     >
-      <b-radio-group
-        v-model="editedSkill.wantsTo"
+      <EditSkillsLevelSelect
         :options="wantsToOptions"
-        plain
-        stacked
+        :initial-value="editedSkill.wantsTo"
+        @option-selected="wantsToOptionSelected($event)"
       />
       <b-btn
         class="modal-btn"
@@ -116,11 +115,10 @@
       title="Update skill proficiency"
       hide-footer
     >
-      <b-radio-group
-        v-model="editedSkill.knows"
+      <EditSkillsLevelSelect
         :options="knowsOptions"
-        plain
-        stacked
+        :initial-value="editedSkill.knows"
+        @option-selected="knowsOptionSelected($event)"
       />
       <b-btn
         class="modal-btn"
@@ -143,11 +141,13 @@
 import { mapActions, mapGetters } from 'vuex'
 import proficiencyDesc from '../../assets/proficiencyDesc'
 import SkillForm from './SkillForm'
+import EditSkillsLevelSelect from '@/components/EditProfile/EditSkillsLevelSelect'
 
 export default {
   name: 'EditSkills',
   components: {
-    SkillForm
+    SkillForm,
+    EditSkillsLevelSelect
   },
   props: {
     'profileId': Number
@@ -211,6 +211,12 @@ export default {
       skillToEdit.visibleInCV = !skillToEdit.visibleInCV
       this.editedSkill = skillToEdit
       this.updateSkill()
+    },
+    knowsOptionSelected (newValue) {
+      this.editedSkill.knows = newValue
+    },
+    wantsToOptionSelected (newValue) {
+      this.editedSkill.wantsTo = newValue
     }
   }
 }
