@@ -13,12 +13,6 @@
       </div>
       <div>
         <div>Born {{ profile.birthYear }}</div>
-        <div class="profileCardDetails profile-card-detail-row">
-          {{ profile.email }}
-        </div>
-        <div class="profileCardDetails profile-card-detail-row">
-          {{ profile.phone }}
-        </div>
       </div>
       <div class="profileCardDetails profile-card-detail-row">
         <b-textarea
@@ -74,13 +68,13 @@
               class="mb-1 mt-2"
               cols="12"
             >
-              <b>{{ project.customerName }}</b>
+              <b>{{ project.customerName[currentLanguage] }}</b>
             </b-col>
             <b-col
               sm="12"
               md="7"
             >
-              {{ project.name }}
+              {{ project.name[currentLanguage] }}
             </b-col>
             <b-col
               sm="12"
