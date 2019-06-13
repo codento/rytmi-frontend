@@ -106,7 +106,7 @@ import { kebabCase, cloneDeep } from 'lodash'
 import { EducationCard } from '@/components/Common'
 
 export default {
-  name: 'CvInfoEditEducationForm',
+  name: 'EditEducationForm',
   components: { EducationCard },
   props: {
     initialValues: {
