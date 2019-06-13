@@ -14,7 +14,6 @@
       :sort-by.sync="sortBy"
       class="clickable"
       striped
-      fixed
       @row-clicked="openProject"
     />
   </b-container>
