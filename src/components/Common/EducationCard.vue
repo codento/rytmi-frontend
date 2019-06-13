@@ -12,11 +12,11 @@
         </h5>
         <p>
           <span v-if="educationData[language].major">
-            Pääaine: {{ educationData[language].major }}
+            {{ labels[language].majorLabel }}: {{ educationData[language].major }}
           </span>
           <br>
           <span v-if="educationData[language].minor">
-            Sivuaine: {{ educationData[language].minor }}
+            {{ labels[language].minorLabel }}: {{ educationData[language].major }}
           </span>
         </p>
       </b-card-text>
@@ -43,9 +43,13 @@ export default {
     }
   },
   data () {
-    return {}
-  },
-  computed: {}
+    return {
+      labels: {
+        fi: { majorLabel: 'Pääaine', minorLabel: 'Sivuaine' },
+        en: { majorLabel: 'Major', minorLabel: 'Minor' }
+      }
+    }
+  }
 }
 </script>
 
