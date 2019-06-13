@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h3> {{ isNewProject ? 'Add a new project' : 'Edit project' }} </h3>
+    <h3 v-if="modalHeader">
+      {{ modalHeader }}
+    </h3>
+    <h3 v-else>
+      {{ isNewProject ? 'Add a new project' : 'Edit project' }}
+    </h3>
     <ProjectForm
       :form-id="formId"
       :project="editableProject"
@@ -86,7 +91,8 @@ export default {
     currentEmployerId: {
       type: Number,
       required: true
-    }
+    },
+    modalHeader: String
   },
   data () {
     return {

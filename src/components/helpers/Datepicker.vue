@@ -61,7 +61,8 @@ export default {
         format: 'D.M.YYYY',
         keyboardInput: false,
         onSelect: this.onSelect,
-        yearRange: 30
+        yearRange: 30,
+        firstDay: 1
       })
     },
     onSelect () {
