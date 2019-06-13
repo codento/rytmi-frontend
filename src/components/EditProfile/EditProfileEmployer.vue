@@ -122,7 +122,7 @@
     </b-row>
     <CollapsableItem
       v-if="profileEmployer.id && profileEmployer.id !== getEmployerId(internalCompany)"
-      title="Projects for this employer"
+      :title="`Projects for ${employerById(profileEmployer.employerId).name}`"
       class="mt-4"
       :initial-visibility="true"
     >
@@ -164,6 +164,7 @@
             no-close-on-backdrop
           >
             <WorkHistoryProjectFormWrapper
+              :modal-header="`Edit ${project.name[currentLanguage]} (${employerById(profileEmployer.employerId).name})`"
               :editable-project="project"
               :profile-project="profileProject"
               :current-employer-id="project.employerId ? project.employerId : profileEmployer.employerId"
@@ -192,6 +193,7 @@
           no-close-on-backdrop
         >
           <WorkHistoryProjectFormWrapper
+            :modal-header="`Add a project for ${employerById(profileEmployer.employerId).name}`"
             :editable-project="{ id: null, employerId: profileEmployer.employerId }"
             :profile-project="{ id: null, profileId: profileEmployer.profileId, employerId: profileEmployer.employerId, role: {en: '', fi: ''} }"
             :current-employer-id="profileEmployer.employerId"
@@ -240,7 +242,8 @@ export default {
       'employers',
       'projects',
       'profileProjectsByProfileId',
-      'currentLanguage'
+      'currentLanguage',
+      'employerById'
     ]),
     endDateLabel () {
       if (this.selectedExistingEmployer) {
@@ -293,7 +296,6 @@ export default {
       'updateProfileEmployer'
     ]),
     getEmployerId (employerName) {
-      console.log(employerName)
       return Object.values(this.employers).find(employer => employer.name === employerName).id
     },
     formatProjectDuration (startDate, endDate) {
