@@ -100,7 +100,7 @@
       hide-footer
       hide-header
     >
-      <CvInfoEditEducationForm
+      <EditEducationForm
         :initial-values="editedEducationItem"
         @cancel="closeEditModal()"
         @submit="submitEducationForm"
@@ -112,7 +112,7 @@
 <script>
 import { cloneDeep } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
-import CvInfoEditEducationForm from './CvInfoEditEducationForm'
+import EditEducationForm from './EditEducationForm'
 
 const educationTemplate = {
   fi: {
@@ -132,9 +132,9 @@ const educationTemplate = {
 }
 
 export default {
-  name: 'CvInfoEditEducation',
+  name: 'EditEducation',
   components: {
-    CvInfoEditEducationForm
+    EditEducationForm
   },
   props: {
     profile: Object

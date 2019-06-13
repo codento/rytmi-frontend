@@ -168,7 +168,7 @@
             Edit education
           </h4>
         </template>
-        <CvInfoEditEducation
+        <EditEducation
           :profile="profile"
         />
       </b-modal>
@@ -215,7 +215,7 @@ import EditBasicProfileInfo from '@/components/Profile/EditBasicProfileInfo'
 import { ProjectRow, SkillRow, SkillExplanations } from '@/components/Common'
 import { WorkHistoryEntryList, EditSkills, EditProjects, WorkHistoryEntryEditList } from '@/components/EditProfile'
 import CvToolEducation from '@/components/Profile/CvToolEducation'
-import CvInfoEditEducation from '@/components/EditProfile/CvInfoEditEducation'
+import EditEducation from '@/components/EditProfile/EditEducation'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
@@ -227,7 +227,7 @@ export default {
     UserProfileCard,
     EditBasicProfileInfo,
     CvToolEducation,
-    CvInfoEditEducation,
+    EditEducation,
     WorkHistoryEntryList,
     EditSkills,
     EditProjects,

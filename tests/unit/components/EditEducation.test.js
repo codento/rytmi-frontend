@@ -1,6 +1,6 @@
 import { merge, cloneDeep } from 'lodash'
 import flushPromises from 'flush-promises'
-import { CvInfoEditEducation } from '@/components/EditProfile'
+import { EditEducation } from '@/components/EditProfile'
 
 import { createWrapper } from './setup/setup'
 import { mockProfile } from './setup/mockData'
@@ -43,9 +43,9 @@ const defaultMountingOptions = {
   }
 }
 
-describe('CvInfoEditEducation.vue', () => {
+describe('EditEducation.vue', () => {
   it('should show table with two data rows', () => {
-    const wrapper = createWrapper(CvInfoEditEducation, defaultStoreConfig, defaultMountingOptions)
+    const wrapper = createWrapper(EditEducation, defaultStoreConfig, defaultMountingOptions)
     const educationTable = wrapper.find('#education-table')
     // Header row plus two education items
     expect(educationTable.findAll('tr').length).toEqual(3)
@@ -62,7 +62,7 @@ describe('CvInfoEditEducation.vue', () => {
       updateProfile: jest.fn((mapActionsStuff, profile, undef) => Promise.resolve(profile))
     }
     const overrideStoreConfig = merge({}, defaultStoreConfig, { actions })
-    const wrapper = createWrapper(CvInfoEditEducation, overrideStoreConfig, defaultMountingOptions)
+    const wrapper = createWrapper(EditEducation, overrideStoreConfig, defaultMountingOptions)
     wrapper.find('#remove-education-item-btn-0').trigger('click')
     await flushPromises()
     expect(actions.updateProfile).toHaveBeenCalledWith(

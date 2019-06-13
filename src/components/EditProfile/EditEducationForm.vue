@@ -28,7 +28,7 @@
         :key="kebabCase(item.key)"
       >
         <b-col cols="12">
-          <small :for="'input-'+ kebabCase(item.key) + '-' + currentLanguage">{{ item.label }}</small>
+          <small :for="'input-'+ kebabCase(item.key) + '-' + currentLanguage">{{ item.labels[currentLanguage] }}</small>
           <b-form-group
             :id="'edit-'+ kebabCase(item.key) + '-' + currentLanguage"
             :description="item.descriptions[currentLanguage]"
@@ -51,7 +51,7 @@
           :key="key"
           cols="6"
         >
-          <small :for="'input-'+ kebabCase(key)">{{ formData.find(item => item.key === key).label }}</small>
+          <small :for="'input-'+ kebabCase(key)">{{ formData.find(item => item.key === key).labels[currentLanguage] }}</small>
           <b-form-group
             :id="'edit-' + kebabCase(key)"
             :invalid-feedback="invalidFeedback(key)"
@@ -66,6 +66,20 @@
               :state="inputStates[key] ? inputStates[key].state : false"
             />
           </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row
+        v-if="currentStep > 0 && currentStep < steps.length"
+        class="mt-3"
+      >
+        <b-col cols="12">
+          <h4>Data from previous step </h4>
+        </b-col>
+        <b-col>
+          <EducationCard
+            :education-data="editedValues"
+            :language="steps[currentStep-1].languageKey"
+          />
         </b-col>
       </b-row>
     </div>
@@ -106,7 +120,7 @@ import { kebabCase, cloneDeep } from 'lodash'
 import { EducationCard } from '@/components/Common'
 
 export default {
-  name: 'CvInfoEditEducationForm',
+  name: 'EditEducationForm',
   components: { EducationCard },
   props: {
     initialValues: {
@@ -125,39 +139,51 @@ export default {
       },
       formData: [
         { key: 'school',
-          label: 'Place of education *',
+          labels: {
+            fi: 'Oppilaitoksen nimi *',
+            en: 'Place of education *'
+          },
           descriptions: {
             fi: 'Oppilaitoksen nimi, esim. Aalto-yliopisto',
             en: 'Name of the shool or institution, e.g. Aalto University'
           }
         },
         { key: 'degree',
-          label: 'Degree *',
+          labels: {
+            fi: 'Tutkinnon nimi *',
+            en: 'Degree *'
+          },
           descriptions: {
             fi: 'Tutkinnon nimi, esim. Tietotekniikan diplomi-insinööri',
             en: 'e.g. M.Sc. (tech) in Computer Science'
           }
         },
         { key: 'major',
-          label: 'Major',
+          labels: {
+            fi: 'Pääaine',
+            en: 'Major'
+          },
           descriptions: {
             fi: 'Pääaineen/suuntautumisen nimi, esim. Ohjelmistotekniikka',
             en: 'Name of the major/study track, e.g Computer Science'
           }
         },
         { key: 'minor',
-          label: 'Minor',
+          labels: {
+            fi: 'Sivuaine',
+            en: 'Minor'
+          },
           descriptions: {
             fi: 'Sivuaineen nimi, esim. Geoinformatiikka',
             en: 'Name of the minor studied, e.g. Geoinformatics'
           }
         },
-        { key: 'startYear', label: 'Starting year *', descriptions: { fi: 'Aloitusvuosi', en: '' } },
-        { key: 'endYear', label: 'Finishing year', descriptions: { fi: 'Lopetusvupsi', en: '' } }
+        { key: 'startYear', labels: { fi: 'Aloitusvuosi *', en: '' }, descriptions: { fi: '', en: '' } },
+        { key: 'endYear', labels: { fi: 'Lopetusvuosi', en: '' }, descriptions: { fi: '', en: '' } }
 
       ],
       steps: [
-        { languageKey: 'fi', useFormTemplate: true, stepTitle: 'Fill data in Finnish' },
+        { languageKey: 'fi', useFormTemplate: true, stepTitle: 'Täytä tiedot suomeksi' },
         { languageKey: 'en', useFormTemplate: true, stepTitle: 'Fill data in English' },
         { useFormTemplate: false, stepTitle: 'Review and submit' }
       ]
