@@ -3,7 +3,7 @@
     <h3>{{ skill.id ? 'Edit skill' : 'Add new skill' }}</h3>
     <hr>
     <b-form>
-      <small for="edit-skill-name">Skill name</small>
+      <small for="edit-skill-name">Skill name *</small>
       <b-form-group
         :invalid-feedback="inputState.name.feedback"
       >
@@ -14,6 +14,7 @@
           required
           :state="inputState.name.state"
           @focus="showSimilarSkills = true"
+          @blur="dirtyFields.name = true"
         />
         <div v-if="showSimilarSkills && similarSkillNames.length > 0">
           <div class="mt-2">
@@ -30,7 +31,7 @@
           </div>
         </div>
       </b-form-group>
-      <small for="edit-skill-category">Skill category</small>
+      <small for="edit-skill-category">Skill category *</small>
       <b-form-group
         :invalid-feedback="inputState.selectedSkillCategoryId.feedback"
       >
@@ -63,7 +64,6 @@
           type="submit"
           variant="success"
           class="mr-2"
-          :disabled="!Object.values(inputState).every(item => item.state)"
           @click.prevent="submitSkill()"
         >
           Save edits
@@ -105,7 +105,11 @@ export default {
       description: this.skill.description || '',
       selectedSkillCategoryId: this.skill.skillCategoryId || null,
       showSimilarSkills: false,
-      errorDetails: []
+      errorDetails: [],
+      validated: false,
+      dirtyFields: {
+        name: false
+      }
     }
   },
   computed: {
@@ -129,11 +133,11 @@ export default {
     inputState () {
       return {
         name: {
-          state: this.name.length > 0,
+          state: this.validated || this.dirtyFields.name ? this.name.length > 0 : undefined,
           feedback: 'Skill name can\'t be empty'
         },
         selectedSkillCategoryId: {
-          state: this.selectedSkillCategoryId !== null,
+          state: this.validated ? this.selectedSkillCategoryId !== null : undefined,
           feedback: 'Skill category can\'t be empty'
         }
       }
@@ -145,12 +149,16 @@ export default {
       'updateSkill'
     ]),
     async submitSkill () {
+      this.validated = true
       this.errorDetails = []
       const isNewSkill = this.skill.id === null
       const skill = {
         name: this.name,
         description: this.description,
         skillCategoryId: this.selectedSkillCategoryId
+      }
+      if (!Object.values(this.inputState).every(item => item.state)) {
+        return
       }
       try {
         if (isNewSkill) {
@@ -162,6 +170,7 @@ export default {
         this.$toasted.global.rytmi_success({
           message: isNewSkill ? `Skill ${this.name} added` : 'Skill updated'
         })
+        this.validated = false
         this.showSimilarSkills = false
         this.close()
       } catch (error) {

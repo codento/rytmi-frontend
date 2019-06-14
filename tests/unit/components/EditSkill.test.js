@@ -120,14 +120,13 @@ describe('SkillListEditSkill.vue', () => {
   })
 
   it('Should not submit skill when category is not selected', async () => {
-    expect.assertions(2)
+    expect.assertions(1)
     const actions = {
       updateSkill: jest.fn(() => Promise.resolve())
     }
     const mergedConfig = merge({}, defaultStoreConfig, { actions })
     const wrapper = createWrapper(SkillListEditSkill, mergedConfig, defaultMountingOptions)
     wrapper.setData({ selectedSkillCategoryId: null })
-    expect(wrapper.find('button[type="submit"]').html().includes('disabled')).toBeTruthy()
     wrapper.find('button[type="submit"]').trigger('submit')
     await flushPromises()
     expect(actions.updateSkill).not.toHaveBeenCalled()
