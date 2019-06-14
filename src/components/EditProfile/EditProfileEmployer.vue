@@ -156,6 +156,7 @@
           </div>
           <b-modal
             :id="`project-modal${profileProject.id}`"
+            v-model="showUpdateProjectModal"
             size="lg"
             hide-header
             ok-only
@@ -168,6 +169,7 @@
               :editable-project="project"
               :profile-project="profileProject"
               :current-employer-id="project.employerId ? project.employerId : profileEmployer.employerId"
+              @close-modal="showUpdateProjectModal = false"
             />
           </b-modal>
         </b-col>
@@ -197,7 +199,7 @@
             :editable-project="{ id: null, employerId: profileEmployer.employerId }"
             :profile-project="{ id: null, profileId: profileEmployer.profileId, employerId: profileEmployer.employerId, role: {en: '', fi: ''} }"
             :current-employer-id="profileEmployer.employerId"
-            @close-modal="closeNewProjectModal()"
+            @close-modal="showNewProjectModal = false"
           />
         </b-modal>
       </b-row>
@@ -232,6 +234,7 @@ export default {
       showEditIconByIndex: null,
       selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
       showNewProjectModal: false,
+      showUpdateProjectModal: false,
       showEditIcon: [],
       validated: false,
       internalCompany: INTERNAL_COMPANY_NAME
@@ -361,9 +364,6 @@ export default {
     },
     shouldCreateANewEmployer () {
       return !this.selectedExistingEmployer
-    },
-    closeNewProjectModal () {
-      this.showNewProjectModal = false
     }
   }
 }

@@ -64,14 +64,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import store from '../store'
-import { CollapsableItem } from '../components/Common'
+import store from '@/store'
+import { CollapsableItem, ProjectProfileForm } from '@/components/Common'
 import {
-  ProjectProfileForm,
   ProjectMemberTable,
   ProjectFormWrapper,
   ProjectSkillForm
-} from '../components/Project'
+} from '@/components/Project'
 
 export default {
   name: 'Project',

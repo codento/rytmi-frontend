@@ -287,6 +287,7 @@ export default {
   },
   methods: {
     onSubmit () {
+      this.$emit('validate-custom-form')
       this.validated = true
       if (this.formIsValid) {
         this.validated = undefined

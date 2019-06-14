@@ -81,74 +81,31 @@
     </div>
     <b-modal
       ref="projectProfileEditModal"
-      title="ASD"
-      hide-footer
       hide-header
+      ok-only
+      ok-title="Close"
+      ok-variant="light"
     >
-      <h3>{{ printMember(editedProjectProfile.profileId) }}</h3>
-      <b-row>
-        <b-col>
-          <small>Role (in Finnish)</small>
-          <b-input
-            v-model="editedProjectProfile.role.fi"
-            placeholder="esim. front-end kehittäjä, ohjelmistoarkkitehti"
-            type="text"
-            required
-          />
-        </b-col>
-        <b-col>
-          <small>Role (in English)</small>
-          <b-input
-            v-model="editedProjectProfile.role.en"
-            placeholder="e.g. front-end developer, database admin, architect"
-            type="text"
-            required
-          />
-        </b-col>
-      </b-row>
-      <small>Start date</small>
-      <Datepicker
-        v-model="editedProjectProfile.startDate"
-        name="edited-project-profile-start-date"
+      <h3>{{ printMember(selectedProfileProject.profileId) }}</h3>
+      <ProjectProfileForm
+        :profile-project="selectedProfileProject"
+        hide-project-select
+        hide-profile-select
+        no-redirect
+        @profile-project-created-or-updated="closeEditModal()"
       />
-      <small>End date</small>
-      <Datepicker
-        v-model="editedProjectProfile.endDate"
-        name="edited-project-profile-end-date"
-      />
-      <small>Utilization %</small>
-      <b-input
-        v-model="editedProjectProfile.workPercentage"
-        class="utilization-input"
-        :min="0"
-        :max="100"
-        type="number"
-      />
-      <b-btn
-        id="save"
-        class="modal-btn"
-        @click="callUpdateProfileProjectAction()"
-      >
-        Save
-      </b-btn>
-      <b-btn
-        id="cancel"
-        variant="light"
-        class="modal-btn"
-        @click="closeEditModal()"
-      >
-        Close
-      </b-btn>
     </b-modal>
   </div>
 </template>
 <script>
-import { cloneDeep } from 'lodash'
-import Datepicker from '../helpers/Datepicker'
+import { ProjectProfileForm } from '@/components/Common'
 import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'ProjectMemberTable',
-  components: { Datepicker },
+  components: {
+    ProjectProfileForm
+  },
   props: {
     members: Array
   },
@@ -162,8 +119,8 @@ export default {
         { key: 'edit', label: ' ' },
         { key: 'remove', label: ' ' }
       ],
-      editedProjectProfile: {
-        role: {}
+      selectedProfileProject: {
+        role: { fi: '', en: '' }
       }
     }
   },
@@ -171,10 +128,7 @@ export default {
     ...mapGetters(['profileById'])
   },
   methods: {
-    ...mapActions([
-      'removeProfileProject',
-      'updateProfileProject'
-    ]),
+    ...mapActions(['removeProfileProject']),
     printMember (profileId) {
       const member = this.profileById(profileId)
       if (member) {
@@ -202,68 +156,19 @@ export default {
       }
     },
     openEditModal (item) {
-      this.editedProjectProfile = cloneDeep(item.item)
-      this.editedProjectProfile.startDate = new Date(this.editedProjectProfile.startDate)
-      this.editedProjectProfile.endDate = this.editedProjectProfile.endDate ? new Date(this.editedProjectProfile.endDate) : null
-      this.editedProjectProfile.index = item.index
+      this.selectedProfileProject = Object.assign({}, item.item)
+      this.selectedProfileProject.startDate = new Date(this.selectedProfileProject.startDate)
+      this.selectedProfileProject.endDate = this.selectedProfileProject.endDate ? new Date(this.selectedProfileProject.endDate) : null
+      this.selectedProfileProject.index = item.index
       this.$refs.projectProfileEditModal.show()
     },
     closeEditModal () {
       this.$refs.projectProfileEditModal.hide()
-    },
-    callUpdateProfileProjectAction () {
-      if (this.isDataValid()) {
-        this.updateProfileProject(this.editedProjectProfile)
-          .then((response) => {
-            this.$toasted.global.rytmi_success({
-              message: 'Member updated.'
-            })
-            this.$refs.projectProfileEditModal.hide()
-          })
-          .catch((err) => {
-            this.$toasted.global.rytmi_error({
-              message: err
-            })
-          })
-      }
-    },
-    isDataValid () {
-      if (!this.editedProjectProfile.workPercentage || !this.editedProjectProfile.role.fi || !this.editedProjectProfile.role.en) {
-        this.$toasted.global.rytmi_error({
-          message: 'Not all fields have data, please fill them in.'
-        })
-        return false
-      }
-      if (this.editedProjectProfile.endDate && this.editedProjectProfile.startDate > this.editedProjectProfile.endDate) {
-        this.$toasted.global.rytmi_error({
-          message: 'Start date can\'t be after end date.'
-        })
-        return false
-      }
-      if (this.editedProjectProfile.workPercentage > 100) {
-        this.$toasted.global.rytmi_error({
-          message: 'Utilization percent can\'t be over 100.'
-        })
-        return false
-      }
-      if (this.editedProjectProfile.workPercentage < 0) {
-        this.$toasted.global.rytmi_error({
-          message: 'Utilization percent can\'t be under 0.'
-        })
-        return false
-      }
-      return true
     }
   }
 }
 </script>
 <style scoped>
-button {
-  width: 100%;
-}
-.modal-btn {
-  margin-top: 1em;
-}
 .clickable {
   cursor: pointer;
 }
