@@ -22,27 +22,23 @@
       <b-modal
         id="skill-modal"
         title="Add skills to project"
-        centered
         ok-only
       >
-        <b-list-group>
-          Click on a skill to add it to the project
-          <b-input
-            v-model="skillFilterText"
-            class="my-3"
-            type="text"
-            placeholder="Filter by skill name"
-          />
-          <b-list-group-item
-            v-for="skill of projectSkillList"
-            :key="skill.id"
-            name="skill"
-            button
-            @click="triggerAddProjectSkill(skill)"
-          >
-            {{ skill.label }}
-          </b-list-group-item>
-        </b-list-group>
+        Click on a skill to add it to the project
+        <b-input
+          v-model="skillFilterText"
+          class="my-3"
+          type="text"
+          placeholder="Filter by skill name"
+        />
+        <div
+          v-for="skill in projectSkillList"
+          :key="skill.label"
+          class="skill-item mx-1 my-1"
+          @click.once="triggerAddProjectSkill(skill)"
+        >
+          {{ skill.label }}
+        </div>
       </b-modal>
     </b-form>
   </div>
@@ -123,7 +119,8 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
 button {
   width: 100%;
   margin-top: 1em;
@@ -135,4 +132,14 @@ button {
   color: black;
   cursor: pointer;
 }
+.skill-item {
+  float: left;
+  padding: 5px 10px;
+  background-color: $c-light;
+  border-radius: 10px;
+}
+  .skill-item:hover {
+    background-color: $c-dark;
+    cursor: pointer;
+  }
 </style>
