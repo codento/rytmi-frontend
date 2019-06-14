@@ -45,7 +45,7 @@
       >
         <b-row @click="openOrCloseEmployerForEditing(profileEmployer)">
           <b-col cols="11">
-            <WorkHistoryEntry
+            <WorkHistoryListItem
               :profile-employer="profileEmployer"
               :profile-id="profileId"
             />
@@ -78,14 +78,14 @@ import { mapGetters } from 'vuex'
 import { parse } from 'date-fns'
 import { orderBy } from 'lodash'
 import EditEmployer from './EditEmployer'
-import WorkHistoryEntry from './WorkHistoryEntry'
+import WorkHistoryListItem from './WorkHistoryListItem'
 import sortBy from 'lodash/sortBy'
 
 export default {
-  name: 'WorkHistoryEntryEditList',
+  name: 'EditWorkHistory',
   components: {
     EditEmployer,
-    WorkHistoryEntry
+    WorkHistoryListItem
   },
   props: {
     profileId: Number

@@ -5,7 +5,7 @@
   >
     <b-row>
       <b-col cols="6">
-        <b-form-group invalid-feedback="An existing employer must be chosen or the name of a new employer must be given.">
+        <b-form-group>
           <small for="employer-select">Select employer or create new by typing</small>
           <v-select
             id="employer-select"
@@ -15,6 +15,12 @@
             push-tags
           />
         </b-form-group>
+        <small
+          v-if="!inputStates.selectedEmployer && inputStates.selectedEmployer !== undefined"
+          class="text-danger"
+        >
+          An existing employer must be chosen or the name of a new employer must be given.
+        </small>
       </b-col>
     </b-row>
     <b-row>
@@ -109,7 +115,7 @@
           type="submit"
           variant="primary"
         >
-          {{ shouldUpdateProfileEmployer ? 'Update work history entry' : 'Create a new work history entry' }}
+          {{ isNewEntry ? 'Update work history entry' : 'Create a new work history entry' }}
         </b-button>
       </b-col>
     </b-row>
@@ -123,7 +129,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { isEmpty } from 'lodash'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
 import EditEmployerProjectList from './EditEmployerProjectList'
@@ -154,11 +159,11 @@ export default {
     internalCompanyId () {
       return this.employerByName(INTERNAL_COMPANY_NAME).id
     },
-    shouldUpdateProfileEmployer () {
-      return this.profileEmployer.id
+    isNewEntry () {
+      return this.profileEmployer.id !== null
     },
-    shouldCreateANewEmployer () {
-      return !this.selectedEmployer
+    shouldCreateNewEmployer () {
+      return !this.selectedEmployer.id
     },
     endDateLabel () {
       if (this.selectedEmployer) {
@@ -173,7 +178,7 @@ export default {
         jobDescriptionEn: this.validated ? this.profileEmployer.description['en'].length > 0 : undefined,
         startDate: this.validated ? new Date(this.profileEmployer.startDate) > 1 : undefined,
         endDate: this.validated ? this.endDateValidation : undefined,
-        employer: this.validated ? !(!this.selectedEmployer && isEmpty(this.profileEmployer.newEmployerName)) : undefined
+        selectedEmployer: this.validated ? !!this.selectedEmployer : undefined
       }
     },
     endDateValidation () {
@@ -198,60 +203,50 @@ export default {
       'createProfileEmployer',
       'updateProfileEmployer'
     ]),
-    async onSubmit (evt) {
+    onSubmit (evt) {
       evt.preventDefault()
       this.validated = true
-      if (!this.formIsValid) {
-        return
-      }
-      this.validated = undefined
-      if (this.shouldCreateANewEmployer) {
-        try {
-          await this.createEmployer({ name: this.profileEmployer.newEmployerName })
-        } catch (error) {
-          this.$toasted.global.rytmi_error({
-            message: `Couldn't create a new employer. ${error}`
-          })
-          return
+      if (this.formIsValid) {
+        this.validated = undefined
+        let employerId = this.selectedEmployer
+        // Create new employer if needed
+        if (this.shouldCreateNewEmployer) {
+          employerId = this.addNewEmployer({ name: this.selectedEmployer.label })
         }
-        this.$toasted.global.rytmi_success({
-          message: 'A new employer created!'
-        })
-        const profileEmployer = { ...this.profileEmployer, employerId: this.employerByName(this.profileEmployer.newEmployerName).id }
-        this.updateOrCreateProfileEmployer(profileEmployer)
-      } else {
-        const profileEmployer = { ...this.profileEmployer, employerId: this.selectedEmployer.id }
-        this.updateOrCreateProfileEmployer(profileEmployer)
+        // Not working -- props mutated, need to copy profileEmployer to data
+        const profileEmployer = { ...this.profileEmployer, employerId: employerId, name: this.selectedEmployer.label }
+        if (employerId) {
+          if (this.isNewEntry) {
+            this.callCreateAction(profileEmployer)
+          } else {
+            this.callUpdateAction(profileEmployer)
+          }
+        }
       }
     },
-    async updateOrCreateProfileEmployer (profileEmployer) {
-      // If the profileEmployer has an existing ID, update it; otherwise create a new profileEmployer
-      if (this.shouldUpdateProfileEmployer) {
-        try {
-          await this.updateProfileEmployer(profileEmployer)
-          this.$toasted.global.rytmi_success({
-            message: 'Work history entry updated!'
-          })
-        } catch (error) {
-          this.$toasted.global.rytmi_error({
-            message: `Work history entry couldn't be updated. Error: ${error}`
-          })
-        }
-      } else {
-        try {
-          this.createProfileEmployer(profileEmployer)
-            .then(response => {
-              this.$emit('new-profile-employer-created', response)
-              this.$toasted.global.rytmi_success({
-                message: 'A new work history entry created!'
-              })
-              document.getElementById('employer-form').reset()
+    async callCreateAction (employer) {
+      try {
+        await this.createEmployer(employer)
+      } catch (error) {
+        this.$toasted.global.rytmi_error({
+          message: `Couldn't create a new employer. ${error}`
+        })
+      }
+    },
+    async callUpdateAction (profileEmployer) {
+      try {
+        this.createProfileEmployer(profileEmployer)
+          .then(response => {
+            this.$emit('new-profile-employer-created', response)
+            this.$toasted.global.rytmi_success({
+              message: 'A new work history entry created!'
             })
-        } catch (error) {
-          this.$toasted.global.rytmi_error({
-            message: `A new work history entry couldn't be created. Error: ${error}`
+            document.getElementById('employer-form').reset()
           })
-        }
+      } catch (error) {
+        this.$toasted.global.rytmi_error({
+          message: `A new work history entry couldn't be created. Error: ${error}`
+        })
       }
     }
   }
