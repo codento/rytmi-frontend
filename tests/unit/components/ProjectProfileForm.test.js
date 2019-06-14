@@ -3,7 +3,7 @@ import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
 import { merge } from 'lodash'
 import flushPromises from 'flush-promises'
-import { ProjectProfileForm } from '@/components/Project'
+import { ProjectProfileForm } from '@/components/Common'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 const localVue = createLocalVue()
@@ -63,6 +63,7 @@ describe('ProjectProfileForm.vue', () => {
   })
 
   it('calls newProjectProfile when form is submitted', async () => {
+    expect.assertions(3)
     const propsData = {
       profileProject: {
         projectId: null,
@@ -80,6 +81,17 @@ describe('ProjectProfileForm.vue', () => {
     }))
     const store = createStore({ actions })
     const wrapper = createWrapper({ propsData, store })
+    wrapper.setData({ editableProfileProject:
+        {
+          ...propsData.profileproject,
+          role: { fi: 'a', en: 'b' },
+          projectId: 1,
+          startDate: new Date('2018-01-01T00:00:00.000Z'),
+          workPercentage: 100
+        }
+    })
+    wrapper.setData({ validated: true })
+    expect(wrapper.vm.formIsValid).toBeTruthy()
     wrapper.find('#project-profile-form').trigger('submit')
     await flushPromises()
     expect(actions.newProjectProfile).toHaveBeenCalledTimes(1)
@@ -104,16 +116,30 @@ describe('ProjectProfileForm.vue', () => {
     }))
     const store = createStore({ actions })
     const wrapper = createWrapper({ propsData, store })
+    wrapper.setData({ editableProfileProject:
+      {
+        ...propsData.profileproject,
+        role: { fi: 'a', en: 'b' },
+        projectId: 1,
+        startDate: new Date('2018-01-01T00:00:00.000Z'),
+        workPercentage: 100
+      }
+    })
     wrapper.find('#project-profile-form').trigger('submit')
     await flushPromises()
     expect(propsData.toggleForm).toHaveBeenCalledTimes(1)
   })
 
   it('shows errors when form submit fails', async () => {
+    expect.assertions(3)
     const propsData = {
       profileProject: {
-        projectId: null,
-        profileId: 1
+        id: 1,
+        projectId: 1,
+        profileId: 1,
+        role: { fi: 'a', en: 'b' },
+        startDate: new Date('2018-01-01T00:00:00.000Z'),
+        workPercentage: 100
       }
     }
     const apiError = {
@@ -126,10 +152,11 @@ describe('ProjectProfileForm.vue', () => {
       }
     }
     const actions = {
-      newProjectProfile: jest.fn(() => Promise.reject(apiError))
+      updateProfileProject: jest.fn(() => Promise.reject(apiError))
     }
     const store = createStore({ actions })
     const wrapper = createWrapper({ propsData, store })
+    wrapper.setData({ validated: true })
     wrapper.find('#project-profile-form').trigger('submit')
     await flushPromises()
     expect(wrapper.vm.errorDetails[0]).toBe('Failure')

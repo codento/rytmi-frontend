@@ -13,6 +13,7 @@
       :employer-id="currentEmployerId"
       :custom-form-validation="formIsValid"
       @on-submit="createOrUpdateProject"
+      @validate-custom-form="validate"
       @cancel="$emit('close-modal')"
     >
       <template #custom-form>
@@ -99,7 +100,8 @@ export default {
       showError: false,
       errorDetails: [],
       formId: 'work-history-project-form',
-      editedProfileProject: cloneDeep(this.profileProject)
+      editedProfileProject: cloneDeep(this.profileProject),
+      validated: false
     }
   },
   computed: {
@@ -112,16 +114,11 @@ export default {
     },
     inputStates () {
       return {
-        roleFi: this.editedProfileProject.role.fi.length > 0,
-        roleEn: this.editedProfileProject.role.en.length > 0
+        roleFi: this.validated ? this.editedProfileProject.role.fi.length > 0 : undefined,
+        roleEn: this.validated ? this.editedProfileProject.role.en.length > 0 : undefined
       }
     }
   },
-  /* watch: {
-    profileProject () {
-      this.editedProfileProject = cloneDeep(this.profileProject)
-    }
-  }, */
   methods: {
     ...mapActions([
       'createProject',
@@ -129,6 +126,9 @@ export default {
       'newProjectProfile',
       'updateProfileProject'
     ]),
+    validate () {
+      this.validated = true
+    },
     async createOrUpdateProject (project) {
       const editedProject = cloneDeep(project)
       this.errorDetails = []

@@ -5,6 +5,7 @@ import UtilizationChart from './UtilizationChart.vue'
 import CollapsableItem from './CollapsableItem.vue'
 import EducationCard from './EducationCard.vue'
 import ProjectForm from './ProjectForm.vue'
+import ProjectProfileForm from './ProjectProfileForm.vue'
 
 export {
   ProjectRow,
@@ -13,5 +14,6 @@ export {
   UtilizationChart,
   CollapsableItem,
   EducationCard,
-  ProjectForm
+  ProjectForm,
+  ProjectProfileForm
 }
