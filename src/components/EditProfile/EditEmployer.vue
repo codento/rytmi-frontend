@@ -6,20 +6,13 @@
     <b-row>
       <b-col cols="6">
         <b-form-group invalid-feedback="An existing employer must be chosen or the name of a new employer must be given.">
-          <small for="employer-select">Select an existing employer</small>
+          <small for="employer-select">Select employer or create new by typing</small>
           <v-select
             id="employer-select"
-            v-model="selectedExistingEmployer"
+            v-model="selectedEmployer"
             :options="vueSelectsEmployers"
-          />
-          <small>Or enter a new employer name</small>
-          <b-input
-            id="new-employer-name"
-            v-model="profileEmployer.newEmployerName"
-            type="text"
-            placeholder="New employer name"
-            :state="inputStates.employer"
-            @input="selectedExistingEmployer = null"
+            taggable
+            push-tags
           />
         </b-form-group>
       </b-col>
@@ -116,114 +109,32 @@
           type="submit"
           variant="primary"
         >
-          {{ shouldUpdateProfileEmployer() ? 'Update work history entry' : 'Create a new work history entry' }}
+          {{ shouldUpdateProfileEmployer ? 'Update work history entry' : 'Create a new work history entry' }}
         </b-button>
       </b-col>
     </b-row>
-    <CollapsableItem
-      v-if="profileEmployer.id && profileEmployer.id !== employerByName(internalCompany).id"
-      :title="`Projects for ${employerById(profileEmployer.employerId).name}`"
-      class="mt-4"
-      :initial-visibility="true"
-    >
-      <b-row v-if="profileProjectsWithProjectData.length === 0">
-        <b-col class="no-projects">
-          <i class="fa fa-exclamation-circle notice" />
-          No projects.
-        </b-col>
-      </b-row>
-      <b-row v-else>
-        <b-col
-          v-for="({ profileProject, project }, index) in profileProjectsWithProjectData"
-          :key="profileProject.id"
-          cols="12"
-        >
-          <div
-            v-b-modal="`project-modal${profileProject.id}`"
-            class="clickable mt-2 mb-2"
-            @mouseover="showEditIconByIndex = index"
-            @mouseout="showEditIconByIndex = null"
-          >
-            <span class="project-name mr-2">
-              {{ project.name[currentLanguage] }} ({{ formatProjectDuration(profileProject.startDate, profileProject.endDate) }})
-            </span>
-            <span class="project-role">
-              {{ profileProject.role[currentLanguage] }}
-            </span>
-            <span v-show="showEditIconByIndex === index">
-              <i class="fa fa-pencil pull-right" />
-            </span>
-          </div>
-          <b-modal
-            :id="`project-modal${profileProject.id}`"
-            v-model="showUpdateProjectModal"
-            size="lg"
-            hide-header
-            ok-only
-            ok-title="Close"
-            ok-variant="light"
-            no-close-on-backdrop
-          >
-            <WorkHistoryProjectFormWrapper
-              :modal-header="`Edit ${project.name[currentLanguage]} (${employerById(profileEmployer.employerId).name})`"
-              :editable-project="project"
-              :profile-project="profileProject"
-              :current-employer-id="project.employerId ? project.employerId : profileEmployer.employerId"
-              @close-modal="showUpdateProjectModal = false"
-            />
-          </b-modal>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <b-button
-            v-b-modal="'new-project-modal'"
-            class="pull-right mt-2"
-          >
-            <i class="fa fa-plus" />
-            Add a project
-          </b-button>
-        </b-col>
-        <b-modal
-          :id="'new-project-modal'"
-          v-model="showNewProjectModal"
-          size="lg"
-          hide-header
-          ok-only
-          ok-title="Close"
-          ok-variant="light"
-          no-close-on-backdrop
-        >
-          <WorkHistoryProjectFormWrapper
-            :modal-header="`Add a project for ${employerById(profileEmployer.employerId).name}`"
-            :editable-project="{ id: null, employerId: profileEmployer.employerId }"
-            :profile-project="{ id: null, profileId: profileEmployer.profileId, employerId: profileEmployer.employerId, role: {en: '', fi: ''} }"
-            :current-employer-id="profileEmployer.employerId"
-            @close-modal="showNewProjectModal = false"
-          />
-        </b-modal>
-      </b-row>
-    </CollapsableItem>
+    <EditEmployerProjectList
+      v-if="profileEmployer.employerId && profileEmployer.employerId !== internalCompanyId"
+      :employer-id="profileEmployer.employerId"
+      :profile-id="profileEmployer.profileId"
+    />
   </b-form>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { isEmpty } from 'lodash'
-import format from 'date-fns/format'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
-import CollapsableItem from '@/components/Common/CollapsableItem'
-import WorkHistoryProjectFormWrapper from './WorkHistoryProjectFormWrapper'
+import EditEmployerProjectList from './EditEmployerProjectList'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
-  name: 'EditProfileEmployer',
+  name: 'EditEmployer',
   components: {
     Datepicker,
     vSelect,
-    CollapsableItem,
-    WorkHistoryProjectFormWrapper
+    EditEmployerProjectList
   },
   props: {
     profileEmployer: Object,
@@ -231,35 +142,28 @@ export default {
   },
   data () {
     return {
-      showEditIconByIndex: null,
-      selectedExistingEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
-      showNewProjectModal: false,
-      showUpdateProjectModal: false,
-      showEditIcon: [],
-      validated: false,
-      internalCompany: INTERNAL_COMPANY_NAME
+      selectedEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
+      validated: false
     }
   },
   computed: {
     ...mapGetters([
       'employers',
-      'projects',
-      'profileProjectsByProfileId',
-      'currentLanguage',
-      'employerByName',
-      'employerById'
+      'employerByName'
     ]),
-    endDateLabel () {
-      if (this.selectedExistingEmployer) {
-        return `End date${this.selectedExistingEmployer.label !== INTERNAL_COMPANY_NAME ? ' *' : ''}`
-      } else return 'End date *'
+    internalCompanyId () {
+      return this.employerByName(INTERNAL_COMPANY_NAME).id
     },
-    profileProjectsWithProjectData () {
-      return this.profileProjectsByProfileId(this.profileEmployer.profileId).map(pp => ({
-        profileProject: pp,
-        project: Object.values(this.projects).find(project => project.id === pp.projectId)
-      })).filter(pp => pp.project.employerId === this.profileEmployer.employerId)
-        .sort((a, b) => a.project.startDate - b.project.startDate)
+    shouldUpdateProfileEmployer () {
+      return this.profileEmployer.id
+    },
+    shouldCreateANewEmployer () {
+      return !this.selectedEmployer
+    },
+    endDateLabel () {
+      if (this.selectedEmployer) {
+        return `End date${this.selectedEmployer.label !== INTERNAL_COMPANY_NAME ? ' *' : ''}`
+      } else return 'End date *'
     },
     inputStates () {
       return {
@@ -269,12 +173,12 @@ export default {
         jobDescriptionEn: this.validated ? this.profileEmployer.description['en'].length > 0 : undefined,
         startDate: this.validated ? new Date(this.profileEmployer.startDate) > 1 : undefined,
         endDate: this.validated ? this.endDateValidation : undefined,
-        employer: this.validated ? !(!this.selectedExistingEmployer && isEmpty(this.profileEmployer.newEmployerName)) : undefined
+        employer: this.validated ? !(!this.selectedEmployer && isEmpty(this.profileEmployer.newEmployerName)) : undefined
       }
     },
     endDateValidation () {
-      if (this.selectedExistingEmployer) {
-        return this.selectedExistingEmployer.label !== INTERNAL_COMPANY_NAME ? new Date(this.profileEmployer.endDate) > 1 : true
+      if (this.selectedEmployer) {
+        return this.selectedEmployer.label !== INTERNAL_COMPANY_NAME ? new Date(this.profileEmployer.endDate) > 1 : true
       } else {
         return new Date(this.profileEmployer.endDate) > 1
       }
@@ -288,21 +192,12 @@ export default {
       return stateArray.every(item => item)
     }
   },
-  watch: {
-    selectedExistingEmployer: function () {
-      this.profileEmployer.newEmployerName = ''
-    }
-  },
   methods: {
     ...mapActions([
       'createEmployer',
       'createProfileEmployer',
       'updateProfileEmployer'
     ]),
-    formatProjectDuration (startDate, endDate) {
-      const formattedEndDate = endDate ? format(endDate, 'MM/YYYY') : ''
-      return format(startDate, 'MM/YYYY') + '-' + formattedEndDate
-    },
     async onSubmit (evt) {
       evt.preventDefault()
       this.validated = true
@@ -310,7 +205,7 @@ export default {
         return
       }
       this.validated = undefined
-      if (this.shouldCreateANewEmployer()) {
+      if (this.shouldCreateANewEmployer) {
         try {
           await this.createEmployer({ name: this.profileEmployer.newEmployerName })
         } catch (error) {
@@ -325,13 +220,13 @@ export default {
         const profileEmployer = { ...this.profileEmployer, employerId: this.employerByName(this.profileEmployer.newEmployerName).id }
         this.updateOrCreateProfileEmployer(profileEmployer)
       } else {
-        const profileEmployer = { ...this.profileEmployer, employerId: this.selectedExistingEmployer.id }
+        const profileEmployer = { ...this.profileEmployer, employerId: this.selectedEmployer.id }
         this.updateOrCreateProfileEmployer(profileEmployer)
       }
     },
     async updateOrCreateProfileEmployer (profileEmployer) {
       // If the profileEmployer has an existing ID, update it; otherwise create a new profileEmployer
-      if (this.shouldUpdateProfileEmployer()) {
+      if (this.shouldUpdateProfileEmployer) {
         try {
           await this.updateProfileEmployer(profileEmployer)
           this.$toasted.global.rytmi_success({
@@ -358,36 +253,7 @@ export default {
           })
         }
       }
-    },
-    shouldUpdateProfileEmployer () {
-      return this.profileEmployer.id
-    },
-    shouldCreateANewEmployer () {
-      return !this.selectedExistingEmployer
     }
   }
 }
 </script>
-
-<style scoped >
-.clickable {
-  cursor: pointer;
-}
-.clickable:hover {
-  text-decoration: underline;
-}
-.no-projects {
-  font-style: italic;
-  color: lightslategrey;
-}
-.notice {
-  color: red;
-  font-size: 150%;
-}
-.project-name {
-  font-weight: bold;
-}
-.project-role {
-  font-style: italic;
-}
-</style>

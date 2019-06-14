@@ -27,7 +27,7 @@
         <b-row>
           <b-col>
             <div>
-              <EditProfileEmployer
+              <EditEmployer
                 :profile-employer="selectedProfileEmployer"
                 :vue-selects-employers="vueSelectsEmployers"
                 @new-profile-employer-created="newProfileEmployerCreated($event)"
@@ -60,7 +60,7 @@
         <b-row v-if="selectedProfileEmployer && selectedProfileEmployer.id === profileEmployer.id">
           <b-col>
             <div>
-              <EditProfileEmployer
+              <EditEmployer
                 :key="profileEmployer ? profileEmployer.id : 0"
                 :profile-employer="profileEmployer"
                 :vue-selects-employers="vueSelectsEmployers"
@@ -77,14 +77,14 @@
 import { mapGetters } from 'vuex'
 import { parse } from 'date-fns'
 import { orderBy } from 'lodash'
-import EditProfileEmployer from './EditProfileEmployer'
+import EditEmployer from './EditEmployer'
 import WorkHistoryEntry from './WorkHistoryEntry'
 import sortBy from 'lodash/sortBy'
 
 export default {
   name: 'WorkHistoryEntryEditList',
   components: {
-    EditProfileEmployer,
+    EditEmployer,
     WorkHistoryEntry
   },
   props: {

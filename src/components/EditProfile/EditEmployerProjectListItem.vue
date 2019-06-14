@@ -1,4 +1,4 @@
-<template>
+ts<template>
   <div>
     <h3 v-if="modalHeader">
       {{ modalHeader }}
@@ -19,7 +19,7 @@
       <template #custom-form>
         <b-row>
           <b-col sm="6">
-            <small for="project-role-fi-input">Your role in the project (in Finnish)</small>
+            <small for="project-role-fi-input">Your role in the project (in Finnish) *</small>
             <b-form-group
               invalid-feedback="Required"
             >
@@ -33,7 +33,7 @@
             </b-form-group>
           </b-col>
           <b-col sm="6">
-            <small for="project-role-en-input">Your role in the project (in English)</small>
+            <small for="project-role-en-input">Your role in the project (in English) *</small>
             <b-form-group
               invalid-feedback="Required"
             >
@@ -73,7 +73,7 @@ import { ProjectForm, CollapsableItem } from '@/components/Common'
 import { ProjectSkillForm } from '@/components/Project'
 
 export default {
-  name: 'WorkHistoryProjectFormWrapper',
+  name: 'EditEmployerProjectListItem',
   components: {
     ProjectForm,
     ApiErrorDetailsPanel,
