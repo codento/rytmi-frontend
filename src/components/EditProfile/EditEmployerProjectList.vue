@@ -18,20 +18,32 @@
           cols="12"
         >
           <div
-            v-b-modal="'edit-project-modal'"
-            class="clickable mt-2 mb-2"
-            @mouseover="showEditIconByIndex = index"
-            @mouseout="showEditIconByIndex = null"
-            @click.prevent="selectProject(index)"
+            class="mt-2 mb-2"
           >
-            <span class="project-name mr-2">
+            <span v-show="showEditIconByIndex === index">
+              <i class="fa fa-pencil" />
+            </span>
+            <span
+              v-b-modal="'edit-project-modal'"
+              class="project-name clickable mr-2"
+              @click.prevent="selectProject(index)"
+              @mouseover="showEditIconByIndex = index"
+              @mouseout="showEditIconByIndex = null"
+            >
               {{ project.name[currentLanguage] }} ({{ formatProjectDuration(profileProject.startDate, profileProject.endDate) }})
             </span>
-            <span class="project-role">
+            <span
+              class="project-role clickable"
+              @mouseover="showEditIconByIndex = index"
+              @mouseout="showEditIconByIndex = null"
+            >
               {{ profileProject.role[currentLanguage] }}
             </span>
-            <span v-show="showEditIconByIndex === index">
-              <i class="fa fa-pencil pull-right" />
+            <span>
+              <i
+                class="fa fa-trash clickable pull-right"
+                @click="deleteProfileProject(profileProject)"
+              />
             </span>
           </div>
         </b-col>
@@ -89,7 +101,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import format from 'date-fns/format'
 import CollapsableItem from '@/components/Common/CollapsableItem'
 import EditEmployerProjectListItem from './EditEmployerProjectListItem'
@@ -136,6 +148,21 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['removeProfileProject']),
+    deleteProfileProject (profileProject) {
+      if (confirm('Are you sure')) {
+        try {
+          this.removeProfileProject(profileProject)
+          this.$toasted.global.rytmi_success({
+            message: `Profile removed from project`
+          })
+        } catch (error) {
+          this.$toasted.global.rytmi_error({
+            message: `Error while removing profile from project: ${error}`
+          })
+        }
+      }
+    },
     formatProjectDuration (startDate, endDate) {
       const formattedEndDate = endDate ? format(endDate, 'MM/YYYY') : ''
       return format(startDate, 'MM/YYYY') + '-' + formattedEndDate
@@ -168,4 +195,8 @@ export default {
 .project-role {
   font-style: italic;
 }
+  .fa-trash:hover {
+    color: red;
+    transform: scale(1.4);
+  }
 </style>

@@ -10,17 +10,27 @@
           <v-select
             id="employer-select"
             v-model="selectedEmployer"
+            :class="!inputStates.selectedEmployer && inputStates.selectedEmployer !== undefined ? 'v-select-is-invalid' : ''"
             :options="vueSelectsEmployers"
             taggable
             push-tags
           />
+          <small
+            v-if="!inputStates.selectedEmployer && inputStates.selectedEmployer !== undefined"
+            class="text-danger"
+          >
+            An existing employer must be chosen or the name of a new employer must be given.
+          </small>
         </b-form-group>
-        <small
-          v-if="!inputStates.selectedEmployer && inputStates.selectedEmployer !== undefined"
-          class="text-danger"
+      </b-col>
+      <b-col cols="6">
+        <b-button
+          variant="danger"
+          class="pull-right"
+          @click="deleteEntry(profileEmployer)"
         >
-          An existing employer must be chosen or the name of a new employer must be given.
-        </small>
+          Delete entry
+        </b-button>
       </b-col>
     </b-row>
     <b-row>
@@ -115,7 +125,7 @@
           type="submit"
           variant="primary"
         >
-          {{ isNewEntry ? 'Update work history entry' : 'Create a new work history entry' }}
+          {{ isNewEntry ? 'Create a new work history entry' : 'Update work history entry' }}
         </b-button>
       </b-col>
     </b-row>
@@ -160,7 +170,7 @@ export default {
       return this.employerByName(INTERNAL_COMPANY_NAME).id
     },
     isNewEntry () {
-      return this.profileEmployer.id !== null
+      return !this.profileEmployer.id
     },
     shouldCreateNewEmployer () {
       return !this.selectedEmployer.id
@@ -201,9 +211,22 @@ export default {
     ...mapActions([
       'createEmployer',
       'createProfileEmployer',
-      'updateProfileEmployer'
+      'updateProfileEmployer',
+      'removeProfileEmployer'
     ]),
-    onSubmit (evt) {
+    async deleteEntry (profileEmployer) {
+      const confirmation = confirm('Remove work history entry?')
+      if (confirmation) {
+        try {
+          await this.removeProfileEmployer(profileEmployer)
+        } catch (error) {
+          this.$toasted.global.rytmi_error({
+            message: `Could not remove work history entry. ${error}`
+          })
+        }
+      }
+    },
+    async onSubmit (evt) {
       evt.preventDefault()
       this.validated = true
       if (this.formIsValid) {
@@ -211,25 +234,30 @@ export default {
         let employerId = this.selectedEmployer
         // Create new employer if needed
         if (this.shouldCreateNewEmployer) {
-          employerId = this.addNewEmployer({ name: this.selectedEmployer.label })
-        }
-        // Not working -- props mutated, need to copy profileEmployer to data
-        const profileEmployer = { ...this.profileEmployer, employerId: employerId, name: this.selectedEmployer.label }
-        if (employerId) {
-          if (this.isNewEntry) {
-            this.callCreateAction(profileEmployer)
-          } else {
-            this.callUpdateAction(profileEmployer)
+          try {
+            const newEmployer = await this.createEmployer({ name: this.selectedEmployer.label })
+            employerId = newEmployer.data
+          } catch (error) {
+            this.$toasted.global.rytmi_error({
+              message: `Could not create a new employer. ${error}`
+            })
           }
+        }
+        const profileEmployer = { ...this.profileEmployer, employerId: employerId.id }
+        if (this.isNewEntry) {
+          this.callCreateAction(profileEmployer)
+        } else {
+          this.callUpdateAction(profileEmployer)
         }
       }
     },
     async callCreateAction (employer) {
       try {
-        await this.createEmployer(employer)
+        const newProfileEmployer = await this.createProfileEmployer(employer)
+        this.$emit('new-profile-employer-created', newProfileEmployer)
       } catch (error) {
         this.$toasted.global.rytmi_error({
-          message: `Couldn't create a new employer. ${error}`
+          message: `Could not create a new work history entry. ${error}`
         })
       }
     },
@@ -245,10 +273,36 @@ export default {
           })
       } catch (error) {
         this.$toasted.global.rytmi_error({
-          message: `A new work history entry couldn't be created. Error: ${error}`
+          message: `Could not update work history entry. ${error}`
         })
       }
     }
   }
 }
 </script>
+
+<style scoped>
+  .v-select-is-invalid {
+    border: 0;
+    border-color: #f86c6b;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23f86c6b' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23f86c6b' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center right calc(0.375em + 0.1875rem);
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    outline: 1px #f86c6b solid;
+    outline-offset: -1px;
+  }
+  #employer-form {
+    cursor: default;
+  }
+
+</style>
+<style>
+  #employer-select {
+    height: 35px;
+  }
+  #employer-select div.dropdown-toggle {
+    height: 35px;
+  }
+</style>

@@ -347,8 +347,10 @@ export function getActiveProjectSkills (id) {
   ).catch(handleError)
 }
 function handleError (error) {
-  if (error.response.status === 401) {
-    store.commit(types.AUTH_LOGOUT)
+  if (error.response) {
+    if (error.response.status === 401) {
+      store.commit(types.AUTH_LOGOUT)
+    }
   } else {
     throw error
   }
