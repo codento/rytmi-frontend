@@ -16,20 +16,24 @@
           @focus="showSimilarSkills = true"
           @blur="dirtyFields.name = true"
         />
-        <div v-if="showSimilarSkills && similarSkillNames.length > 0">
-          <div class="mt-2">
-            <small>
-              Existing skills with a similar name
-            </small>
-          </div>
-          <div
-            v-for="skillName in similarSkillNames"
-            :key="skillName"
-            class="existing-skill-item mx-1 my-1"
-          >
-            {{ skillName }}
-          </div>
-        </div>
+        <b-row>
+          <b-col cols="12">
+            <div v-if="showSimilarSkills && similarSkillNames.length > 0">
+              <div class="mt-2">
+                <small>
+                  Existing skills with a similar name
+                </small>
+              </div>
+              <div
+                v-for="skillName in similarSkillNames"
+                :key="skillName"
+                :class="`existing-skill-item mx-1 my-1 ${matchesExistingSkill ? 'highlighted-skill' : ''}`"
+              >
+                {{ skillName }}
+              </div>
+            </div>
+          </b-col>
+        </b-row>
       </b-form-group>
       <small for="edit-skill-category">Skill category *</small>
       <b-form-group
@@ -122,6 +126,10 @@ export default {
         return { value: category.id, text: category.title }
       }).sort((a, b) => a.text.localeCompare(b.text))
     },
+    matchesExistingSkill () {
+      const skillNames = Object.values(this.skills).map(skill => skill.name)
+      return skillNames.some(name => name.toLowerCase() === this.name.toLowerCase())
+    },
     similarSkillNames () {
       if (isEmpty(this.name)) {
         return []
@@ -133,8 +141,8 @@ export default {
     inputState () {
       return {
         name: {
-          state: this.validated || this.dirtyFields.name ? this.name.length > 0 : undefined,
-          feedback: 'Skill name can\'t be empty'
+          state: this.validated || this.dirtyFields.name ? this.name.length > 0 && !this.matchesExistingSkill : undefined,
+          feedback: this.name.length > 0 ? 'Skill name must be unique' : 'Skill name can\'t be empty'
         },
         selectedSkillCategoryId: {
           state: this.validated ? this.selectedSkillCategoryId !== null : undefined,
@@ -199,5 +207,8 @@ export default {
   padding: 5px 10px;
   background-color: $c-light;
   border-radius: 10px;
+}
+.highlighted-skill {
+  border: 1px solid #f86c6b;
 }
 </style>
