@@ -3,7 +3,7 @@
     <h3>{{ skill.id ? 'Edit skill' : 'Add new skill' }}</h3>
     <hr>
     <b-form>
-      <small for="edit-skill-name">Skill name</small>
+      <small for="edit-skill-name">Skill name *</small>
       <b-form-group
         :invalid-feedback="inputState.name.feedback"
       >
@@ -14,23 +14,28 @@
           required
           :state="inputState.name.state"
           @focus="showSimilarSkills = true"
+          @blur="dirtyFields.name = true"
         />
-        <div v-if="showSimilarSkills && similarSkillNames.length > 0">
-          <div class="mt-2">
-            <small>
-              Existing skills with a similar name
-            </small>
-          </div>
-          <div
-            v-for="skillName in similarSkillNames"
-            :key="skillName"
-            class="existing-skill-item mx-1 my-1"
-          >
-            {{ skillName }}
-          </div>
-        </div>
+        <b-row>
+          <b-col cols="12">
+            <div v-if="showSimilarSkills && similarSkillNames.length > 0">
+              <div class="mt-2">
+                <small>
+                  Existing skills with a similar name
+                </small>
+              </div>
+              <div
+                v-for="skillName in similarSkillNames"
+                :key="skillName"
+                :class="`existing-skill-item mx-1 my-1 ${matchesExistingSkill ? 'highlighted-skill' : ''}`"
+              >
+                {{ skillName }}
+              </div>
+            </div>
+          </b-col>
+        </b-row>
       </b-form-group>
-      <small for="edit-skill-category">Skill category</small>
+      <small for="edit-skill-category">Skill category *</small>
       <b-form-group
         :invalid-feedback="inputState.selectedSkillCategoryId.feedback"
       >
@@ -63,7 +68,6 @@
           type="submit"
           variant="success"
           class="mr-2"
-          :disabled="!Object.values(inputState).every(item => item.state)"
           @click.prevent="submitSkill()"
         >
           Save edits
@@ -105,7 +109,11 @@ export default {
       description: this.skill.description || '',
       selectedSkillCategoryId: this.skill.skillCategoryId || null,
       showSimilarSkills: false,
-      errorDetails: []
+      errorDetails: [],
+      validated: false,
+      dirtyFields: {
+        name: false
+      }
     }
   },
   computed: {
@@ -118,6 +126,10 @@ export default {
         return { value: category.id, text: category.title }
       }).sort((a, b) => a.text.localeCompare(b.text))
     },
+    matchesExistingSkill () {
+      const skillNames = Object.values(this.skills).map(skill => skill.name)
+      return skillNames.some(name => name.toLowerCase() === this.name.toLowerCase())
+    },
     similarSkillNames () {
       if (isEmpty(this.name)) {
         return []
@@ -129,11 +141,11 @@ export default {
     inputState () {
       return {
         name: {
-          state: this.name.length > 0,
-          feedback: 'Skill name can\'t be empty'
+          state: this.validated || this.dirtyFields.name ? this.name.length > 0 && !this.matchesExistingSkill : undefined,
+          feedback: this.name.length > 0 ? 'Skill name must be unique' : 'Skill name can\'t be empty'
         },
         selectedSkillCategoryId: {
-          state: this.selectedSkillCategoryId !== null,
+          state: this.validated ? this.selectedSkillCategoryId !== null : undefined,
           feedback: 'Skill category can\'t be empty'
         }
       }
@@ -145,12 +157,16 @@ export default {
       'updateSkill'
     ]),
     async submitSkill () {
+      this.validated = true
       this.errorDetails = []
       const isNewSkill = this.skill.id === null
       const skill = {
         name: this.name,
         description: this.description,
         skillCategoryId: this.selectedSkillCategoryId
+      }
+      if (!Object.values(this.inputState).every(item => item.state)) {
+        return
       }
       try {
         if (isNewSkill) {
@@ -162,6 +178,7 @@ export default {
         this.$toasted.global.rytmi_success({
           message: isNewSkill ? `Skill ${this.name} added` : 'Skill updated'
         })
+        this.validated = false
         this.showSimilarSkills = false
         this.close()
       } catch (error) {
@@ -190,5 +207,8 @@ export default {
   padding: 5px 10px;
   background-color: $c-light;
   border-radius: 10px;
+}
+.highlighted-skill {
+  border: 1px solid #f86c6b;
 }
 </style>
