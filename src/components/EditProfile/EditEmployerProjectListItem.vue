@@ -1,4 +1,4 @@
-ts<template>
+<template>
   <div>
     <h3 v-if="modalHeader">
       {{ modalHeader }}
