@@ -36,6 +36,7 @@
               {{ project.name[currentLanguage] }} ({{ formatProjectDuration(profileProject.startDate, profileProject.endDate) }})
             </span>
             <span
+              v-b-modal="'edit-project-modal'"
               class="project-role clickable"
               @mouseover="showEditIconByIndex = index"
               @mouseout="showEditIconByIndex = null"
@@ -157,7 +158,7 @@ export default {
   methods: {
     ...mapActions(['removeProfileProject']),
     deleteProfileProject (profileProject) {
-      if (confirm(`Remove ${this.fullName} from ${profileProject.name.fi.length > 0 ? profileProject.name.fi : 'project'}`)) {
+      if (confirm(`Remove ${this.fullName} from ${profileProject.name.fi.length > 0 ? profileProject.name.fi : 'project'}?`)) {
         try {
           this.removeProfileProject(profileProject)
           this.$toasted.global.rytmi_success({
