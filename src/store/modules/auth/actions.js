@@ -1,8 +1,8 @@
 import * as types from '../../mutation-types'
 import { login } from '@/utils/api/api'
 
-export async function handleLogin ({ commit, dispatch }) {
-  const options = { ux_mode: 'redirect', redirect_uri: process.env.VUE_APP_CLIENT_AUTH_REDIRECT_URI }
+export async function handleLogin ({ commit, dispatch }, popup) {
+  const options = { ux_mode: popup ? 'popup' : 'redirect', redirect_uri: process.env.VUE_APP_CLIENT_AUTH_REDIRECT_URI }
   const auth2 = await gapi.auth2.getAuthInstance().signIn(options)
   return requestAuth({ commit, dispatch }, auth2.Zi.id_token)
 }

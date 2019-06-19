@@ -14,7 +14,7 @@
       >
         <span
           class="clickable"
-          @click="handleLogin"
+          @click="handleLogin()"
         >
           Please Sign in
         </span>
