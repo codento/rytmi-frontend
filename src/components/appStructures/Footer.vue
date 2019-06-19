@@ -22,7 +22,7 @@
         <div>Token is valid: {{ isTokenValid }} until {{ new Date(tokenValidTime * 1000) }} seconds</div>
       </b-row>
       <b-button @click="expireToken">
-        Expire token
+        Set token to expire in 30 seconds
       </b-button>
       <template
         slot="modal-header"
@@ -64,7 +64,7 @@ export default {
       this.backendVersion = response.data.version
     },
     expireToken () {
-      this.$store.commit('auth/SET_TOKEN_EXPIRATION', null)
+      this.$store.commit('auth/SET_TOKEN_EXPIRATION', Date.now() / 1000 + 30)
     }
   }
 }

@@ -118,7 +118,7 @@ export default {
       setAppInitializeError: SET_APP_INITIALIZE_ERROR
     }),
     checkTokenTimeout () {
-      if (Number(this.tokenValidTime) - 360 < Math.round(Date.now() / 1000)) {
+      if (Number(this.tokenValidTime) - 360 < Math.round(Date.now() / 1000) && this.isAuthenticated && this.isTokenValid) {
         this.$bvModal.show('login-popup')
       }
     },
