@@ -19,7 +19,7 @@
         <div>User token: {{ !!isAuthenticated }}</div>
       </b-row>
       <b-row>
-        <div>Token is valid: {{ isTokenValid }} until {{ new Date(tokenValidTime * 1000) }} seconds</div>
+        <div>Token is valid: {{ isTokenValid }} until {{ new Date(tokenValidTime * 1000) }}</div>
       </b-row>
       <b-button @click="expireToken">
         Set token to expire in 30 seconds
