@@ -20,8 +20,11 @@
           <div
             class="mt-2 mb-2"
           >
-            <span v-show="showEditIconByIndex === index">
-              <i class="fa fa-pencil" />
+            <span class="icon-sized">
+              <i
+                v-show="showEditIconByIndex === index"
+                class="fa fa-pencil"
+              />
             </span>
             <span
               v-b-modal="'edit-project-modal'"
@@ -137,8 +140,12 @@ export default {
       'projects',
       'profileProjectsByProfileId',
       'currentLanguage',
-      'employerById'
+      'employerById',
+      'profileById'
     ]),
+    fullName () {
+      return `${this.profileById(this.profileId).firstName} ${this.profileById(this.profileId).lastName}`
+    },
     profileProjectsWithProjectData () {
       return this.profileProjectsByProfileId(this.profileId).map(pp => ({
         profileProject: pp,
@@ -150,7 +157,7 @@ export default {
   methods: {
     ...mapActions(['removeProfileProject']),
     deleteProfileProject (profileProject) {
-      if (confirm('Are you sure')) {
+      if (confirm(`Remove ${this.fullName} from ${profileProject.name.fi.length > 0 ? profileProject.name.fi : 'project'}`)) {
         try {
           this.removeProfileProject(profileProject)
           this.$toasted.global.rytmi_success({
@@ -195,8 +202,14 @@ export default {
 .project-role {
   font-style: italic;
 }
-  .fa-trash:hover {
-    color: red;
-    transform: scale(1.4);
-  }
+.fa-trash {
+  color: grey;
+}
+.fa-trash:hover {
+  color: black;
+}
+.icon-sized {
+  display: inline-block;
+  width: 14px;
+}
 </style>
