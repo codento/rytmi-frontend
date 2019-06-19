@@ -177,16 +177,16 @@
           Employer history
           <span
             v-if="profileId === profile.id || isAdmin"
-            v-b-modal="'workHistoryEntryEditListModal'"
+            v-b-modal="'work-history'"
             class="pull-right"
           >
             <i class="fa fa-pencil clickable" />
           </span>
         </div>
-        <WorkHistoryEntryList :profile-id="profile.id" />
+        <WorkHistoryList :profile-id="profile.id" />
       </b-card>
       <b-modal
-        id="workHistoryEntryEditListModal"
+        id="work-history"
         size="lg"
         ok-only
         ok-title="Close"
@@ -199,7 +199,7 @@
             Edit work history
           </h4>
         </template>
-        <WorkHistoryEntryEditList
+        <EditWorkHistory
           :profile-id="profile.id"
         />
       </b-modal>
@@ -213,7 +213,7 @@ import proficiencyDesc from '@/assets/proficiencyDesc'
 import UserProfileCard from './UserProfileCard.vue'
 import EditBasicProfileInfo from '@/components/Profile/EditBasicProfileInfo'
 import { ProjectRow, SkillRow, SkillExplanations } from '@/components/Common'
-import { WorkHistoryEntryList, EditSkills, EditProjects, WorkHistoryEntryEditList } from '@/components/EditProfile'
+import { EditWorkHistory, WorkHistoryList, EditSkills, EditProjects } from '@/components/EditProfile'
 import CvToolEducation from '@/components/Profile/CvToolEducation'
 import EditEducation from '@/components/EditProfile/EditEducation'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
@@ -228,10 +228,10 @@ export default {
     EditBasicProfileInfo,
     CvToolEducation,
     EditEducation,
-    WorkHistoryEntryList,
+    EditWorkHistory,
+    WorkHistoryList,
     EditSkills,
-    EditProjects,
-    WorkHistoryEntryEditList
+    EditProjects
   },
   props: {
     profile: Object

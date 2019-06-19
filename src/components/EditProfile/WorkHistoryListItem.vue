@@ -21,7 +21,7 @@ import { mapGetters } from 'vuex'
 import { format } from 'date-fns'
 
 export default {
-  name: 'WorkHistoryEntry',
+  name: 'WorkHistoryListItem',
   props: {
     profileEmployer: Object,
     profileId: Number

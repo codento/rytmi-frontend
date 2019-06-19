@@ -8,7 +8,7 @@
       :key="profileEmployer.id"
     >
       <b-col>
-        <WorkHistoryEntry
+        <WorkHistoryListItem
           :profile-employer="profileEmployer"
           :profile-id="profileId"
         />
@@ -27,12 +27,12 @@
 import { mapGetters } from 'vuex'
 import { parse } from 'date-fns'
 import { orderBy } from 'lodash'
-import WorkHistoryEntry from './WorkHistoryEntry'
+import WorkHistoryListItem from './WorkHistoryListItem'
 
 export default {
-  name: 'WorkHistoryEntryList',
+  name: 'WorkHistoryListItemList',
   components: {
-    WorkHistoryEntry
+    WorkHistoryListItem
   },
   props: {
     profileId: Number

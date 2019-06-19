@@ -27,7 +27,7 @@
         <b-row>
           <b-col>
             <div>
-              <EditProfileEmployer
+              <EditEmployer
                 :profile-employer="selectedProfileEmployer"
                 :vue-selects-employers="vueSelectsEmployers"
                 @new-profile-employer-created="newProfileEmployerCreated($event)"
@@ -45,7 +45,7 @@
       >
         <b-row @click="openOrCloseEmployerForEditing(profileEmployer)">
           <b-col cols="11">
-            <WorkHistoryEntry
+            <WorkHistoryListItem
               :profile-employer="profileEmployer"
               :profile-id="profileId"
             />
@@ -60,7 +60,7 @@
         <b-row v-if="selectedProfileEmployer && selectedProfileEmployer.id === profileEmployer.id">
           <b-col>
             <div>
-              <EditProfileEmployer
+              <EditEmployer
                 :key="profileEmployer ? profileEmployer.id : 0"
                 :profile-employer="profileEmployer"
                 :vue-selects-employers="vueSelectsEmployers"
@@ -77,15 +77,15 @@
 import { mapGetters } from 'vuex'
 import { parse } from 'date-fns'
 import { orderBy } from 'lodash'
-import EditProfileEmployer from './EditProfileEmployer'
-import WorkHistoryEntry from './WorkHistoryEntry'
+import EditEmployer from './EditEmployer'
+import WorkHistoryListItem from './WorkHistoryListItem'
 import sortBy from 'lodash/sortBy'
 
 export default {
-  name: 'WorkHistoryEntryEditList',
+  name: 'EditWorkHistory',
   components: {
-    EditProfileEmployer,
-    WorkHistoryEntry
+    EditEmployer,
+    WorkHistoryListItem
   },
   props: {
     profileId: Number
