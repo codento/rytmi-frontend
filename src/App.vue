@@ -16,7 +16,7 @@
         id="login-popup"
         title="Login expiring!"
         @ok.prevent="loginViaModal"
-        @cancel="resetAuthModalTimer"
+        @cancel="cancelLoginModal"
       >
         Your login will expire in 5 minutes!
         <template #modal-ok>
@@ -122,12 +122,12 @@ export default {
         this.$bvModal.show('login-popup')
       }
     },
-    resetAuthModalTimer () {
+    cancelLoginModal () {
       clearInterval(this.modalTimer)
     },
-    loginViaModal () {
-      this.handleLogin(true)
-      setTimeout(() => { this.$bvModal.hide('login-popup') }, 1500)
+    async loginViaModal () {
+      await this.handleLogin(true)
+      this.$bvModal.hide('login-popup')
     },
     async initialAuth () {
       const isSignedInToGoogle = await gapi.auth2.getAuthInstance().isSignedIn.get()
