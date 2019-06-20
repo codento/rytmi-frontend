@@ -21,7 +21,8 @@
       </b-button>
       <b-modal
         id="skill-modal"
-        title="Add skills to project"
+        v-model="showSkillModal"
+        :title="`Add skills to project ${getProjectName()}`"
         ok-only
       >
         Click on a skill to add it to the project
@@ -54,18 +55,25 @@ export default {
     projectId: {
       type: Number,
       required: true
+    },
+    showSkillsListInitially: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      skillFilterText: ''
+      skillFilterText: '',
+      showSkillModal: this.showSkillsListInitially
     }
   },
   computed: {
     ...mapGetters([
       'skills',
       'skillById',
-      'activeProjectSkills'
+      'activeProjectSkills',
+      'projectById',
+      'currentLanguage'
     ]),
     projectSkillList () {
       if (this.skills) {
@@ -115,6 +123,9 @@ export default {
       } catch (error) {
         this.$toasted.global.rytmi_error({ message: error.message })
       }
+    },
+    getProjectName () {
+      return this.projectById(this.projectId).name[this.currentLanguage]
     }
   }
 }
