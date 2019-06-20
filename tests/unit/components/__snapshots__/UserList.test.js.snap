@@ -3,25 +3,23 @@
 exports[`UserList.vue Template is correct 1`] = `
 <div>
   <fieldset
-    aria-labelledby="__BVID__10__BV_label_"
     class="form-group"
-    id="__BVID__10"
+    id="__BVID__12"
   >
     <legend
       class="col-form-label pt-0"
-      id="__BVID__10__BV_label_"
+      id="__BVID__12__BV_label_"
       tabindex="-1"
     >
       Filter by name
     </legend>
     <div
-      aria-labelledby="__BVID__10__BV_label_"
       role="group"
       tabindex="-1"
     >
       <input
         class="form-control"
-        id="__BVID__11"
+        id="__BVID__13"
         type="text"
       />
       <!---->
@@ -48,6 +46,7 @@ exports[`UserList.vue Template is correct 1`] = `
   >
     <div
       class="list-group-item"
+      name="select-user"
     >
       
       Aaa Foo
@@ -66,6 +65,7 @@ exports[`UserList.vue Template is correct 1`] = `
   >
     <div
       class="list-group-item"
+      name="select-user"
     >
       
       Bbb Rab
@@ -84,6 +84,7 @@ exports[`UserList.vue Template is correct 1`] = `
   >
     <div
       class="list-group-item"
+      name="select-user"
     >
       
       Ccc Foo
@@ -100,6 +101,7 @@ exports[`UserList.vue Template is correct 1`] = `
   >
     <div
       class="list-group-item"
+      name="select-user"
     >
       
       Ddd Baru

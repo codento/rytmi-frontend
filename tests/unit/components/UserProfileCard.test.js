@@ -16,8 +16,10 @@ describe('UserProfileCard.test.js', () => {
       profileById: () => (arg) => arg,
       profiles: () => (arg) => arg,
       skillsById: () => (arg) => arg,
-      skillsByProfileId: () => (arg) => arg,
-      profileProjectsByProfileId: () => (arg) => arg
+      profileSkillsByProfileId: () => (arg) => arg,
+      profileProjectsByProfileId: () => (arg) => arg,
+      employeeRoles: () => [{ 'id': 1, 'title': 'somethinger' }, { 'id': 2, 'title': 'dunno lol' }],
+      employeeRoleList: (arg) => [1, 2]
     }
     store = new Vuex.Store({ getters })
   })
@@ -32,7 +34,8 @@ describe('UserProfileCard.test.js', () => {
           phone: '1231123',
           mail: 'mail@mail.comi',
           accounts: null,
-          photoPath: 'shouldNotWork'
+          photoPath: 'shouldNotWork',
+          employeeRoles: [1]
         }
       }
     })

@@ -3,7 +3,6 @@ import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Project from '@/views/Project.vue'
-import { ProjectProfileForm } from '@/components/Project'
 import Loading from '@/components/helpers/LoadingSpinner'
 import { format } from 'date-fns'
 
@@ -17,9 +16,10 @@ localVue.filter('dateFilter', value => {
 
 const projectMock = (projectId) => ({
   id: projectId,
-  name: 'Project Foo',
+  name: { en: 'Project Foo', fi: 'Projekti Foo' },
+  description: { en: 'Foo Bar', fi: 'Foo Bar' },
+  customerName: { en: 'Customer', fi: 'Asiakas' },
   code: 50,
-  description: 'Foo Bar',
   startDate: new Date('2018-01-01'),
   endDate: new Date('2018-05-01')
 })
@@ -30,15 +30,38 @@ const profileProjectMock = (projectId) => ([
     profile: 1,
     projectId: projectId,
     startDate: '2018-01-01',
-    endDate: '2018-02-01'
+    endDate: '2018-02-01',
+    role: { en: 'Developer', fi: 'Devaaja' }
   }
 ])
+
+const mockEmployers = {
+  1: {
+    createdAt: '2019-05-21T13:21:48.222Z',
+    id: 1,
+    name: 'Codento Oy',
+    updatedAt: '2019-05-21T13:21:48.222Z'
+  },
+  2: {
+    createdAt: '2019-05-21T13:21:56.034Z',
+    id: 2,
+    name: 'Macejkovic Inc',
+    updatedAt: '2019-05-21T13:21:56.034Z'
+  }
+}
 
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
       projectById: () => (projectId) => projectMock(projectId),
-      profileProjectsByProjectId: () => (projectId) => profileProjectMock(projectId)
+      profileProjectsByProjectId: () => (projectId) => profileProjectMock(projectId),
+      employers: () => mockEmployers,
+      isAdmin: () => false,
+      profileId: () => 1,
+      currentLanguage: () => 'fi'
+    },
+    state: {
+      siteSettings: { currentLanguage: 'fi' }
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -64,7 +87,8 @@ describe('Project.vue', () => {
   it('shows loading icon when project is being fetched', () => {
     const store = createStore({
       getters: {
-        projectById: () => (projectId) => null
+        projectById: () => (projectId) => null,
+        employers: () => mockEmployers
       }
     })
     const wrapper = createWrapper({ store })
@@ -74,38 +98,38 @@ describe('Project.vue', () => {
 
   it('shows project information correctly', () => {
     const wrapper = createWrapper()
-    expect(wrapper.find('h1').text()).toContain('Project Foo')
+    expect(wrapper.find('h1').text()).toEqual(projectMock().name.fi)
     const bElements = wrapper.findAll('b')
     const projectCode = bElements.at(0)
     const startDate = wrapper.find('.project-start-date')
     const endDate = wrapper.find('.project-end-date')
     const numOfMembers = bElements.at(3)
-    expect(projectCode.text()).toContain(projectMock().code)
+    expect(projectCode.text()).toEqual(projectMock().code.toString())
     expect(startDate.text()).toBe(format(projectMock().startDate, 'D.M.YYYY'))
     expect(endDate.text()).toBe(format(projectMock().endDate, 'D.M.YYYY'))
     expect(numOfMembers.text()).toBe(profileProjectMock().length.toString())
-    expect(wrapper.find('p').text()).toContain(projectMock().description)
+    expect(wrapper.find('p').text()).toContain(projectMock().description.fi)
   })
 
   it('does not show members field if there are no members', () => {
     const store = createStore({
       getters: {
-        profileProjectsByProjectId: () => (id) => null
+        profileProjectsByProjectId: () => (id) => null,
+        employers: () => mockEmployers
       }
     })
     const wrapper = createWrapper({ store })
     expect(wrapper.find('span[class="detail members').text()).toBe('Consultants')
   })
 
-  it('opens the add consultant form when clicked', () => {
-    const wrapper = createWrapper()
-    expect(wrapper.find(ProjectProfileForm).exists()).toBe(false)
-    wrapper.find('h3').trigger('click')
-    expect(wrapper.find(ProjectProfileForm).exists()).toBe(true)
-  })
-
   it('Template is correct', () => {
-    const wrapper = createWrapper()
+    const store = createStore({
+      getters: {
+        profileProjectsByProjectId: () => (id) => null,
+        employers: () => mockEmployers
+      }
+    })
+    const wrapper = createWrapper({ store })
     expect(wrapper.element).toMatchSnapshot()
   })
 })

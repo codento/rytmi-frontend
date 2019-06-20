@@ -3,7 +3,7 @@ import {
   getProjects,
   deleteProject,
   alterProject
-} from '../../../utils/api'
+} from '../../../utils/api/api'
 import * as types from '../../mutation-types'
 
 export function createProject ({ commit, state }, data) {

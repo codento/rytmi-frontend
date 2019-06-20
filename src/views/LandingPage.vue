@@ -9,26 +9,33 @@
       text-variant="primary"
       border-variant="dark"
     >
-      <span slot="header">Codento Rytmi</span>
       <template
         slot="lead"
       >
-        Please Sign in
+        <span
+          class="clickable"
+          @click="handleLogin()"
+        >
+          Please Sign in
+        </span>
       </template>
+      <span slot="header">Codento Rytmi</span>
     </b-jumbotron>
-    <dashboard
-      v-if="isAuthenticated"
-      class="mb-2"
-    >
-      <template slot="header">
-        Codento Rytmi
-      </template>
-    </dashboard>
+    <div v-if="employeeRolesLoaded">
+      <Dashboard
+        v-if="isAuthenticated"
+        class="mb-2"
+      >
+        <template slot="header">
+          Codento Rytmi
+        </template>
+      </Dashboard>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Dashboard from '@/components/Dashboard'
 
 export default {
@@ -37,10 +44,24 @@ export default {
     Dashboard
   },
   computed: {
-    ...mapGetters(['isAuthenticated'])
+    ...mapGetters([
+      'isAuthenticated',
+      'employeeRoles'
+    ]),
+    employeeRolesLoaded () {
+      return Object.keys(this.employeeRoles).length > 0
+    }
   },
   mounted () {
     document.title = 'Rytmi'
+  },
+  methods: {
+    ...mapActions(['handleLogin'])
   }
 }
 </script>
+<style scoped>
+.clickable:hover {
+  cursor: pointer;
+}
+</style>

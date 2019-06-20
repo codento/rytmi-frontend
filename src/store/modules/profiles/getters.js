@@ -1,10 +1,10 @@
-import _ from 'lodash'
+import { isEmpty } from 'lodash'
 
 export const getters = {
   futureProjectsOfProfile: (state, getters, rootState) => (profileId) => {
-    const ppIds = state.futurePpList[profileId] || []
-    return ppIds
-      .map(ppId => rootState.profileProjects.profileProjects[ppId])
+    const profileProjectIds = state.futurePpList[profileId] || []
+    return profileProjectIds
+      .map(profileProjectId => rootState.profileProjects.profileProjects[profileProjectId])
   },
   profileId: (state) => state.profileId,
   profiles: (state) => state.profiles,
@@ -12,7 +12,7 @@ export const getters = {
   profileById: (state) => (id) => state.profiles[id],
   profileByUserId: (state) => (userId) => state.profiles[userId],
   skillProfiles: (state) => state.profileSkills,
-  skillsByProfileId: (state, getters) => (profileId) => {
+  profileSkillsByProfileId: (state, getters) => (profileId) => {
     return state.profileSkills
       .filter(skill => skill.profileId === profileId)
       .sort((a, b) => {
@@ -25,7 +25,7 @@ export const getters = {
   },
   profileFilter: (state) => (nameFilter) => {
     const profiles = Object.values(state.profiles)
-    if (_.isEmpty(nameFilter)) {
+    if (isEmpty(nameFilter)) {
       return profiles.filter(profile => profile.active)
     } else {
       return profiles.filter(profile => {

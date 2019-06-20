@@ -1,11 +1,19 @@
-import EditLinks from './EditLinks.vue'
 import EditSkills from './EditSkills.vue'
-import ProfileForm from './ProfileForm.vue'
 import EditProjects from './EditProjects.vue'
+import EditEducation from './EditEducation.vue'
+import EditEducationForm from './EditEducationForm.vue'
+import EditSkillsLevelSelect from './EditSkillsLevelSelect.vue'
+import EditWorkHistory from './EditWorkHistory.vue'
+import WorkHistoryList from './WorkHistoryList.vue'
+import WorkHistoryListItem from './WorkHistoryListItem'
 
 export {
-  EditLinks,
   EditSkills,
-  ProfileForm,
-  EditProjects
+  EditProjects,
+  EditEducation,
+  EditEducationForm,
+  EditSkillsLevelSelect,
+  EditWorkHistory,
+  WorkHistoryList,
+  WorkHistoryListItem
 }

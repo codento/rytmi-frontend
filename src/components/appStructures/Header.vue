@@ -33,6 +33,7 @@
       <b-nav-item
         v-if="!isAuthenticated"
         class="px-3"
+        name="login"
         @click="login"
       >
         <i class="fa fa-unlock" />&nbsp; Sign in
@@ -42,23 +43,29 @@
         class="px-3"
       >
         <b-dropdown
+          id="account-dropdown"
           variant="light"
           text="Account"
         >
           <b-dropdown-item
+            id="account-dropdown-item-profile"
             :to="{ name: 'profile', params: { id: profileId } }"
             exact
           >
-            <i class="fa fa-user" /> My Profile
-          </b-dropdown-item>
-          <b-dropdown-item
-            :to="{ name: 'editProfile', params: { profileId: profileId } }"
-            exact
-          >
-            <i class="fa fa-edit" /> Edit Profile
+            <img
+              class="profile-icon"
+              :src="profileById(profileId) ? profileById(profileId).photoPath : ''"
+              height="20px"
+              width="20px"
+              alt="Profile picture"
+            >
+            My Profile
           </b-dropdown-item>
           <b-dropdown-divider />
-          <b-dropdown-item @click="logout">
+          <b-dropdown-item
+            id="account-dropdown-item-signout"
+            @click="logout"
+          >
             <i class="fa fa-lock" /> Sign Out
           </b-dropdown-item>
         </b-dropdown>
@@ -79,7 +86,7 @@ export default {
     SidebarToggler
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'profileId', 'getToken'])
+    ...mapGetters(['isAuthenticated', 'profileId', 'getToken', 'profileById'])
   },
   methods: {
     logout () {
@@ -95,3 +102,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.profile-icon {
+  margin: 0 10px 0 -10px;
+  border-radius: 50%;
+}
+</style>

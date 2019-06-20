@@ -14,5 +14,8 @@ export const mutations = {
   },
   [types.DELETE_SKILL] (state, id) {
     Vue.delete(state.skills, id)
+  },
+  [types.UPDATE_SKILL_FILTER] (state, selectedSkills) {
+    state.skillFilter = selectedSkills
   }
 }

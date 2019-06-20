@@ -4,7 +4,7 @@ import projectModule from '@/store/modules/projects'
 import { cloneDeep } from 'lodash'
 import * as types from '@/store/mutation-types'
 
-jest.mock('@/utils/api')
+jest.mock('@/utils/api/api')
 const localVue = createLocalVue()
 localVue.use(Vuex)
 

@@ -2,26 +2,37 @@ import projectModule from '@/store/modules/projects'
 import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 
-jest.mock('@/utils/api')
+jest.mock('@/utils/api/api')
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
 const initialProjectState = {
+  siteSettings: {
+    currentLanguage: 'fi'
+  },
   projects: {
-    one: {
-      name: 'one',
-      code: 1
+    1: {
+      id: 1,
+      code: 100,
+      name: { en: 'one', fi: 'yksi' },
+      description: { en: 'descOne', fi: 'kuvausYksi' },
+      customerName: { en: 'customer1', fi: 'asiakas1' }
     },
-    two: {
-      name: 'two',
-      code: 2
+    2: {
+      id: 2,
+      code: 200,
+      name: { en: 'two', fi: 'kaksi' },
+      description: { en: 'descTwo', fi: 'kuvausKaksi' },
+      customerName: { en: 'customer1', fi: 'asiakas1' }
     },
-    twentyOne: {
-      name: 'twentyone',
-      code: 21
+    3: {
+      id: 3,
+      code: 300,
+      name: { en: 'almostOne', fi: 'kuinYksi' },
+      description: { en: 'descAlmostOne', fi: 'kuvausKuinYksi' },
+      customerName: { en: 'customer1', fi: 'asiakas1' }
     }
-
   },
   projectList: [],
   profileProjectList: {}
@@ -36,8 +47,15 @@ describe('Projects.getters', () => {
     expect(store.getters.projects).toBe(initialProjectState.projects)
   })
 
-  it('should return the project with given id', () => {
-    expect(store.getters.projectById('one')).toBe(initialProjectState.projects.one)
+  it('should return the correct project with given id', () => {
+    expect(store.getters.projectById(1)).toEqual(
+      { id: 1,
+        code: 100,
+        name: { en: 'one', fi: 'yksi' },
+        description: { en: 'descOne', fi: 'kuvausYksi' },
+        customerName: { en: 'customer1', fi: 'asiakas1' }
+      }
+    )
   })
 
   it('should return the unfiltered list', () => {
@@ -46,6 +64,11 @@ describe('Projects.getters', () => {
 
   it('should return the filtered projects', () => {
     const projects = initialProjectState.projects
-    expect(store.getters.projectFilter('one')).toEqual([projects.one, projects.twentyOne])
+    expect(store.getters.projectFilter('One')).toEqual(
+      {
+        1: projects[1],
+        3: projects[3]
+      }
+    )
   })
 })

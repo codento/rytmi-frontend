@@ -19,7 +19,7 @@ exports[`EditUser.vue Template is correct 1`] = `
       <div>
         <fieldset
           class="form-group"
-          id="__BVID__4"
+          id="__BVID__6"
         >
           <!---->
           <div
@@ -32,13 +32,13 @@ exports[`EditUser.vue Template is correct 1`] = `
               <input
                 autocomplete="off"
                 class="custom-control-input"
-                id="__BVID__5"
+                id="__BVID__7"
                 type="checkbox"
                 value="true"
               />
               <label
                 class="custom-control-label"
-                for="__BVID__5"
+                for="__BVID__7"
               >
                 
           Is admin?
@@ -52,13 +52,13 @@ exports[`EditUser.vue Template is correct 1`] = `
               <input
                 autocomplete="off"
                 class="custom-control-input"
-                id="__BVID__6"
+                id="__BVID__8"
                 type="checkbox"
                 value="true"
               />
               <label
                 class="custom-control-label"
-                for="__BVID__6"
+                for="__BVID__8"
               >
                 
           Is active?
@@ -72,7 +72,6 @@ exports[`EditUser.vue Template is correct 1`] = `
         </fieldset>
          
         <div
-          aria-labelledby="roleLabel__BV_label_"
           class="form-row form-group"
           id="roleLabel"
           role="group"
@@ -166,7 +165,7 @@ exports[`EditUser.vue Template is correct 1`] = `
          
         <fieldset
           class="form-group"
-          id="__BVID__10"
+          id="__BVID__12"
         >
           <!---->
           <div
@@ -181,6 +180,7 @@ exports[`EditUser.vue Template is correct 1`] = `
               >
                 <button
                   class="btn btn-success"
+                  name="update"
                   type="button"
                 >
                   
@@ -194,6 +194,7 @@ exports[`EditUser.vue Template is correct 1`] = `
               >
                 <button
                   class="btn btn-danger"
+                  name="delete"
                   type="button"
                 >
                   

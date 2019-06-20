@@ -1,7 +1,15 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import { ProjectRow } from '@/components/Profile'
+import { ProjectRow } from '@/components/Common'
 import Vuex from 'vuex'
 import { format } from 'date-fns'
+
+const mockProject = {
+  projectId: 1,
+  name: { fi: 'Testi prkkis' },
+  description: { fi: 'mail' },
+  startDate: '2017-05-15',
+  endDate: '2017-06-16'
+}
 
 describe('ProjectRow.test.js', () => {
   let localVue = createLocalVue()
@@ -9,25 +17,23 @@ describe('ProjectRow.test.js', () => {
   localVue.filter('dateFilter', value => {
     return value ? format(value, 'D.M.YYYY') : undefined
   })
-  let getters, store
+  let getters, state, store
   beforeEach(() => {
     getters = {
-      projectById: () => (arg) => arg
+      projectById: () => (arg) => mockProject,
+      currentLanguage: () => 'fi'
     }
-    store = new Vuex.Store({ getters })
+    state = {
+      siteSettings: { currentLanguage: 'fi' }
+    }
+    store = new Vuex.Store({ getters, state })
   })
   it('Template is correct', () => {
     let wrapper = mount(ProjectRow, {
       store,
       localVue,
       propsData: {
-        profileProject: {
-          projectId: 1,
-          name: 'Testi prkkis',
-          description: 'mail',
-          startDate: '2017-05-15',
-          endDate: '2017-06-16'
-        }
+        profileProject: mockProject
       }
     })
     expect(wrapper.html()).toMatchSnapshot()

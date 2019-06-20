@@ -70,6 +70,7 @@ export default {
         await this.deleteUser(this.selectedUser.id)
         this.updating = false
         this.setUser(null)
+        this.$store.dispatch('fetchProfiles')
       } catch (error) {
         this.updating = false
       }

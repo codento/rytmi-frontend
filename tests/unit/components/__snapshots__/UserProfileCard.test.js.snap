@@ -8,7 +8,10 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
     style="text-align: center;"
   >
     <img
+      alt="profile photo"
+      height="128px"
       src="shouldNotWork"
+      width="128px"
     />
   </div>
    
@@ -22,15 +25,27 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
     </span>
     <br />
      
-    <span
-      class="profile-title"
-    >
-      
-    </span>
-     
   </div>
    
   <div>
+    <div
+      class="profileCardDetails profile-card-detail-row"
+    >
+      <span>
+        
+        somethinger
+      
+      </span>
+    </div>
+     
+    <div
+      class="profileCardDetails profile-card-detail-row"
+    >
+      
+      
+    
+    </div>
+     
     <div
       class="profileCardDetails profile-card-detail-row"
     >
@@ -48,14 +63,6 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
     </div>
      
     <br />
-     
-    <div
-      class="profileCardDetails profile-card-detail-row"
-    >
-      
-      
-    
-    </div>
      
     <!---->
   </div>

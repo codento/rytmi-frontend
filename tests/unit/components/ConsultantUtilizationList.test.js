@@ -1,9 +1,9 @@
-import { addMonths, subMonths } from 'date-fns'
+import { addDays, subDays } from 'date-fns'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
-import { UtilizationChart } from '@/components/Profile'
+import { UtilizationChart } from '@/components/Common'
 import ConsultantUtilizationList from '@/components/Dashboard/ConsultantUtilizationList'
 import profileProjectGetters from '@/store/modules/profileProjects/getters'
 
@@ -25,49 +25,49 @@ const mockProjectProfiles = [
   {
     projectId: 1,
     profileId: '2',
-    startDate: subMonths(Date.now(), 1),
-    endDate: addMonths(Date.now(), 1),
+    startDate: subDays(Date.now(), 30),
+    endDate: addDays(Date.now(), 30),
     workPercentage: 100
   },
   {
     projectId: 1,
     profileId: '6',
-    startDate: subMonths(Date.now(), 1),
-    endDate: addMonths(Date.now(), 1),
+    startDate: subDays(Date.now(), 30),
+    endDate: addDays(Date.now(), 30),
     workPercentage: 100
   },
   {
     projectId: 2,
     profileId: '3',
-    startDate: subMonths(Date.now(), 1),
-    endDate: addMonths(Date.now(), 8),
+    startDate: subDays(Date.now(), 30),
+    endDate: addDays(Date.now(), 235),
     workPercentage: 20
   },
   {
     projectId: 3,
     profileId: '3',
-    startDate: addMonths(Date.now(), 1),
-    endDate: addMonths(Date.now(), 10),
+    startDate: addDays(Date.now(), 30),
+    endDate: addDays(Date.now(), 200),
     workPercentage: 80
   },
   {
     projectId: 2,
     profileId: '7',
-    startDate: subMonths(Date.now(), 1),
-    endDate: addMonths(Date.now(), 8),
+    startDate: subDays(Date.now(), 30),
+    endDate: addDays(Date.now(), 260),
     workPercentage: 20
   },
   {
     projectId: 3,
     profileId: '7',
-    startDate: addMonths(Date.now(), 1),
-    endDate: addMonths(Date.now(), 10),
+    startDate: addDays(Date.now(), 30),
+    endDate: addDays(Date.now(), 200),
     workPercentage: 80
   },
   {
     projectId: 4,
     profileId: '4',
-    startDate: subMonths(Date.now(), 1),
+    startDate: subDays(Date.now(), 30),
     endDate: null,
     workPercentage: 100
   }
@@ -112,12 +112,12 @@ describe('ConsultantUtilizationList.vue', () => {
     const wrapper = createWrapper()
     expect(wrapper.vm.initiallyVisibleProfiles.length).toEqual(4)
     expect(wrapper.vm.initiallyVisibleProfiles[0].daysToZeroUtilization).toEqual(0)
-    expect(wrapper.vm.initiallyVisibleProfiles[3].daysToZeroUtilization).toEqual(30)
+    expect(wrapper.vm.initiallyVisibleProfiles[3].daysToZeroUtilization).toEqual(29)
   })
   it('Should list utilized consultants in initiallyHiddenProfiles, ordered by utilization', () => {
     const wrapper = createWrapper()
     expect(wrapper.vm.initiallyHiddenProfiles.length).toEqual(3)
-    expect(wrapper.vm.initiallyHiddenProfiles[0].daysToZeroUtilization).toEqual(304)
+    expect(wrapper.vm.initiallyHiddenProfiles[0].daysToZeroUtilization).toEqual(234)
   })
   it('Should show correct amount of data in sections', () => {
     const wrapper = createWrapper()

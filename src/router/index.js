@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import LandingPage from '@/views/LandingPage'
 import Profile from '@/views/Profile'
-import EditProfile from '@/views/EditProfile'
 import Search from '@/views/Search'
 import store from '../store'
 import Callback from '@/components/helpers/Callback'
@@ -55,7 +54,10 @@ export default new Router({
       path: '/profile/:id',
       name: 'profile',
       component: Profile,
-      beforeEnter: requireAuth
+      beforeEnter: requireAuth,
+      props: (route) => {
+        return { profile: store.getters.profileById(route.params.id) }
+      }
     },
     {
       path: '/projects',
@@ -65,15 +67,9 @@ export default new Router({
     },
     {
       path: '/projects/:id',
-      name: 'Project',
+      name: 'project',
       component: Project,
       beforeEnter: requireAuth
-    },
-    {
-      path: '/profile/:profileId/edit',
-      name: 'editProfile',
-      component: EditProfile,
-      props: true
     },
     {
       path: '/skills',

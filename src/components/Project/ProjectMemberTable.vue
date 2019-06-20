@@ -10,13 +10,14 @@
         caption-top
       >
         <template slot="table-caption">
-          Consultants (click value to edit)
+          Consultants
         </template>
         <template
           slot="profileId"
           slot-scope="profileId"
         >
           <span
+            name="open-profile"
             class="clickable"
             @click.stop="openProfile(profileId.value)"
           >
@@ -27,10 +28,7 @@
           slot="startDate"
           slot-scope="element"
         >
-          <span
-            class="clickable"
-            @click.stop="openEditModal(element)"
-          >
+          <span>
             {{ element.value | dateFilter }}
           </span>
         </template>
@@ -38,10 +36,7 @@
           slot="endDate"
           slot-scope="element"
         >
-          <span
-            class="clickable"
-            @click.stop="openEditModal(element)"
-          >
+          <span>
             {{ element.value | dateFilter }}
           </span>
         </template>
@@ -49,18 +44,28 @@
           slot="workPercentage"
           slot-scope="element"
         >
-          <span
-            class="clickable"
-            @click.stop="openEditModal(element)"
-          >
+          <span>
             {{ element.value }} %
           </span>
         </template>
         <template
+          slot="edit"
+          slot-scope="element"
+        >
+          <b-btn
+            size="sm"
+            class="mr-1"
+            variant="success"
+            @click.stop="openEditModal(element)"
+          >
+            Edit
+          </b-btn>
+        </template>        <template
           slot="remove"
           slot-scope="remove"
         >
           <b-btn
+            name="remove-member"
             size="sm"
             class="mr-1"
             variant="danger"
@@ -76,52 +81,31 @@
     </div>
     <b-modal
       ref="projectProfileEditModal"
-      title="ASD"
-      hide-footer
       hide-header
+      ok-only
+      ok-title="Close"
+      ok-variant="light"
     >
-      <h3>{{ printMember(editedProjectProfile.profileId) }}</h3>
-      <small>Start date</small>
-      <Datepicker
-        v-model="editedProjectProfile.startDate"
-        name="edited-project-profile-start-date"
+      <h3>{{ printMember(selectedProfileProject.profileId) }}</h3>
+      <ProjectProfileForm
+        :profile-project="selectedProfileProject"
+        hide-project-select
+        hide-profile-select
+        no-redirect
+        @profile-project-created-or-updated="closeEditModal()"
       />
-      <small>End date</small>
-      <Datepicker
-        v-model="editedProjectProfile.endDate"
-        name="edited-project-profile-end-date"
-      />
-      <small>Utilization %</small>
-      <b-input
-        v-model="editedProjectProfile.workPercentage"
-        class="utilization-input"
-        :min="0"
-        :max="100"
-        type="number"
-      />
-      <b-btn
-        id="save"
-        class="modal-btn"
-        @click="callUpdateProfileProjectAction()"
-      >
-        Save
-      </b-btn>
-      <b-btn
-        id="cancel"
-        class="modal-btn"
-        @click="closeEditModal()"
-      >
-        Cancel
-      </b-btn>
     </b-modal>
   </div>
 </template>
 <script>
-import Datepicker from '../helpers/Datepicker'
+import { ProjectProfileForm } from '@/components/Common'
 import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'ProjectMemberTable',
-  components: { Datepicker },
+  components: {
+    ProjectProfileForm
+  },
   props: {
     members: Array
   },
@@ -132,19 +116,19 @@ export default {
         { key: 'startDate', label: 'From' },
         { key: 'endDate', label: 'To' },
         { key: 'workPercentage', label: 'Utilization' },
+        { key: 'edit', label: ' ' },
         { key: 'remove', label: ' ' }
       ],
-      editedProjectProfile: {}
+      selectedProfileProject: {
+        role: { fi: '', en: '' }
+      }
     }
   },
   computed: {
     ...mapGetters(['profileById'])
   },
   methods: {
-    ...mapActions([
-      'removeProfileProject',
-      'updateProfileProject'
-    ]),
+    ...mapActions(['removeProfileProject']),
     printMember (profileId) {
       const member = this.profileById(profileId)
       if (member) {
@@ -172,40 +156,23 @@ export default {
       }
     },
     openEditModal (item) {
-      this.editedProjectProfile = Object.assign({}, item.item)
-      this.editedProjectProfile.startDate = new Date(this.editedProjectProfile.startDate)
-      this.editedProjectProfile.endDate = new Date(this.editedProjectProfile.endDate)
-      this.editedProjectProfile.index = item.index
+      this.selectedProfileProject = Object.assign({}, item.item)
+      this.selectedProfileProject.startDate = new Date(this.selectedProfileProject.startDate)
+      this.selectedProfileProject.endDate = this.selectedProfileProject.endDate ? new Date(this.selectedProfileProject.endDate) : null
+      this.selectedProfileProject.index = item.index
       this.$refs.projectProfileEditModal.show()
     },
     closeEditModal () {
       this.$refs.projectProfileEditModal.hide()
-    },
-    callUpdateProfileProjectAction () {
-      this.updateProfileProject(this.editedProjectProfile)
-        .then((response) => {
-          this.$toasted.global.rytmi_success({
-            message: 'Member updated.'
-          })
-          this.$refs.projectProfileEditModal.hide()
-        })
-        .catch((err) => {
-          this.$toasted.global.rytmi_error({
-            message: err
-          })
-        })
     }
   }
 }
 </script>
 <style scoped>
-button {
-  width: 100%;
-}
-.modal-btn {
-  margin-top: 1em;
-}
 .clickable {
   cursor: pointer;
+}
+.clickable:hover {
+  font-weight: bolder;
 }
 </style>

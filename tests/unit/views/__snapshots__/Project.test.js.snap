@@ -3,7 +3,7 @@
 exports[`Project.vue Template is correct 1`] = `
 <div>
   <div
-    class="animated fadeIn project-container col-sm-12 col-md-7"
+    class="animated fadeIn project-container col-xl-7"
   >
     <b-row-stub
       tag="div"
@@ -17,7 +17,7 @@ exports[`Project.vue Template is correct 1`] = `
         </b>
          
         <h1>
-          Project Foo
+          Projekti Foo
         </h1>
          
         <div
@@ -61,9 +61,7 @@ exports[`Project.vue Template is correct 1`] = `
             </small>
             <br />
              
-            <b>
-              1
-            </b>
+            <!---->
           </span>
         </div>
          
@@ -86,34 +84,40 @@ exports[`Project.vue Template is correct 1`] = `
         class="project-members"
         tag="div"
       >
-        <projectmembertable-stub
-          members="[object Object]"
-        />
+        <projectmembertable-stub />
       </b-col-stub>
     </b-row-stub>
      
     <hr />
      
-    <projectform-stub
-      editableproject="[object Object]"
-    />
+    <collapsableitem-stub
+      title="Edit project"
+    >
+      <projectformwrapper-stub
+        editableproject="[object Object]"
+      />
+    </collapsableitem-stub>
      
     <hr />
      
-    <div>
-      <h3
-        class="project-profile-form-header"
-      >
-        
-        Add a consultant
-        
-        <i
-          class="fa fa-chevron-down"
-        />
-      </h3>
-       
-      <!---->
-    </div>
+    <collapsableitem-stub
+      title="Join project"
+    >
+      <projectprofileform-stub
+        noredirect="true"
+        profileproject="[object Object]"
+      />
+    </collapsableitem-stub>
+     
+    <hr />
+     
+    <collapsableitem-stub
+      title="Related skills"
+    >
+      <projectskillform-stub
+        projectid="5"
+      />
+    </collapsableitem-stub>
   </div>
 </div>
 `;

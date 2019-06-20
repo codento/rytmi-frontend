@@ -11,8 +11,8 @@
           title="Skill level descriptions"
           triggers="hover focus"
         >
-          <skill-explanations
-            :know-desc="proficiencyDescriptions.knows"
+          <SkillExplanations
+            :know-desc="proficiencyDescriptions.knows['en']"
             :want-desc="proficiencyDescriptions.wants"
           />
         </b-popover>
@@ -50,7 +50,7 @@
 import ChartCard from './ChartCard'
 import RadarChart from '../Charts/RadarChart'
 import BarChart from '../Charts/BarChart'
-import { SkillExplanations } from '@/components/Profile'
+import { SkillExplanations } from '@/components/Common'
 import proficiencyDescriptions from '@/assets/proficiencyDesc'
 import { sortBy } from 'lodash'
 import vSelect from 'vue-select'

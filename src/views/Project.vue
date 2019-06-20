@@ -3,12 +3,12 @@
     <loading v-if="!project" />
     <div
       v-else
-      class="animated fadeIn project-container col-sm-12 col-md-7"
+      class="animated fadeIn project-container col-xl-7"
     >
       <b-row>
         <b-col class="project-details">
           <b>{{ project.code }}</b>
-          <h1>{{ project.name }}</h1>
+          <h1>{{ project.name[currentLanguage] }}</h1>
           <div class="detail-container">
             <span class="detail detail-start">
               <small>Start date</small><br>
@@ -25,7 +25,7 @@
           </div>
           <p>
             <small>Description</small><br>
-            {{ project.description }}
+            {{ project.description[currentLanguage] }}
           </p>
         </b-col>
       </b-row>
@@ -35,52 +35,60 @@
         </b-col>
       </b-row>
       <hr>
-      <ProjectForm :editable-project="project" />
-      <hr>
-      <div>
-        <h3
-          class="project-profile-form-header"
-          @click="toggleProfileForm"
-        >
-          Add a consultant
-          <i class="fa fa-chevron-down" />
-        </h3>
-        <div v-if="profileFormOpen">
-          <ProjectProfileForm
-            :toggle-form="toggleProfileForm"
-            :project-id="project.id"
-          />
+      <CollapsableItem title="Edit project">
+        <ProjectFormWrapper
+          v-if="Object.values(employers).length > 0"
+          :editable-project="project"
+        />
+        <div v-else>
+          Loading employers...
         </div>
-      </div>
+      </CollapsableItem>
+      <hr>
+      <CollapsableItem :title="isAdmin ? 'Add a consultant' : 'Join project'">
+        <ProjectProfileForm
+          :profile-project="{ projectId: project.id, profileId: isAdmin ? null : profileId }"
+          no-redirect
+        />
+      </CollapsableItem>
+      <hr>
+      <CollapsableItem title="Related skills">
+        <ProjectSkillForm
+          v-if="project.id"
+          :project-id="project.id"
+        />
+      </CollapsableItem>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import store from '../store'
+import store from '@/store'
+import { CollapsableItem, ProjectProfileForm } from '@/components/Common'
 import {
-  ProjectProfileForm,
   ProjectMemberTable,
-  ProjectForm
-} from '../components/Project'
+  ProjectFormWrapper,
+  ProjectSkillForm
+} from '@/components/Project'
 
 export default {
   name: 'Project',
   components: {
     ProjectProfileForm,
     ProjectMemberTable,
-    ProjectForm
-  },
-  data () {
-    return {
-      profileFormOpen: false
-    }
+    ProjectFormWrapper,
+    ProjectSkillForm,
+    CollapsableItem
   },
   computed: {
     ...mapGetters([
+      'profileId',
       'projectById',
-      'profileProjectsByProjectId'
+      'profileProjectsByProjectId',
+      'employers',
+      'currentLanguage',
+      'isAdmin'
     ]),
     project () {
       return this.projectById(this.$route.params.id)
@@ -99,12 +107,6 @@ export default {
         document.title = 'Rytmi - ' + val.name
       }
     }
-  },
-  methods: {
-    // TODO: scroll to bottom when opening form
-    toggleProfileForm () {
-      this.profileFormOpen = !this.profileFormOpen
-    }
   }
 }
 </script>
@@ -113,10 +115,6 @@ export default {
 .project-container {
   padding: 1em;
   margin: 0 auto;
-}
-.project-profile-form-header {
-  text-align: center;
-  cursor: pointer;
 }
 .detail-container {
   display: flex;

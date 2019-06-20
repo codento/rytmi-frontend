@@ -1,11 +1,10 @@
 export default {
   profileProjectsStatus: (state) => state.profileProjectsStatus,
-  profileProjectsByProjectId: (state, getters, rootState) => (projectId) => {
-    const ppIds = rootState.projects.profileProjectList[projectId] || []
-    return ppIds.map(ppId => state.profileProjects[ppId])
+  profileProjects: (state) => state.profileProjects,
+  profileProjectsByProjectId: (state) => projectId => {
+    return Object.values(state.profileProjects).filter(item => item.projectId === projectId)
   },
-  profileProjectsByProfileId: (state, getters, rootState) => (profileId) => {
-    const ppIds = rootState.profiles.profileProjectList[profileId] || []
-    return ppIds.map(ppId => state.profileProjects[ppId])
+  profileProjectsByProfileId: (state) => profileId => {
+    return Object.values(state.profileProjects).filter(item => item.profileId === profileId)
   }
 }

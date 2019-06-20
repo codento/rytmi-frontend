@@ -7,89 +7,60 @@
       <b-form-group
         id="skillLabel"
         vertical
-        label="Skill:"
+        label="Skill"
         label-for="skill"
+        label-size="lg"
       >
-        <b-form-select
-          id="skill"
-          v-model="profileSkill.skillId"
-          :options="availableSkills"
-          value-field="id"
-          text-field="name"
-          required
-        >
-          <template slot="first">
-            <option
-              :value="null"
-              disabled
-            >
-              -- Select skill --
-            </option>
-          </template>
-        </b-form-select>
-      </b-form-group>
-      <b-form-group
-        id="description"
-        vertical
-        label="Description:"
-        label-for="descriptionInput"
-      >
-        <b-form-textarea
-          id="descriptionInput"
-          v-model="profileSkill.description"
-          :rows="3"
-          type="text"
-          placeholder="Short description"
+        <v-select
+          id="skill-select"
+          v-model="profileSkill"
+          :options="availableSkillsForVueSelect"
+          placeholder="Select skill"
+          select-on-tab
         />
       </b-form-group>
       <b-form-group
-        id="knowsLabel"
-        label="Proficiency level:"
+        id="knows-label"
+        label="Proficiency level"
+        label-size="lg"
       >
-        <b-form-radio-group
-          id="knows"
-          v-model="profileSkill.knows"
+        <EditSkillsLevelSelect
           :options="knowsOptions"
-          stacked
-          plain
+          :initial-value="knows"
+          @option-selected="knowsOptionSelected($event)"
         />
       </b-form-group>
       <b-form-group
-        id="wantsToLabel"
-        label="Willingness level:"
+        v-if="!isLanguageSkill"
+        id="wants-to-label"
+        label="Willingness level"
+        label-size="lg"
       >
-        <b-form-radio-group
-          id="wantsTo"
-          v-model="profileSkill.wantsTo"
+        <EditSkillsLevelSelect
           :options="wantsToOptions"
-          stacked
-          name="wantsTo"
-          plain
+          :initial-value="wantsTo"
+          @option-selected="wantsOptionSelected($event)"
         />
       </b-form-group>
       <b-form-group
-        id="visibleInCVLabel"
+        id="visible-in-cv-label"
         vertical
-        label="Show in CV:"
-        label-for="visibleInCV"
+        label="Show in CV"
+        label-for="visible-in-cv"
+        label-size="lg"
       >
         <input
-          id="visibleInCV"
-          v-model="profileSkill.visibleInCV"
+          id="visible-in-cv"
+          v-model="visibleInCV"
           type="checkbox"
         >
       </b-form-group>
       <b-button
+        id="submit-skill"
         type="submit"
         variant="primary"
       >
-        Submit
-      </b-button>
-      <b-button
-        variant="danger"
-        @click="onReset"
-      >
-        Clear
+        Add skill
       </b-button>
     </b-form>
   </b-card>
@@ -97,20 +68,18 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import proficiencyDesc from '../../assets/proficiencyDesc'
-import { filter } from 'lodash'
-const skillTemplate = () => {
-  return {
-    skillId: null,
-    knows: 0,
-    wantsTo: 0,
-    description: '',
-    visibleInCV: true
-  }
-}
+import proficiencyDesc from '@/assets/proficiencyDesc'
+import { orderBy } from 'lodash'
+import vSelect from 'vue-select'
+import EditSkillsLevelSelect from '@/components/EditProfile/EditSkillsLevelSelect'
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 export default {
   name: 'SkillForm',
+  components: {
+    vSelect,
+    EditSkillsLevelSelect
+  },
   props: {
     'profileId': {
       type: Number,
@@ -119,37 +88,70 @@ export default {
   },
   data () {
     return {
-      profileSkill: skillTemplate(),
+      profileSkill: null,
       wantsToOptions: proficiencyDesc.wants,
-      knowsOptions: proficiencyDesc.knows
+      visibleInCV: true,
+      wantsTo: 0,
+      knows: 0
     }
   },
   computed: {
     ...mapGetters([
       'skills',
-      'skillsByProfileId'
+      'profileSkillsByProfileId',
+      'skillGroupBySkillId'
     ]),
-    availableSkills () {
-      const existingSkills = this.skillsByProfileId(this.profileId)
-        .map(profileSkill => profileSkill.skillId)
-      return filter(this.skills, (value, key) =>
-        existingSkills.indexOf(value.id) === -1
-      )
+    isLanguageSkill () {
+      if (this.profileSkill && this.profileSkill.id) {
+        const skillGroup = this.skillGroupBySkillId(this.profileSkill.id)
+        return skillGroup ? skillGroup.title === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
+      }
+      return false
+    },
+    knowsOptions () {
+      if (this.isLanguageSkill) {
+        return proficiencyDesc.knowsLanguage['en']
+      }
+      return proficiencyDesc.knows['en']
+    },
+    availableSkillsForVueSelect () {
+      const existingSkillsIds = this.profileSkillsByProfileId(this.profileId).map(profileSkill => profileSkill.skillId)
+      const allSkillsMappedForVueSelect = Object.values(this.skills).map(skill => ({
+        label: skill.name,
+        id: skill.id
+      }))
+      return orderBy(allSkillsMappedForVueSelect.filter(skill => !existingSkillsIds.includes(skill.id)), [skill => skill.label.toLowerCase()])
     }
   },
   methods: {
     ...mapActions(['addProfileSkill']),
     onSubmit (evt) {
       evt.preventDefault()
-      this.profileSkill.profileId = this.profileId
-      this.addProfileSkill(this.profileSkill)
-      this.profileSkill = skillTemplate()
+      const profileSkill = {
+        name: this.profileSkill.label,
+        skillId: this.profileSkill.id,
+        profileId: this.profileId,
+        visibleInCV: this.visibleInCV,
+        wantsTo: this.wantsTo,
+        knows: this.knows
+      }
+      this.addProfileSkill(profileSkill)
+
+      this.profileSkill = null
+      this.visibleInCV = true
     },
-    onReset () {
-      this.profileSkill = skillTemplate()
+    knowsOptionSelected (newValue) {
+      this.knows = newValue
+    },
+    wantsOptionSelected (newValue) {
+      this.wantsTo = newValue
     }
   }
 }
 </script>
 
-<style scoped />
+<style scoped >
+.form-label {
+  font-weight: bold;
+}
+</style>

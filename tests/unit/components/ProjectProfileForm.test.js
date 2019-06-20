@@ -3,7 +3,8 @@ import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
 import { merge } from 'lodash'
 import flushPromises from 'flush-promises'
-import { ProjectProfileForm } from '@/components/Project'
+import { ProjectProfileForm } from '@/components/Common'
+import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -39,28 +40,35 @@ function createWrapper (overrideMountingOptions) {
 describe('ProjectProfileForm.vue', () => {
   it('shows consultant select when consultant profile is unknown', () => {
     const propsData = {
-      projectId: 1,
-      profileId: null
+      profileProject: {
+        projectId: 1,
+        profileId: null
+      }
     }
     const wrapper = createWrapper({ propsData })
-    expect(wrapper.find('#consultantLabel').isVisible()).toBe(true)
-    expect(wrapper.find('#ProjectLabel').element.style.display).toBe('none')
+    expect(wrapper.find('#consultantSelectFormGroup').isVisible()).toBe(true)
+    expect(wrapper.find('#projectSelectFormGroup').element.style.display).toBe('none')
   })
 
   it('shows project select when project is unknown', () => {
     const propsData = {
-      projectId: null,
-      profileId: 1
+      profileProject: {
+        projectId: null,
+        profileId: 1
+      }
     }
     const wrapper = createWrapper({ propsData })
-    expect(wrapper.find('#ProjectLabel').isVisible()).toBe(true)
-    expect(wrapper.find('#consultantLabel').element.style.display).toBe('none')
+    expect(wrapper.find('#projectSelectFormGroup').isVisible()).toBe(true)
+    expect(wrapper.find('#consultantSelectFormGroup').element.style.display).toBe('none')
   })
 
   it('calls newProjectProfile when form is submitted', async () => {
+    expect.assertions(3)
     const propsData = {
-      projectId: null,
-      profileId: 1
+      profileProject: {
+        projectId: null,
+        profileId: 1
+      }
     }
 
     const actions = {
@@ -73,6 +81,17 @@ describe('ProjectProfileForm.vue', () => {
     }))
     const store = createStore({ actions })
     const wrapper = createWrapper({ propsData, store })
+    wrapper.setData({ editableProfileProject:
+        {
+          ...propsData.profileproject,
+          role: { fi: 'a', en: 'b' },
+          projectId: 1,
+          startDate: new Date('2018-01-01T00:00:00.000Z'),
+          workPercentage: 100
+        }
+    })
+    wrapper.setData({ validated: true })
+    expect(wrapper.vm.formIsValid).toBeTruthy()
     wrapper.find('#project-profile-form').trigger('submit')
     await flushPromises()
     expect(actions.newProjectProfile).toHaveBeenCalledTimes(1)
@@ -81,8 +100,10 @@ describe('ProjectProfileForm.vue', () => {
 
   it('closes the form when toggleForm is present and form is submitted', async () => {
     const propsData = {
-      projectId: null,
-      profileId: 1,
+      profileProject: {
+        projectId: null,
+        profileId: 1
+      },
       toggleForm: jest.fn()
     }
     const actions = {
@@ -95,15 +116,31 @@ describe('ProjectProfileForm.vue', () => {
     }))
     const store = createStore({ actions })
     const wrapper = createWrapper({ propsData, store })
+    wrapper.setData({ editableProfileProject:
+      {
+        ...propsData.profileproject,
+        role: { fi: 'a', en: 'b' },
+        projectId: 1,
+        startDate: new Date('2018-01-01T00:00:00.000Z'),
+        workPercentage: 100
+      }
+    })
     wrapper.find('#project-profile-form').trigger('submit')
     await flushPromises()
     expect(propsData.toggleForm).toHaveBeenCalledTimes(1)
   })
 
   it('shows errors when form submit fails', async () => {
+    expect.assertions(3)
     const propsData = {
-      projectId: null,
-      profileId: 1
+      profileProject: {
+        id: 1,
+        projectId: 1,
+        profileId: 1,
+        role: { fi: 'a', en: 'b' },
+        startDate: new Date('2018-01-01T00:00:00.000Z'),
+        workPercentage: 100
+      }
     }
     const apiError = {
       response: {
@@ -115,13 +152,15 @@ describe('ProjectProfileForm.vue', () => {
       }
     }
     const actions = {
-      newProjectProfile: jest.fn(() => Promise.reject(apiError))
+      updateProfileProject: jest.fn(() => Promise.reject(apiError))
     }
     const store = createStore({ actions })
     const wrapper = createWrapper({ propsData, store })
+    wrapper.setData({ validated: true })
     wrapper.find('#project-profile-form').trigger('submit')
     await flushPromises()
     expect(wrapper.vm.errorDetails[0]).toBe('Failure')
-    expect(wrapper.find('div[class="profile-form-errors"]').isVisible()).toBe(true)
+    expect(wrapper.vm.showError).toBe(true)
+    expect(wrapper.find(ApiErrorDetailsPanel).isVisible()).toBeTruthy()
   })
 })

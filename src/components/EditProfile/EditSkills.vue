@@ -1,18 +1,16 @@
 <template>
   <div class="animated fadeIn">
-    <h1>Proficiencies</h1>
-    <hr>
     <b-row>
-      <b-col class="col-12 col-md-7">
+      <b-col class="col-12">
         <b-table
-          :items="skillsByProfileId(profileId)"
+          :items="profileSkillsByProfileId(profileId)"
           :fields="fields"
           fixed
           caption-top
           stacked="sm"
         >
           <template slot="table-caption">
-            Current proficiencies (click on value to update)
+            Click on value to update
           </template>
           <template
             slot="skillId"
@@ -24,7 +22,10 @@
             slot="knows"
             slot-scope="knows"
           >
-            <span @click.stop="showKnowsModal(knows)">
+            <span
+              class="clickable"
+              @click.stop="showKnowsModal(knows)"
+            >
               <b-progress
                 :value="knows.value"
                 :max="5"
@@ -37,7 +38,11 @@
             slot="wantsTo"
             slot-scope="wantsTo"
           >
-            <span @click.stop="showWantsModal(wantsTo)">
+            <span
+              v-show="!isLanguageSkill(wantsTo.item.skillId)"
+              class="clickable"
+              @click.stop="showWantsModal(wantsTo)"
+            >
               <b-progress
                 :value="wantsTo.value"
                 :max="5"
@@ -47,10 +52,25 @@
             </span>
           </template>
           <template
+            slot="visibleInCV"
+            slot-scope="visibleInCV"
+          >
+            <div
+              :id="`visible-in-cv-checkbox-container-${visibleInCV.item.id}`"
+              @click="changeVisibilityInCV(visibleInCV)"
+            >
+              <i
+                class="fa clickable"
+                :class="visibleInCV.value ? 'fa-check-square' : 'fa-square'"
+              />
+            </div>
+          </template>
+          <template
             slot="remove"
             slot-scope="remove"
           >
             <b-btn
+              name="remove-skill"
               size="sm"
               class="mr-1"
               variant="danger"
@@ -61,7 +81,9 @@
           </template>
         </b-table>
       </b-col>
-      <b-col class="col-12 col-md-5">
+    </b-row>
+    <b-row>
+      <b-col class="col-12">
         <SkillForm :profile-id="profileId" />
       </b-col>
     </b-row>
@@ -70,11 +92,10 @@
       title="Update skill willingness"
       hide-footer
     >
-      <b-radio-group
-        v-model="editedSkill.wantsTo"
+      <EditSkillsLevelSelect
         :options="wantsToOptions"
-        plain
-        stacked
+        :initial-value="editedSkill.wantsTo"
+        @option-selected="wantsToOptionSelected($event)"
       />
       <b-btn
         class="modal-btn"
@@ -84,9 +105,10 @@
       </b-btn>
       <b-btn
         class="modal-btn"
+        variant="light"
         @click="hideModals()"
       >
-        Cancel
+        Close
       </b-btn>
     </b-modal>
     <b-modal
@@ -94,11 +116,10 @@
       title="Update skill proficiency"
       hide-footer
     >
-      <b-radio-group
-        v-model="editedSkill.knows"
+      <EditSkillsLevelSelect
         :options="knowsOptions"
-        plain
-        stacked
+        :initial-value="editedSkill.knows"
+        @option-selected="knowsOptionSelected($event)"
       />
       <b-btn
         class="modal-btn"
@@ -108,9 +129,10 @@
       </b-btn>
       <b-btn
         class="modal-btn"
+        variant="light"
         @click="hideModals()"
       >
-        Cancel
+        Close
       </b-btn>
     </b-modal>
   </div>
@@ -118,16 +140,19 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import proficiencyDesc from '../../assets/proficiencyDesc'
+import proficiencyDesc from '@/assets/proficiencyDesc'
 import SkillForm from './SkillForm'
+import EditSkillsLevelSelect from '@/components/EditProfile/EditSkillsLevelSelect'
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 export default {
   name: 'EditSkills',
   components: {
-    SkillForm
+    SkillForm,
+    EditSkillsLevelSelect
   },
   props: {
-    'profileId': Number
+    profileId: Number
   },
   data () {
     return {
@@ -135,10 +160,10 @@ export default {
         { key: 'skillId', label: 'Proficiency' },
         { key: 'knows', label: 'Level' },
         { key: 'wantsTo', label: 'Willingness' },
+        { key: 'visibleInCV', label: 'Show in CV' },
         { key: 'remove', label: ' ' }
       ],
       wantsToOptions: proficiencyDesc.wants,
-      knowsOptions: proficiencyDesc.knows,
       editedSkill: {}
     }
   },
@@ -146,14 +171,31 @@ export default {
     ...mapGetters([
       'skills',
       'skillById',
-      'skillsByProfileId'
-    ])
+      'profileSkillsByProfileId',
+      'skillGroupBySkillId'
+    ]),
+    currentSkillIsLanguage () {
+      if (this.editedSkill && this.editedSkill.skillId) {
+        return this.isLanguageSkill(this.editedSkill.skillId)
+      }
+      return false
+    },
+    knowsOptions () {
+      if (this.currentSkillIsLanguage) {
+        return proficiencyDesc.knowsLanguage['en']
+      }
+      return proficiencyDesc.knows['en']
+    }
   },
   methods: {
     ...mapActions([
       'removeProfileSkill',
       'updateProfileSkill'
     ]),
+    isLanguageSkill (skillId) {
+      const skillGroup = this.skillGroupBySkillId(skillId)
+      return skillGroup ? skillGroup.title === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
+    },
     removeSkillFromProfile (skillId) {
       const confirmation = confirm('Are you sure?')
       if (confirmation) {
@@ -176,11 +218,23 @@ export default {
       this.updateProfileSkill(this.editedSkill)
         .then(response => {
           this.$toasted.global.rytmi_success({
-            message: 'Proficiency updated.'
+            message: 'User\'s skill updated.'
           })
           this.$refs.wantsToModal.hide()
           this.$refs.knowsModal.hide()
         })
+    },
+    changeVisibilityInCV (visibleInCV) {
+      const skillToEdit = { ...visibleInCV.item }
+      skillToEdit.visibleInCV = !skillToEdit.visibleInCV
+      this.editedSkill = skillToEdit
+      this.updateSkill()
+    },
+    knowsOptionSelected (newValue) {
+      this.editedSkill.knows = newValue
+    },
+    wantsToOptionSelected (newValue) {
+      this.editedSkill.wantsTo = newValue
     }
   }
 }
@@ -193,5 +247,7 @@ button {
 .modal-btn {
   margin-top: 0.5rem;
 }
-
+.clickable {
+  cursor: pointer;
+}
 </style>

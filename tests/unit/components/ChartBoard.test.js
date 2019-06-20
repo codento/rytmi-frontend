@@ -1,73 +1,54 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import BootstrapVue from 'bootstrap-vue'
-import Vuex from 'vuex'
-import { merge } from 'lodash'
+import _ from 'lodash'
 import ChartBoard from '@/components/Dashboard/ChartBoard'
 import SkillChart from '@/components/Dashboard/SkillChart'
 import TopSkillChart from '@/components/Dashboard/TopSkillChart'
 import MostWillingnessChart from '@/components/Dashboard/MostWillingnessChart'
 import ConsultantUtilizationChart from '@/components/Dashboard/ConsultantUtilizationChart'
 import ConsultantUtilizationList from '@/components/Dashboard/ConsultantUtilizationList'
+import { createShallowWrapper } from './setup/setup'
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
-const localVue = createLocalVue()
-localVue.use(BootstrapVue)
-localVue.use(Vuex)
-
-function createStore (overrideConfig) {
-  const defaultStoreConfig = {
-    actions: {
-      updateProfile: jest.fn()
+const storeConfig = {
+  actions: {
+    updateProfile: jest.fn()
+  },
+  getters: {
+    appInitialized: () => true,
+    profileList: () => [{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }],
+    employeeRoles: () => {
+      return [
+        { id: 1, title: 'administrative' },
+        { id: 2, title: 'hardcore soft engineer' },
+        { id: 3, title: 'software destroyer' }
+      ]
     },
-    getters: {
-      appInitialized: () => true,
-      profileList: () => [{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }],
-      employeeRoles: () => {
-        return [
-          { id: 1, title: 'administrative' },
-          { id: 2, title: 'hardcore soft engineer' },
-          { id: 3, title: 'software destroyer' }
-        ]
-      },
-      profileById: () => (arg) => {
-        return {
-          id: arg,
-          userId: 2,
-          firstName: 'Bar',
-          lastName: 'Foo',
-          photoPath: '',
-          employeeRoles: [2],
-          title: 'software developer',
-          accounts: [
-            {
-              address: 'twitter.com/foo'
-            },
-            {
-              address: 'github.com/bar'
-            }
-          ],
-          email: 'foo.bar@foo.com',
-          phone: '1354',
-          description: 'fdas'
-        }
+    profileById: () => (arg) => {
+      return {
+        id: arg,
+        userId: 2,
+        firstName: 'Bar',
+        lastName: 'Foo',
+        photoPath: '',
+        employeeRoles: [2],
+        title: 'software developer',
+        email: 'foo.bar@foo.com',
+        phone: '1354'
       }
-    }
+    },
+    skillGroupBySkillId: () => (id) => mockSkillGroups[id]
   }
-  const mergedConfig = merge(defaultStoreConfig, overrideConfig)
-  return new Vuex.Store(mergedConfig)
-}
-
-function createWrapper (overrideMountingOptions) {
-  const defaultMountingOptions = {
-    localVue,
-    store: createStore()
-  }
-  const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
-  return shallowMount(ChartBoard, mergedMountingOptions)
 }
 
 const mockSkills = {
   1: { id: 1, name: 'SkillOne' },
-  2: { id: 2, name: 'SkillTwo' }
+  2: { id: 2, name: 'SkillTwo' },
+  3: { id: 3, name: 'LanguageOne' }
+}
+
+const mockSkillGroups = {
+  1: { id: 100, title: 'SomeGroup' },
+  2: { id: 100, title: 'SomeGroup' },
+  3: { id: 200, title: LANGUAGE_ENUM.LANGUAGE_GROUP_NAME }
 }
 
 const mockSkillProfiles = [
@@ -82,8 +63,8 @@ describe('ChartBoard.vue', () => {
       skills: () => ({}),
       skillProfiles: () => mockSkillProfiles
     }
-    const store = createStore({ getters })
-    const wrapper = createWrapper({ store })
+    const overrideStoreConfigs = _.merge(storeConfig, { getters })
+    const wrapper = createShallowWrapper(ChartBoard, overrideStoreConfigs)
     expect(wrapper.find('#no-data-message').isVisible()).toBeTruthy()
     expect(wrapper.find(SkillChart).exists()).toBeFalsy()
   })
@@ -93,27 +74,29 @@ describe('ChartBoard.vue', () => {
       skills: () => mockSkills,
       skillProfiles: () => []
     }
-    const store = createStore({ getters })
-    const wrapper = createWrapper({ store })
+    const overrideStoreConfigs = _.merge(storeConfig, { getters })
+    const wrapper = createShallowWrapper(ChartBoard, overrideStoreConfigs)
     expect(wrapper.find('#no-data-message').isVisible()).toBeTruthy()
     expect(wrapper.find(SkillChart).exists()).toBeFalsy()
   })
 
-  it('should show SkillChart, TopSkillChart, MostWillingnessChart', () => {
+  it('should show SkillChart, TopSkillChart, MostWillingnessChart, ConsultantUtilizationChart', () => {
     const getters = {
       skills: () => mockSkills,
       skillProfiles: () => mockSkillProfiles
     }
-    const store = createStore({ getters })
-    const wrapper = createWrapper({ store })
+    const overrideStoreConfigs = _.merge(storeConfig, { getters })
+    const wrapper = createShallowWrapper(ChartBoard, overrideStoreConfigs)
     expect(wrapper.find(TopSkillChart).isVisible()).toBeTruthy()
     expect(wrapper.find(MostWillingnessChart).isVisible()).toBeTruthy()
     expect(wrapper.find(SkillChart).isVisible()).toBeTruthy()
-    expect(wrapper.find(ConsultantUtilizationChart).isVisible()).toBeTruthy()
     expect(wrapper.find(ConsultantUtilizationList).isVisible()).toBeTruthy()
+    const utilizationChart = wrapper.find(ConsultantUtilizationChart)
+    expect(utilizationChart.isVisible()).toBeTruthy()
+    expect(utilizationChart.vm.activeRoleSelection.length).toEqual(2)
   })
 
-  it('createEmptySkillObject should create object with skill id\'s as properties', () => {
+  it('createEmptySkillObject should create object with skill id\'s as properties, languages should be ignored', () => {
     const expected = {
       1: {
         name: 'SkillOne',
@@ -130,12 +113,12 @@ describe('ChartBoard.vue', () => {
       skills: () => mockSkills,
       skillProfiles: () => mockSkillProfiles
     }
-    const store = createStore({ getters })
-    const wrapper = createWrapper({ store })
+    const overrideStoreConfigs = _.merge(storeConfig, { getters })
+    const wrapper = createShallowWrapper(ChartBoard, overrideStoreConfigs)
     expect(wrapper.vm.createEmptySkillObject(wrapper.vm.skillList)).toEqual(expected)
   })
 
-  it('groupSkillProfileBySkill should group profiles by skill', () => {
+  it('groupSkillProfileBySkill should group profiles by skill, languages should be ignored', () => {
     const expected = {
       1: {
         name: 'SkillOne',
@@ -152,8 +135,8 @@ describe('ChartBoard.vue', () => {
       skills: () => mockSkills,
       skillProfiles: () => mockSkillProfiles
     }
-    const store = createStore({ getters })
-    const wrapper = createWrapper({ store })
+    const overrideStoreConfigs = _.merge(storeConfig, { getters })
+    const wrapper = createShallowWrapper(ChartBoard, overrideStoreConfigs)
     expect(wrapper.vm.groupSkillProfilesBySkill(wrapper.vm.skillList)).toEqual(expected)
   })
 
@@ -178,8 +161,8 @@ describe('ChartBoard.vue', () => {
       skills: () => mockSkills,
       skillProfiles: () => mockSkillProfiles
     }
-    const store = createStore({ getters })
-    const wrapper = createWrapper({ store })
+    const overrideStoreConfigs = _.merge(storeConfig, { getters })
+    const wrapper = createShallowWrapper(ChartBoard, overrideStoreConfigs)
     expect(wrapper.vm.skillInfo).toEqual(expected)
   })
 })

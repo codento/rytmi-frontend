@@ -94,40 +94,14 @@ describe('ProjectMemberTable.vue', () => {
     })
     const wrapper = createWrapper({ propsData, store })
     const removeProfileSpy = jest.spyOn(wrapper.vm, 'removeMember')
-    wrapper.find('tbody').find('button').trigger('click')
+    wrapper.find('tbody').find('.btn-danger').trigger('click')
     await flushPromises()
     expect(removeProfileSpy).toHaveBeenCalledWith(propsData.members[0])
     expect(confirmSpy).toHaveBeenCalled()
     expect(actions.removeProfileProject).toHaveBeenCalled()
   })
-
-  it('shows modal with correct data when openModal is called', () => {
-    const propsData = getMembersList()
-    const wrapper = createWrapper({ propsData })
-    const modalSpy = jest.spyOn(wrapper.vm.$refs.projectProfileEditModal, 'show')
-    const modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' }).find('div.modal')
-    expect(modalWrapper.element.style.display).toBe('none')
-    wrapper.vm.openEditModal({ item: propsData.members[0] })
-    const modalInputs = modalWrapper.findAll('input')
-    expect(modalInputs.at(2).vm.value).toBe(propsData.members[0].workPercentage)
-    expect(modalSpy).toHaveBeenCalled()
-  })
-
-  it('calls updateProfileProject with editedProfile when callUpdateProfileProjectAction is called', async () => {
-    expect.assertions(1)
-    const propsData = getMembersList()
-    const actions = {
-      updateProfileProject: jest.fn(() => Promise.resolve())
-    }
-    const store = createStore({ actions })
-    const wrapper = createWrapper({ store })
-    wrapper.vm.openEditModal({ item: propsData.members[0] })
-    const modalWrapper = wrapper.find({ ref: 'projectProfileEditModal' })
-    modalWrapper.find('button[id=save]').trigger('click')
-    await flushPromises()
-    expect(actions.updateProfileProject).toHaveBeenCalled()
-  })
 })
+
 function getMembersList () {
   return {
     members: [
@@ -137,7 +111,8 @@ function getMembersList () {
         projectId: 2,
         startDate: new Date('2018-01-01'),
         endDate: new Date('2018-02-01'),
-        workPercentage: 45
+        workPercentage: 45,
+        role: { fi: 'Koodaaja', en: 'Coder' }
       }
     ]
   }

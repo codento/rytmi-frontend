@@ -8,11 +8,14 @@
       >
         <span
           style="cursor: pointer"
+          name="open-profile"
           @click="openProfile(profile)"
         >
           <img
             :src="profile.photoPath"
             alt=""
+            height="96px"
+            width="96px"
           >
           <h3>{{ profile.firstName }} {{ profile.lastName }}</h3>
         </span>
@@ -39,6 +42,7 @@
           v-bind="skill"
           :highlight="skillHighlight.includes(skill.skillId)"
           :show-skills-only="showSkillsOnly"
+          disable-tooltip
         />
       </b-col>
       <b-col
@@ -46,7 +50,10 @@
         md="1"
         class="profile-open-button"
       >
-        <b-button @click="openProfile(profile)">
+        <b-button
+          id="open-profile"
+          @click="openProfile(profile)"
+        >
           <i
             style="font-size: 76px; color: gray;"
             class="fa fa-5x fa-angle-right"
@@ -58,7 +65,7 @@
 </template>
 
 <script>
-import { SkillRow, UtilizationChart } from '../Profile'
+import { SkillRow, UtilizationChart } from '@/components/Common'
 import ProfileCardProjectInfo from './ProfileCardProjectInfoRow'
 import { mapGetters } from 'vuex'
 
@@ -77,7 +84,7 @@ export default {
   computed: {
     ...mapGetters([
       'profileFilter',
-      'skillsByProfileId',
+      'profileSkillsByProfileId',
       'skillById',
       'futureProjectsOfProfile'
     ])
@@ -87,7 +94,7 @@ export default {
       this.$router.push({ name: 'profile', params: { id: profile.id } })
     },
     sortedSkills (profileId) {
-      const sortedByProficiency = this.skillsByProfileId(profileId).sort((a, b) => {
+      const sortedByProficiency = this.profileSkillsByProfileId(profileId).sort((a, b) => {
         if (b.knows > a.knows) { return 1 }
         if (b.knows < a.knows) { return -1 }
         return 0

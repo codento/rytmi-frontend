@@ -1,43 +1,26 @@
-import Vuex from 'vuex'
-import BootstrapVue from 'bootstrap-vue'
 import { merge } from 'lodash'
-import { mount, createLocalVue } from '@vue/test-utils'
-import { SkillList, EditSkill } from '@/components/Skills/'
+import flushPromises from 'flush-promises'
+import { createWrapper } from './setup/setup'
+import { SkillList } from '@/components/Skills/'
 import { format } from 'date-fns'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(BootstrapVue)
-localVue.filter('dateFilter', value => {
-  return value ? format(value, 'D.M.YYYY') : undefined
-})
-
-const mockSkills = {
-  1: {
-    id: 1,
-    name: 'JavaScript',
-    description: 'Jäsää',
-    SkillCategoryId: 1
-  },
-  2: {
+// should be ordered alphabetically
+const mockSkillList = [
+  {
     id: 2,
     name: 'C',
     description: 'old robust shit',
-    SkillCategoryId: 2
-  }
-}
-const mockSkillCategories = {
-  1: {
-    id: 1,
-    SkillGroupId: 1,
-    title: 'New stuff'
+    skillCategoryId: 2,
+    skillCategoryName: 'Old stuff'
   },
-  2: {
-    id: 2,
-    SkillGroupId: 1,
-    title: 'Old stuff'
+  {
+    id: 1,
+    name: 'JavaScript',
+    description: 'Jäsää',
+    skillCategoryId: 1,
+    skillCategoryName: 'New stuff'
   }
-}
+]
 
 const mockSkillProfiles = [
   {
@@ -60,56 +43,67 @@ const mockSkillProfiles = [
   }
 ]
 
-function createStore (overrideConfig) {
-  const defaultStoreConfig = {
-    getters: {
-      skills: () => mockSkills,
-      skillCategories: () => mockSkillCategories,
-      skillProfiles: () => mockSkillProfiles
-    }
+const defaultStoreConfig = {
+  actions: {
+    deleteSkill: jest.fn()
+  },
+  getters: {
+    skillProfiles: () => mockSkillProfiles,
+    isAdmin: () => false
   }
-  const mergedConfig = merge(defaultStoreConfig, overrideConfig)
-  return new Vuex.Store(mergedConfig)
 }
 
-function createWrapper (overrideMountingOptions) {
-  const defaultMountingOptions = {
-    localVue,
-    store: createStore(),
-    $options: {
-      filters: {
-        dateFilter: function (value) {
-          return value ? format(value, 'D.M.YYYY') : undefined
-        }
+const defaultMountingOptions = {
+  propsData: {
+    skillList: mockSkillList
+  },
+  mocks: {
+    $toasted: {
+      global: {
+        rytmi_success: jest.fn(),
+        rytmi_error: jest.fn()
+      }
+    }
+  },
+  $options: {
+    filters: {
+      dateFilter: function (value) {
+        return value ? format(value, 'D.M.YYYY') : undefined
       }
     }
   }
-  const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
-  return mount(SkillList, mergedMountingOptions)
-};
+}
 
 describe('SkillList.vue', () => {
   it('Should render the list of skills', () => {
-    const wrapper = createWrapper()
+    const wrapper = createWrapper(SkillList, defaultStoreConfig, defaultMountingOptions)
     const tableRows = wrapper.find('#skill-list-table').findAll('tr')
     expect(tableRows).toHaveLength(3)
   })
 
-  it('Should open modal to edit skill when skill is clicked', () => {
-    const wrapper = createWrapper()
-    const firstRow = wrapper.find('#skill-list-table').findAll('tr').at(1)
-    expect(wrapper.find(EditSkill).exists()).toBeFalsy()
-    firstRow.trigger('click')
-    expect(wrapper.vm.selectedSkill.name).toBe('C')
-    expect(wrapper.find(EditSkill).exists()).toBeTruthy()
+  it('Should not render manage categories button when user is admin', () => {
+    const wrapper = createWrapper(SkillList, defaultStoreConfig, defaultMountingOptions)
+    expect(wrapper.find('#manage-categories-btn').exists()).toBeFalsy()
   })
 
-  it('Should hide the EditSkillModal', () => {
-    const wrapper = createWrapper()
-    wrapper.setData({ selectedSkill: mockSkills[1] })
-    expect(wrapper.find(EditSkill).exists()).toBeTruthy()
-    wrapper.vm.closeEditModal()
-    expect(wrapper.vm.selectedSkill).toBe(null)
-    expect(wrapper.find(EditSkill).exists()).toBeFalsy()
+  it('Should render manage categories button when user is admin', () => {
+    const getters = {
+      isAdmin: () => true
+    }
+    const mergedConfig = merge({}, defaultStoreConfig, { getters })
+    const wrapper = createWrapper(SkillList, mergedConfig, defaultMountingOptions)
+    expect(wrapper.find('#manage-categories-btn').isVisible()).toBeTruthy()
+  })
+
+  it('Should call the delete action if remove skill button is clicked', async () => {
+    window.confirm = () => true
+    const actions = {
+      deleteSkill: jest.fn(() => Promise.resolve())
+    }
+    const mergedConfig = merge({}, defaultStoreConfig, { actions })
+    const wrapper = createWrapper(SkillList, mergedConfig, defaultMountingOptions)
+    wrapper.find('#remove-skill-item-btn-0').trigger('click')
+    await flushPromises()
+    expect(actions.deleteSkill).toHaveBeenCalledWith(expect.anything(), mockSkillList[0].id, undefined)
   })
 })

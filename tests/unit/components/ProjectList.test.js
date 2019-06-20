@@ -1,30 +1,67 @@
-import Vuex from 'vuex'
-import BootstrapVue from 'bootstrap-vue'
-import { merge } from 'lodash'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { cloneDeep } from 'lodash'
 import { ProjectList } from '@/components/Project'
+import projectGetters from '@/store/modules/projects/getters'
+import employerGetters from '@/store/modules/employers/getters'
+import { createShallowWrapper } from './setup/setup'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(BootstrapVue)
-
-function createStore (overrideConfig) {
-  const defaultStoreConfig = {
-    getters: {
-      projectFilter: () => jest.fn((args) => args)
-    }
+const mockProjects = {
+  11: {
+    id: 11,
+    code: 100,
+    employerId: 1,
+    name: { fi: 'yksi', en: 'one' },
+    description: { fi: 'testi', en: 'test' },
+    customerName: { fi: 'asiakas', en: 'customer' },
+    isInternal: false
+  },
+  12: {
+    id: 12,
+    code: 200,
+    employerId: 1,
+    name: { fi: 'kaksi', en: 'two' },
+    description: { fi: 'testi', en: 'test' },
+    customerName: { fi: '', en: '' },
+    isInternal: true
+  },
+  13: {
+    id: 13,
+    code: 300,
+    employerId: 1,
+    name: { fi: 'kolme', en: 'three' },
+    description: { fi: 'testi', en: 'test' },
+    customerName: { fi: '', en: '' },
+    isInternal: true
+  },
+  14: {
+    id: 14,
+    code: null,
+    employerId: 2,
+    name: { fi: 'neljä', en: 'four' },
+    description: { fi: 'testi', en: 'test' }
   }
-  const mergedConfig = merge(defaultStoreConfig, overrideConfig)
-  return new Vuex.Store(mergedConfig)
 }
 
-function createWrapper (overrideMountingOptions) {
-  const defaultMountingOptions = {
-    localVue,
-    store: createStore()
+const mockEmployers = {
+  1: {
+    id: 1,
+    name: INTERNAL_COMPANY_NAME
+  },
+  2: {
+    id: 2,
+    name: 'Some other company'
   }
-  const mergedMountingOptions = merge(defaultMountingOptions, overrideMountingOptions)
-  return shallowMount(ProjectList, mergedMountingOptions)
+}
+
+const defaultStoreConfig = {
+  getters: {
+    ...projectGetters,
+    ...employerGetters
+  },
+  state: {
+    projects: mockProjects,
+    employers: mockEmployers
+  }
 }
 
 describe('ProjectList.vue', () => {
@@ -34,7 +71,7 @@ describe('ProjectList.vue', () => {
         push: jest.fn()
       }
     }
-    const wrapper = createWrapper({ mocks })
+    const wrapper = createShallowWrapper(ProjectList, defaultStoreConfig, { mocks })
     const table = wrapper.find({ name: 'BTable' })
     table.vm.$emit('row-clicked', { id: 1 })
     expect(table.emitted).toHaveLength(1)
@@ -42,7 +79,28 @@ describe('ProjectList.vue', () => {
   })
 
   it('Template is correct', () => {
-    const wrapper = createWrapper()
+    const overrideStoreConfig = cloneDeep(defaultStoreConfig)
+    overrideStoreConfig.state.projects = {}
+    const wrapper = createShallowWrapper(ProjectList, overrideStoreConfig, {})
+    expect(wrapper.vm.results.length).toEqual(0)
     expect(wrapper.element).toMatchSnapshot()
+  })
+
+  it('Shows all internal company projects when filter is empty', () => {
+    const wrapper = createShallowWrapper(ProjectList, defaultStoreConfig, {})
+    expect(wrapper.vm.internalCompanyId).toEqual(mockEmployers[1].id)
+    expect(wrapper.vm.results.length).toEqual(3)
+  })
+
+  it('Filtering projects should work', () => {
+    const wrapper = createShallowWrapper(ProjectList, defaultStoreConfig, {})
+    wrapper.setData({ projectFilterTerm: 'yksi' })
+    expect(wrapper.vm.results.length).toEqual(1)
+    wrapper.setData({ projectFilterTerm: '00' })
+    expect(wrapper.vm.results.length).toEqual(3)
+    wrapper.setData({ projectFilterTerm: '30' })
+    expect(wrapper.vm.results.length).toEqual(1)
+    wrapper.setData({ projectFilterTerm: 'thr' })
+    expect(wrapper.vm.results.length).toEqual(1)
   })
 })

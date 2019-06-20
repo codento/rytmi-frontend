@@ -3,7 +3,7 @@
     <AppHeader />
     <div class="app-body">
       <Sidebar :nav-items="nav" />
-      <loading v-if="!appInitialized" />
+      <loading v-if="!appInitialized && isAuthenticated" />
       <main
         v-else
         class="main"
@@ -12,6 +12,17 @@
           <router-view />
         </div>
       </main>
+      <b-modal
+        id="login-popup"
+        title="Login expiring!"
+        @ok.prevent="loginViaModal"
+        @cancel="cancelLoginModal"
+      >
+        Your login will expire in 5 minutes!
+        <template #modal-ok>
+          Keep me logged in
+        </template>
+      </b-modal>
     </div>
     <AppFooter />
   </div>
@@ -33,13 +44,19 @@ export default {
     Sidebar,
     AppFooter
   },
+  data () {
+    return {
+      modalTimer: undefined
+    }
+  },
   computed: {
     ...mapGetters([
       'isAuthenticated',
       'isAdmin',
       'profileId',
       'isTokenValid',
-      'appInitialized'
+      'appInitialized',
+      'tokenValidTime'
     ]),
     nav () {
       const navItems = [
@@ -77,6 +94,7 @@ export default {
   },
   created () {
     this.initialAuth()
+    this.modalTimer = setInterval(this.checkTokenTimeout, 10000)
   },
   methods: {
     ...mapActions([
@@ -90,12 +108,27 @@ export default {
       'fetchEmployeeRoles',
       'requestAuth',
       'clearLoginData',
-      'fetchUsers'
+      'fetchUsers',
+      'fetchEmployers',
+      'fetchProfileEmployers',
+      'handleLogin'
     ]),
     ...mapMutations({
       setAppInitialized: SET_APP_INITIALIZED,
       setAppInitializeError: SET_APP_INITIALIZE_ERROR
     }),
+    checkTokenTimeout () {
+      if (Number(this.tokenValidTime) - 360 < Math.round(Date.now() / 1000) && this.isAuthenticated && this.isTokenValid) {
+        this.$bvModal.show('login-popup')
+      }
+    },
+    cancelLoginModal () {
+      clearInterval(this.modalTimer)
+    },
+    async loginViaModal () {
+      await this.handleLogin(true)
+      this.$bvModal.hide('login-popup')
+    },
     async initialAuth () {
       const isSignedInToGoogle = await gapi.auth2.getAuthInstance().isSignedIn.get()
       let googleUserToken = isSignedInToGoogle ? await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token : false
@@ -120,7 +153,9 @@ export default {
           this.fetchSkillCategories(),
           this.fetchSkillGroups(),
           this.fetchEmployeeRoles(),
-          this.fetchUsers()
+          this.fetchUsers(),
+          this.fetchEmployers(),
+          this.fetchProfileEmployers()
         ])
           .catch(error => {
             this.setAppInitializeError(error)
