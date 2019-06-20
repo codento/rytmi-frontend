@@ -103,7 +103,7 @@ export default {
     skillsInitialVisibility: {
       type: Boolean,
       default: false
-    },
+    }
   },
   data () {
     return {
