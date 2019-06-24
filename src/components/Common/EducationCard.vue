@@ -16,7 +16,7 @@
           </span>
           <br>
           <span v-if="educationData[language].minor">
-            {{ labels[language].minorLabel }}: {{ educationData[language].major }}
+            {{ labels[language].minorLabel }}: {{ educationData[language].minor }}
           </span>
         </p>
       </b-card-text>
