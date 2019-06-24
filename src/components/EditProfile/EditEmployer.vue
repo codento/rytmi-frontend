@@ -9,12 +9,33 @@
           <small for="employer-select">Select employer or create new by typing</small>
           <v-select
             id="employer-select"
-            v-model="selectedEmployer"
+            v-model="selectedEmployerOption"
             :class="!inputStates.selectedEmployer && inputStates.selectedEmployer !== undefined ? 'v-select-is-invalid' : ''"
             :options="vueSelectsEmployers"
             taggable
             push-tags
           />
+          <i
+            v-if="profileEmployer.employerId !== internalCompanyId"
+            v-b-tooltip.hover
+            title="Change name of existing employer"
+            class="fa fa-pencil edit-employer-name-icon"
+            v-b-modal.edit-employer-name
+          />
+          <b-modal
+            id="edit-employer-name"
+            title="Change employer name"
+            @show="setEditableEmployer"
+            @ok.prevent="handleUpdateEmployer"
+          >
+            <small :for="`edit-employer-name-input-${profileEmployer.id}`">Employer name</small>
+            <b-input
+              :id="`edit-employer-name-input-${profileEmployer.id}`"
+              v-model="editedEmployerName"
+              type="text"
+              @keyup.enter="handleUpdateEmployer"
+            />
+          </b-modal>
           <small
             v-if="!inputStates.selectedEmployer && inputStates.selectedEmployer !== undefined"
             class="text-danger"
@@ -157,6 +178,7 @@ export default {
   },
   data () {
     return {
+      editedEmployerName: '',
       selectedEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
       validated: false
     }
@@ -166,6 +188,16 @@ export default {
       'employers',
       'employerByName'
     ]),
+    selectedEmployerOption: {
+      get () {
+        return this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId)
+      },
+      set (item) {
+        console.log(this.profileEmployer.employerId)
+        this.selectedEmployer = item
+        this.profileEmployer.employerId = item.id
+      }
+    },
     internalCompanyId () {
       return this.employerByName(INTERNAL_COMPANY_NAME).id
     },
@@ -212,7 +244,9 @@ export default {
       'createEmployer',
       'createProfileEmployer',
       'updateProfileEmployer',
-      'removeProfileEmployer'
+      'removeProfileEmployer',
+      'updateEmployer',
+      'fetchEmployers'
     ]),
     async deleteEntry (profileEmployer) {
       const confirmation = confirm('Remove work history entry?')
@@ -251,9 +285,9 @@ export default {
         }
       }
     },
-    async callCreateAction (employer) {
+    async callCreateAction (profileEmployer) {
       try {
-        const newProfileEmployer = await this.createProfileEmployer(employer)
+        const newProfileEmployer = this.createProfileEmployer(profileEmployer)
         this.$emit('new-profile-employer-created', newProfileEmployer)
       } catch (error) {
         this.$toasted.global.rytmi_error({
@@ -263,11 +297,11 @@ export default {
     },
     async callUpdateAction (profileEmployer) {
       try {
-        this.createProfileEmployer(profileEmployer)
+        this.updateProfileEmployer(profileEmployer)
           .then(response => {
             this.$emit('new-profile-employer-created', response)
             this.$toasted.global.rytmi_success({
-              message: 'A new work history entry created!'
+              message: 'Work history entry updated'
             })
             document.getElementById('employer-form').reset()
           })
@@ -276,6 +310,22 @@ export default {
           message: `Could not update work history entry. ${error}`
         })
       }
+    },
+    async handleUpdateEmployer () {
+      try {
+        await this.updateEmployer({ id: this.selectedEmployer.id, name: this.editedEmployerName })
+        this.$bvModal.hide('edit-employer-name')
+        this.$toasted.global.rytmi_success({
+          message: 'Employer name updated.'
+        })
+      } catch (error) {
+        this.$toasted.global.rytmi_error({
+          message: `Could not update employer name. Error: ${error.response.data.error.details.toString()}`
+        })
+      }
+    },
+    setEditableEmployer () {
+      this.editedEmployerName = this.selectedEmployerOption.label
     }
   }
 }
@@ -296,7 +346,16 @@ export default {
   #employer-form {
     cursor: default;
   }
-
+  .edit-employer-name-icon {
+    position: absolute;
+    right: -4px;
+    bottom: 30px;
+    color: gray;
+  }
+  .edit-employer-name-icon:hover {
+    cursor: pointer;
+    color: black;
+  }
 </style>
 <style>
   #employer-select {
