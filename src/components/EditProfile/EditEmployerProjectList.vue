@@ -77,7 +77,7 @@
             :editable-project="{ id: null, employerId: employerId }"
             :profile-project="{ id: null, profileId: profileId, employerId: employerId, role: {en: '', fi: ''} }"
             :current-employer-id="employerId"
-            @close-modal="newProjectModalClosed($event)"
+            @close-modal="newProjectModalClosed"
           />
         </b-modal>
       </b-row>
