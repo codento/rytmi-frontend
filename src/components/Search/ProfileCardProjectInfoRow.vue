@@ -16,8 +16,8 @@
           xl="4"
         >
           <small>
-          <b>End date: </b>
-          <b>{{ `${project.endDate ? formattedDate(project.endDate) : '-'}` }}</b>
+            <b>End date: </b>
+            <b>{{ `${project.endDate ? formattedDate(project.endDate) : '-'}` }}</b>
           </small>
         </b-col>
       </b-row>
