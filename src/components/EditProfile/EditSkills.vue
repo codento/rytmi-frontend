@@ -52,20 +52,6 @@
             </span>
           </template>
           <template
-            slot="visibleInCV"
-            slot-scope="visibleInCV"
-          >
-            <div
-              :id="`visible-in-cv-checkbox-container-${visibleInCV.item.id}`"
-              @click="changeVisibilityInCV(visibleInCV)"
-            >
-              <i
-                class="fa clickable"
-                :class="visibleInCV.value ? 'fa-check-square' : 'fa-square'"
-              />
-            </div>
-          </template>
-          <template
             slot="remove"
             slot-scope="remove"
           >
@@ -160,7 +146,6 @@ export default {
         { key: 'skillId', label: 'Proficiency' },
         { key: 'knows', label: 'Level' },
         { key: 'wantsTo', label: 'Willingness' },
-        { key: 'visibleInCV', label: 'Show in CV' },
         { key: 'remove', label: ' ' }
       ],
       wantsToOptions: proficiencyDesc.wants,
@@ -223,12 +208,6 @@ export default {
           this.$refs.wantsToModal.hide()
           this.$refs.knowsModal.hide()
         })
-    },
-    changeVisibilityInCV (visibleInCV) {
-      const skillToEdit = { ...visibleInCV.item }
-      skillToEdit.visibleInCV = !skillToEdit.visibleInCV
-      this.editedSkill = skillToEdit
-      this.updateSkill()
     },
     knowsOptionSelected (newValue) {
       this.editedSkill.knows = newValue

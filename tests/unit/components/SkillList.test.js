@@ -29,7 +29,6 @@ const mockSkillProfiles = [
     knows: 3,
     profileId: 1,
     skillId: 1,
-    visibleInCV: false,
     wantsTo: 2
   },
   {
@@ -38,7 +37,6 @@ const mockSkillProfiles = [
     knows: 3,
     profileId: 2,
     skillId: 1,
-    visibleInCV: false,
     wantsTo: 5
   }
 ]
