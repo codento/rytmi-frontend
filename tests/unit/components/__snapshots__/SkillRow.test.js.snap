@@ -7,7 +7,7 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
   title=""
 >
   <div
-    class="col-4 skillname text-right valign-middle"
+    class="col-5 skillname text-right valign-middle"
   >
     
     Python:
@@ -15,7 +15,7 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
   </div>
    
   <div
-    class="col-8"
+    class="col-7"
   >
     <div
       class="mb-6 progress"
