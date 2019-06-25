@@ -16,7 +16,7 @@
             push-tags
           />
           <i
-            v-if="profileEmployer.employerId !== internalCompanyId"
+            v-if="profileEmployer.employerId !== internalCompanyId && selectedEmployerOption ? selectedEmployerOption.id : false"
             v-b-tooltip.hover
             title="Change name of existing employer"
             class="fa fa-pencil edit-employer-name-icon"
@@ -46,6 +46,7 @@
       </b-col>
       <b-col cols="6">
         <b-button
+          v-if="!isNewEntry"
           variant="danger"
           class="pull-right"
           @click="deleteEntry(profileEmployer)"
@@ -151,7 +152,7 @@
       </b-col>
     </b-row>
     <EditEmployerProjectList
-      v-if="profileEmployer.employerId && profileEmployer.employerId !== internalCompanyId"
+      v-if="profileEmployer.employerId && profileEmployer.employerId !== internalCompanyId && selectedEmployer.id"
       :employer-id="profileEmployer.employerId"
       :profile-id="profileEmployer.profileId"
     />
@@ -190,12 +191,11 @@ export default {
     ]),
     selectedEmployerOption: {
       get () {
-        return this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId)
+        return this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId) || Object.assign({ label: '' }, this.selectedEmployer)
       },
       set (item) {
-        console.log(this.profileEmployer.employerId)
         this.selectedEmployer = item
-        this.profileEmployer.employerId = item.id
+        this.profileEmployer.employerId = item ? item.id : null
       }
     },
     internalCompanyId () {
@@ -287,7 +287,7 @@ export default {
     },
     async callCreateAction (profileEmployer) {
       try {
-        const newProfileEmployer = this.createProfileEmployer(profileEmployer)
+        const newProfileEmployer = await this.createProfileEmployer(profileEmployer)
         this.$emit('new-profile-employer-created', newProfileEmployer)
       } catch (error) {
         this.$toasted.global.rytmi_error({

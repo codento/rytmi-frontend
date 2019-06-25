@@ -3,7 +3,7 @@
     id="employers-form"
     class="animated fadeIn"
   >
-    <b-row v-if="!shouldShowNewEmployerAddForm()">
+    <b-row>
       <b-col>
         <b-button
           class="pull-right mb-2"
@@ -39,11 +39,14 @@
       <b-list-group-item
         v-for="(profileEmployer, index) in profileEmployers"
         :key="profileEmployer.id"
-        class="clickable"
+        :class="isHoveredProfileEmployerCardSelected(profileEmployer.id) ? '' : 'clickable'"
         @mouseover="showEditIconByIndex = index"
         @mouseout="showEditIconByIndex = null"
       >
-        <b-row @click="openOrCloseEmployerForEditing(profileEmployer)">
+        <b-row
+          class="work-history-list-titlebar"
+          @click="openOrCloseEmployerForEditing(profileEmployer)"
+        >
           <b-col cols="11">
             <WorkHistoryListItem
               :profile-employer="profileEmployer"
@@ -51,7 +54,7 @@
             />
           </b-col>
           <b-col
-            v-show="showEditIconByIndex === index"
+            v-show="showEditIconByIndex === index && !isHoveredProfileEmployerCardSelected(profileEmployer.id)"
             cols="1"
           >
             <i class="fa fa-pencil pull-right" />
@@ -61,6 +64,7 @@
           <b-col>
             <div>
               <EditEmployer
+                class="edit-employer"
                 :key="profileEmployer ? profileEmployer.id : 0"
                 :profile-employer="profileEmployer"
                 :vue-selects-employers="vueSelectsEmployers"
@@ -156,6 +160,9 @@ export default {
     },
     newProfileEmployerCreated (createdProfileEmployer) {
       this.profileEmployerIdToOpenForEditing = createdProfileEmployer.id
+    },
+    isHoveredProfileEmployerCardSelected (profileEmployerId) {
+      return this.selectedProfileEmployer ? this.selectedProfileEmployer.id === profileEmployerId : false
     }
   }
 }
@@ -164,5 +171,12 @@ export default {
 <style scoped >
 .clickable:hover {
   cursor: pointer;
+}
+.edit-employer {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.work-history-list-titlebar {
+  margin-bottom: 5px;
 }
 </style>
