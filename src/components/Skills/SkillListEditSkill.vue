@@ -2,7 +2,7 @@
   <div>
     <h3>{{ skill.id ? 'Edit skill' : 'Add new skill' }}</h3>
     <hr>
-    <b-form>
+    <b-form @submit.prevent="submitSkill">
       <small for="edit-skill-name">Skill name *</small>
       <b-form-group
         :invalid-feedback="inputState.name.feedback"
@@ -128,7 +128,9 @@ export default {
     },
     matchesExistingSkill () {
       const skillNames = Object.values(this.skills).map(skill => skill.name)
-      return skillNames.some(name => name.toLowerCase() === this.name.toLowerCase())
+      return skillNames.some(name => {
+        return name.toLowerCase() === this.name.toLowerCase() && name.toLowerCase() !== this.originalName.toLowerCase()
+      })
     },
     similarSkillNames () {
       if (isEmpty(this.name)) {

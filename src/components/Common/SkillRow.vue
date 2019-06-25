@@ -6,12 +6,12 @@
   >
     <b-col
       :class="{ skillname:true, 'skillname-highlight': highlight, 'text-right': true, 'valign-middle': true }"
-      cols="4"
+      cols="5"
     >
       {{ skillName(skillId) }}:
     </b-col>
     <b-col
-      cols="8"
+      cols="7"
       class=""
       @mouseenter="active = id"
       @mouseleave="active = null"
