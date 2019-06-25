@@ -9,14 +9,16 @@
           lg="12"
           xl="8"
         >
-          <b>{{ `${projectById(project.projectId).name}` }}</b>
+          <small><b>{{ `${projectById(project.projectId).name[currentLanguage]}` }}</b></small>
         </b-col>
         <b-col
           lg="12"
           xl="4"
         >
+          <small>
           <b>End date: </b>
-          <b>{{ `${project.endDate ? formattedDate(project.endDate) : 'undefined'}` }}</b>
+          <b>{{ `${project.endDate ? formattedDate(project.endDate) : '-'}` }}</b>
+          </small>
         </b-col>
       </b-row>
     </div>
@@ -35,7 +37,8 @@ export default {
   computed: {
     ...mapGetters([
       'futureProjectsOfProfile',
-      'projectById'
+      'projectById',
+      'currentLanguage'
     ])
   },
   methods: {
