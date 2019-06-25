@@ -350,7 +350,7 @@ export default {
       this.$nextTick(() => { this.show = true })
       if (this.noRedirect) {
         this.editableProfileProject = {}
-        this.editableProfileProject.projectId = null
+        this.editableProfileProject.projectId = !this.projectVisible ? this.profileProject.projectId : null
         this.editableProfileProject.profileId = this.profileProject.profileId
         this.editableProfileProject.role = {}
       } else {
