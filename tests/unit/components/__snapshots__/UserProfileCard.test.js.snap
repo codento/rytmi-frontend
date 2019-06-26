@@ -65,8 +65,6 @@ exports[`UserProfileCard.test.js Template is correct 1`] = `
     <br />
      
     <!---->
-     
-    <!---->
   </div>
 </div>
 `;
