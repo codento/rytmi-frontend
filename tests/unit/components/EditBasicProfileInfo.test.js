@@ -38,7 +38,8 @@ const mockProfile = {
   ],
   email: 'foo.bar@barfoo.com',
   employeeRoles: [1],
-  links: ['http://christy.net', 'http://holly.biz', 'http://www.linkedin.com/username']
+  links: ['http://christy.net', 'http://holly.biz', 'http://www.linkedin.com/username'],
+  otherInfo: { en: '', fi: '' }
 }
 
 const defaultMountingOptions = {
