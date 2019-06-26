@@ -42,19 +42,6 @@
           @option-selected="wantsOptionSelected($event)"
         />
       </b-form-group>
-      <b-form-group
-        id="visible-in-cv-label"
-        vertical
-        label="Show in CV"
-        label-for="visible-in-cv"
-        label-size="lg"
-      >
-        <input
-          id="visible-in-cv"
-          v-model="visibleInCV"
-          type="checkbox"
-        >
-      </b-form-group>
       <b-button
         id="submit-skill"
         type="submit"
@@ -90,7 +77,6 @@ export default {
     return {
       profileSkill: null,
       wantsToOptions: proficiencyDesc.wants,
-      visibleInCV: true,
       wantsTo: 0,
       knows: 0
     }
@@ -131,14 +117,12 @@ export default {
         name: this.profileSkill.label,
         skillId: this.profileSkill.id,
         profileId: this.profileId,
-        visibleInCV: this.visibleInCV,
         wantsTo: this.wantsTo,
         knows: this.knows
       }
       this.addProfileSkill(profileSkill)
 
       this.profileSkill = null
-      this.visibleInCV = true
     },
     knowsOptionSelected (newValue) {
       this.knows = newValue

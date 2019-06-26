@@ -77,7 +77,7 @@
             :editable-project="{ id: null, employerId: employerId }"
             :profile-project="{ id: null, profileId: profileId, employerId: employerId, role: {en: '', fi: ''} }"
             :current-employer-id="employerId"
-            @close-modal="showNewProjectModal = false"
+            @close-modal="newProjectModalClosed"
           />
         </b-modal>
       </b-row>
@@ -98,6 +98,7 @@
         :editable-project="selectedProject.project"
         :profile-project="selectedProject.profileProject"
         :current-employer-id="employerId"
+        :skills-initial-visibility="projectSkillsInitialVisibility"
         @close-modal="showUpdateProjectModal = false"
       />
     </b-modal>
@@ -133,7 +134,8 @@ export default {
       selectedProject: undefined,
       showNewProjectModal: false,
       showUpdateProjectModal: false,
-      internalCompany: INTERNAL_COMPANY_NAME
+      internalCompany: INTERNAL_COMPANY_NAME,
+      projectSkillsInitialVisibility: false
     }
   },
   computed: {
@@ -176,7 +178,15 @@ export default {
       return format(startDate, 'MM/YYYY') + '-' + formattedEndDate
     },
     selectProject (index) {
+      this.projectSkillsInitialVisibility = false
       this.selectedProject = this.profileProjectsWithProjectData[this.showEditIconByIndex]
+    },
+    newProjectModalClosed (newProfileProject) {
+      const newlyCreatedProject = Object.values(this.profileProjectsWithProjectData).find(profileProject => profileProject.project.id === newProfileProject.projectId)
+      this.showNewProjectModal = false
+      this.selectedProject = newlyCreatedProject
+      this.projectSkillsInitialVisibility = true
+      this.showUpdateProjectModal = true
     }
   }
 }

@@ -21,7 +21,6 @@ const mockGetters = {
         profileId: profileId,
         name: 'Python',
         description: 'Python desc',
-        visibleInCv: true,
         knows: 3,
         wantsTo: 1
       }

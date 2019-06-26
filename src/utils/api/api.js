@@ -351,7 +351,6 @@ function handleError (error) {
     if (error.response.status === 401) {
       store.commit(types.AUTH_LOGOUT)
     }
-  } else {
-    throw error
   }
+  throw error
 }

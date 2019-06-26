@@ -49,8 +49,14 @@
         </b-row>
         <b-row v-if="!isNewProject">
           <b-col>
-            <CollapsableItem title="Project's related skills">
-              <ProjectSkillForm :project-id="editableProject.id" />
+            <CollapsableItem
+              title="Project's related skills"
+              :initial-visibility="skillsInitialVisibility"
+            >
+              <ProjectSkillForm
+                :project-id="editableProject.id"
+                :show-skills-list-initially="skillsInitialVisibility"
+              />
             </CollapsableItem>
           </b-col>
         </b-row>
@@ -93,7 +99,11 @@ export default {
       type: Number,
       required: true
     },
-    modalHeader: String
+    modalHeader: String,
+    skillsInitialVisibility: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
@@ -182,7 +192,7 @@ export default {
           message: this.isNewProject ? 'Project created!' : 'Project updated!'
         })
         this.showError = false
-        this.$emit('close-modal')
+        this.$emit('close-modal', profileProject)
       } catch (error) {
         if (Array.isArray(error.data.error.details)) {
           this.errorDetails = error.data.error.details

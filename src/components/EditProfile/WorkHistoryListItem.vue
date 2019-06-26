@@ -1,18 +1,16 @@
 <template>
   <div>
-    <div>
-      <span
-        v-b-modal="'create-or-edit-profile-employer-modal'"
-        name="employer"
-        class="employer-name"
-      >
-        {{ profileEmployer ? getEmployerName(profileEmployer.employerId) : '' }}
-      </span>
-      <span>
-        {{ profileEmployer ? profileEmployer.title[currentLanguage] : '' }}
-      </span>
-      <span>{{ getFormatedDate(profileEmployer.startDate) + ' - ' + getFormatedDate(profileEmployer.endDate) }}</span>
-    </div>
+    <span
+      v-b-modal="'create-or-edit-profile-employer-modal'"
+      name="employer"
+      class="employer-name"
+    >
+      {{ profileEmployer ? getEmployerName(profileEmployer.employerId) : '' }}
+    </span>
+    <span>
+      {{ profileEmployer ? profileEmployer.title[currentLanguage] : '' }}
+    </span>
+    <span>{{ getFormatedDate(profileEmployer.startDate) + ' - ' + getFormatedDate(profileEmployer.endDate) }}</span>
   </div>
 </template>
 

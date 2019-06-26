@@ -42,7 +42,7 @@
         v-if="profile.introduction"
         class="profileCardDetails profile-card-detail-row"
       >
-        {{ profile.introduction.en }}
+        {{ profile.introduction[currentLanguage] }}
       </div>
     </div>
   </div>
@@ -55,7 +55,7 @@ export default {
     'profile': Object
   },
   computed: {
-    ...mapGetters(['profileId', 'isAdmin', 'employeeRoles']),
+    ...mapGetters(['profileId', 'isAdmin', 'employeeRoles', 'currentLanguage']),
     getNames: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
     },

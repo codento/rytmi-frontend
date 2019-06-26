@@ -86,14 +86,21 @@
           type="tel"
         />
       </b-form-group>
-      <b-form-group
-        v-for="lang in descriptionLanguages"
-        :key="'edit-introduction-elem-' + lang.key"
-        :label="`Introduction for CV main page (in ${lang.label}) *`"
-        :label-for="'introduction-input-' + lang.key"
-        sm="6"
-      >
-        <b-col>
+      <b-card>
+        <div>
+          <h4>
+            Information to include in CV
+          </h4>
+        </div>
+        <b-form-group
+          v-for="lang in languages"
+          :key="'edit-introduction-elem-' + lang.key"
+          :label="`Introduction for CV main page (in ${lang.label}) *`"
+          :label-for="'introduction-input-' + lang.key"
+          label-align-md="left"
+          label-size="sm"
+          sm="6"
+        >
           <b-textarea
             :id="'introduction-input-' + lang.key"
             v-model="editedProfile.introduction[lang.key]"
@@ -111,16 +118,48 @@
               Introduction cannot be empty
             </div>
             <div v-else>
-              Maximum number of characters reached ({{ editedProfile.introduction[lang.key].length }}/{{ maxIntroductionLength }})
+              Maximum number of characters reached ({{ editedProfile.introduction[lang.key].length }}/{{ maxLengths.introduction }})
             </div>
           </b-form-invalid-feedback>
           <div v-if="introductionIsValid(lang.key)">
             <p class="text-right text-success">
-              {{ maxIntroductionLength - editedProfile.introduction[lang.key].length }}/{{ maxIntroductionLength }}
+              {{ maxLengths.introduction - editedProfile.introduction[lang.key].length }}/{{ maxLengths.introduction }}
             </p>
           </div>
-        </b-col>
-      </b-form-group>
+        </b-form-group>
+        <b-form-group
+          v-for="lang in languages"
+          :key="'edit-other-info-elem-' + lang.key"
+          :label="`Other info to include in CV (in ${lang.label}) *`"
+          :label-for="'other-info-input-' + lang.key"
+          label-align-md="left"
+          label-size="sm"
+          sm="6"
+        >
+          <b-textarea
+            :id="'other-info-input-' + lang.key"
+            v-model="editedProfile.otherInfo[lang.key]"
+            :placeholder="`Describe your hobbies and interests ${lang.label}`"
+            type="text"
+            rows="2"
+            :state="otherInfoIsValid(lang.key)"
+            @focus="otherInfoEdited[lang.key] = true"
+          />
+          <b-form-invalid-feedback
+            :id="'other-info-input-feedback-' + lang.key"
+            class="text-left"
+          >
+            <div v-if="editedProfile.otherInfo[lang.key].length > 0">
+              Maximum number of characters reached ({{ editedProfile.otherInfo[lang.key].length }}/{{ maxLengths.otherInfo }})
+            </div>
+          </b-form-invalid-feedback>
+          <div v-if="otherInfoIsValid(lang.key)">
+            <p class="text-right text-success">
+              {{ maxLengths.otherInfo - editedProfile.otherInfo[lang.key].length }}/{{ maxLengths.otherInfo }}
+            </p>
+          </div>
+        </b-form-group>
+      </b-card>
       <b-button
         id="submit-basic-details"
         type="submit"
@@ -153,12 +192,15 @@ export default {
   },
   data () {
     return {
-      maxIntroductionLength: 360,
+      maxLengths: {
+        introduction: 700,
+        otherInfo: 1000
+      },
       selectedEmployeeRoles: [],
       editedProfile: JSON.parse(JSON.stringify(this.profile)),
       validated: false,
-      introductionEdited: { fi: undefined, en: undefined }
-
+      introductionEdited: { fi: undefined, en: undefined },
+      otherInfoEdited: { fi: undefined, en: undefined }
     }
   },
   computed: {
@@ -173,7 +215,7 @@ export default {
       })
       return roles.filter(role => !this.selectedEmployeeRoles.some(selectedRole => selectedRole.id === role.id))
     },
-    descriptionLanguages () {
+    languages () {
       return [{ key: 'fi', label: 'Finnish' }, { key: 'en', label: 'English' }]
     },
     isBirthYearValid () {
@@ -210,6 +252,8 @@ export default {
       }
       stateArray.push(this.introductionIsValid('fi'))
       stateArray.push(this.introductionIsValid('en'))
+      stateArray.push(this.otherInfoIsValid('fi'))
+      stateArray.push(this.otherInfoIsValid('en'))
       Array.prototype.push.apply(stateArray, this.birthYearState.map(item => item.state))
       return stateArray.every(item => item)
     }
@@ -224,15 +268,20 @@ export default {
     this.selectedEmployeeRoles = this.employeeRoleList.filter(role => {
       return this.editedProfile.employeeRoles.includes(role.id)
     })
-    if (!this.profile.introduction) {
-      this.editedProfile.introduction = { fi: '', en: '' }
-    }
+    this.editedProfile.introduction = this.editedProfile.introduction || { fi: '', en: '' }
+    this.editedProfile.otherInfo = this.editedProfile.otherInfo || { fi: '', en: '' }
   },
   methods: {
     ...mapActions(['updateProfile']),
     introductionIsValid (key) {
       if (this.introductionEdited[key] || this.validated) {
-        return this.editedProfile.introduction[key].length > 0 && this.editedProfile.introduction[key].length <= this.maxIntroductionLength
+        return this.editedProfile.introduction[key].length > 0 && this.editedProfile.introduction[key].length <= this.maxLengths.introduction
+      }
+      return undefined
+    },
+    otherInfoIsValid (key) {
+      if (this.otherInfoEdited[key] || this.validated) {
+        return this.editedProfile.otherInfo[key].length <= this.maxLengths.otherInfo
       }
       return undefined
     },

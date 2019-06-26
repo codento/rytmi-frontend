@@ -196,7 +196,7 @@ export default {
       const profileSkills = this.profileSkillsByProfileId(this.profile.id)
       return profileSkills
         ? profileSkills
-          .filter(skill => skill.visibleInCV && skill.knows > 0)
+          .filter(skill => skill.knows > 0)
           .map(skill => this.joinSkillCategory(skill))
         : []
     },
