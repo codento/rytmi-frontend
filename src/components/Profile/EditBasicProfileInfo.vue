@@ -193,7 +193,7 @@ export default {
   data () {
     return {
       maxLengths: {
-        introduction: 360,
+        introduction: 700,
         otherInfo: 1000
       },
       selectedEmployeeRoles: [],
