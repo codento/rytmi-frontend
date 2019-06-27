@@ -45,7 +45,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters(['profileProjectsStatus']),
+    ...mapGetters(['profileProjectsStatus', 'projectById']),
     minDate () {
       return moment()
     },
@@ -132,8 +132,10 @@ export default {
       const values = new Array(dates.size).fill(0)
       sortedDates.map((date, index) => {
         this.projects.forEach(project => {
-          if (moment(project.startDate) <= date && (project.endDate == null || date < moment(project.endDate))) {
-            values[index] += project.workPercentage
+          if (!this.projectById(project.projectId).isInternal) {
+            if (moment(project.startDate) <= date && (project.endDate == null || date < moment(project.endDate))) {
+              values[index] += project.workPercentage
+            }
           }
         })
       })
