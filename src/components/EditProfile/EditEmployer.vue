@@ -18,9 +18,9 @@
           <i
             v-if="profileEmployer.employerId !== internalCompanyId && selectedEmployerOption ? selectedEmployerOption.id : false"
             v-b-tooltip.hover
+            v-b-modal.edit-employer-name
             title="Change name of existing employer"
             class="fa fa-pencil edit-employer-name-icon"
-            v-b-modal.edit-employer-name
           />
           <b-modal
             id="edit-employer-name"
@@ -152,7 +152,7 @@
       </b-col>
     </b-row>
     <EditEmployerProjectList
-      v-if="profileEmployer.employerId && profileEmployer.employerId !== internalCompanyId && selectedEmployer.id"
+      v-if="profileEmployer.employerId && profileEmployer.employerId !== internalCompanyId && selectedEmployer.id && profileEmployer.id"
       :employer-id="profileEmployer.employerId"
       :profile-id="profileEmployer.profileId"
     />
