@@ -134,7 +134,8 @@ export default {
     ...mapGetters([
       'profileFilter',
       'futureProjectsOfProfile',
-      'profileProjectsByProfileId'
+      'profileProjectsByProfileId',
+      'projectById'
     ]),
     chartOptionsForFirstItem () {
       const optionsCopy = cloneDeep(this.overrideChartOptions)
@@ -184,7 +185,7 @@ export default {
       const activeProfiles = this.profileFilter()
       // Map projects for each active profile
       return Object.values(activeProfiles).map(profile => {
-        const projects = this.futureProjectsOfProfile(profile.id)
+        const projects = this.futureProjectsOfProfile(profile.id).filter(profileProject => !this.projectById(profileProject.projectId).isInternal)
         let utilizationOnSelectedDate = 0
         projects.map(project => {
           utilizationOnSelectedDate += project.workPercentage
