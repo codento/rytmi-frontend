@@ -2,7 +2,7 @@ import { addDays, subDays } from 'date-fns'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
-import { merge } from 'lodash'
+import { filter, merge } from 'lodash'
 import { UtilizationChart } from '@/components/Common'
 import ConsultantUtilizationList from '@/components/Dashboard/ConsultantUtilizationList'
 import profileProjectGetters from '@/store/modules/profileProjects/getters'
@@ -72,6 +72,48 @@ const mockProjectProfiles = [
     workPercentage: 100
   }
 ]
+const mockProjects = {
+  1: {
+    id: 1,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  },
+  2: {
+    id: 2,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  },
+  3: {
+    id: 3,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  },
+  4: {
+    id: 4,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  }
+}
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
@@ -79,7 +121,8 @@ function createStore (overrideConfig) {
       futureProjectsOfProfile: () => (id) => mockProjectProfiles.filter(profileProject => {
         return profileProject.profileId === id
       }),
-      profileProjectsByProfileId: profileProjectGetters.profileProjectsByProfileId
+      profileProjectsByProfileId: profileProjectGetters.profileProjectsByProfileId,
+      projectById: () => (projectId) => filter(mockProjects, project => project.id === projectId)
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
