@@ -39,6 +39,39 @@ const profileProjectsMock = {
   4: { projectId: 3, profileId: 3, startDate: '2018-11-23', endDate: null, workPercentage: 20 } // No endDate, continues indefinitely
 }
 
+const projectsMock = {
+  1: {
+    id: 1,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  },
+  2: {
+    id: 2,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  },
+  3: {
+    id: 3,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  }
+}
+
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
 
 function createStore (overrideConfig) {
@@ -48,7 +81,8 @@ function createStore (overrideConfig) {
       profileFilter: () => (name) => !isEmpty(name) ? filter(profilesMock, profile => profile.firstName === name) : Object.values(profilesMock),
       profileSkillsByProfileId: () => (profileId) => filter(profileSkills, ps => ps.profileId === profileId),
       profiles: () => profilesMock,
-      futureProjectsOfProfile: () => (profileId) => filter(profileProjectsMock, project => project.profileId === profileId)
+      futureProjectsOfProfile: () => (profileId) => filter(profileProjectsMock, project => project.profileId === profileId),
+      projectById: () => (projectId) => filter(projectsMock, project => project.id === projectId)
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
