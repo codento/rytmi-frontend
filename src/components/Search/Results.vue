@@ -105,7 +105,8 @@ export default {
       'profileSkillsByProfileId',
       'profiles',
       'futureProjectsOfProfile',
-      'profileProjectsByProfileId'
+      'profileProjectsByProfileId',
+      'projectById'
     ]),
     sortOptions () {
       const { name, knows, wantsTo, utilization } = sortAttributeEnum
@@ -157,7 +158,7 @@ export default {
       const parsedDate = getOnlyDateFromFullDate(utilizationDateFilter)
 
       if (isValid(parsedDate)) {
-        return profilesToFilter.filter(profile => getProjectsAtGivenTime(profile.projects.filter(project => project.workPercentage > 0), parsedDate).length === 0)
+        return profilesToFilter.filter(profile => getProjectsAtGivenTime(profile.projects.filter(project => project.workPercentage > 0 && this.projectById(project.projectId).isInternal), parsedDate).length === 0)
       }
       return profilesToFilter
     },
