@@ -112,7 +112,7 @@
           <Datepicker
             id="profile-project-start-date"
             v-model="editableProfileProject.startDate"
-            :name="`profile-project-start-date${isInModal ? '-modal' : ''}`"
+            :name="`profile-project-start-date-${profileProject.id}${isInModal ? '-modal' : ''}`"
             :is-valid="inputStates.startDate"
           />
           <small
@@ -127,7 +127,7 @@
           <Datepicker
             id="profile-project-end-date"
             v-model="editableProfileProject.endDate"
-            :name="`profile-project-end-date${isInModal ? '-modal' : ''}`"
+            :name="`profile-project-end-date-${profileProject.id}${isInModal ? '-modal' : ''}`"
           />
         </b-col>
       </b-row>
