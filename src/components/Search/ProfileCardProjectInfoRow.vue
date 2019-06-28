@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-for="project in futureProjectsOfProfile(profile.id)"
+      v-for="project in futureProjectsOfProfile(profile.id).filter(projectToFilter => projectById(projectToFilter.projectId).employerId === internalCompanyId && !projectById(projectToFilter.projectId).isInternal)"
       :key="project.id"
     >
       <b-row class="project-info-row">
@@ -28,6 +28,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { format } from 'date-fns'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
   name: 'ProfileCardProjectInfoRow',
@@ -38,8 +39,12 @@ export default {
     ...mapGetters([
       'futureProjectsOfProfile',
       'projectById',
-      'currentLanguage'
-    ])
+      'currentLanguage',
+      'employerByName'
+    ]),
+    internalCompanyId () {
+      return this.employerByName(INTERNAL_COMPANY_NAME).id
+    }
   },
   methods: {
     formattedDate (date) {
