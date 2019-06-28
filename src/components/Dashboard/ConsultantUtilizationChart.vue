@@ -31,6 +31,7 @@ import { mapGetters } from 'vuex'
 import { isWithinRange, isBefore, addMonths, addWeeks, format, isAfter } from 'date-fns'
 import ChartCard from './ChartCard'
 import LineChart from '../Charts/LineChart'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 const createLabel = (date) => format(date, 'D.M.YYYY')
 
@@ -58,7 +59,9 @@ export default {
     ...mapGetters([
       'profileFilter',
       'futureProjectsOfProfile',
-      'profileById'
+      'profileById',
+      'projectById',
+      'employerByName'
     ]),
     lineChartData () {
       const utilization = this.mapUtilizationOnTimeFrame(this.today, this.endDate)
@@ -124,7 +127,9 @@ export default {
         })
       })
       consultantProfiles.forEach((profile) => {
-        const projectProfiles = this.futureProjectsOfProfile(profile)
+        const projectProfiles = this.futureProjectsOfProfile(profile).filter(profileProject =>
+          this.projectById(profileProject.projectId).employerId === this.employerByName(INTERNAL_COMPANY_NAME).id &&
+          !this.projectById(profileProject.projectId).isInternal)
         this.consultantHasOngoingProject(projectProfiles, this.today)
           ? this.utilized += 1
           : this.notUtilized += 1
@@ -143,7 +148,9 @@ export default {
       let count = 0
       this.activeProfiles.forEach(profile => {
         if (this.activeRoleSelection.some(role => this.profileById(profile).employeeRoles.includes(role.id))) {
-          const profileProjects = this.futureProjectsOfProfile(profile)
+          const profileProjects = this.futureProjectsOfProfile(profile).filter(profileProject =>
+            this.projectById(profileProject.projectId).employerId === this.employerByName(INTERNAL_COMPANY_NAME).id &&
+            !this.projectById(profileProject.projectId).isInternal)
           if (this.consultantHasOngoingProject(profileProjects, currentDate)) {
             count += 1
           }

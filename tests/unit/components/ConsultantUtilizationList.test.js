@@ -114,6 +114,10 @@ const mockProjects = {
     isInternal: false
   }
 }
+const employersMock = {
+  1: { id: 1, name: 'Codento Oy' },
+  2: { id: 2, name: 'Företag Ab' }
+}
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
@@ -122,7 +126,8 @@ function createStore (overrideConfig) {
         return profileProject.profileId === id
       }),
       profileProjectsByProfileId: profileProjectGetters.profileProjectsByProfileId,
-      projectById: () => (projectId) => filter(mockProjects, project => project.id === projectId)
+      projectById: () => (projectId) => filter(mockProjects, project => project.id === projectId),
+      employerByName: () => (employerName) => filter(employersMock, employer => employer.name === employerName)
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
