@@ -72,6 +72,11 @@ const projectsMock = {
   }
 }
 
+const employersMock = {
+  1: { id: 1, name: 'Codento Oy' },
+  2: { id: 2, name: 'Företag Ab' }
+}
+
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3 })
 
 function createStore (overrideConfig) {
@@ -82,7 +87,8 @@ function createStore (overrideConfig) {
       profileSkillsByProfileId: () => (profileId) => filter(profileSkills, ps => ps.profileId === profileId),
       profiles: () => profilesMock,
       futureProjectsOfProfile: () => (profileId) => filter(profileProjectsMock, project => project.profileId === profileId),
-      projectById: () => (projectId) => filter(projectsMock, project => project.id === projectId)
+      projectById: () => (projectId) => filter(projectsMock, project => project.id === projectId),
+      employerByName: () => (employerName) => filter(employersMock, employer => employer.name === employerName)
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)

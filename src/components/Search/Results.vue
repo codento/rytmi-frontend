@@ -63,6 +63,8 @@ import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
 import { isValid, startOfDay } from 'date-fns'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3, utilization: 4 })
 
 const sortArrayBy = (array, key) => sortBy(array, key)
@@ -106,7 +108,8 @@ export default {
       'profiles',
       'futureProjectsOfProfile',
       'profileProjectsByProfileId',
-      'projectById'
+      'projectById',
+      'employerByName'
     ]),
     sortOptions () {
       const { name, knows, wantsTo, utilization } = sortAttributeEnum
@@ -183,7 +186,7 @@ export default {
         return {
           profile: profile,
           skills: this.profileSkillsByProfileId(profile.id),
-          projects: this.futureProjectsOfProfile(profile.id),
+          projects: this.futureProjectsOfProfile(profile.id).filter(profileProject => this.projectById(profileProject.projectId).employerId === this.employerByName(INTERNAL_COMPANY_NAME).id),
           utilization: utilizationOnSelectedDate
         }
       })
