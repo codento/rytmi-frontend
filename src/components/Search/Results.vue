@@ -151,12 +151,11 @@ export default {
       return profilesToFilter.filter(profile => difference(skillIds, profile.skills.map(skill => skill.skillId)).length === 0)
     },
     getProfilesFilteredByUtilization (profilesToFilter, utilizationDateFilter) {
+      const getOnlyDateFromFullDate = (date) => startOfDay(date)
       const getProjectsAtGivenTime = (projects, date) => projects.filter(project =>
         getOnlyDateFromFullDate(project.startDate) <= date &&
         (isEmpty(project.endDate) || getOnlyDateFromFullDate(project.endDate) >= date))
-      const getOnlyDateFromFullDate = (date) => startOfDay(date)
       const parsedDate = getOnlyDateFromFullDate(utilizationDateFilter)
-
       if (isValid(parsedDate)) {
         return profilesToFilter.filter(profile => getProjectsAtGivenTime(profile.projects.filter(project => project.workPercentage > 0 && !this.projectById(project.projectId).isInternal), parsedDate).length === 0)
       }
