@@ -63,6 +63,7 @@ import { mapGetters } from 'vuex'
 import { differenceInDays } from 'date-fns'
 import { UtilizationChart, CollapsableItem } from '@/components/Common'
 import ChartCard from './ChartCard'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 const getMaxDate = (projectsArray) => {
   const projectsEndDates = projectsArray.filter(project => !!project.endDate).map(project => new Date(project.endDate))
@@ -135,7 +136,8 @@ export default {
       'profileFilter',
       'futureProjectsOfProfile',
       'profileProjectsByProfileId',
-      'projectById'
+      'projectById',
+      'employerByName'
     ]),
     chartOptionsForFirstItem () {
       const optionsCopy = cloneDeep(this.overrideChartOptions)
@@ -185,7 +187,9 @@ export default {
       const activeProfiles = this.profileFilter()
       // Map projects for each active profile
       return Object.values(activeProfiles).map(profile => {
-        const projects = this.futureProjectsOfProfile(profile.id).filter(profileProject => !this.projectById(profileProject.projectId).isInternal)
+        const projects = this.futureProjectsOfProfile(profile.id).filter(profileProject =>
+          !this.projectById(profileProject.projectId).isInternal &&
+          this.projectById(profileProject.projectId).employerId === this.employerByName(INTERNAL_COMPANY_NAME).id)
         let utilizationOnSelectedDate = 0
         projects.map(project => {
           utilizationOnSelectedDate += project.workPercentage
