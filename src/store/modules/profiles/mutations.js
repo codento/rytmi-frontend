@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import * as types from '../../mutation-types'
-import moment from 'moment'
+import { startOfToday, startOfDay } from 'date-fns'
 
 export const mutations = {
   [types.FETCH_PROFILES] (state, profiles) {
@@ -42,7 +42,7 @@ export const mutations = {
     if (index === -1) {
       state.profileProjectList[profileProject.profileId].push(profileProject.id)
     }
-    if (profileProject.endDate == null || moment(profileProject.endDate) > moment()) {
+    if (profileProject.endDate == null || startOfDay(profileProject.endDate) >= startOfToday()) {
       if (!(profileProject.profileId in state.futurePpList)) {
         Vue.set(state.futurePpList, profileProject.profileId, [])
       }
