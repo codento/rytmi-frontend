@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import LineChart from '@/components/Charts/LineChart'
-import { merge } from 'lodash'
+import { filter, merge } from 'lodash'
 import ConsultantUtilizationChart from '@/components/Dashboard/ConsultantUtilizationChart'
 
 const localVue = createLocalVue()
@@ -61,6 +61,52 @@ const mockProjectProfiles = [
     endDate: new Date('2018-12-31')
   }
 ]
+const mockProjects = {
+  1: {
+    id: 1,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  },
+  2: {
+    id: 2,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  },
+  3: {
+    id: 3,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  },
+  4: {
+    id: 4,
+    name: { en: 'Project Foo', fi: 'Projekti Foo' },
+    description: { en: 'Foo Bar', fi: 'Foo Bar' },
+    customerName: { en: 'Customer', fi: 'Asiakas' },
+    code: 50,
+    startDate: new Date('2018-01-01'),
+    endDate: new Date('2018-05-01'),
+    isInternal: false
+  }
+}
+const employersMock = {
+  1: { id: 1, name: 'Codento Oy' },
+  2: { id: 2, name: 'Företag Ab' }
+}
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
@@ -111,7 +157,9 @@ function createStore (overrideConfig) {
           phone: '1354',
           description: 'fdas'
         }
-      }
+      },
+      projectById: () => (projectId) => filter(mockProjects, project => project.id === projectId),
+      employerByName: () => (employerName) => filter(employersMock, employer => employer.name === employerName)
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)

@@ -64,8 +64,8 @@
           <b-col>
             <div>
               <EditEmployer
-                class="edit-employer"
                 :key="profileEmployer ? profileEmployer.id : 0"
+                class="edit-employer"
                 :profile-employer="profileEmployer"
                 :vue-selects-employers="vueSelectsEmployers"
               />

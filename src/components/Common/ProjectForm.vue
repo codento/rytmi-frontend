@@ -128,7 +128,7 @@
           <b-textarea
             id="project-description-fi-input"
             v-model="editedProject.description.fi"
-            placeholder="Project description (fi)"
+            placeholder="Kuvaile projektia ja mitä teit siinä"
             type="text"
             rows="5"
             :state="inputStates.projectDescriptionFi"
@@ -141,7 +141,7 @@
           <b-textarea
             id="project-description-en-input"
             v-model="editedProject.description.en"
-            placeholder="Project description (en)"
+            placeholder="Describe the project and what you did in it."
             type="text"
             rows="5"
             :state="inputStates.projectDescriptionEn"

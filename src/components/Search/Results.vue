@@ -63,6 +63,8 @@ import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
 import { isValid, startOfDay } from 'date-fns'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3, utilization: 4 })
 
 const sortArrayBy = (array, key) => sortBy(array, key)
@@ -105,7 +107,9 @@ export default {
       'profileSkillsByProfileId',
       'profiles',
       'futureProjectsOfProfile',
-      'profileProjectsByProfileId'
+      'profileProjectsByProfileId',
+      'projectById',
+      'employerByName'
     ]),
     sortOptions () {
       const { name, knows, wantsTo, utilization } = sortAttributeEnum
@@ -150,14 +154,13 @@ export default {
       return profilesToFilter.filter(profile => difference(skillIds, profile.skills.map(skill => skill.skillId)).length === 0)
     },
     getProfilesFilteredByUtilization (profilesToFilter, utilizationDateFilter) {
+      const getOnlyDateFromFullDate = (date) => startOfDay(date)
       const getProjectsAtGivenTime = (projects, date) => projects.filter(project =>
         getOnlyDateFromFullDate(project.startDate) <= date &&
         (isEmpty(project.endDate) || getOnlyDateFromFullDate(project.endDate) >= date))
-      const getOnlyDateFromFullDate = (date) => startOfDay(date)
       const parsedDate = getOnlyDateFromFullDate(utilizationDateFilter)
-
       if (isValid(parsedDate)) {
-        return profilesToFilter.filter(profile => getProjectsAtGivenTime(profile.projects.filter(project => project.workPercentage > 0), parsedDate).length === 0)
+        return profilesToFilter.filter(profile => getProjectsAtGivenTime(profile.projects.filter(project => project.workPercentage > 0 && !this.projectById(project.projectId).isInternal), parsedDate).length === 0)
       }
       return profilesToFilter
     },
@@ -183,7 +186,7 @@ export default {
         return {
           profile: profile,
           skills: this.profileSkillsByProfileId(profile.id),
-          projects: this.futureProjectsOfProfile(profile.id),
+          projects: this.futureProjectsOfProfile(profile.id).filter(profileProject => this.projectById(profileProject.projectId).employerId === this.employerByName(INTERNAL_COMPANY_NAME).id),
           utilization: utilizationOnSelectedDate
         }
       })
