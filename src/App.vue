@@ -14,11 +14,11 @@
       </main>
       <b-modal
         id="login-popup"
-        title="Login expiring!"
+        title="Session expiring!"
         @ok.prevent="loginViaModal"
-        @cancel="cancelLoginModal"
+        @cancel="clearLoginModalCheckInterval"
       >
-        Your login will expire in 5 minutes!
+        {{ loginModalText() }}
         <template #modal-ok>
           Keep me logged in
         </template>
@@ -56,7 +56,8 @@ export default {
       'profileId',
       'isTokenValid',
       'appInitialized',
-      'tokenValidTime'
+      'tokenValidTime',
+      'now'
     ]),
     nav () {
       const navItems = [
@@ -93,8 +94,11 @@ export default {
     }
   },
   created () {
+    this.startNow()
     this.initialAuth()
-    this.modalTimer = setInterval(this.checkTokenTimeout, 10000)
+    this.modalTimer = setInterval(() => {
+      this.loginModalTokenCheck()
+    }, 10000)
   },
   methods: {
     ...mapActions([
@@ -111,18 +115,19 @@ export default {
       'fetchUsers',
       'fetchEmployers',
       'fetchProfileEmployers',
-      'handleLogin'
+      'handleLogin',
+      'startNow'
     ]),
     ...mapMutations({
       setAppInitialized: SET_APP_INITIALIZED,
       setAppInitializeError: SET_APP_INITIALIZE_ERROR
     }),
-    checkTokenTimeout () {
-      if (Number(this.tokenValidTime) - 360 < Math.round(Date.now() / 1000) && this.isAuthenticated && this.isTokenValid) {
+    loginModalTokenCheck () {
+      if (Number(this.tokenValidTime) - 360 < this.now / 1000 && this.isAuthenticated && this.isTokenValid) {
         this.$bvModal.show('login-popup')
       }
     },
-    cancelLoginModal () {
+    clearLoginModalCheckInterval () {
       clearInterval(this.modalTimer)
     },
     async loginViaModal () {
@@ -164,6 +169,14 @@ export default {
             this.setAppInitialized(this.isTokenValid && isSignedInToGoogle)
           })
       }
+    },
+    loginModalText () {
+      return this.tokenValidTime - 360 < this.now / 1000 && this.tokenValidTime > this.now / 1000
+        ? `Your session will expire soon`
+        : `Your session has expired`
+    },
+    beforeDestroy () {
+      this.clearLoginModalCheckInterval()
     }
   }
 }
