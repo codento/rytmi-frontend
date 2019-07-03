@@ -34,7 +34,17 @@
             :description="item.descriptions[currentLanguage]"
             :invalid-feedback="invalidFeedback(item.key, currentLanguage)"
           >
+            <b-textarea
+              v-if="item.key === 'additionalInfo'"
+              :id="'input-'+ kebabCase(item.key) + '-' + currentLanguage"
+              v-model="editedValues[currentLanguage][item.key]"
+              type="text"
+              rows="2"
+              :state="inputStates[item.key] ? inputStates[item.key][currentLanguage].state : null"
+              class="form-control"
+            />
             <b-form-input
+              v-else
               :id="'input-'+ kebabCase(item.key) + '-' + currentLanguage"
               v-model="editedValues[currentLanguage][item.key]"
               type="text"
@@ -176,6 +186,16 @@ export default {
           descriptions: {
             fi: 'Sivuaineen nimi, esim. Geoinformatiikka',
             en: 'Name of the minor studied, e.g. Geoinformatics'
+          }
+        },
+        { key: 'additionalInfo',
+          labels: {
+            fi: 'Lisätieto',
+            en: 'Additional information'
+          },
+          descriptions: {
+            fi: 'Vapaa tekstikenttä, johon voi esim. lopputyön aiheen tai lyhyen kuvauksen koulutuksesta',
+            en: 'Free form text which can include e.g. thesis subject or short description if needed'
           }
         },
         { key: 'startYear', labels: { fi: 'Aloitusvuosi *', en: '' }, descriptions: { fi: '', en: '' } },

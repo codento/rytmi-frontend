@@ -19,35 +19,7 @@
           </template>
 
           <template
-            slot="startYear"
-            slot-scope="data"
-          >
-            {{ data.value }}
-          </template>
-
-          <template
-            slot="endYear"
-            slot-scope="data"
-          >
-            {{ data.value }}
-          </template>
-
-          <template
             slot="degree"
-            slot-scope="data"
-          >
-            <span class="table-cell-text text-truncate"> {{ data.value }} </span>
-          </template>
-
-          <template
-            slot="major"
-            slot-scope="data"
-          >
-            <span class="table-cell-text text-truncate"> {{ data.value }} </span>
-          </template>
-
-          <template
-            slot="minor"
             slot-scope="data"
           >
             <span class="table-cell-text text-truncate"> {{ data.value }} </span>
@@ -119,13 +91,15 @@ const educationTemplate = {
     school: '',
     degree: '',
     major: '',
-    minor: ''
+    minor: '',
+    additionalInfo: ''
   },
   en: {
     school: '',
     degree: '',
     major: '',
-    minor: ''
+    minor: '',
+    additionalInfo: ''
   },
   startYear: null,
   endYear: null
@@ -146,8 +120,6 @@ export default {
         { key: 'startYear', label: 'Starting year' },
         { key: 'endYear', label: 'Finishing year' },
         { key: 'degree', label: 'Degree' },
-        { key: 'major', label: 'Major' },
-        { key: 'minor', label: 'Minor' },
         'actions'
       ],
       editedEducation: this.profile.education ? this.profile.education : [],
@@ -165,7 +137,8 @@ export default {
           startYear: item.startYear,
           endYear: item.endYear,
           major: item[this.currentLanguage].major,
-          minor: item[this.currentLanguage].minor
+          minor: item[this.currentLanguage].minor,
+          additionalInfo: item[this.currentLanguage].additionalInfo
         }
       })
     }
