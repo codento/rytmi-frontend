@@ -123,14 +123,14 @@
           </b-form-invalid-feedback>
           <div v-if="introductionIsValid(lang.key)">
             <p class="text-right text-success">
-              {{ maxLengths.introduction - editedProfile.introduction[lang.key].length }}/{{ maxLengths.introduction }}
+              {{ editedProfile.introduction[lang.key].length }}/{{ maxLengths.introduction }}
             </p>
           </div>
         </b-form-group>
         <b-form-group
           v-for="lang in languages"
           :key="'edit-other-info-elem-' + lang.key"
-          :label="`Other info to include in CV (in ${lang.label}) *`"
+          :label="`Other info to include in CV (in ${lang.label})`"
           :label-for="'other-info-input-' + lang.key"
           label-align-md="left"
           label-size="sm"
@@ -139,9 +139,9 @@
           <b-textarea
             :id="'other-info-input-' + lang.key"
             v-model="editedProfile.otherInfo[lang.key]"
-            :placeholder="`Describe your hobbies and interests ${lang.label}`"
+            :placeholder="`Optional description of hobbies, interests etc for CV final page under heading Other info (in ${lang.label})`"
             type="text"
-            rows="2"
+            rows="6"
             :state="otherInfoIsValid(lang.key)"
             @focus="otherInfoEdited[lang.key] = true"
           />
@@ -155,7 +155,7 @@
           </b-form-invalid-feedback>
           <div v-if="otherInfoIsValid(lang.key)">
             <p class="text-right text-success">
-              {{ maxLengths.otherInfo - editedProfile.otherInfo[lang.key].length }}/{{ maxLengths.otherInfo }}
+              {{ editedProfile.otherInfo[lang.key].length }}/{{ maxLengths.otherInfo }}
             </p>
           </div>
         </b-form-group>
