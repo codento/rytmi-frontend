@@ -19,6 +19,7 @@
             {{ labels[language].minorLabel }}: {{ educationData[language].minor }}
           </span>
         </p>
+        <p> {{ educationData[language].additionalInfo }} </p>
       </b-card-text>
     </b-card-body>
   </b-card>
