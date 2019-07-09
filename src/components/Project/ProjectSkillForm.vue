@@ -6,7 +6,7 @@
     >
       <ul>
         <li
-          v-for="skill of activeProjectSkills"
+          v-for="skill of projectById(projectId).projectSkills"
           :key="skill.skillId"
         >
           {{ skillById(skill.skillId).name }}

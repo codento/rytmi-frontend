@@ -51,13 +51,6 @@
           no-redirect
         />
       </CollapsableItem>
-      <hr>
-      <CollapsableItem title="Related skills">
-        <ProjectSkillForm
-          v-if="project.id"
-          :project-id="project.id"
-        />
-      </CollapsableItem>
     </div>
   </div>
 </template>
@@ -68,8 +61,7 @@ import store from '@/store'
 import { CollapsableItem, ProjectProfileForm } from '@/components/Common'
 import {
   ProjectMemberTable,
-  ProjectFormWrapper,
-  ProjectSkillForm
+  ProjectFormWrapper
 } from '@/components/Project'
 
 export default {
@@ -78,7 +70,6 @@ export default {
     ProjectProfileForm,
     ProjectMemberTable,
     ProjectFormWrapper,
-    ProjectSkillForm,
     CollapsableItem
   },
   computed: {

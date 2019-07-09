@@ -158,6 +158,58 @@
         </b-form-checkbox>
       </b-col>
     </b-row>
+    <b-row>
+      <b-form-group
+        id="profile-project-skill-form"
+      >
+        <b-col>
+          <small>
+            Skills related to project
+          </small>
+        </b-col>
+        <b-col>
+          <div
+            v-for="skill of editedProject.skills"
+            :key="skill.skillId"
+            class="skill-item mx-1 my-1"
+          >
+            <span>
+              {{ skill.name }}
+              <i
+                class="fa fa-trash icon"
+                @click="removeSkillFromProject(skill)"
+              />
+            </span>
+          </div>
+        </b-col>
+      </b-form-group>
+      <b-col cols="12">
+        <b-button v-b-modal.project-skill-modal>
+          Add skills to project
+        </b-button>
+      </b-col>
+      <b-modal
+        id="project-skill-modal"
+        :title="`Add skills to project ${editedProject.name[currentLanguage]}`"
+        ok-only
+      >
+        Click on a skill to add it to the project
+        <b-input
+          v-model="skillFilterText"
+          class="my-3"
+          type="text"
+          placeholder="Filter by skill name"
+        />
+        <div
+          v-for="skill in projectSkillList"
+          :key="skill.name"
+          class="skill-item clickable mx-1 my-1"
+          @click.once="addSkillToProject(skill)"
+        >
+          {{ skill.name }}
+        </div>
+      </b-modal>
+    </b-row>
     <slot name="custom-form" />
     <b-row class="mt-4 pull-right">
       <b-col>
@@ -186,6 +238,7 @@
 import { mapGetters } from 'vuex'
 import Datepicker from '@/components/helpers/Datepicker'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+import orderBy from 'lodash/orderBy'
 
 export default {
   name: 'ProjectForm',
@@ -218,13 +271,17 @@ export default {
   data () {
     return {
       editedProject: this.initProject(),
-      validated: false
+      validated: false,
+      skillFilterText: ''
     }
   },
   computed: {
     ...mapGetters([
       'employerByName',
-      'projects'
+      'projects',
+      'skillById',
+      'skills',
+      'currentLanguage'
     ]),
     internalCompanyId () {
       return this.employerByName(INTERNAL_COMPANY_NAME).id
@@ -238,6 +295,15 @@ export default {
     },
     showCustomerName () {
       return !this.editedProject.isInternal
+    },
+    projectSkillList () {
+      if (this.skills) {
+        const unorderedSkills = Object.values(this.skills)
+          .filter(skill =>
+            !this.editedProject.skills.map(projectSkill => projectSkill.id).includes(skill.id))
+        return orderBy(unorderedSkills.filter(skill => skill.name.toLowerCase().includes(this.skillFilterText.toLowerCase())), [skill => skill.name.toLowerCase()])
+      }
+      return []
     },
     isProjectCodeValid () {
       if (!this.validated) {
@@ -308,9 +374,37 @@ export default {
         name: !this.isNewProject && this.project.name ? { ...this.project.name } : { fi: '', en: '' },
         description: !this.isNewProject && this.project.description ? { ...this.project.description } : { fi: '', en: '' },
         customerName: !this.isNewProject && this.project.customerName ? { ...this.project.customerName } : { fi: '', en: '' },
-        employerId: this.employerId
+        employerId: this.employerId,
+        skills: !this.isNewProject ? this.project.skills : []
+
       }
+    },
+    addSkillToProject (skill) {
+      this.editedProject.skills.push(skill)
+    },
+    removeSkillFromProject (skill) {
+      this.editedProject.skills = this.editedProject.skills.filter(projectSkill => projectSkill.id !== skill.id)
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+.skill-item {
+  float: left;
+  padding: 5px 10px;
+  background-color: $c-light;
+  border-radius: 10px;
+}
+.skill-item.clickable:hover {
+  background-color: $c-dark;
+  cursor: pointer;
+}
+.fa.fa-trash {
+  color: gray;
+}
+.fa.fa-trash:hover {
+  color: black;
+  cursor: pointer;
+}
+</style>

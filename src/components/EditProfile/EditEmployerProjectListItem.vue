@@ -47,19 +47,6 @@
             </b-form-group>
           </b-col>
         </b-row>
-        <b-row v-if="!isNewProject">
-          <b-col>
-            <CollapsableItem
-              title="Project's related skills"
-              :initial-visibility="skillsInitialVisibility"
-            >
-              <ProjectSkillForm
-                :project-id="editableProject.id"
-                :show-skills-list-initially="skillsInitialVisibility"
-              />
-            </CollapsableItem>
-          </b-col>
-        </b-row>
       </template>
     </ProjectForm>
     <div
@@ -75,16 +62,14 @@
 import { cloneDeep } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel.vue'
-import { ProjectForm, CollapsableItem } from '@/components/Common'
-import { ProjectSkillForm } from '@/components/Project'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+import { ProjectForm } from '@/components/Common'
 
 export default {
   name: 'EditEmployerProjectListItem',
   components: {
     ProjectForm,
-    ApiErrorDetailsPanel,
-    ProjectSkillForm,
-    CollapsableItem
+    ApiErrorDetailsPanel
   },
   props: {
     editableProject: {
@@ -99,11 +84,7 @@ export default {
       type: Number,
       required: true
     },
-    modalHeader: String,
-    skillsInitialVisibility: {
-      type: Boolean,
-      default: false
-    }
+    modalHeader: String
   },
   data () {
     return {
@@ -115,7 +96,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['employers']),
+    ...mapGetters(['employers', 'employerByName']),
     isNewProject () {
       return this.editableProject.id === null
     },
@@ -180,7 +161,8 @@ export default {
         role: {
           fi: this.editedProfileProject.role.fi,
           en: this.editedProfileProject.role.en
-        }
+        },
+        skills: this.currentEmployerId === this.employerByName(INTERNAL_COMPANY_NAME).id ? this.editedProfileProject.skills : relatedProject.skills
       }
       try {
         if (this.isNewProject) {

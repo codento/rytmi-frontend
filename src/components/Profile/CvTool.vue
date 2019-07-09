@@ -220,8 +220,7 @@ export default {
               description: project.description,
               customerName: project.customerName,
               employerId: project.employerId,
-              isSecret: project.isSecret,
-              projectSkills: [...project.projectSkills]
+              isSecret: project.isSecret
             })
           }
           return profileProject

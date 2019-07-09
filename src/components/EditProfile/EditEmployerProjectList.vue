@@ -98,7 +98,6 @@
         :editable-project="selectedProject.project"
         :profile-project="selectedProject.profileProject"
         :current-employer-id="employerId"
-        :skills-initial-visibility="projectSkillsInitialVisibility"
         @close-modal="showUpdateProjectModal = false"
       />
     </b-modal>
@@ -134,8 +133,7 @@ export default {
       selectedProject: undefined,
       showNewProjectModal: false,
       showUpdateProjectModal: false,
-      internalCompany: INTERNAL_COMPANY_NAME,
-      projectSkillsInitialVisibility: false
+      internalCompany: INTERNAL_COMPANY_NAME
     }
   },
   computed: {
@@ -164,11 +162,11 @@ export default {
         try {
           this.removeProfileProject(profileProject)
           this.$toasted.global.rytmi_success({
-            message: `Profile removed from project`
+            message: `Project removed`
           })
         } catch (error) {
           this.$toasted.global.rytmi_error({
-            message: `Error while removing profile from project: ${error}`
+            message: `Error while removing project: ${error}`
           })
         }
       }
@@ -178,15 +176,11 @@ export default {
       return format(startDate, 'MM/YYYY') + '-' + formattedEndDate
     },
     selectProject (index) {
-      this.projectSkillsInitialVisibility = false
       this.selectedProject = this.profileProjectsWithProjectData[this.showEditIconByIndex]
     },
     newProjectModalClosed (newProfileProject) {
-      const newlyCreatedProject = Object.values(this.profileProjectsWithProjectData).find(profileProject => profileProject.project.id === newProfileProject.projectId)
       this.showNewProjectModal = false
-      this.selectedProject = newlyCreatedProject
-      this.projectSkillsInitialVisibility = true
-      this.showUpdateProjectModal = true
+      this.selectedProject = Object.values(this.profileProjectsWithProjectData).find(profileProject => profileProject.project.id === newProfileProject.projectId)
     }
   }
 }
