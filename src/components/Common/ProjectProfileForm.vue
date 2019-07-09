@@ -143,6 +143,27 @@
           :state="isWorkPercentageValid"
         />
       </b-form-group>
+      <b-form-group
+        id="profile-project-skill-form"
+      >
+        <b-row>
+          <b-col cols="12">
+            <small>Select skills you have worked with while on the project:</small>
+          </b-col>
+          <b-col cols="12">
+            <div
+              v-for="skill of projectSkills"
+              :key="skill.skillId"
+              :class="`skill-item mx-1 my-1 ${isSelectedSkill(skill) ? 'selected' : ''}`"
+              @click="editableProfileProject.skills.some(profileProjectSkill => profileProjectSkill.id === skill.id) ? removeSkill(skill) : addSkillToProfileProject(skill)"
+            >
+              <span>
+                {{ (isSelectedSkill(skill) ? '✓ ' : '') + skill.name }}
+              </span>
+            </div>
+          </b-col>
+        </b-row>
+      </b-form-group>
       <b-button
         variant="primary"
         block
@@ -218,8 +239,13 @@ export default {
       'profiles',
       'projects',
       'employerByName',
-      'currentLanguage'
+      'currentLanguage',
+      'projectById',
+      'skillById'
     ]),
+    projectSkills () {
+      return this.profileProject.projectId ? this.projectById(this.profileProject.projectId).skills : []
+    },
     filteredProjects () {
       const projectList = Object.keys(this.projects).map(key => this.projects[key])
       return projectList.filter(project => {
@@ -282,11 +308,15 @@ export default {
       'newProjectProfile',
       'updateProfileProject'
     ]),
+    isSelectedSkill (skill) {
+      return this.editableProfileProject.skills.some(profileProjectSkill => profileProjectSkill.id === skill.id)
+    },
     initProfileProject () {
       if (!this.profileProject.id) {
         return {
           ...this.profileProject,
-          role: { fi: '', en: '' }
+          role: { fi: '', en: '' },
+          skills: []
         }
       }
       return cloneDeep(this.profileProject)
@@ -352,7 +382,8 @@ export default {
         this.editableProfileProject = {}
         this.editableProfileProject.projectId = !this.projectVisible ? this.profileProject.projectId : null
         this.editableProfileProject.profileId = this.profileProject.profileId
-        this.editableProfileProject.role = {}
+        this.editableProfileProject.role = { fi: '', en: '' }
+        this.editableProfileProject.skills = []
       } else {
         this.redirect()
       }
@@ -363,7 +394,29 @@ export default {
       } else if (this.profileProject.projectId) {
         this.$router.push('/projects/' + this.profileProject.projectId)
       }
+    },
+    addSkillToProfileProject (skill) {
+      this.editableProfileProject.skills.push(skill)
+    },
+    removeSkill (skill) {
+      this.editableProfileProject.skills = this.editableProfileProject.skills.filter(skillToFilter => skillToFilter.id !== skill.id)
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+  @import '@/assets/scss/_variables.scss';
+  .skill-item {
+    float: left;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: 1px solid $c-light;
+  }
+  .skill-item.selected {
+    background-color: $c-light;
+  }
+  .skill-item:hover {
+    background-color: $c-dark;
+    cursor: pointer;
+  }
+</style>

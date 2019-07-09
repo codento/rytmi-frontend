@@ -321,13 +321,6 @@ export function getProfileEmployers () {
     .catch(handleError)
 }
 
-export function insertProjectSkills (data) {
-  return axios.post(
-    API_URL + PATH_PROJECTSKILLS + '/',
-    data,
-    getAuthHeaders())
-}
-
 export function deleteProjectSkill (id) {
   return axios.delete(
     API_URL + PATH_PROJECTSKILLS + '/' + id,
@@ -335,17 +328,13 @@ export function deleteProjectSkill (id) {
     .catch(handleError)
 }
 
-export function getActiveProjectSkills (id) {
+export function getProjectsForProfile (id) {
   return axios.get(
-    API_URL + PATH_PROJECTSKILLS,
-    {
-      params: {
-        projectId: id
-      },
-      headers: getAuthHeaders().headers
-    }
-  ).catch(handleError)
+    API_URL + PATH_PROFILES + `/${id}` + PATH_PROJECTS,
+    getAuthHeaders())
+    .catch(handleError)
 }
+
 function handleError (error) {
   if (error.response) {
     if (error.response.status === 401) {

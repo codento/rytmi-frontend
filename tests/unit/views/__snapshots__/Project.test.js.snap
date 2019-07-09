@@ -108,16 +108,6 @@ exports[`Project.vue Template is correct 1`] = `
         profileproject="[object Object]"
       />
     </collapsableitem-stub>
-     
-    <hr />
-     
-    <collapsableitem-stub
-      title="Related skills"
-    >
-      <projectskillform-stub
-        projectid="5"
-      />
-    </collapsableitem-stub>
   </div>
 </div>
 `;
