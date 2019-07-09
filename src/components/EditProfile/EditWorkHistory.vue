@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { parse } from 'date-fns'
 import { orderBy } from 'lodash'
 import EditEmployer from './EditEmployer'
@@ -132,8 +132,13 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['fetchEmployers']),
+    loadData: function () {
+      this.fetchEmployers()
+    },
     addNewProfileEmployer () {
       this.selectedProfileEmployer = this.getEmptyProfileEmployer()
+      this.loadData()
     },
     getEmptyProfileEmployer () {
       return {
@@ -154,6 +159,7 @@ export default {
     },
     openOrCloseEmployerForEditing (profileEmployer) {
       this.selectedProfileEmployer = this.selectedProfileEmployer && this.selectedProfileEmployer.id === profileEmployer.id ? null : profileEmployer
+      this.loadData()
     },
     shouldShowNewEmployerAddForm () {
       return this.selectedProfileEmployer && this.selectedProfileEmployer.id === null

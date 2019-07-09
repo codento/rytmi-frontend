@@ -239,6 +239,12 @@ export default {
       return stateArray.every(item => item)
     }
   },
+  watch: {
+    selectedEmployer () {
+      console.log('triggered')
+      this.loadData()
+    }
+  },
   methods: {
     ...mapActions([
       'createEmployer',
@@ -248,6 +254,9 @@ export default {
       'updateEmployer',
       'fetchEmployers'
     ]),
+    loadData: function () {
+      this.fetchEmployers()
+    },
     async deleteEntry (profileEmployer) {
       const confirmation = confirm('Remove work history entry?')
       if (confirmation) {
