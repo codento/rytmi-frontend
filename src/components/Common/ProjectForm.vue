@@ -77,7 +77,14 @@
         <Datepicker
           v-model="editedProject.endDate"
           name="project-end-date"
+          :is-valid="inputStates.endDate"
         />
+        <small
+          v-if="!inputStates.endDate && inputStates.endDate !== undefined"
+          class="text-danger"
+        >
+          End date can't be before start date
+        </small>
       </b-col>
     </b-row>
     <b-row>
@@ -261,6 +268,7 @@ export default {
     inputStates () {
       return {
         startDate: this.validated ? !!this.editedProject.startDate : undefined,
+        endDate: this.validated ? !this.editedProject.endDate || this.editedProject.endDate >= this.editedProject.startDate  : undefined,
         projectNameFi: this.validated ? this.editedProject.name.fi.length > 0 : undefined,
         projectNameEn: this.validated ? this.editedProject.name.en.length > 0 : undefined,
         customerNameFi: this.validated ? this.editedProject.customerName.fi.length > 0 || this.editedProject.isInternal : undefined,
