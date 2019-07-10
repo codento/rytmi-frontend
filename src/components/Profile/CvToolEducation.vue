@@ -43,8 +43,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { EducationCard } from '@/components/Common'
-import { CertificateOrOtherCard } from '@/components/Common'
+import { EducationCard, CertificateOrOtherCard } from '@/components/Common'
 
 export default {
   name: 'CvToolEducation',
