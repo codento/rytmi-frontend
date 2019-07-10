@@ -143,7 +143,6 @@ import CvToolWorkExperience from './CvToolWorkExperience.vue'
 import CvToolEducation from './CvToolEducation.vue'
 import LoadingSpinner from '@/components/helpers/LoadingSpinner.vue'
 import proficiencyDesc from '@/assets/proficiencyDesc'
-import staticTexts from '@/assets/cvStaticTexts'
 import { LANGUAGE_ENUM, INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
@@ -305,11 +304,11 @@ export default {
     mapProjectForCV (projectObj) {
       return {
         projectRole: projectObj.role[this.currentLanguage],
-        projectName: projectObj.isSecret ? null : projectObj.name[this.currentLanguage],
+        projectName: projectObj.name[this.currentLanguage],
         projectDescription: projectObj.description[this.currentLanguage],
-        projectCustomer: projectObj.isSecret ? 'Secret' : projectObj.customerName[this.currentLanguage],
+        projectCustomer: projectObj.customerName[this.currentLanguage],
         projectDuration: projectObj.duration,
-        projectSkills: projectObj.projectSkills.map(skill => this.mapSkillForCV(this.skillById(skill.skillId)))
+        projectSkills: projectObj.projectSkills.map(skill => this.skillById(skill.skillId).name)
       }
     },
     mapSkillForCV (skillObj) {
@@ -331,8 +330,6 @@ export default {
 
       const cvSkills = this.skills.map(skill => this.mapSkillForCV(skill))
 
-      const cvProjects = this.mappedProfileProjects.map(project => this.mapProjectForCV(project))
-
       const workHistory = this.profileEmployersByProfileId(this.profile.id)
         .map(item => { return { ...item, employerName: this.employerById(item.employerId).name } })
         .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
@@ -343,6 +340,7 @@ export default {
             jobDescription: item.description[this.currentLanguage],
             jobDuration: this.getFormattedDuration(item.startDate, item.endDate),
             projects: this.mappedProfileProjects.filter(project => project.employerId === item.employerId)
+              .filter(project => !project.isSecret)
               .map(project => this.mapProjectForCV(project))
           }
         })
@@ -355,13 +353,11 @@ export default {
         topProjects: this.topProjects.map(project => this.mapProjectForCV(project)),
         topSkills: this.topSkills.map(skill => this.mapSkillForCV(skill)),
         languages: cvLanguages,
-        projects: cvProjects,
         workHistory: workHistory,
         skills: cvSkills,
         education: this.profile.education ? this.profile.education : [],
         born: this.profile.birthYear,
         skillLevelDescriptions: proficiencyDesc.knows[this.currentLanguage],
-        staticTexts: staticTexts,
         currentLanguage: this.currentLanguage
       }
     },
