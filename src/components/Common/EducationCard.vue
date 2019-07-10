@@ -58,7 +58,4 @@ export default {
 .education-preview > h4 {
   font-weight: bolder;
 }
-.education-preview {
-  max-width: 600px;
-}
 </style>

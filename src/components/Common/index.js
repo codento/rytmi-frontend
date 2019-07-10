@@ -4,6 +4,7 @@ import SkillExplanations from './SkillExplanations.vue'
 import UtilizationChart from './UtilizationChart.vue'
 import CollapsableItem from './CollapsableItem.vue'
 import EducationCard from './EducationCard.vue'
+import CertificateCard from './CertificateCard.vue'
 import ProjectForm from './ProjectForm.vue'
 import ProjectProfileForm from './ProjectProfileForm.vue'
 
@@ -14,6 +15,7 @@ export {
   UtilizationChart,
   CollapsableItem,
   EducationCard,
+  CertificateCard,
   ProjectForm,
   ProjectProfileForm
 }

@@ -99,14 +99,14 @@
           :label-for="'introduction-input-' + lang.key"
           label-align-md="left"
           label-size="sm"
-          sm="6"
+          sm="5"
         >
           <b-textarea
             :id="'introduction-input-' + lang.key"
             v-model="editedProfile.introduction[lang.key]"
             :placeholder="`Describe shortly in ${lang.label} your work experience, strengths, interests and motivation`"
             type="text"
-            rows="6"
+            rows="5"
             :state="introductionIsValid(lang.key)"
             @focus="introductionEdited[lang.key] = true"
           />
@@ -141,7 +141,7 @@
             v-model="editedProfile.otherInfo[lang.key]"
             :placeholder="`Optional description of hobbies, interests etc for CV final page under heading Other info (in ${lang.label})`"
             type="text"
-            rows="6"
+            rows="3"
             :state="otherInfoIsValid(lang.key)"
             @focus="otherInfoEdited[lang.key] = true"
           />
