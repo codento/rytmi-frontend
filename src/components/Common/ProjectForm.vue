@@ -268,7 +268,7 @@ export default {
     inputStates () {
       return {
         startDate: this.validated ? !!this.editedProject.startDate : undefined,
-        endDate: this.validated ? !this.editedProject.endDate || this.editedProject.endDate >= this.editedProject.startDate  : undefined,
+        endDate: this.validated ? !this.editedProject.endDate || this.editedProject.endDate >= this.editedProject.startDate : undefined,
         projectNameFi: this.validated ? this.editedProject.name.fi.length > 0 : undefined,
         projectNameEn: this.validated ? this.editedProject.name.en.length > 0 : undefined,
         customerNameFi: this.validated ? this.editedProject.customerName.fi.length > 0 || this.editedProject.isInternal : undefined,
