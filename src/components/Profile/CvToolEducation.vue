@@ -27,12 +27,12 @@
       </b-col>
       <b-col sm="6">
         <b-card-group
-          v-for="(certificateItem, index) in certificateList"
+          v-for="(certificateOrOtherItem, index) in certificateOrOtherList"
           :key="'certificate-' + index"
           deck
         >
-          <CertificateCard
-            :certificate-data="certificateItem"
+          <CertificateOrOtherCard
+            :certificate-or-other="certificateOrOtherItem"
             :language="currentLanguage"
           />
         </b-card-group>
@@ -44,20 +44,20 @@
 <script>
 import { mapGetters } from 'vuex'
 import { EducationCard } from '@/components/Common'
-import { CertificateCard } from '@/components/Common'
+import { CertificateOrOtherCard } from '@/components/Common'
 
 export default {
   name: 'CvToolEducation',
   components: {
     EducationCard,
-    CertificateCard
+    CertificateOrOtherCard
   },
   props: {
     educationList: {
       type: Array,
       required: true
     },
-    certificateList: {
+    certificateOrOtherList: {
       type: Array,
       required: true
     }

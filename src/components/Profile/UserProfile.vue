@@ -136,7 +136,7 @@
       </b-card>
       <CvToolEducation
         :education-list="profile.education ? profile.education : []"
-        :certificate-list="profile.expertiseValidations ? profile.expertiseValidations : []"
+        :certificate-or-other-list="profile.certificatesAndOthers ? profile.certificatesAndOthers : []"
       >
         <template #custom-header>
           Education

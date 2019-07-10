@@ -81,15 +81,15 @@
 
     <b-row class="pt-3">
       <b-col cols="12">
-        <h2>Certificates</h2>
+        <h2>Certificates and other validations of expertise</h2>
       </b-col>
       <b-col class="col-12">
         <b-table
-          id="certificate-table"
-          :items="certificateTableItems"
-          :fields="certificateFields"
+          id="certificate-or-other-table"
+          :items="certificateOrOtherTableItems"
+          :fields="certificateOrOtherFields"
           stacked="sm"
-          class="certificate-table"
+          class="certificate-or-other-table"
         >
           <template
             slot="name"
@@ -111,21 +111,21 @@
           >
             <b-button-group>
               <b-btn
-                :id="'edit-certificate-item-btn-' + data.index"
+                :id="'edit-certificate-or-other-item-btn-' + data.index"
                 size="sm"
                 class="mr-1 table-button"
                 variant="primary"
-                @click="openCertificateEditModal(data)"
+                @click="openCertificateOrOtherEditModal(data)"
               >
                 Edit
               </b-btn>
               <b-btn
-                :id="'remove-certificate-item-btn-' + data.index"
+                :id="'remove-certificate-or-other-item-btn-' + data.index"
                 name="remove"
                 size="sm"
                 class="mr-1 table-button"
                 variant="danger"
-                @click.stop="removeCertificate(data)"
+                @click.stop="removeCertificateOrOther(data)"
               >
                 Remove
               </b-btn>
@@ -135,27 +135,27 @@
       </b-col>
       <b-col cols="12">
         <b-button
-          id="add-certificate-btn"
+          id="add-certificate-or-other-btn"
           size="sm"
           class="mr-1"
           variant="primary"
-          @click="openCertificateEditModal()"
+          @click="openCertificateOrOtherEditModal()"
         >
-          Add a new certificate
+          Add a new certificate or other similar item
         </b-button>
       </b-col>
     </b-row>
     <b-modal
-      ref="edit-certificate-modal"
+      ref="edit-certificate-or-other-modal"
       title=""
       size="lg"
       hide-footer
       hide-header
     >
-      <EditCertificateForm
-        :certificate="editedCertificateItem"
-        @cancel="closeCertificateEditModal()"
-        @submit="submitCertificateForm"
+      <EditCertificateOrOtherForm
+        :certificate-or-other="editedCertificateOrOtherItem"
+        @cancel="closeCertificateOrOtherEditModal()"
+        @submit="submitCertificateOrOtherForm"
       />
     </b-modal>
   </div>
@@ -165,7 +165,7 @@
 import { cloneDeep, orderBy } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import EditEducationForm from './EditEducationForm'
-import EditCertificateForm from './EditCertificateForm'
+import EditCertificateOrOtherForm from './EditCertificateOrOtherForm'
 
 const educationTemplate = {
   fi: {
@@ -186,7 +186,7 @@ const educationTemplate = {
   endYear: null
 }
 
-const certificateTemplate = {
+const certificateOrOtherTemplate = {
   fi: {
     name: '',
     description: ''
@@ -202,7 +202,7 @@ export default {
   name: 'EditEducation',
   components: {
     EditEducationForm,
-    EditCertificateForm
+    EditCertificateOrOtherForm
   },
   props: {
     profile: Object
@@ -219,15 +219,15 @@ export default {
       editedEducation: this.profile.education ? this.profile.education : [],
       editedEducationItem: cloneDeep(educationTemplate),
       editedEducationItemIndex: -1,
-      certificateFields: [
-        { key: 'name', label: 'Certificate\'s name' },
+      certificateOrOtherFields: [
+        { key: 'name', label: 'Certificate\'s or other similar item\'s name' },
         { key: 'description', label: 'Description' },
         { key: 'year', label: 'Year' },
         'actions'
       ],
-      editedCertificates: this.profile.expertiseValidations ? this.profile.expertiseValidations : [],
-      editedCertificateItem: cloneDeep(certificateTemplate),
-      editedCertificateItemIndex: -1
+      editedCertificatesAndOthers: this.profile.certificatesAndOthers ? this.profile.certificatesAndOthers : [],
+      editedCertificateOrOtherItem: cloneDeep(certificateOrOtherTemplate),
+      editedCertificateOrOtherItemIndex: -1
     }
   },
   computed: {
@@ -245,8 +245,8 @@ export default {
         }
       })
     },
-    certificateTableItems () {
-      return this.editedCertificates.map(item => {
+    certificateOrOtherTableItems () {
+      return this.editedCertificatesAndOthers.map(item => {
         return {
           name: item[this.currentLanguage].name,
           description: item[this.currentLanguage].description,
@@ -264,10 +264,10 @@ export default {
         this.callUpdateProfileAction()
       }
     },
-    removeCertificate (item) {
-      const confirmation = confirm(`Are you sure you want to remove this certificate? (${item.item.name})`)
+    removeCertificateOrOther (item) {
+      const confirmation = confirm(`Are you sure you want to remove this certificate or similar item? (${item.item.name})`)
       if (confirmation) {
-        this.editedCertificates.splice(item.index, 1)
+        this.editedCertificatesAndOthers.splice(item.index, 1)
         this.callUpdateProfileAction()
       }
     },
@@ -281,21 +281,21 @@ export default {
       }
       this.$refs['edit-education-modal'].show()
     },
-    openCertificateEditModal (item = null) {
+    openCertificateOrOtherEditModal (item = null) {
       if (item) {
-        this.editedCertificateItem = cloneDeep(this.editedCertificates[item.index])
-        this.editedCertificateItemIndex = item.index
+        this.editedCertificateOrOtherItem = cloneDeep(this.editedCertificatesAndOthers[item.index])
+        this.editedCertificateOrOtherItemIndex = item.index
       } else {
-        this.editedCertificateItem = cloneDeep(certificateTemplate)
-        this.editedCertificateItemIndex = -1
+        this.editedCertificateOrOtherItem = cloneDeep(certificateOrOtherTemplate)
+        this.editedCertificateOrOtherItemIndex = -1
       }
-      this.$refs['edit-certificate-modal'].show()
+      this.$refs['edit-certificate-or-other-modal'].show()
     },
     closeEducationEditModal () {
       this.$refs['edit-education-modal'].hide()
     },
-    closeCertificateEditModal () {
-      this.$refs['edit-certificate-modal'].hide()
+    closeCertificateOrOtherEditModal () {
+      this.$refs['edit-certificate-or-other-modal'].hide()
     },
     submitEducationForm (submittedData) {
       if (this.editedEducationItemIndex >= 0) {
@@ -306,21 +306,21 @@ export default {
       this.closeEducationEditModal()
       this.callUpdateProfileAction()
     },
-    submitCertificateForm (submittedData) {
-      if (this.editedCertificateItemIndex >= 0) {
-        this.editedCertificates[this.editedCertificateItemIndex] = cloneDeep(submittedData)
+    submitCertificateOrOtherForm (submittedData) {
+      if (this.editedCertificateOrOtherItemIndex >= 0) {
+        this.editedCertificatesAndOthers[this.editedCertificateOrOtherItemIndex] = cloneDeep(submittedData)
       } else {
-        this.editedCertificates.push(submittedData)
+        this.editedCertificatesAndOthers.push(submittedData)
       }
-      this.closeCertificateEditModal()
+      this.closeCertificateOrOtherEditModal()
       this.callUpdateProfileAction()
     },
     async callUpdateProfileAction () {
       const editedProfile = cloneDeep(this.profile)
       this.editedEducation = orderBy(this.editedEducation, ['endYear'], ['desc'])
-      this.editedCertificates = orderBy(this.editedCertificates, ['year', 'name'], ['desc', 'asc'])
+      this.editedCertificatesAndOthers = orderBy(this.editedCertificatesAndOthers, ['year', 'name'], ['desc', 'asc'])
       editedProfile.education = this.editedEducation
-      editedProfile.expertiseValidations = this.editedCertificates
+      editedProfile.certificatesAndOthers = this.editedCertificatesAndOthers
       try {
         await this.updateProfile(editedProfile)
         this.$toasted.global.rytmi_success({

@@ -1,30 +1,30 @@
 <template>
   <b-form
-    id="edit-certificate-form"
+    id="edit-certificate-or-other-form"
   >
-    <h3>Add a new certificate</h3>
+    <h3>Add a new certificate or other validation of expertise</h3>
     <hr>
     <b-row>
       <b-col>
         <b-form-group invalid-feedback="Required">
-          <small for="name-fi">Sertifikaatin nimi (suomeksi) *</small>
+          <small for="name-fi">Sertifikaatin tai muun nimi (suomeksi) *</small>
           <b-input
             id="name-fi"
-            v-model="editedCertificate.fi.name"
+            v-model="editedCertificateOrOther.fi.name"
             type="text"
-            placeholder="Sertifikaatin nimi suomeksi"
+            placeholder="Nimi suomeksi"
             :state="inputStates.nameFi"
           />
         </b-form-group>
       </b-col>
       <b-col>
         <b-form-group invalid-feedback="Required">
-          <small for="name-en">Certificate name (in English) *</small>
+          <small for="name-en">Certificate's / Other similar item's name (in English) *</small>
           <b-input
             id="name-en"
-            v-model="editedCertificate.en.name"
+            v-model="editedCertificateOrOther.en.name"
             type="text"
-            placeholder="Name of the certificate in English"
+            placeholder="Name in English"
             :state="inputStates.nameEn"
           />
         </b-form-group>
@@ -33,27 +33,27 @@
     <b-row>
       <b-col>
         <b-form-group invalid-feedback="Required">
-          <small for="description-fi">Sertifikaatin kuvaus (suomeksi)</small>
+          <small for="description-fi">Kuvaus (suomeksi)</small>
           <b-textarea
             id="description-fi"
-            v-model="editedCertificate.fi.description"
+            v-model="editedCertificateOrOther.fi.description"
             type="text"
             rows="2"
             class="form-control"
-            placeholder="Lisätietoa sertifikaatista, jos tarpeen."
+            placeholder="Lisätietoa, jos tarpeen"
           />
         </b-form-group>
       </b-col>
       <b-col>
         <b-form-group invalid-feedback="Required">
-          <small for="description-en">Certificate description (in English)</small>
+          <small for="description-en">Description (in English)</small>
           <b-textarea
             id="description-en"
-            v-model="editedCertificate.en.description"
+            v-model="editedCertificateOrOther.en.description"
             type="text"
             rows="2"
             class="form-control"
-            placeholder="Additional information about the certificate, if needed."
+            placeholder="Additional information, if needed"
           />
         </b-form-group>
       </b-col>
@@ -64,9 +64,9 @@
           <small for="name-fi">Acquisition year *</small>
           <b-input
             id="year"
-            v-model="editedCertificate.year"
+            v-model="editedCertificateOrOther.year"
             type="number"
-            placeholder="Year of acquiring the certificate"
+            placeholder="Year of acquiring the certificate or similar item"
             :state="inputStates.year"
             :min="1970"
             :max="new Date().getFullYear()"
@@ -101,9 +101,9 @@
 import { cloneDeep } from 'lodash'
 
 export default {
-  name: 'EditCertificateForm',
+  name: 'EditCertificateOrOtherForm',
   props: {
-    certificate: {
+    certificateOrOther: {
       type: Object,
       required: true
     }
@@ -111,15 +111,15 @@ export default {
   data () {
     return {
       validated: false,
-      editedCertificate: cloneDeep(this.certificate)
+      editedCertificateOrOther: cloneDeep(this.certificateOrOther)
     }
   },
   computed: {
     inputStates () {
       return {
-        nameFi: this.validated ? this.editedCertificate.fi.name.length > 0 : undefined,
-        nameEn: this.validated ? this.editedCertificate.en.name.length > 0 : undefined,
-        year: this.validated ? this.editedCertificate.year >= 1970 && this.editedCertificate.year <= new Date().getFullYear() : undefined
+        nameFi: this.validated ? this.editedCertificateOrOther.fi.name.length > 0 : undefined,
+        nameEn: this.validated ? this.editedCertificateOrOther.en.name.length > 0 : undefined,
+        year: this.validated ? this.editedCertificateOrOther.year >= 1970 && this.editedCertificateOrOther.year <= new Date().getFullYear() : undefined
       }
     },
     formIsValid () {
@@ -134,7 +134,7 @@ export default {
     save () {
       this.validated = true
       if (this.formIsValid) {
-        this.$emit('submit', this.editedCertificate)
+        this.$emit('submit', this.editedCertificateOrOther)
       }
     },
     cancel () {

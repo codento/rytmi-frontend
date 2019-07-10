@@ -1,13 +1,13 @@
 <template>
   <b-card
-    class="my-2 education-preview"
+    class="my-2 certificate-or-other-preview"
     no-header
     no-body
   >
     <b-card-body>
       <b-card-text>
-        <h4>{{ certificateData[language].name }} <span class="small">{{ certificateData.year }}</span></h4>
-        <p> {{ certificateData[language].description }} </p>
+        <h4>{{ certificateOrOther[language].name }} <span class="small">{{ certificateOrOther.year }}</span></h4>
+        <p> {{ certificateOrOther[language].description }} </p>
       </b-card-text>
     </b-card-body>
   </b-card>
@@ -17,9 +17,9 @@
 import { LANGUAGE_ENUM } from '@/utils/constants'
 
 export default {
-  name: 'CertificateCard',
+  name: 'CertificateOrOtherCard',
   props: {
-    certificateData: {
+    certificateOrOther: {
       type: Object,
       required: true
     },
@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style scoped >
-.certificate-preview > h4 {
+.certificate-or-other-preview > h4 {
   font-weight: bolder;
 }
 </style>
