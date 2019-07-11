@@ -93,6 +93,22 @@ describe('Profile.vue shallowMount', () => {
           customerName: { en: 'Customer', fi: 'Asiakas' },
           description: { en: 'Foo Bar (en)', fi: 'Foo Bar' }
         }
+      },
+      profileEmployersByProfileId: () => (profileId) => {
+        return [
+          {
+            profileId,
+            employerId: 1
+          }
+        ]
+      },
+      employers: () => () => {
+        return [
+          {
+            name: 'Codento Oy',
+            id: 1
+          }
+        ]
       }
     }
     store = new Vuex.Store({ getters })

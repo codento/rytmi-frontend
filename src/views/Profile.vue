@@ -3,14 +3,26 @@
     <loading v-if="!profile" />
     <b-row v-else>
       <b-col cols="12">
-        <b-btn
-          v-if="false"
-          v-b-modal.cv-tool-modal
-          type="button"
-          class="open-cv-tool-button pull-right"
+        <div
+          id="disabled-open-cv-tool-button-wrapper"
+          class="pull-right"
         >
-          Open CV tool
-        </b-btn>
+          <b-btn
+            id="open-cv-tool-button"
+            v-b-modal.cv-tool-modal
+            type="button"
+            class="open-cv-tool-button"
+            :disabled="!isAllowedToOpenCvTool"
+          >
+            Open CV tool
+          </b-btn>
+          <b-tooltip
+            :disabled.sync="isAllowedToOpenCvTool"
+            target="disabled-open-cv-tool-button-wrapper"
+          >
+            {{ disabledButtonInfo }}
+          </b-tooltip>
+        </div>
       </b-col>
       <b-col cols="12">
         <UserProfile
@@ -31,6 +43,7 @@ import {
   CvTool,
   UserProfile
 } from '../components/Profile'
+import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
   name: 'Profile',
@@ -44,9 +57,36 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['profileById']),
+    ...mapGetters([
+      'profileById',
+      'profileSkillsByProfileId',
+      'profileEmployersByProfileId',
+      'employers',
+      'profileProjectsByProfileId'
+    ]),
     profile () {
       return this.profileById(this.$route.params.id)
+    },
+    isAllowedToOpenCvTool: {
+      get: function () {
+        return this.profileSkillsByProfileId(this.profile.id).length !== 0 &&
+          this.hasCodentoAsEmployer() &&
+          this.profileProjectsByProfileId(this.profile.id).length !== 0
+      },
+      set: function () {}
+    },
+    disabledButtonInfo: function () {
+      const missingInfo = []
+      if (this.profileSkillsByProfileId(this.profile.id).length === 0) {
+        missingInfo.push('At least one skill is needed.')
+      }
+      if (!this.hasCodentoAsEmployer()) {
+        missingInfo.push('Must have Codento Oy as an employer.')
+      }
+      if (this.profileProjectsByProfileId(this.profile.id).length === 0) {
+        missingInfo.push('At least one project is needed.')
+      }
+      return 'Required info missing: •'.concat(missingInfo.join(' •'))
     }
   },
   watch: {
@@ -54,6 +94,17 @@ export default {
       if (val) {
         document.title = `Rytmi - ${val.firstName} ${val.lastName}`
       }
+    }
+  },
+  methods: {
+    getEmployerName (employerId) {
+      const employer = Object.values(this.employers).find(employer => employer.id === employerId)
+      return employer ? employer.name : ''
+    },
+    hasCodentoAsEmployer () {
+      console.log(this.profileEmployersByProfileId(this.profile.id))
+      const employerNames = this.profileEmployersByProfileId(this.profile.id).map(profileEmployer => this.getEmployerName(profileEmployer.employerId))
+      return employerNames.includes(INTERNAL_COMPANY_NAME)
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -66,5 +117,13 @@ export default {
 <style scoped>
 .open-cv-tool-button {
   margin-bottom: 8px;
+}
+#disabled-open-cv-tool-button-wrapper {
+  display: inline-block;
+}
+
+#disabled-open-cv-tool-button-wrapper .btn :disabled {
+  /* don't let button block mouse events from reaching wrapper */
+  pointer-events: none;
 }
 </style>

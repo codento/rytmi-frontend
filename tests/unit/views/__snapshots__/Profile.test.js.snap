@@ -12,7 +12,41 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
       cols="12"
       tag="div"
     >
-      <!---->
+      <div
+        class="pull-right"
+        id="disabled-open-cv-tool-button-wrapper"
+      >
+        <b-btn-stub
+          class="open-cv-tool-button"
+          disabled="true"
+          event="click"
+          id="open-cv-tool-button"
+          routertag="a"
+          tag="button"
+          target="_self"
+          type="button"
+          variant="secondary"
+        >
+          
+          Open CV tool
+        
+        </b-btn-stub>
+         
+        <b-tooltip-stub
+          boundary="scrollParent"
+          boundarypadding="5"
+          delay="0"
+          offset="0"
+          placement="top"
+          target="disabled-open-cv-tool-button-wrapper"
+          title=""
+          triggers="hover focus"
+        >
+          
+          Required info missing: •Must have Codento Oy as an employer.
+        
+        </b-tooltip-stub>
+      </div>
     </b-col-stub>
      
     <b-col-stub
