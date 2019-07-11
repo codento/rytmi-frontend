@@ -7,6 +7,10 @@ exports[`Project view shallow Template is correct 1`] = `
   <b-container-stub
     tag="div"
   >
+    <h1>
+      Projects
+    </h1>
+     
     <collapsableitem-stub
       title="Add a new project"
     >

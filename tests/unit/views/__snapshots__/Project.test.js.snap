@@ -5,88 +5,100 @@ exports[`Project.vue Template is correct 1`] = `
   <div
     class="animated fadeIn project-container col-xl-7"
   >
-    <b-row-stub
+    <b-card-stub
+      bodytag="div"
+      footertag="div"
+      headertag="div"
+      subtitle=""
+      subtitletag="h6"
+      subtitletextvariant="muted"
       tag="div"
+      title=""
+      titletag="h4"
     >
-      <b-col-stub
-        class="project-details"
+      <b-row-stub
         tag="div"
       >
-        <b>
-          50
-        </b>
-         
-        <h1>
-          Projekti Foo
-        </h1>
-         
-        <div
-          class="detail-container"
+        <b-col-stub
+          class="project-details"
+          tag="div"
         >
-          <span
-            class="detail detail-start"
-          >
-            <small>
-              Start date
-            </small>
-            <br />
-             
-            <b
-              class="project-start-date"
-            >
-              1.1.2018
-            </b>
-          </span>
+          <b>
+            50
+          </b>
            
-          <span
-            class="detail detail-end"
-          >
-            <small>
-              End date
-            </small>
-            <br />
-             
-            <b
-              class="project-end-date"
-            >
-              1.5.2018
-            </b>
-          </span>
+          <h1>
+            Projekti Foo
+          </h1>
            
-          <span
-            class="detail members"
+          <div
+            class="detail-container"
           >
+            <span
+              class="detail detail-start"
+            >
+              <small>
+                Start date
+              </small>
+              <br />
+               
+              <b
+                class="project-start-date"
+              >
+                1.1.2018
+              </b>
+            </span>
+             
+            <span
+              class="detail detail-end"
+            >
+              <small>
+                End date
+              </small>
+              <br />
+               
+              <b
+                class="project-end-date"
+              >
+                1.5.2018
+              </b>
+            </span>
+             
+            <span
+              class="detail members"
+            >
+              <small>
+                Consultants
+              </small>
+              <br />
+               
+              <!---->
+            </span>
+          </div>
+           
+          <p>
             <small>
-              Consultants
+              Description
             </small>
             <br />
-             
-            <!---->
-          </span>
-        </div>
-         
-        <p>
-          <small>
-            Description
-          </small>
-          <br />
+            
+            Foo Bar
           
-          Foo Bar
-        
-        </p>
-      </b-col-stub>
-    </b-row-stub>
-     
-    <b-row-stub
-      tag="div"
-    >
-      <b-col-stub
-        class="project-members"
+          </p>
+        </b-col-stub>
+      </b-row-stub>
+       
+      <b-row-stub
         tag="div"
       >
-        <projectmembertable-stub />
-      </b-col-stub>
-    </b-row-stub>
+        <b-col-stub
+          class="project-members"
+          tag="div"
+        >
+          <projectmembertable-stub />
+        </b-col-stub>
+      </b-row-stub>
+    </b-card-stub>
      
     <hr />
      

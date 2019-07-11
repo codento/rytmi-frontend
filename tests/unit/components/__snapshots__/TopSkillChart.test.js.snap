@@ -3,13 +3,9 @@
 exports[`TopSkillChart.vue Should match the template 1`] = `
 <chart-card-stub>
   <template>
-    <div
-      class="h3 px-2"
-    >
-      
+    <h2>
       Top skill
-    
-    </div>
+    </h2>
   </template>
    
   <b-col-stub
