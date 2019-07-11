@@ -1,9 +1,7 @@
 <template>
   <chart-card>
     <template slot="header">
-      <div class="h3 px-2">
-        Utilization
-      </div>
+      <h2>Utilization</h2>
     </template>
     <b-col
       :cols="12"
@@ -36,6 +34,7 @@ import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 const createLabel = (date) => format(date, 'D.M.YYYY')
 
 export default {
+  name: 'ConsultantUtilizationChart',
   components: {
     ChartCard,
     LineChart

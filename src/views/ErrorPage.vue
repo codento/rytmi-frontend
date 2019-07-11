@@ -6,8 +6,8 @@
     <b-jumbotron
       :header="header"
       bg-variant="info"
-      text-variant="white"
-      border-variant="dark"
+      text-variant="dark"
+      class="draw-shadow"
     />
   </div>
 </template>
@@ -33,3 +33,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+.draw-shadow {
+  box-shadow: 2px 2px darken($color: $body-bg, $amount: 5);
+}
+</style>

@@ -5,21 +5,17 @@
   >
     <b-jumbotron
       v-if="!isAuthenticated"
-      bg-variant="white"
-      text-variant="primary"
-      border-variant="dark"
+      class="sign-in-jumbotron"
     >
-      <template
-        slot="lead"
-      >
-        <span
-          class="clickable"
+      <span slot="header">Codento Rytmi</span>
+      <div class="mt-5">
+        <b-button
+          variant="primary"
           @click="handleLogin()"
         >
           Please Sign in
-        </span>
-      </template>
-      <span slot="header">Codento Rytmi</span>
+        </b-button>
+      </div>
     </b-jumbotron>
     <div v-if="employeeRolesLoaded">
       <Dashboard
@@ -60,8 +56,10 @@ export default {
   }
 }
 </script>
-<style scoped>
-.clickable:hover {
-  cursor: pointer;
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+.sign-in-jumbotron {
+  background-color: white;
+  box-shadow: 2px 2px darken($color: $body-bg, $amount: 5);
 }
 </style>

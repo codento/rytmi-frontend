@@ -1,89 +1,163 @@
 <template>
-  <AppHeader fixed>
-    <SidebarToggler
-      class="d-lg-none"
-      display="md"
-      mobile
-    />
-    <b-link
-      class="navbar-brand"
-      to="/home"
-    >
+  <b-navbar
+    id="header-navbar"
+    type="dark"
+    toggleable="lg"
+    variant="dark"
+  >
+    <b-navbar-brand href="/home">
       <img
-        class="navbar-brand-full"
+        class="navbar-brand-full mx-5"
         src="/img/logo.png"
         width="143"
         height="25"
         alt="Codento Logo"
       >
-      <img
+      <!-- <img
         class="navbar-brand-minimized"
         src="/img/Codento C RGB medium square.jpg"
         width="30"
         height="30"
         alt="Codento Logo"
-      >
-    </b-link>
-    <SidebarToggler
-      class="d-md-down-none"
-      display="lg"
-    />
-
-    <b-navbar-nav class="ml-auto">
-      <b-nav-item
-        v-if="!isAuthenticated"
-        class="px-3"
-        name="login"
-        @click="login"
-      >
-        <i class="fa fa-unlock" />&nbsp; Sign in
-      </b-nav-item>
-      <b-nav-item
-        v-else
-        class="px-3"
-      >
-        <b-dropdown
-          id="account-dropdown"
-          variant="light"
-          text="Account"
+      > -->
+    </b-navbar-brand>
+    <b-navbar-toggle target="nav-collapse" />
+    <b-collapse
+      id="nav-collapse"
+      is-nav
+    >
+      <b-navbar-nav v-if="isAuthenticated">
+        <b-nav-item
+          class="px-3"
+          name="go-to-dashboard"
+          href="/home"
         >
-          <b-dropdown-item
-            id="account-dropdown-item-profile"
-            :to="{ name: 'profile', params: { id: profileId } }"
-            exact
+          <b-row class="text-center my-1">
+            <b-col cols="12">
+              <GlobeIcon class="nav-icon" />
+            </b-col>
+            <b-col class="nav-item-label">
+              DASHBOARD
+            </b-col>
+          </b-row>
+        </b-nav-item>
+        <b-nav-item
+          class="px-3"
+          name="go-to-projects"
+          href="/projects"
+        >
+          <b-row class="text-center my-1">
+            <b-col cols="12">
+              <ArchiveIcon class="nav-icon" />
+            </b-col>
+            <b-col class="nav-item-label">
+              PROJECTS
+            </b-col>
+          </b-row>
+        </b-nav-item>
+        <b-nav-item
+          class="px-3"
+          name="go-to-profiles"
+          href="/search"
+        >
+          <b-row class="nav-item text-center my-1">
+            <b-col cols="12">
+              <UsersIcon class="nav-icon" />
+            </b-col>
+            <b-col class="nav-item-label">
+              PROFILES
+            </b-col>
+          </b-row>
+        </b-nav-item>
+        <b-nav-item
+          class="px-3"
+          name="go-to-skills"
+          href="/skills"
+        >
+          <b-row class="nav-item text-center my-1">
+            <b-col cols="12">
+              <StarIcon class="nav-icon" />
+            </b-col>
+            <b-col class="nav-item-label">
+              SKILLS
+            </b-col>
+          </b-row>
+        </b-nav-item>
+        <b-nav-item
+          v-show="isAdmin"
+          class="px-3"
+          name="go-to-profiles"
+          href="/search"
+        >
+          <b-row class="nav-item text-center my-1">
+            <b-col cols="12">
+              <SettingsIcon class="nav-icon" />
+            </b-col>
+            <b-col class="nav-item-label">
+              ADMIN
+            </b-col>
+          </b-row>
+        </b-nav-item>
+      </b-navbar-nav>
+      <b-navbar-nav class="ml-auto">
+        <b-nav-item
+          v-if="!isAuthenticated"
+          class="px-3"
+          name="login"
+          @click="login"
+        >
+          <i class="fa fa-unlock" />&nbsp; Sign in
+        </b-nav-item>
+        <b-nav-item
+          v-if="isAuthenticated"
+          class="px-3"
+        >
+          <b-dropdown
+            id="account-dropdown"
+            variant="outline-light"
+            text="Account"
           >
-            <img
-              class="profile-icon"
-              :src="profileById(profileId) ? profileById(profileId).photoPath : ''"
-              height="20px"
-              width="20px"
-              alt="Profile picture"
+            <b-dropdown-item
+              id="account-dropdown-item-profile"
+              :to="{ name: 'profile', params: { id: profileId } }"
+              exact
             >
-            My Profile
-          </b-dropdown-item>
-          <b-dropdown-divider />
-          <b-dropdown-item
-            id="account-dropdown-item-signout"
-            @click="logout"
-          >
-            <i class="fa fa-lock" /> Sign Out
-          </b-dropdown-item>
-        </b-dropdown>
-      </b-nav-item>
-    </b-navbar-nav>
-  </AppHeader>
+              <img
+                class="profile-icon"
+                :src="profileById(profileId) ? profileById(profileId).photoPath : ''"
+                height="20px"
+                width="20px"
+                alt="Profile picture"
+              >
+              My Profile
+            </b-dropdown-item>
+            <b-dropdown-divider />
+            <b-dropdown-item
+              id="account-dropdown-item-signout"
+              @click="logout"
+            >
+              <i class="fa fa-lock" /> Sign Out
+            </b-dropdown-item>
+          </b-dropdown>
+        </b-nav-item>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
 </template>
 
 <script>
 
-import { Header as AppHeader, SidebarToggler } from '@coreui/vue'
 import { mapGetters, mapActions } from 'vuex'
+import { UsersIcon, GlobeIcon, StarIcon, ArchiveIcon, SettingsIcon } from 'vue-feather-icons'
 
 export default {
   name: 'CHeader',
   components: {
-    AppHeader,
-    SidebarToggler
+    UsersIcon,
+    GlobeIcon,
+    StarIcon,
+    ArchiveIcon,
+    SettingsIcon
   },
   computed: {
     ...mapGetters(['isAuthenticated', 'profileId', 'getToken', 'profileById'])
@@ -103,9 +177,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
 .profile-icon {
   margin: 0 10px 0 -10px;
   border-radius: 50%;
 }
+.nav-item-label {
+  margin-top: 10px;
+  font-family: 'Poppins';
+  font-weight: 600;
+}
+#header-navbar {
+  height: 100px;
+}
+
 </style>

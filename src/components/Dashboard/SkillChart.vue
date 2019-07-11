@@ -1,22 +1,23 @@
 <template>
   <chart-card>
     <template slot="header">
-      <div class="h3 px-2">
-        Skills <i
+      <h2>
+        Skills
+        <i
           id="skill-explanations-icon"
           class="cui-info"
         />
-        <b-popover
-          target="skill-explanations-icon"
-          title="Skill level descriptions"
-          triggers="hover focus"
-        >
-          <SkillExplanations
-            :know-desc="proficiencyDescriptions.knows['en']"
-            :want-desc="proficiencyDescriptions.wants"
-          />
-        </b-popover>
-      </div>
+      </h2>
+      <b-popover
+        target="skill-explanations-icon"
+        title="Skill level descriptions"
+        triggers="hover focus"
+      >
+        <SkillExplanations
+          :know-desc="proficiencyDescriptions.knows['en']"
+          :want-desc="proficiencyDescriptions.wants"
+        />
+      </b-popover>
       <b-col>
         <v-select
           v-model="selectedSkills"

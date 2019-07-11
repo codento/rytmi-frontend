@@ -24,7 +24,9 @@
         id="collapse"
         v-model="visibility"
       >
-        <slot />
+        <b-card-body>
+          <slot />
+        </b-card-body>
       </b-collapse>
     </b-card>
   </div>

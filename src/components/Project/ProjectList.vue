@@ -1,11 +1,12 @@
 <template>
   <b-container>
-    <h2>Projects</h2>
+    <hr>
     <b-input
       v-model="projectFilterTerm"
       name="project-filter"
       type="text"
       placeholder="Filter projects (by name or project code)"
+      class="mb-2"
     />
     <b-table
       id="project-table"

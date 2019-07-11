@@ -1,10 +1,12 @@
 <template>
-  <div class="animated fadeIn">
-    <h2>Profiles</h2>
+  <b-container
+    class="mt-2"
+  >
+    <h1>Profiles</h1>
     <b-row id="search">
       <b-col>
         <b-row class="search-item">
-          <b-col>
+          <b-col class="col-sm-3">
             <b-form-input
               v-model="nameFilter"
               type="text"
@@ -58,7 +60,7 @@
       :utilization-date-filter="utilizationDateFilter"
       :employee-role-filter="selectedRole"
     />
-  </div>
+  </b-container>
 </template>
 
 <script>
