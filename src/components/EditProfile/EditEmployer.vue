@@ -241,7 +241,6 @@ export default {
   },
   watch: {
     selectedEmployer () {
-      console.log('triggered')
       this.loadData()
     }
   },
