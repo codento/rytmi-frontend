@@ -128,7 +128,14 @@
             id="profile-project-end-date"
             v-model="editableProfileProject.endDate"
             :name="`profile-project-end-date-${profileProject.id}${isInModal ? '-modal' : ''}`"
+            :is-valid="inputStates.endDate"
           />
+          <small
+            v-if="!inputStates.endDate && inputStates.endDate !== undefined"
+            class="text-danger"
+          >
+            End date can't be before start date
+          </small>
         </b-col>
       </b-row>
       <b-form-group
@@ -277,7 +284,8 @@ export default {
         profileId: this.validated ? !!this.editableProfileProject.profileId : undefined,
         projectRoleFi: this.validated ? this.editableProfileProject.role.fi.length > 0 : undefined,
         projectRoleEn: this.validated ? this.editableProfileProject.role.en.length > 0 : undefined,
-        startDate: this.validated ? new Date(this.editableProfileProject.startDate) > 1 : undefined
+        startDate: this.validated ? new Date(this.editableProfileProject.startDate) > 1 : undefined,
+        endDate: this.validated ? !this.editableProfileProject.endDate || new Date(this.editableProfileProject.endDate) >= new Date(this.editableProfileProject.startDate) : undefined
       }
     },
     submitButtonText () {
