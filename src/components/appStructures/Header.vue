@@ -160,7 +160,7 @@ export default {
     SettingsIcon
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'profileId', 'getToken', 'profileById'])
+    ...mapGetters(['isAuthenticated', 'isAdmin', 'profileId', 'getToken', 'profileById'])
   },
   methods: {
     logout () {
