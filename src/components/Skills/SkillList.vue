@@ -169,7 +169,8 @@ export default {
   computed: {
     ...mapGetters([
       'skillProfiles',
-      'isAdmin'
+      'isAdmin',
+      'skillFilter'
     ]),
     tableItems () {
       const orderedSkills = orderBy(this.skillList, [skill => skill.name.toLowerCase()], ['asc'])
@@ -211,7 +212,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['deleteSkill']),
+    ...mapActions(['deleteSkill', 'updateSkillFilter']),
     openEditSkillModal (item) {
       if (item) {
         this.selectedSkill = { ...item }
@@ -249,6 +250,7 @@ export default {
     async callDeleteSkillAction (skillId) {
       try {
         await this.deleteSkill(skillId)
+        this.updateSkillFilter(this.skillFilter.filter(skill => skill.id !== skillId))
         this.$toasted.global.rytmi_success({
           message: 'Skill removed'
         })
