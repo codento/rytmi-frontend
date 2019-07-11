@@ -36,6 +36,7 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
           boundary="scrollParent"
           boundarypadding="5"
           delay="0"
+          fallbackplacement="flip"
           offset="0"
           placement="top"
           target="disabled-open-cv-tool-button-wrapper"
