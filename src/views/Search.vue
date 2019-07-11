@@ -65,7 +65,7 @@
 import Datepicker from '../components/helpers/Datepicker'
 import { mapGetters, mapActions } from 'vuex'
 import { Results } from '../components/Search'
-import { sortBy } from 'lodash'
+import { orderBy } from 'lodash'
 import vSelect from 'vue-select'
 
 export default {
@@ -94,7 +94,7 @@ export default {
     selectFilterOptions () {
       const skills = Object.values(this.skills).map(skill => ({ label: skill.name, id: skill.id }))
       const unselectedSkills = skills.filter(selectableSkill => !(this.selectedSkills.map(skill => skill.id)).includes(selectableSkill.id))
-      return sortBy(unselectedSkills, ['label'])
+      return orderBy(unselectedSkills, [skill => skill.label.toLowerCase()], ['asc'])
     },
     mapSkillFilterForResultsComponent () {
       return this.selectedSkills.map(skill => ({ name: skill.label, id: skill.id }))
