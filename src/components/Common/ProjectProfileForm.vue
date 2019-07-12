@@ -83,7 +83,7 @@
       <b-row>
         <b-col>
           <b-form-group invalid-feedback="Required">
-            <small for="project-role-fi-input">Your role in the project (in Finnish) *</small>
+            <small for="project-role-fi-input">{{ editableProfileProject.profileId === profileId ? `Your role in the project (in Finnish) *` : 'The consultants role in the Project (in Finnish)' }}</small>
             <b-input
               id="project-role-fi-input"
               v-model="editableProfileProject.role.fi"
@@ -95,7 +95,7 @@
         </b-col>
         <b-col>
           <b-form-group invalid-feedback="Required">
-            <small for="project-role-en-input">Your role in the project (in English) *</small>
+            <small for="project-role-en-input">{{ editableProfileProject.profileId === profileId ? `Your role in the project (in English) *` : 'The consultants role in the Project (in English)' }}</small>
             <b-input
               id="project-role-en-input"
               v-model="editableProfileProject.role.en"
@@ -248,7 +248,8 @@ export default {
       'employerByName',
       'currentLanguage',
       'projectById',
-      'skillById'
+      'skillById',
+      'profileId'
     ]),
     projectSkills () {
       return this.profileProject.projectId ? this.projectById(this.profileProject.projectId).skills : []

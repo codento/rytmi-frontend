@@ -111,21 +111,24 @@ export default {
   },
   data () {
     return {
-      fields: [
-        { key: 'profileId', label: 'Name' },
-        { key: 'startDate', label: 'From' },
-        { key: 'endDate', label: 'To' },
-        { key: 'workPercentage', label: 'Utilization' },
-        { key: 'edit', label: ' ' },
-        { key: 'remove', label: ' ' }
-      ],
       selectedProfileProject: {
         role: { fi: '', en: '' }
       }
     }
   },
   computed: {
-    ...mapGetters(['profileById'])
+    ...mapGetters(['profileById', 'currentLanguage', 'isAdmin']),
+    fields () {
+      return [
+        { key: 'profileId', label: 'Name' },
+        { key: `role.${this.currentLanguage}`, label: 'Role' },
+        { key: 'startDate', label: 'From' },
+        { key: 'endDate', label: 'To' },
+        { key: 'workPercentage', label: 'Utilization' },
+        this.isAdmin ? 'edit' : null,
+        this.isAdmin ? 'remove' : null
+      ]
+    }
   },
   methods: {
     ...mapActions(['removeProfileProject']),

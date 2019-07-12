@@ -116,15 +116,6 @@ export default {
   },
   data () {
     return {
-      fields: [
-        { key: 'code', label: 'Code' },
-        { key: 'name', label: 'Name' },
-        { key: 'startDate', label: 'From' },
-        { key: 'endDate', label: 'To' },
-        { key: 'workPercentage', label: 'Utilization' },
-        'edit',
-        'remove'
-      ],
       selectedProfileProject: {
         role: { fi: '', en: '' }
       }
@@ -137,6 +128,18 @@ export default {
       'currentLanguage',
       'employerByName'
     ]),
+    fields () {
+      return [
+        { key: 'code', label: 'Code' },
+        { key: 'name', label: 'Name' },
+        { key: `role.${this.currentLanguage}`, label: 'Role' },
+        { key: 'startDate', label: 'From' },
+        { key: 'endDate', label: 'To' },
+        { key: 'workPercentage', label: 'Utilization' },
+        'edit',
+        'remove'
+      ]
+    },
     internalCompanyId () {
       return this.employerByName(INTERNAL_COMPANY_NAME).id
     },

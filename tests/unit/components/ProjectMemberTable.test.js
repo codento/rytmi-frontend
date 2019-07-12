@@ -19,7 +19,8 @@ function createStore (overrideConfig) {
       profileById: jest.fn((profileId) => () => ({
         firstName: 'Foo',
         lastName: 'Bar'
-      }))
+      })),
+      isAdmin: () => () => true
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
