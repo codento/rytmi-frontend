@@ -102,7 +102,6 @@ export default {
       return employer ? employer.name : ''
     },
     hasCodentoAsEmployer () {
-      console.log(this.profileEmployersByProfileId(this.profile.id))
       const employerNames = this.profileEmployersByProfileId(this.profile.id).map(profileEmployer => this.getEmployerName(profileEmployer.employerId))
       return employerNames.includes(INTERNAL_COMPANY_NAME)
     }
