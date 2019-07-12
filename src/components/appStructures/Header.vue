@@ -46,21 +46,6 @@
         </b-nav-item>
         <b-nav-item
           class="px-3"
-          name="go-to-projects"
-        >
-          <router-link to="/projects">
-            <b-row class="text-center my-1">
-              <b-col cols="12">
-                <ArchiveIcon class="nav-icon" />
-              </b-col>
-              <b-col class="nav-item-label">
-                PROJECTS
-              </b-col>
-            </b-row>
-          </router-link>
-        </b-nav-item>
-        <b-nav-item
-          class="px-3"
           name="go-to-profiles"
           href="/search"
         >
@@ -71,6 +56,21 @@
               </b-col>
               <b-col class="nav-item-label">
                 PROFILES
+              </b-col>
+            </b-row>
+          </router-link>
+        </b-nav-item>
+        <b-nav-item
+          class="px-3"
+          name="go-to-projects"
+        >
+          <router-link to="/projects">
+            <b-row class="text-center my-1">
+              <b-col cols="12">
+                <ArchiveIcon class="nav-icon" />
+              </b-col>
+              <b-col class="nav-item-label">
+                PROJECTS
               </b-col>
             </b-row>
           </router-link>
