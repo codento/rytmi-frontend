@@ -194,7 +194,7 @@ export default {
             en: 'Additional information'
           },
           descriptions: {
-            fi: 'Vapaa tekstikenttä, johon voi esim. lopputyön aiheen tai lyhyen kuvauksen koulutuksesta',
+            fi: 'Vapaa tekstikenttä, johon voi kirjoittaa esim. lopputyön aiheen tai lyhyen kuvauksen koulutuksesta',
             en: 'Free form text which can include e.g. thesis subject or short description if needed'
           }
         },

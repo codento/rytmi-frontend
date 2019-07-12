@@ -134,7 +134,10 @@
           <EditProjects :profile-id="profile.id" />
         </b-modal>
       </b-card>
-      <CvToolEducation :education-list="profile.education ? profile.education : []">
+      <CvToolEducation
+        :education-list="profile.education ? profile.education : []"
+        :certificate-or-other-list="profile.certificatesAndOthers ? profile.certificatesAndOthers : []"
+      >
         <template #custom-header>
           Education
           <span

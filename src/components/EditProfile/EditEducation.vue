@@ -7,8 +7,8 @@
       <b-col class="col-12">
         <b-table
           id="education-table"
-          :items="tableItems"
-          :fields="fields"
+          :items="educationTableItems"
+          :fields="educationFields"
           stacked="sm"
         >
           <template
@@ -35,7 +35,7 @@
                 size="sm"
                 class="mr-1 table-button"
                 variant="primary"
-                @click="openEditModal(data)"
+                @click="openEducationEditModal(data)"
               >
                 Edit
               </b-btn>
@@ -59,7 +59,7 @@
           size="sm"
           class="mr-1"
           variant="primary"
-          @click="openEditModal()"
+          @click="openEducationEditModal()"
         >
           Add new education
         </b-button>
@@ -74,17 +74,98 @@
     >
       <EditEducationForm
         :initial-values="editedEducationItem"
-        @cancel="closeEditModal()"
+        @cancel="closeEducationEditModal()"
         @submit="submitEducationForm"
+      />
+    </b-modal>
+
+    <b-row class="pt-3">
+      <b-col cols="12">
+        <h2>Certificates and other validations of expertise</h2>
+      </b-col>
+      <b-col class="col-12">
+        <b-table
+          id="certificate-or-other-table"
+          :items="certificateOrOtherTableItems"
+          :fields="certificateOrOtherFields"
+          stacked="sm"
+          class="certificate-or-other-table"
+        >
+          <template
+            slot="name"
+            slot-scope="data"
+          >
+            <span class="table-cell-text text-truncate"> {{ data.value }} </span>
+          </template>
+
+          <template
+            slot="description"
+            slot-scope="data"
+          >
+            <span class="table-cell-text text-truncate"> {{ data.value }} </span>
+          </template>
+
+          <template
+            slot="actions"
+            slot-scope="data"
+          >
+            <b-button-group>
+              <b-btn
+                :id="'edit-certificate-or-other-item-btn-' + data.index"
+                size="sm"
+                class="mr-1 table-button"
+                variant="primary"
+                @click="openCertificateOrOtherEditModal(data)"
+              >
+                Edit
+              </b-btn>
+              <b-btn
+                :id="'remove-certificate-or-other-item-btn-' + data.index"
+                name="remove"
+                size="sm"
+                class="mr-1 table-button"
+                variant="danger"
+                @click.stop="removeCertificateOrOther(data)"
+              >
+                Remove
+              </b-btn>
+            </b-button-group>
+          </template>
+        </b-table>
+      </b-col>
+      <b-col cols="12">
+        <b-button
+          id="add-certificate-or-other-btn"
+          size="sm"
+          class="mr-1"
+          variant="primary"
+          @click="openCertificateOrOtherEditModal()"
+        >
+          Add a new certificate or other similar item
+        </b-button>
+      </b-col>
+    </b-row>
+    <b-modal
+      ref="edit-certificate-or-other-modal"
+      title=""
+      size="lg"
+      hide-footer
+      hide-header
+    >
+      <EditCertificateOrOtherForm
+        :certificate-or-other="editedCertificateOrOtherItem"
+        @cancel="closeCertificateOrOtherEditModal()"
+        @submit="submitCertificateOrOtherForm"
       />
     </b-modal>
   </div>
 </template>
 
 <script>
-import { cloneDeep } from 'lodash'
+import { cloneDeep, orderBy } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import EditEducationForm from './EditEducationForm'
+import EditCertificateOrOtherForm from './EditCertificateOrOtherForm'
 
 const educationTemplate = {
   fi: {
@@ -105,17 +186,30 @@ const educationTemplate = {
   endYear: null
 }
 
+const certificateOrOtherTemplate = {
+  fi: {
+    name: '',
+    description: ''
+  },
+  en: {
+    name: '',
+    description: ''
+  },
+  year: null
+}
+
 export default {
   name: 'EditEducation',
   components: {
-    EditEducationForm
+    EditEducationForm,
+    EditCertificateOrOtherForm
   },
   props: {
     profile: Object
   },
   data () {
     return {
-      fields: [
+      educationFields: [
         { key: 'school', label: 'Place of education' },
         { key: 'startYear', label: 'Starting year' },
         { key: 'endYear', label: 'Finishing year' },
@@ -124,12 +218,21 @@ export default {
       ],
       editedEducation: this.profile.education ? this.profile.education : [],
       editedEducationItem: cloneDeep(educationTemplate),
-      editedItemIndex: -1
+      editedEducationItemIndex: -1,
+      certificateOrOtherFields: [
+        { key: 'name', label: 'Certificate\'s or other similar item\'s name' },
+        { key: 'description', label: 'Description' },
+        { key: 'year', label: 'Year' },
+        'actions'
+      ],
+      editedCertificatesAndOthers: this.profile.certificatesAndOthers ? this.profile.certificatesAndOthers : [],
+      editedCertificateOrOtherItem: cloneDeep(certificateOrOtherTemplate),
+      editedCertificateOrOtherItemIndex: -1
     }
   },
   computed: {
     ...mapGetters(['currentLanguage']),
-    tableItems () {
+    educationTableItems () {
       return this.editedEducation.map(item => {
         return {
           school: item[this.currentLanguage].school,
@@ -141,48 +244,88 @@ export default {
           additionalInfo: item[this.currentLanguage].additionalInfo
         }
       })
+    },
+    certificateOrOtherTableItems () {
+      return this.editedCertificatesAndOthers.map(item => {
+        return {
+          name: item[this.currentLanguage].name,
+          description: item[this.currentLanguage].description,
+          year: item.year
+        }
+      })
     }
   },
   methods: {
     ...mapActions(['updateProfile']),
     removeEducation (item) {
-      const confirmation = confirm('Are you sure?')
+      const confirmation = confirm(`Are you sure you want to remove this education? (${item.item.degree})`)
       if (confirmation) {
         this.editedEducation.splice(item.index, 1)
         this.callUpdateProfileAction()
       }
     },
-    openEditModal (item = null) {
+    removeCertificateOrOther (item) {
+      const confirmation = confirm(`Are you sure you want to remove this certificate or similar item? (${item.item.name})`)
+      if (confirmation) {
+        this.editedCertificatesAndOthers.splice(item.index, 1)
+        this.callUpdateProfileAction()
+      }
+    },
+    openEducationEditModal (item = null) {
       if (item) {
         this.editedEducationItem = cloneDeep(this.editedEducation[item.index])
-        this.editedItemIndex = item.index
+        this.editedEducationItemIndex = item.index
       } else {
         this.editedEducationItem = cloneDeep(educationTemplate)
-        this.editedItemIndex = -1
+        this.editedEducationItemIndex = -1
       }
       this.$refs['edit-education-modal'].show()
     },
-    closeEditModal () {
+    openCertificateOrOtherEditModal (item = null) {
+      if (item) {
+        this.editedCertificateOrOtherItem = cloneDeep(this.editedCertificatesAndOthers[item.index])
+        this.editedCertificateOrOtherItemIndex = item.index
+      } else {
+        this.editedCertificateOrOtherItem = cloneDeep(certificateOrOtherTemplate)
+        this.editedCertificateOrOtherItemIndex = -1
+      }
+      this.$refs['edit-certificate-or-other-modal'].show()
+    },
+    closeEducationEditModal () {
       this.$refs['edit-education-modal'].hide()
     },
+    closeCertificateOrOtherEditModal () {
+      this.$refs['edit-certificate-or-other-modal'].hide()
+    },
     submitEducationForm (submittedData) {
-      if (this.editedItemIndex >= 0) {
-        this.editedEducation[this.editedItemIndex] = cloneDeep(submittedData)
+      if (this.editedEducationItemIndex >= 0) {
+        this.editedEducation[this.editedEducationItemIndex] = cloneDeep(submittedData)
       } else {
         this.editedEducation.push(submittedData)
       }
+      this.closeEducationEditModal()
+      this.callUpdateProfileAction()
+    },
+    submitCertificateOrOtherForm (submittedData) {
+      if (this.editedCertificateOrOtherItemIndex >= 0) {
+        this.editedCertificatesAndOthers[this.editedCertificateOrOtherItemIndex] = cloneDeep(submittedData)
+      } else {
+        this.editedCertificatesAndOthers.push(submittedData)
+      }
+      this.closeCertificateOrOtherEditModal()
       this.callUpdateProfileAction()
     },
     async callUpdateProfileAction () {
       const editedProfile = cloneDeep(this.profile)
-      this.editedEducation.sort((a, b) => b.endYear - a.endYear)
+      this.editedEducation = orderBy(this.editedEducation, ['endYear'], ['desc'])
+      this.editedCertificatesAndOthers = orderBy(this.editedCertificatesAndOthers, ['year', 'name'], ['desc', 'asc'])
       editedProfile.education = this.editedEducation
+      editedProfile.certificatesAndOthers = this.editedCertificatesAndOthers
       try {
         await this.updateProfile(editedProfile)
         this.$toasted.global.rytmi_success({
-          message: 'Profile CV education updated.'
+          message: 'Profile updated.'
         })
-        this.$refs['edit-education-modal'].hide()
       } catch (error) {
         this.$toasted.global.rytmi_error({
           message: error
@@ -206,5 +349,4 @@ button.table-button {
 .modal-btn {
   margin-top: 0.5rem;
 }
-
 </style>

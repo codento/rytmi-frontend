@@ -20,6 +20,11 @@ export const mockProfile = {
       endYear: 2015
     }
   ],
+  certificatesAndOthers: [
+    { en: { name: 'Rocket workshop', description: 'I organized a workshop in which a rocket was built.' },
+      fi: { name: 'Raketti-workshop', description: 'Pidin workshopin, jossa rakennettiin raketti.' },
+      year: '2018' }
+  ],
   otherInfo: 'markdown kuvaus'
 }
 

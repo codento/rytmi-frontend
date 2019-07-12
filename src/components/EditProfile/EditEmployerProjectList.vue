@@ -58,7 +58,6 @@
             v-b-modal="'new-project-modal'"
             class="pull-right mt-2"
           >
-            <i class="fa fa-plus" />
             Add a project
           </b-button>
         </b-col>
