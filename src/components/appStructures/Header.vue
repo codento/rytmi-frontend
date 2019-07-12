@@ -87,7 +87,7 @@
           v-show="isAdmin"
           class="px-3"
           name="go-to-profiles"
-          href="/search"
+          href="/admin"
         >
           <b-row class="nav-item text-center my-1">
             <b-col cols="12">
