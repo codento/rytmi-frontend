@@ -14,6 +14,13 @@
       :key="employerName + '-' + index"
     >
       <h3>{{ employerName }}</h3>
+      <b-row v-if="projects.length === 0">
+        <b-col>
+          <div class="text-muted pb-2">
+            No projects for this employer.
+          </div>
+        </b-col>
+      </b-row>
       <b-row
         v-for="project in projects"
         :key="project.projectId"

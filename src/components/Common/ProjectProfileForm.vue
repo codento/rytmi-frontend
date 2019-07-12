@@ -168,6 +168,12 @@
                 {{ (isSelectedSkill(skill) ? '✓ ' : '') + skill.name }}
               </span>
             </div>
+            <div
+              v-if="!projectSkills || projectSkills.length === 0"
+              class="text-muted"
+            >
+              <small>This project doesn't have any skills yet. To add them, edit the project.</small>
+            </div>
           </b-col>
         </b-row>
       </b-form-group>
@@ -252,7 +258,13 @@ export default {
       'profileId'
     ]),
     projectSkills () {
-      return this.profileProject.projectId ? this.projectById(this.profileProject.projectId).skills : []
+      if (this.profileProject.projectId) {
+        return this.projectById(this.profileProject.projectId).skills
+      }
+      if (this.editableProfileProject.projectId) {
+        return this.projectById(this.editableProfileProject.projectId).skills
+      }
+      return []
     },
     filteredProjects () {
       const projectList = Object.keys(this.projects).map(key => this.projects[key])
