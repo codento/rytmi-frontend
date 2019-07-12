@@ -5,21 +5,23 @@
     toggleable="lg"
     variant="dark"
   >
-    <b-navbar-brand href="/home">
-      <img
-        class="navbar-brand-full mx-5"
-        src="/img/logo.png"
-        width="143"
-        height="25"
-        alt="Codento Logo"
-      >
-      <!-- <img
-        class="navbar-brand-minimized"
-        src="/img/Codento C RGB medium square.jpg"
-        width="30"
-        height="30"
-        alt="Codento Logo"
-      > -->
+    <b-navbar-brand>
+      <router-link to="/home">
+        <img
+          class="navbar-brand-full mx-5"
+          src="/img/logo.png"
+          width="143"
+          height="25"
+          alt="Codento Logo"
+        >
+        <!-- <img
+          class="navbar-brand-minimized"
+          src="/img/Codento C RGB medium square.jpg"
+          width="30"
+          height="30"
+          alt="Codento Logo"
+        > -->
+      </router-link>
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse" />
     <b-collapse
@@ -30,58 +32,63 @@
         <b-nav-item
           class="px-3"
           name="go-to-dashboard"
-          href="/home"
         >
-          <b-row class="text-center my-1">
-            <b-col cols="12">
-              <GlobeIcon class="nav-icon" />
-            </b-col>
-            <b-col class="nav-item-label">
-              DASHBOARD
-            </b-col>
-          </b-row>
+          <router-link to="/home">
+            <b-row class="text-center my-1">
+              <b-col cols="12">
+                <GlobeIcon class="nav-icon" />
+              </b-col>
+              <b-col class="nav-item-label">
+                DASHBOARD
+              </b-col>
+            </b-row>
+          </router-link>
         </b-nav-item>
         <b-nav-item
           class="px-3"
           name="go-to-projects"
-          href="/projects"
         >
-          <b-row class="text-center my-1">
-            <b-col cols="12">
-              <ArchiveIcon class="nav-icon" />
-            </b-col>
-            <b-col class="nav-item-label">
-              PROJECTS
-            </b-col>
-          </b-row>
+          <router-link to="/projects">
+            <b-row class="text-center my-1">
+              <b-col cols="12">
+                <ArchiveIcon class="nav-icon" />
+              </b-col>
+              <b-col class="nav-item-label">
+                PROJECTS
+              </b-col>
+            </b-row>
+          </router-link>
         </b-nav-item>
         <b-nav-item
           class="px-3"
           name="go-to-profiles"
           href="/search"
         >
-          <b-row class="nav-item text-center my-1">
-            <b-col cols="12">
-              <UsersIcon class="nav-icon" />
-            </b-col>
-            <b-col class="nav-item-label">
-              PROFILES
-            </b-col>
-          </b-row>
+          <router-link to="/search">
+            <b-row class="nav-item text-center my-1">
+              <b-col cols="12">
+                <UsersIcon class="nav-icon" />
+              </b-col>
+              <b-col class="nav-item-label">
+                PROFILES
+              </b-col>
+            </b-row>
+          </router-link>
         </b-nav-item>
         <b-nav-item
           class="px-3"
           name="go-to-skills"
-          href="/skills"
         >
-          <b-row class="nav-item text-center my-1">
-            <b-col cols="12">
-              <StarIcon class="nav-icon" />
-            </b-col>
-            <b-col class="nav-item-label">
-              SKILLS
-            </b-col>
-          </b-row>
+          <router-link to="/skills">
+            <b-row class="nav-item text-center my-1">
+              <b-col cols="12">
+                <StarIcon class="nav-icon" />
+              </b-col>
+              <b-col class="nav-item-label">
+                SKILLS
+              </b-col>
+            </b-row>
+          </router-link>
         </b-nav-item>
         <b-nav-item
           v-show="isAdmin"
@@ -89,14 +96,16 @@
           name="go-to-profiles"
           href="/admin"
         >
-          <b-row class="nav-item text-center my-1">
-            <b-col cols="12">
-              <SettingsIcon class="nav-icon" />
-            </b-col>
-            <b-col class="nav-item-label">
-              ADMIN
-            </b-col>
-          </b-row>
+          <router-link to="/admin">
+            <b-row class="nav-item text-center my-1">
+              <b-col cols="12">
+                <SettingsIcon class="nav-icon" />
+              </b-col>
+              <b-col class="nav-item-label">
+                ADMIN
+              </b-col>
+            </b-row>
+          </router-link>
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
