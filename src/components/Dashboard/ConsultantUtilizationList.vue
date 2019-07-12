@@ -1,9 +1,7 @@
 <template>
   <chart-card>
     <template slot="header">
-      <div class="h3 px-2">
-        Consultants
-      </div>
+      <h2>Consultants</h2>
     </template>
     <b-col
       role="tablist"

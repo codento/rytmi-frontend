@@ -4,11 +4,10 @@ exports[`ProjectList.vue Template is correct 1`] = `
 <b-container-stub
   tag="div"
 >
-  <h2>
-    Projects
-  </h2>
+  <hr />
    
   <b-input-stub
+    class="mb-2"
     name="project-filter"
     placeholder="Filter projects (by name or project code)"
     type="text"

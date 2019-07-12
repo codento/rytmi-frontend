@@ -1,9 +1,7 @@
 <template>
   <chart-card>
     <template slot="header">
-      <div class="h3 px-2">
-        Preferred skills
-      </div>
+      <h2>Preferred skills</h2>
     </template>
     <b-col>
       <p class="lead px-2">
@@ -22,6 +20,7 @@
 import ChartCard from './ChartCard'
 
 export default {
+  name: 'MostWillingnessChart',
   components: {
     ChartCard
   },

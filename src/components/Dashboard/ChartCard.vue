@@ -1,5 +1,5 @@
 <template>
-  <div
+  <b-card
     class="draw-border"
   >
     <div class="header-container">
@@ -9,16 +9,16 @@
     <b-row>
       <slot />
     </b-row>
-  </div>
+  </b-card>
 </template>
 
 <style scoped>
-  .draw-border {
+  /* .draw-border {
     height: 100%;
     border: 1px solid black;
   }
   .draw-border .header-container {
     padding-top: 15px;
     padding-left: 15px;
-  }
+  } */
 </style>

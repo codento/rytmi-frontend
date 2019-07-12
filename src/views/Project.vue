@@ -5,35 +5,37 @@
       v-else
       class="animated fadeIn project-container col-xl-7"
     >
-      <b-row>
-        <b-col class="project-details">
-          <b>{{ project.code }}</b>
-          <h1>{{ project.name[currentLanguage] }}</h1>
-          <div class="detail-container">
-            <span class="detail detail-start">
-              <small>Start date</small><br>
-              <b class="project-start-date">{{ project.startDate | dateFilter }}</b>
-            </span>
-            <span class="detail detail-end">
-              <small>End date</small><br>
-              <b class="project-end-date">{{ project.endDate | dateFilter }}</b>
-            </span>
-            <span class="detail members">
-              <small>Consultants</small><br>
-              <b v-if="members">{{ members.length }}</b>
-            </span>
-          </div>
-          <p>
-            <small>Description</small><br>
-            {{ project.description[currentLanguage] }}
-          </p>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col class="project-members">
-          <ProjectMemberTable :members="members" />
-        </b-col>
-      </b-row>
+      <b-card>
+        <b-row>
+          <b-col class="project-details">
+            <b>{{ project.code }}</b>
+            <h1>{{ project.name[currentLanguage] }}</h1>
+            <div class="detail-container">
+              <span class="detail detail-start">
+                <small>Start date</small><br>
+                <b class="project-start-date">{{ project.startDate | dateFilter }}</b>
+              </span>
+              <span class="detail detail-end">
+                <small>End date</small><br>
+                <b class="project-end-date">{{ project.endDate | dateFilter }}</b>
+              </span>
+              <span class="detail members">
+                <small>Consultants</small><br>
+                <b v-if="members">{{ members.length }}</b>
+              </span>
+            </div>
+            <p>
+              <small>Description</small><br>
+              {{ project.description[currentLanguage] }}
+            </p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col class="project-members">
+            <ProjectMemberTable :members="members" />
+          </b-col>
+        </b-row>
+      </b-card>
       <hr>
       <CollapsableItem title="Edit project">
         <ProjectFormWrapper

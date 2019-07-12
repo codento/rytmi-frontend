@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h2>Skills</h2>
+    <h1>Skills</h1>
     <b-row class="my-2">
       <b-col
         cols="12"
-        class="my-2"
+        class="my-4"
       >
         <b-button
           id="add-skill-btn"
@@ -25,17 +25,18 @@
         </b-button>
       </b-col>
     </b-row>
-    <b-row class="my-2">
+    <b-row
+      class="my-2"
+      align-v="end"
+    >
       <b-col
         cols="12"
         md="4"
       >
-        <small for="skill-name-filter-input">
-          Skill name
-        </small>
         <b-input
           id="skill-name-filter-input"
           v-model="filterValues['name']"
+          placeholder="Search all skills"
           class="mr-2"
         />
       </b-col>

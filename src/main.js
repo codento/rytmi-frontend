@@ -16,6 +16,10 @@ import ErrorPage from '@/views/ErrorPage'
 import store from './store'
 import Toasted from 'vue-toasted'
 import Loading from './components/helpers/LoadingSpinner'
+import Chart from 'chart.js'
+
+Chart.defaults.global.defaultFontColor = '#303030'
+Chart.defaults.global.defaultFontFamily = "'Poppins', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
 
 Vue.use(BootstrapVue)
 Vue.use(Toasted)

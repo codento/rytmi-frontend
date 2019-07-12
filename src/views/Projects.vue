@@ -1,6 +1,7 @@
 <template>
   <div class="animated fadeIn col-sm-12 col-md-8 project-list-container">
     <b-container>
+      <h1>Projects</h1>
       <CollapsableItem title="Add a new project">
         <ProjectFormWrapper
           v-if="Object.values(employers).length > 0"
