@@ -1,7 +1,4 @@
 // Variable overrides
-
-@import "~@coreui/coreui/scss/variables";
-
 $c-orange: #FF8429;
 $c-orange-light: #FF9A4F;
 $c-violet-dark: #1F1A4E;
@@ -14,7 +11,7 @@ $c-dark: #1D1433;
 $theme-colors: (
   primary:             $c-orange,
   secondary:           $c-violet,
-  info:              white,
+  info:                white,
   dark:                $c-dark,
   light:               $c-light
 );
@@ -26,23 +23,15 @@ $btn-font-family: 'Poppins';
 $btn-font-weight: 500;
 $btn-border-width: 0px;
 
+$text-muted: $c-light;
+
 $card-border-color: $body-bg;
 $card-cap-bg: darken($color: $body-bg, $amount: 5);
 
 $progress-border-radius: 0;
-
-$sidebar-bg: #eee;
-$sidebar-nav-link-color: $body-color;
-$sidebar-nav-link-active-color: #fff;
-$sidebar-nav-link-icon-color: $body-color;
-$sidebar-nav-link-active-icon-color: #fff;
-
-$sidebar-nav-link-active-bg: $c-orange;
-$sidebar-nav-link-hover-bg: $c-orange;
-
 $progress-bar-bg: theme-color('primary');
 
-$table-bg: $white;
+$table-bg: white;
 $table-hover-color: $c-violet;
 $table-accent-bg: $c-light;
 $table-hover-bg: rbba(200, 200, 200, 0.5);
