@@ -47,11 +47,11 @@
             >
               {{ skillById(skill.skillId).name }}
             </b-col>
-            <b-col class="knows-balls-containter">
+            <b-col class="knows-circles-containter">
               <span
-                v-for="knows in knowsBalls(skill.knows)"
+                v-for="knows in knowsCircles(skill.knows)"
                 :key="knows.index"
-                :class="knows.knows ? 'knows-ball' : 'not-knows-ball'"
+                :class="knows.knows ? 'knows-circle' : 'not-knows-circle'"
               />
             </b-col>
           </b-row>
@@ -103,7 +103,7 @@ export default {
     openProfile (profile) {
       this.$router.push({ name: 'profile', params: { id: profile.id } })
     },
-    knowsBalls (knows) {
+    knowsCircles (knows) {
       const ballsArray = new Array(5)
       for (let i = 0; i < 5; i++) {
         if (i <= knows) {
@@ -158,21 +158,21 @@ img {
         width: 100%;
     }
   }
-.knows-ball {
+.knows-circle {
   background-color: $c-violet-dark;
   width: 1em;
   height: 1em;
   border-radius: 50%;
   margin: 0 1px 0 1px;
 }
-.not-knows-ball {
+.not-knows-circle {
   border: 1px solid $c-violet-dark;
   width: 1em;
   height: 1em;
   border-radius: 50%;
   margin: 0 1px 0 1px;
 }
-.knows-balls-containter {
+.knows-circles-containter {
   display: flex;
   align-items: center;
 }
