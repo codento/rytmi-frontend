@@ -13,7 +13,7 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
       tag="div"
     >
       <div
-        class="pull-right"
+        class="float-right"
         id="disabled-open-cv-tool-button-wrapper"
       >
         <b-btn-stub

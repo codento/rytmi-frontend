@@ -11,7 +11,7 @@
         <b-button-group
           v-for="languageButton in languageButtons"
           :key="languageButton.id"
-          class="pull-right"
+          class="float-right"
         >
           <b-button
             :id="languageButton.id"

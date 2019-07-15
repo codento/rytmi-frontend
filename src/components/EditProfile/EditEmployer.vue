@@ -49,7 +49,7 @@
         <b-button
           v-if="!isNewEntry"
           variant="danger"
-          class="pull-right"
+          class="float-right"
           @click="deleteEntry(profileEmployer)"
         >
           Delete entry

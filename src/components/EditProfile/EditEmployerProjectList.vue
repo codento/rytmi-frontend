@@ -48,7 +48,7 @@
             </span>
             <span>
               <TrashIcon
-                class="clickable pull-right trash-icon"
+                class="clickable float-right trash-icon"
                 size="1x"
                 @click="deleteProfileProject(profileProject)"
               />
@@ -60,7 +60,7 @@
         <b-col>
           <b-button
             v-b-modal="'new-project-modal'"
-            class="pull-right mt-2"
+            class="float-right mt-2"
           >
             Add a project
           </b-button>

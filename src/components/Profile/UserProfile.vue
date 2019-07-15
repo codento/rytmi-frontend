@@ -7,16 +7,12 @@
           class="mb-0"
         >
           Profile
-          <span
+          <EditIcon
             v-if="profileId === profile.id || isAdmin"
             v-b-modal.editProfileBasicInfoModal
-            class="pull-right"
-          >
-            <EditIcon
-              size="1x"
-              class="clickable"
-            />
-          </span>
+            size="1x"
+            class="clickable float-right"
+          />
         </div>
         <UserProfileCard :profile="profile" />
         <b-modal
@@ -43,16 +39,12 @@
           class="mb-0"
         >
           Skills
-          <span
+          <EditIcon
             v-if="profileId === profile.id || isAdmin"
             v-b-modal.editProfileSkillsModal
-            class="pull-right"
-          >
-            <EditIcon
-              size="1x"
-              class="clickable"
-            />
-          </span>
+            size="1x"
+            class="clickable float-right"
+          />
         </div>
         <b-row v-if="showInfo">
           <SkillExplanations
@@ -91,7 +83,7 @@
           </template>
           <EditSkills :profile-id="profile.id" />
           <b-btn
-            class="pull-right"
+            class="float-right"
             variant="light"
             @click="$bvModal.hide('editProfileSkillsModal')"
           >
@@ -102,16 +94,12 @@
       <b-card header="Projects">
         <div slot="header">
           Projects
-          <span
+          <EditIcon
             v-if="profileId === profile.id || isAdmin"
             v-b-modal.editProfileProjectsModal
-            class="pull-right"
-          >
-            <EditIcon
-              size="1x"
-              class="clickable"
-            />
-          </span>
+            size="1x"
+            class="clickable float-right"
+          />
         </div>
         <loading v-if="!profileProjects" />
         <ProjectRow
@@ -149,16 +137,12 @@
       >
         <template #custom-header>
           Education
-          <span
+          <EditIcon
             v-if="profileId === profile.id || isAdmin"
             v-b-modal.editEducationModal
-            class="pull-right"
-          >
-            <EditIcon
-              size="1x"
-              class="clickable"
-            />
-          </span>
+            size="1x"
+            class="clickable float-right"
+          />
         </template>
         <template
           v-if="!profile.education || profile.education.length === 0"
@@ -190,16 +174,12 @@
       <b-card header="Employer history">
         <div slot="header">
           Employer history
-          <span
+          <EditIcon
             v-if="profileId === profile.id || isAdmin"
             v-b-modal="'work-history'"
-            class="pull-right"
-          >
-            <EditIcon
-              size="1x"
-              class="clickable"
-            />
-          </span>
+            size="1x"
+            class="clickable float-right"
+          />
         </div>
         <WorkHistoryList :profile-id="profile.id" />
       </b-card>

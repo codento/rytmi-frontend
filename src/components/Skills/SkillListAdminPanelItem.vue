@@ -13,7 +13,7 @@
           :id="'add-new-' + idPrefix + '-btn'"
           type="submit"
           variant="success"
-          class="pull-right mb-2"
+          class="float-right mb-2"
           @click.prevent="startCreateMode()"
         >
           Add

@@ -107,7 +107,7 @@
     </div>
     <b-btn
       id="save"
-      class="pull-right"
+      class="float-right"
       variant="success"
       @click="handleNextButton()"
     >
@@ -117,7 +117,7 @@
       id="cancel"
       type="button"
       variant="light"
-      class="pull-right"
+      class="float-right"
       @click="handleBackButton()"
     >
       {{ currentStep === 0 ? 'Cancel' : 'Back' }}

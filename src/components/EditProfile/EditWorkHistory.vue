@@ -6,7 +6,7 @@
     <b-row>
       <b-col>
         <b-button
-          class="pull-right mb-2"
+          class="float-right mb-2"
           @click="addNewProfileEmployer"
         >
           Add a new work history entry

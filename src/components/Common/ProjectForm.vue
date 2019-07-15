@@ -224,7 +224,7 @@
       </b-modal>
     </b-row>
     <slot name="custom-form" />
-    <b-row class="mt-4 pull-right">
+    <b-row class="mt-4 float-right">
       <b-col>
         <b-button
           id="submit-project-edits-btn"
