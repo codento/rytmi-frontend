@@ -63,11 +63,11 @@
         class="my-auto"
       >
         <ChevronRightIcon
-					id="open-profile"
-					size="5x"
-					class="clickable"
-					@click="openProfile(profile)"
-				/>
+          id="open-profile"
+          size="5x"
+          class="clickable"
+          @click="openProfile(profile)"
+        />
       </b-col>
     </b-row>
   </b-card>
@@ -147,7 +147,7 @@ img {
   margin-left: 10px
 }
 .clickable {
-	cursor: pointer;
+  cursor: pointer;
 }
 .knows-circle {
   background-color: $c-violet-dark;
