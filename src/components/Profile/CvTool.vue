@@ -40,7 +40,10 @@
             :profile-projects="mappedProfileProjects"
           />
         </div>
-        <CvToolEducation :education-list="profile.education ? profile.education : []" />
+        <CvToolEducation
+          :education-list="profile.education ? profile.education : []"
+          :certificate-or-other-list="profile.certificatesAndOthers ? profile.certificatesAndOthers : []"
+        />
       </b-col>
     </b-row>
     <template v-slot:modal-footer>
@@ -308,7 +311,7 @@ export default {
         projectDescription: projectObj.description[this.currentLanguage],
         projectCustomer: projectObj.customerName[this.currentLanguage],
         projectDuration: projectObj.duration,
-        projectSkills: projectObj.projectSkills.map(skill => this.skillById(skill.skillId).name)
+        projectSkills: projectObj.skills.map(skill => skill.name)
       }
     },
     mapSkillForCV (skillObj) {
