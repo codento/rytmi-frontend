@@ -3,7 +3,7 @@
     id="header-navbar"
     type="dark"
     toggleable="lg"
-    variant="dark"
+    variant="c-violet-dark"
   >
     <b-navbar-brand>
       <router-link to="/home">
@@ -46,6 +46,7 @@
         </b-nav-item>
         <b-nav-item
           class="px-3"
+          variant="light"
           name="go-to-profiles"
           href="/search"
         >
@@ -123,12 +124,13 @@
         >
           <b-dropdown
             id="account-dropdown"
-            variant="outline-light"
+            variant="outline-c-violet-light"
             text="Account"
           >
             <b-dropdown-item
               id="account-dropdown-item-profile"
               :to="{ name: 'profile', params: { id: profileId } }"
+              variant="c-violet-dark"
               exact
             >
               <img
@@ -140,9 +142,10 @@
               >
               My Profile
             </b-dropdown-item>
-            <b-dropdown-divider />
+            <b-dropdown-divider variant="c-violet-dark" />
             <b-dropdown-item
               id="account-dropdown-item-signout"
+              variant="c-violet-dark"
               @click="logout"
             >
               <i class="fa fa-lock" /> Sign Out
@@ -186,7 +189,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/assets/scss/_variables.scss';
 .profile-icon {
   margin: 0 10px 0 -10px;

@@ -1,9 +1,11 @@
+
 // If you want to override variables do it here
 @import "variables";
 
 // If you want to add something do it here
 @import "custom";
 
+@import "~bootstrap/scss/bootstrap";
 // ie fixes
 @import "ie-fix";
 
@@ -30,6 +32,13 @@ html, body {
   small {
     font-family: 'Poppins';
     font-weight: 400;
+  }
+  a {
+    color: $c-violet-light;
+  }
+  a:hover {
+    color: $c-light;
+    text-decoration: none;
   }
 }
 
