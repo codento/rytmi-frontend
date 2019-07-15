@@ -51,7 +51,8 @@
               <span
                 v-for="knows in knowsBalls(skill.knows)"
                 :key="knows.index"
-                :class="knows.knows ? 'knows-ball' : 'not-knows-ball'" />
+                :class="knows.knows ? 'knows-ball' : 'not-knows-ball'"
+              />
             </b-col>
           </b-row>
         </div>
