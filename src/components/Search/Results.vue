@@ -40,9 +40,13 @@
           title="Reverse order"
           @click="reversedOrder = !reversedOrder"
         >
-          <i
-            :class="reversedOrder ? 'fa-chevron-up' : 'fa-chevron-down'"
-            class="fa"
+          <ChevronUpIcon
+            v-if="reversedOrder"
+            size="1x"
+          />
+          <ChevronDownIcon
+            v-else
+            size="1x"
           />
         </b-btn>
       </b-col>
@@ -64,6 +68,7 @@ import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
 import { isValid, startOfDay } from 'date-fns'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+import { ChevronDownIcon, ChevronUpIcon } from 'vue-feather-icons'
 
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3, utilization: 4 })
 
@@ -83,7 +88,9 @@ const sortBySkills = (sortAttribute, skillFilters) => (profileOne, profileTwo) =
 export default {
   name: 'Results',
   components: {
-    ProfileCard
+    ProfileCard,
+    ChevronDownIcon,
+    ChevronUpIcon
   },
   props: {
     nameFilter: String,

@@ -10,14 +10,6 @@
     </div>
     <div style="text-align: center; color:#869fac">
       <span class="profile-name"> {{ getNames }}</span><br>
-      <a
-        v-for="account in profile.accounts"
-        :key="account.address"
-        :class="getFAClass(account)"
-        :href="account.address"
-        style="padding: 4px;"
-        class="fa"
-      />
     </div>
     <div>
       <div class="profileCardDetails profile-card-detail-row">
@@ -66,11 +58,6 @@ export default {
           return roleid === role.id
         })
       })
-    }
-  },
-  methods: {
-    getFAClass: function (object) {
-      return 'fa-'.concat(object.type)
     }
   }
 }

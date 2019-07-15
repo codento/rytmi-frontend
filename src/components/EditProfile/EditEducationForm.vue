@@ -10,9 +10,9 @@
         <div
           :class="step === currentStep ? 'step-title current-step' : 'step-title text-muted'"
         >
-          <i
+          <CheckIcon
             v-if="step < currentStep"
-            class="fa fa-check"
+            size="1x"
           />
           <span v-else>
             {{ step + 1 }}
@@ -128,10 +128,14 @@
 <script>
 import { kebabCase, cloneDeep } from 'lodash'
 import { EducationCard } from '@/components/Common'
+import { CheckIcon } from 'vue-feather-icons'
 
 export default {
   name: 'EditEducationForm',
-  components: { EducationCard },
+  components: {
+    EducationCard,
+    CheckIcon
+  },
   props: {
     initialValues: {
       type: Object,

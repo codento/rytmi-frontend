@@ -15,12 +15,13 @@
             taggable
             push-tags
           />
-          <i
+          <EditIcon
             v-if="profileEmployer.employerId !== internalCompanyId && selectedEmployerOption ? selectedEmployerOption.id : false"
             v-b-tooltip.hover
             v-b-modal.edit-employer-name
             title="Change name of existing employer"
-            class="fa fa-pencil edit-employer-name-icon"
+            class="edit-employer-name-icon"
+            size="1x"
           />
           <b-modal
             id="edit-employer-name"
@@ -165,13 +166,15 @@ import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
 import EditEmployerProjectList from './EditEmployerProjectList'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+import { EditIcon } from 'vue-feather-icons'
 
 export default {
   name: 'EditEmployer',
   components: {
     Datepicker,
     vSelect,
-    EditEmployerProjectList
+    EditEmployerProjectList,
+    EditIcon
   },
   props: {
     profileEmployer: Object,

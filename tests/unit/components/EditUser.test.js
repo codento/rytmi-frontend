@@ -18,14 +18,6 @@ describe('EditUser.vue', () => {
         photoPath: '',
         employeeRoles: [1],
         title: 'software developer',
-        accounts: [
-          {
-            address: 'twitter.com/foo'
-          },
-          {
-            address: 'github.com/bar'
-          }
-        ],
         email: 'foo.bar@foo.com',
         phone: '1354',
         description: 'fdas'

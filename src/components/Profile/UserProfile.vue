@@ -12,7 +12,10 @@
             v-b-modal.editProfileBasicInfoModal
             class="pull-right"
           >
-            <i class="fa fa-pencil clickable" />
+            <EditIcon
+              size="1x"
+              class="clickable"
+            />
           </span>
         </div>
         <UserProfileCard :profile="profile" />
@@ -45,7 +48,10 @@
             v-b-modal.editProfileSkillsModal
             class="pull-right"
           >
-            <i class="fa fa-pencil clickable" />
+            <EditIcon
+              size="1x"
+              class="clickable"
+            />
           </span>
         </div>
         <b-row v-if="showInfo">
@@ -101,7 +107,10 @@
             v-b-modal.editProfileProjectsModal
             class="pull-right"
           >
-            <i class="fa fa-pencil clickable" />
+            <EditIcon
+              size="1x"
+              class="clickable"
+            />
           </span>
         </div>
         <loading v-if="!profileProjects" />
@@ -145,7 +154,10 @@
             v-b-modal.editEducationModal
             class="pull-right"
           >
-            <i class="fa fa-pencil clickable" />
+            <EditIcon
+              size="1x"
+              class="clickable"
+            />
           </span>
         </template>
         <template
@@ -183,7 +195,10 @@
             v-b-modal="'work-history'"
             class="pull-right"
           >
-            <i class="fa fa-pencil clickable" />
+            <EditIcon
+              size="1x"
+              class="clickable"
+            />
           </span>
         </div>
         <WorkHistoryList :profile-id="profile.id" />
@@ -220,6 +235,7 @@ import { EditWorkHistory, WorkHistoryList, EditSkills, EditProjects } from '@/co
 import CvToolEducation from '@/components/Profile/CvToolEducation'
 import EditEducation from '@/components/EditProfile/EditEducation'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+import { EditIcon } from 'vue-feather-icons'
 
 export default {
   name: 'UserProfile',
@@ -234,7 +250,8 @@ export default {
     EditWorkHistory,
     WorkHistoryList,
     EditSkills,
-    EditProjects
+    EditProjects,
+    EditIcon
   },
   props: {
     profile: Object

@@ -48,17 +48,14 @@
       <b-col
         cols="12"
         md="1"
-        class="profile-open-button"
+        class="my-auto"
       >
-        <b-button
+        <ChevronRightIcon
           id="open-profile"
+          size="5x"
+          class="clickable"
           @click="openProfile(profile)"
-        >
-          <i
-            style="font-size: 76px; color: gray;"
-            class="fa fa-5x fa-angle-right"
-          />
-        </b-button>
+        />
       </b-col>
     </b-row>
   </b-card>
@@ -68,10 +65,16 @@
 import { SkillRow, UtilizationChart } from '@/components/Common'
 import ProfileCardProjectInfo from './ProfileCardProjectInfoRow'
 import { mapGetters } from 'vuex'
+import { ChevronRightIcon } from 'vue-feather-icons'
 
 export default {
   name: 'ProfileCard',
-  components: { SkillRow, UtilizationChart, ProfileCardProjectInfo },
+  components: {
+    SkillRow,
+    UtilizationChart,
+    ProfileCardProjectInfo,
+    ChevronRightIcon
+  },
   props: {
     profile: Object,
     skillHighlight: Array,
@@ -124,13 +127,7 @@ img {
   object-fit: contain;
   margin-left: 10px
 }
-.profile-open-button {
-    margin: 0 auto;
-    button {
-        height: 100%;
-        background: #fff;
-        border: 0;
-        width: 100%;
-    }
+.clickable {
+  cursor: pointer;
 }
 </style>
