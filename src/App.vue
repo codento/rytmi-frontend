@@ -1,3 +1,4 @@
+
 <template>
   <div class="app">
     <AppHeader />
@@ -32,16 +33,13 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { SET_APP_INITIALIZED, SET_APP_INITIALIZE_ERROR } from '@/store/mutation-types'
 import {
-  Sidebar,
   Header as AppHeader,
   Footer as AppFooter
 } from './components/appStructures'
-
 export default {
   name: 'App',
   components: {
     AppHeader,
-    Sidebar,
     AppFooter
   },
   data () {
@@ -137,14 +135,12 @@ export default {
     async initialAuth () {
       const isSignedInToGoogle = await gapi.auth2.getAuthInstance().isSignedIn.get()
       let googleUserToken = isSignedInToGoogle ? await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token : false
-
       if (!this.isTokenValid && isSignedInToGoogle) {
         await this.requestAuth(googleUserToken)
         googleUserToken = await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token
       } else if (await !isSignedInToGoogle || !this.isTokenValid) {
         await this.clearLoginData()
       }
-
       this.initializeApp(isSignedInToGoogle)
     },
     initializeApp (isSignedInToGoogle) {
@@ -183,13 +179,6 @@ export default {
 </script>
 
 <style lang="scss">
-// CoreUI Icons Set
-@import "~@coreui/icons/css/coreui-icons.min.css";
-/* Import Simple Line Icons Set */
-$simple-line-font-path: "~simple-line-icons/fonts/";
-@import "~simple-line-icons/scss/simple-line-icons.scss";
-/* Import Flag Icons Set */
-@import "~flag-icon-css/css/flag-icon.min.css";
 /* Import Bootstrap Vue Styles */
 @import "~bootstrap-vue/dist/bootstrap-vue.css";
 // Import Main styles for this application

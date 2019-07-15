@@ -18,14 +18,6 @@
           >
             Show all skills
           </b-form-checkbox>
-          <b-form-checkbox
-            id="willingness-checkbox"
-            v-model="showSkillsOnly"
-            name="hide-willingnesss-checkbox"
-            inline
-          >
-            Hide willingness
-          </b-form-checkbox>
         </div>
         <small>Sort profiles by: </small>
         <b-form-radio-group
@@ -56,7 +48,6 @@
       :key="profile.id"
       :profile="profile"
       :skill-highlight="mapIdsOfSkillFilters"
-      :show-skills-only="showSkillsOnly"
       :show-all-skills="showAllSkills"
     />
   </div>
@@ -104,7 +95,6 @@ export default {
       sortAttribute: sortAttributeEnum.name,
       profilesWithSkills: null,
       reversedOrder: false,
-      showSkillsOnly: false,
       showAllSkills: false
     }
   },

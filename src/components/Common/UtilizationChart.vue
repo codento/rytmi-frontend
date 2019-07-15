@@ -30,7 +30,7 @@ export default {
     },
     backgroundColor: {
       type: String,
-      default: 'rgba(251, 85, 85, 0.4)'
+      default: '#E3E2E8'
     },
     fillColor: {
       type: String,
@@ -68,7 +68,7 @@ export default {
               time: {
                 max: this.maxDate,
                 displayFormats: {
-                  month: 'M'
+                  month: 'MMM'
                 },
                 unit: 'month',
                 stepSize: 1,
@@ -93,6 +93,9 @@ export default {
                     return `${value} %`
                   }
                 }
+              },
+              gridLines: {
+                display: false
               },
               display: true
             }
