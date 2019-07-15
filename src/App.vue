@@ -1,3 +1,4 @@
+
 <template>
   <div class="app">
     <AppHeader />
@@ -35,7 +36,6 @@ import {
   Header as AppHeader,
   Footer as AppFooter
 } from './components/appStructures'
-
 export default {
   name: 'App',
   components: {
@@ -135,14 +135,12 @@ export default {
     async initialAuth () {
       const isSignedInToGoogle = await gapi.auth2.getAuthInstance().isSignedIn.get()
       let googleUserToken = isSignedInToGoogle ? await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token : false
-
       if (!this.isTokenValid && isSignedInToGoogle) {
         await this.requestAuth(googleUserToken)
         googleUserToken = await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token
       } else if (await !isSignedInToGoogle || !this.isTokenValid) {
         await this.clearLoginData()
       }
-
       this.initializeApp(isSignedInToGoogle)
     },
     initializeApp (isSignedInToGoogle) {
@@ -181,9 +179,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* Import Font Awesome Icons Set */
-$fa-font-path: "~font-awesome/fonts/";
-@import "~font-awesome/scss/font-awesome.scss";
 /* Import Bootstrap Vue Styles */
 @import "~bootstrap-vue/dist/bootstrap-vue.css";
 // Import Main styles for this application

@@ -115,7 +115,7 @@
           name="login"
           @click="login"
         >
-          <i class="fa fa-unlock" />&nbsp; Sign in
+          <UnlockIcon size="1x" />&nbsp; Sign in
         </b-nav-item>
         <b-nav-item
           v-if="isAuthenticated"
@@ -145,7 +145,7 @@
               id="account-dropdown-item-signout"
               @click="logout"
             >
-              <i class="fa fa-lock" /> Sign Out
+              <LockIcon size="1x" /> Sign Out
             </b-dropdown-item>
           </b-dropdown>
         </b-nav-item>
@@ -157,7 +157,7 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex'
-import { UsersIcon, GlobeIcon, StarIcon, ArchiveIcon, SettingsIcon } from 'vue-feather-icons'
+import { UsersIcon, GlobeIcon, StarIcon, ArchiveIcon, SettingsIcon, LockIcon, UnlockIcon } from 'vue-feather-icons'
 
 export default {
   name: 'CHeader',
@@ -166,7 +166,9 @@ export default {
     GlobeIcon,
     StarIcon,
     ArchiveIcon,
-    SettingsIcon
+    SettingsIcon,
+    UnlockIcon,
+    LockIcon
   },
   computed: {
     ...mapGetters(['isAuthenticated', 'isAdmin', 'profileId', 'getToken', 'profileById'])

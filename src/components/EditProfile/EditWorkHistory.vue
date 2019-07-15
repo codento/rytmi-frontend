@@ -6,7 +6,7 @@
     <b-row>
       <b-col>
         <b-button
-          class="pull-right mb-2"
+          class="float-right mb-2"
           @click="addNewProfileEmployer"
         >
           Add a new work history entry
@@ -56,7 +56,7 @@
             v-show="showEditIconByIndex === index && !isHoveredProfileEmployerCardSelected(profileEmployer.id)"
             cols="1"
           >
-            <i class="fa fa-pencil pull-right" />
+            <EditIcon size="1x" />
           </b-col>
         </b-row>
         <b-row v-if="selectedProfileEmployer && selectedProfileEmployer.id === profileEmployer.id">
@@ -83,12 +83,14 @@ import { orderBy } from 'lodash'
 import EditEmployer from './EditEmployer'
 import WorkHistoryListItem from './WorkHistoryListItem'
 import sortBy from 'lodash/sortBy'
+import { EditIcon } from 'vue-feather-icons'
 
 export default {
   name: 'EditWorkHistory',
   components: {
     EditEmployer,
-    WorkHistoryListItem
+    WorkHistoryListItem,
+    EditIcon
   },
   props: {
     profileId: Number

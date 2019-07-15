@@ -7,7 +7,10 @@
     >
       <b-row v-if="profileProjectsWithProjectData.length === 0">
         <b-col class="no-projects">
-          <i class="fa fa-exclamation-circle notice" />
+          <AlertCircleIcon
+            class="notice"
+            size="1x"
+          />
           No projects added
         </b-col>
       </b-row>
@@ -21,9 +24,9 @@
             class="mt-2 mb-2"
           >
             <span class="icon-sized">
-              <i
+              <EditIcon
                 v-show="showEditIconByIndex === index"
-                class="fa fa-pencil"
+                size="1x"
               />
             </span>
             <span
@@ -44,8 +47,9 @@
               {{ profileProject.role[currentLanguage] }}
             </span>
             <span>
-              <i
-                class="fa fa-trash clickable pull-right"
+              <TrashIcon
+                class="clickable float-right trash-icon"
+                size="1x"
                 @click="deleteProfileProject(profileProject)"
               />
             </span>
@@ -56,7 +60,7 @@
         <b-col>
           <b-button
             v-b-modal="'new-project-modal'"
-            class="pull-right mt-2"
+            class="float-right mt-2"
           >
             Add a project
           </b-button>
@@ -109,12 +113,16 @@ import format from 'date-fns/format'
 import CollapsableItem from '@/components/Common/CollapsableItem'
 import EditEmployerProjectListItem from './EditEmployerProjectListItem'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+import { AlertCircleIcon, EditIcon, TrashIcon } from 'vue-feather-icons'
 
 export default {
   name: 'EditEmployerProjectList',
   components: {
     CollapsableItem,
-    EditEmployerProjectListItem
+    EditEmployerProjectListItem,
+    AlertCircleIcon,
+    EditIcon,
+    TrashIcon
   },
   props: {
     employerId: {
@@ -185,7 +193,9 @@ export default {
 }
 </script>
 
-<style scoped >
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
 .clickable {
   cursor: pointer;
 }
@@ -206,14 +216,15 @@ export default {
 .project-role {
   font-style: italic;
 }
-.fa-trash {
-  color: grey;
-}
-.fa-trash:hover {
-  color: black;
-}
 .icon-sized {
   display: inline-block;
   width: 14px;
+}
+.trash-icon {
+  color: $c-violet-light;
+}
+.trash-icon:hover {
+  color: $c-dark;
+  cursor: pointer;
 }
 </style>

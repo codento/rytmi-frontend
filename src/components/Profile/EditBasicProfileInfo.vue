@@ -172,7 +172,7 @@
         id="reset-basic-details"
         type="button"
         variant="light"
-        class="pull-right"
+        class="float-right"
         @click="onCancel"
       >
         Close

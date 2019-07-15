@@ -13,7 +13,7 @@
           :id="'add-new-' + idPrefix + '-btn'"
           type="submit"
           variant="success"
-          class="pull-right mb-2"
+          class="float-right mb-2"
           @click.prevent="startCreateMode()"
         >
           Add
@@ -109,13 +109,19 @@
             v-show="showEditIconByIndex === index && !item.disabled"
             cols="1"
           >
-            <i class="fa fa-pencil pull-left" />
+            <EditIcon
+              size="1x"
+              class="pull-left"
+            />
           </b-col>
           <b-col
             v-show="item.disabled"
             cols="1"
           >
-            <i class="fa fa-lock pull-left text-muted" />
+            <LockIcon
+              size="1x"
+              class="pull-left text-muted"
+            />
           </b-col>
         </b-row>
       </b-list-group-item>
@@ -132,12 +138,15 @@
 <script>
 import { mapGetters } from 'vuex'
 import { kebabCase } from 'lodash'
+import { EditIcon, LockIcon } from 'vue-feather-icons'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel.vue'
 
 export default {
   name: 'SkillListAdminPanelItem',
   components: {
-    ApiErrorDetailsPanel
+    ApiErrorDetailsPanel,
+    EditIcon,
+    LockIcon
   },
   props: {
     isSkillCategory: {

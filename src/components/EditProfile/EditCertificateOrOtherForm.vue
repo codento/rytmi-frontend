@@ -78,7 +78,7 @@
       <b-col>
         <b-btn
           id="save-certificate-or-other"
-          class="pull-right"
+          class="float-right"
           variant="success"
           @click="save()"
         >
@@ -86,7 +86,7 @@
         </b-btn>
         <b-btn
           id="close-certificate-or-other-form"
-          class="pull-right"
+          class="float-right"
           variant="light"
           @click="cancel()"
         >
