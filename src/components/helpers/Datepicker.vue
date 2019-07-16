@@ -54,6 +54,9 @@ export default {
   mounted () {
     this.createDatePicker()
   },
+  beforeDestroy () {
+    this.pikaday.destroy()
+  },
   methods: {
     createDatePicker () {
       this.pikaday = new Pikaday({

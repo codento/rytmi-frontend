@@ -3,7 +3,6 @@
   <div class="app">
     <AppHeader />
     <div class="app-body">
-      <Sidebar :nav-items="nav" />
       <loading v-if="!appInitialized && isAuthenticated" />
       <main
         v-else

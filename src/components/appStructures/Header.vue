@@ -2,8 +2,8 @@
   <b-navbar
     id="header-navbar"
     type="dark"
-    toggleable="lg"
-    variant="dark"
+    toggleable="xl"
+    variant="c-violet-dark"
   >
     <b-navbar-brand>
       <router-link to="/home">
@@ -14,13 +14,6 @@
           height="25"
           alt="Codento Logo"
         >
-        <!-- <img
-          class="navbar-brand-minimized"
-          src="/img/Codento C RGB medium square.jpg"
-          width="30"
-          height="30"
-          alt="Codento Logo"
-        > -->
       </router-link>
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse" />
@@ -46,6 +39,7 @@
         </b-nav-item>
         <b-nav-item
           class="px-3"
+          variant="light"
           name="go-to-profiles"
           href="/search"
         >
@@ -108,7 +102,7 @@
           </router-link>
         </b-nav-item>
       </b-navbar-nav>
-      <b-navbar-nav class="ml-auto">
+      <b-navbar-nav class="float-right ml-auto">
         <b-nav-item
           v-if="!isAuthenticated"
           class="px-3"
@@ -123,12 +117,13 @@
         >
           <b-dropdown
             id="account-dropdown"
-            variant="outline-light"
+            variant="outline-c-violet-light"
             text="Account"
           >
             <b-dropdown-item
               id="account-dropdown-item-profile"
               :to="{ name: 'profile', params: { id: profileId } }"
+              variant="c-violet-dark"
               exact
             >
               <img
@@ -140,9 +135,10 @@
               >
               My Profile
             </b-dropdown-item>
-            <b-dropdown-divider />
+            <b-dropdown-divider variant="c-violet-dark" />
             <b-dropdown-item
               id="account-dropdown-item-signout"
+              variant="c-violet-dark"
               @click="logout"
             >
               <LockIcon size="1x" /> Sign Out
@@ -188,7 +184,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/assets/scss/_variables.scss';
 .profile-icon {
   margin: 0 10px 0 -10px;
@@ -199,8 +195,22 @@ export default {
   font-family: 'Poppins';
   font-weight: 600;
 }
-#header-navbar {
-  height: 100px;
+.nav-item-active {
+  color: $c-light;
+}
+a.dropdown-item {
+  color: $c-violet-dark
+}
+a.dropdown-item.router-link-active, a.dropdown-item:focus, a.dropdown-item:active {
+  background-color: $c-violet-light;
+  color: $c-light;
+}
+a.nav-link a {
+  color: $c-violet-light;
+}
+a.nav-link a:hover, a.nav-link a.router-link-active {
+  color: $c-light;
+  text-decoration: none;
 }
 
 </style>
