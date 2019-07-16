@@ -2,7 +2,7 @@
   <b-navbar
     id="header-navbar"
     type="dark"
-    toggleable="lg"
+    toggleable="xl"
     variant="c-violet-dark"
   >
     <b-navbar-brand>
@@ -102,7 +102,7 @@
           </router-link>
         </b-nav-item>
       </b-navbar-nav>
-      <b-navbar-nav class="ml-auto">
+      <b-navbar-nav class="float-right ml-auto">
         <b-nav-item
           v-if="!isAuthenticated"
           class="px-3"
@@ -192,9 +192,6 @@ export default {
   margin-top: 10px;
   font-family: 'Poppins';
   font-weight: 600;
-}
-#header-navbar {
-  height: 100px;
 }
 .nav-item-active {
   color: $c-light;
