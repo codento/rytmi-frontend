@@ -2,14 +2,15 @@
 // If you want to override variables do it here
 @import "variables";
 
+@import "~bootstrap/scss/bootstrap";
 // If you want to add something do it here
 @import "custom";
 
-@import "~bootstrap/scss/bootstrap";
 // ie fixes
 @import "ie-fix";
 
 html, body {
+  min-height: 100%;
   font-family: 'Lato', sans-serif;
   color: #1D1433;
   h1 {
@@ -41,8 +42,16 @@ html, body {
     text-decoration: none;
   }
 }
-
-#app {
+.app {
   font-family: 'Lato', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-
+.app-body {
+  padding-bottom: 20px;
+}
+.footer {
+  margin-top: auto;
+  background-color: $c-violet-dark;
+}
