@@ -14,13 +14,6 @@
           height="25"
           alt="Codento Logo"
         >
-        <!-- <img
-          class="navbar-brand-minimized"
-          src="/img/Codento C RGB medium square.jpg"
-          width="30"
-          height="30"
-          alt="Codento Logo"
-        > -->
       </router-link>
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse" />
@@ -202,6 +195,23 @@ export default {
 }
 #header-navbar {
   height: 100px;
+}
+.nav-item-active {
+  color: $c-light;
+}
+a.dropdown-item {
+  color: $c-violet-dark
+}
+a.dropdown-item.router-link-active, a.dropdown-item:focus, a.dropdown-item:active {
+  background-color: $c-violet-light;
+  color: $c-light;
+}
+a.nav-link a {
+  color: $c-violet-light;
+}
+a.nav-link a:hover, a.nav-link a.router-link-active {
+  color: $c-light;
+  text-decoration: none;
 }
 
 </style>

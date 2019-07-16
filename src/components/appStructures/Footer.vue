@@ -38,8 +38,7 @@
             </h4>
           </template>
         </b-modal>
-        </b-col>
-
+      </b-col>
     </b-row>
   </b-container>
 </template>

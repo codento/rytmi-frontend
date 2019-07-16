@@ -29,17 +29,9 @@ html, body {
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
   }
-
   small {
     font-family: 'Poppins';
     font-weight: 400;
-  }
-  a {
-    color: $c-violet-light;
-  }
-  a:hover {
-    color: $c-light;
-    text-decoration: none;
   }
 }
 .app {
