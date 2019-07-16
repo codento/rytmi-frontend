@@ -304,14 +304,14 @@ export default {
     hideModal () {
       this.$refs['create-cv-modal'].hide()
     },
-    mapProjectForCV (projectObj) {
+    mapProfileProjectForCV (profileProjectObj) {
       return {
-        projectRole: projectObj.role[this.currentLanguage],
-        projectName: projectObj.name[this.currentLanguage],
-        projectDescription: projectObj.description[this.currentLanguage],
-        projectCustomer: projectObj.customerName[this.currentLanguage],
-        projectDuration: projectObj.duration,
-        projectSkills: projectObj.skills.map(skill => skill.name)
+        projectRole: profileProjectObj.role[this.currentLanguage],
+        projectName: profileProjectObj.name[this.currentLanguage],
+        projectDescription: profileProjectObj.description[this.currentLanguage],
+        projectCustomer: profileProjectObj.customerName[this.currentLanguage],
+        projectDuration: profileProjectObj.duration,
+        projectSkills: profileProjectObj.skills.map(skill => skill.name)
       }
     },
     mapSkillForCV (skillObj) {
@@ -344,16 +344,15 @@ export default {
             jobDuration: this.getFormattedDuration(item.startDate, item.endDate),
             projects: this.mappedProfileProjects.filter(project => project.employerId === item.employerId)
               .filter(project => !project.isSecret)
-              .map(project => this.mapProjectForCV(project))
+              .map(project => this.mapProfileProjectForCV(project))
           }
         })
-
       return {
         employeeName: this.profile.firstName + ' ' + this.profile.lastName,
         employeePicture: this.profile.photoPath,
         jobTitle: workHistory.find(item => item.employerName === INTERNAL_COMPANY_NAME).jobTitle,
         employeeDescription: this.cvIntroduction,
-        topProjects: this.topProjects.map(project => this.mapProjectForCV(project)),
+        topProjects: this.topProjects.map(project => this.mapProfileProjectForCV(project)),
         topSkills: this.topSkills.map(skill => this.mapSkillForCV(skill)),
         languages: cvLanguages,
         workHistory: workHistory,
