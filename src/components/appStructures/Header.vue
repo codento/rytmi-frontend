@@ -129,8 +129,6 @@
               <img
                 class="profile-icon"
                 :src="profileById(profileId) ? profileById(profileId).photoPath : ''"
-                height="20px"
-                width="20px"
                 alt="Profile picture"
               >
               My Profile
@@ -141,7 +139,11 @@
               variant="c-violet-dark"
               @click="logout"
             >
-              <LockIcon size="1x" /> Sign Out
+              <LockIcon
+                size="1x"
+                class="lock-icon"
+              />
+              Sign Out
             </b-dropdown-item>
           </b-dropdown>
         </b-nav-item>
@@ -186,8 +188,12 @@ export default {
 
 <style lang="scss">
 @import '@/assets/scss/_variables.scss';
-.profile-icon {
+.profile-icon, .lock-icon {
   margin: 0 10px 0 -10px;
+  width: 20px;
+  height: 20px;
+}
+.profile-icon {
   border-radius: 50%;
 }
 .nav-item-label {
