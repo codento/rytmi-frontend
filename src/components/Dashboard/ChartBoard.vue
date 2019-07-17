@@ -4,19 +4,9 @@
       <b-col
         :cols="6"
       >
-        <h1 class="text-primary">
+        <h1>
           <slot name="header" />
         </h1>
-      </b-col>
-      <b-col
-        :cols="6"
-      >
-        <v-select
-          v-model="selectedEmployeeRoles"
-          :options="employeeRoleOptions"
-          label="title"
-          multiple
-        />
       </b-col>
     </b-row>
     <div>
@@ -30,6 +20,16 @@
             class="mb-2"
           >
             <consultant-utilization-list />
+          </b-col>
+          <b-col
+            :cols="6"
+          >
+            <v-select
+              v-model="selectedEmployeeRoles"
+              :options="employeeRoleOptions"
+              label="title"
+              multiple
+            />
           </b-col>
           <b-col
             :cols="12"
