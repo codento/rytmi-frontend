@@ -44,6 +44,5 @@ export default {
 <style scoped >
 .project-list-container {
   margin: 0 auto;
-  padding: 1em 0;
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <div
     class="animated fadeIn container"
-    style="margin-top: 24px"
   >
     <b-jumbotron
       v-if="!isAuthenticated"
