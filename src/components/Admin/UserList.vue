@@ -6,8 +6,8 @@
       <b-form-input v-model="filterValue" />
     </b-form-group>
     <div>
-      Active User<span class="cui-check" />
-      Admin User<span class="cui-cog" />
+      Active User<CheckIcon class="check-icon" />
+      Admin User<SettingsIcon />
     </div>
     <b-list-group
       v-for="(user, idx) in usersAsList"
@@ -16,16 +16,16 @@
       <b-list-group-item
         :active="isUserSelected(user.id)"
         name="select-user"
+        class="user-list-item"
         @click="selectUser(user.id)"
       >
         {{ user.firstName + ' ' + user.lastName }}
-        <span
+        <CheckIcon
           v-if="user.active"
-          class="cui-check"
+          class="check-icon"
         />
-        <span
+        <SettingsIcon
           v-if="user.admin"
-          class="cui-cog"
         />
       </b-list-group-item>
     </b-list-group>
@@ -33,8 +33,11 @@
 </template>
 <script>
 import { sortBy } from 'lodash'
+import SettingsIcon from 'vue-feather-icons/icons/SettingsIcon'
+import CheckIcon from 'vue-feather-icons/icons/CheckIcon'
 
 export default {
+  components: { CheckIcon, SettingsIcon },
   props: {
     users: {
       type: Object,
@@ -69,7 +72,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .cui-check {
+  @import '@/assets/scss/_variables.scss';
+  .check-icon {
     color: green
+  }
+  .user-list-item:hover {
+    cursor: pointer;
+    background-color: darken(#fff, 5);
+  }
+  .user-list-item.active:hover {
+    background-color: darken(map_get($theme-colors, 'primary'), 5);
   }
 </style>
