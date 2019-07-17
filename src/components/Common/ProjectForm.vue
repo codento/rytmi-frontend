@@ -191,14 +191,14 @@
           </div>
         </b-col>
       </b-form-group>
-        <b-col cols="12">
-          <b-button
-            v-b-modal.project-skill-modal
-            variant="primary"
-          >
-            Add skills to project
-          </b-button>
-        </b-col>
+      <b-col cols="12">
+        <b-button
+          v-b-modal.project-skill-modal
+          variant="primary"
+        >
+          Add skills to project
+        </b-button>
+      </b-col>
       <b-modal
         id="project-skill-modal"
         :title="`Add skills to project ${editedProject.name[currentLanguage]}`"
