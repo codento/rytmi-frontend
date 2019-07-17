@@ -4,9 +4,9 @@ exports[`Admin.vue Template is correct 1`] = `
 <div
   class="container"
 >
-  <h2>
+  <h1>
     Admin
-  </h2>
+  </h1>
    
   <div
     class="row"

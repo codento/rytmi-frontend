@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <h2>Admin</h2>
+    <h1>Admin</h1>
     <b-row>
       <b-col
         sm="12"
