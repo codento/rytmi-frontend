@@ -218,5 +218,10 @@ a.nav-link a:hover, a.nav-link a.router-link-active {
   color: $c-light;
   text-decoration: none;
 }
+@media screen and (min-width: 1200px) {
+  #header-navbar {
+    min-height: 100px;
+  }
+}
 
 </style>
