@@ -33,8 +33,7 @@
 </template>
 <script>
 import { sortBy } from 'lodash'
-import SettingsIcon from 'vue-feather-icons/icons/SettingsIcon'
-import CheckIcon from 'vue-feather-icons/icons/CheckIcon'
+import { SettingsIcon, CheckIcon } from 'vue-feather-icons'
 
 export default {
   components: { CheckIcon, SettingsIcon },
