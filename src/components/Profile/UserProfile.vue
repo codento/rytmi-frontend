@@ -1,7 +1,10 @@
 <template>
   <b-row>
     <b-col cols="12">
-      <b-card id="user-profile">
+      <b-card
+        id="user-profile"
+        class="mb-2"
+      >
         <div
           slot="header"
           class="mb-0"
@@ -33,7 +36,10 @@
       </b-card>
     </b-col>
     <b-col cols="12">
-      <b-card id="Skills">
+      <b-card
+        id="Skills"
+        class="mb-2"
+      >
         <div
           slot="header"
           class="mb-0"
@@ -91,7 +97,10 @@
           </b-btn>
         </b-modal>
       </b-card>
-      <b-card header="Projects">
+      <b-card
+        header="Projects"
+        class="mb-2"
+      >
         <div slot="header">
           Projects
           <EditIcon
