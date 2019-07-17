@@ -6,7 +6,6 @@
           v-if="projectList.length > 0"
           :items="projectList"
           :fields="fields"
-          fixed
           caption-top
           stacked="sm"
         >
