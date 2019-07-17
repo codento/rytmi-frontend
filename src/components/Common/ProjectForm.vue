@@ -191,7 +191,6 @@
           </div>
         </b-col>
       </b-form-group>
-      <b-form-group>
         <b-col cols="12">
           <b-button
             v-b-modal.project-skill-modal
@@ -200,7 +199,6 @@
             Add skills to project
           </b-button>
         </b-col>
-      </b-form-group>
       <b-modal
         id="project-skill-modal"
         :title="`Add skills to project ${editedProject.name[currentLanguage]}`"
@@ -228,7 +226,7 @@
       <b-col>
         <b-button
           id="submit-project-edits-btn"
-          class="mr-2"
+          class="mr-2 mb-2"
           type="submit"
           @click.prevent="onSubmit()"
         >
