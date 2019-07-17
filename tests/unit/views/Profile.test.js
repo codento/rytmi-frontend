@@ -44,14 +44,6 @@ describe('Profile.vue shallowMount', () => {
           lastName: 'bar',
           photoPath: '',
           title: 'software developer',
-          accounts: [
-            {
-              address: 'twitter.com/foo'
-            },
-            {
-              address: 'github.com/bar'
-            }
-          ],
           email: 'foo.bar@foo.com',
           phone: '1354',
           introduction: { fi: 'intro in Finnish', en: 'intro in English' }

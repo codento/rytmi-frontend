@@ -2,8 +2,8 @@
   <b-navbar
     id="header-navbar"
     type="dark"
-    toggleable="lg"
-    variant="dark"
+    toggleable="xl"
+    variant="c-violet-dark"
   >
     <b-navbar-brand>
       <router-link to="/home">
@@ -14,13 +14,6 @@
           height="25"
           alt="Codento Logo"
         >
-        <!-- <img
-          class="navbar-brand-minimized"
-          src="/img/Codento C RGB medium square.jpg"
-          width="30"
-          height="30"
-          alt="Codento Logo"
-        > -->
       </router-link>
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse" />
@@ -46,6 +39,7 @@
         </b-nav-item>
         <b-nav-item
           class="px-3"
+          variant="light"
           name="go-to-profiles"
           href="/search"
         >
@@ -108,14 +102,14 @@
           </router-link>
         </b-nav-item>
       </b-navbar-nav>
-      <b-navbar-nav class="ml-auto">
+      <b-navbar-nav class="float-right ml-auto">
         <b-nav-item
           v-if="!isAuthenticated"
           class="px-3"
           name="login"
           @click="login"
         >
-          <i class="fa fa-unlock" />&nbsp; Sign in
+          <UnlockIcon size="1x" />&nbsp; Sign in
         </b-nav-item>
         <b-nav-item
           v-if="isAuthenticated"
@@ -123,29 +117,33 @@
         >
           <b-dropdown
             id="account-dropdown"
-            variant="outline-light"
+            variant="outline-c-violet-light"
             text="Account"
           >
             <b-dropdown-item
               id="account-dropdown-item-profile"
               :to="{ name: 'profile', params: { id: profileId } }"
+              variant="c-violet-dark"
               exact
             >
               <img
                 class="profile-icon"
                 :src="profileById(profileId) ? profileById(profileId).photoPath : ''"
-                height="20px"
-                width="20px"
                 alt="Profile picture"
               >
               My Profile
             </b-dropdown-item>
-            <b-dropdown-divider />
+            <b-dropdown-divider variant="c-violet-dark" />
             <b-dropdown-item
               id="account-dropdown-item-signout"
+              variant="c-violet-dark"
               @click="logout"
             >
-              <i class="fa fa-lock" /> Sign Out
+              <LockIcon
+                size="1x"
+                class="lock-icon"
+              />
+              Sign Out
             </b-dropdown-item>
           </b-dropdown>
         </b-nav-item>
@@ -157,7 +155,7 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex'
-import { UsersIcon, GlobeIcon, StarIcon, ArchiveIcon, SettingsIcon } from 'vue-feather-icons'
+import { UsersIcon, GlobeIcon, StarIcon, ArchiveIcon, SettingsIcon, LockIcon, UnlockIcon } from 'vue-feather-icons'
 
 export default {
   name: 'CHeader',
@@ -166,7 +164,9 @@ export default {
     GlobeIcon,
     StarIcon,
     ArchiveIcon,
-    SettingsIcon
+    SettingsIcon,
+    UnlockIcon,
+    LockIcon
   },
   computed: {
     ...mapGetters(['isAuthenticated', 'isAdmin', 'profileId', 'getToken', 'profileById'])
@@ -186,10 +186,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/assets/scss/_variables.scss';
-.profile-icon {
+.profile-icon, .lock-icon {
   margin: 0 10px 0 -10px;
+  width: 20px;
+  height: 20px;
+}
+.profile-icon {
   border-radius: 50%;
 }
 .nav-item-label {
@@ -197,8 +201,22 @@ export default {
   font-family: 'Poppins';
   font-weight: 600;
 }
-#header-navbar {
-  height: 100px;
+.nav-item-active {
+  color: $c-light;
+}
+a.dropdown-item {
+  color: $c-violet-dark
+}
+a.dropdown-item.router-link-active, a.dropdown-item:focus, a.dropdown-item:active {
+  background-color: $c-violet-light;
+  color: $c-light;
+}
+a.nav-link a {
+  color: $c-violet-light;
+}
+a.nav-link a:hover, a.nav-link a.router-link-active {
+  color: $c-light;
+  text-decoration: none;
 }
 
 </style>

@@ -18,14 +18,6 @@
           >
             Show all skills
           </b-form-checkbox>
-          <b-form-checkbox
-            id="willingness-checkbox"
-            v-model="showSkillsOnly"
-            name="hide-willingnesss-checkbox"
-            inline
-          >
-            Hide willingness
-          </b-form-checkbox>
         </div>
         <small>Sort profiles by: </small>
         <b-form-radio-group
@@ -40,9 +32,13 @@
           title="Reverse order"
           @click="reversedOrder = !reversedOrder"
         >
-          <i
-            :class="reversedOrder ? 'fa-chevron-up' : 'fa-chevron-down'"
-            class="fa"
+          <ChevronUpIcon
+            v-if="reversedOrder"
+            size="1x"
+          />
+          <ChevronDownIcon
+            v-else
+            size="1x"
           />
         </b-btn>
       </b-col>
@@ -52,7 +48,6 @@
       :key="profile.id"
       :profile="profile"
       :skill-highlight="mapIdsOfSkillFilters"
-      :show-skills-only="showSkillsOnly"
       :show-all-skills="showAllSkills"
     />
   </div>
@@ -64,6 +59,7 @@ import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
 import { isValid, startOfDay } from 'date-fns'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+import { ChevronDownIcon, ChevronUpIcon } from 'vue-feather-icons'
 
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3, utilization: 4 })
 
@@ -83,7 +79,9 @@ const sortBySkills = (sortAttribute, skillFilters) => (profileOne, profileTwo) =
 export default {
   name: 'Results',
   components: {
-    ProfileCard
+    ProfileCard,
+    ChevronDownIcon,
+    ChevronUpIcon
   },
   props: {
     nameFilter: String,
@@ -97,7 +95,6 @@ export default {
       sortAttribute: sortAttributeEnum.name,
       profilesWithSkills: null,
       reversedOrder: false,
-      showSkillsOnly: false,
       showAllSkills: false
     }
   },

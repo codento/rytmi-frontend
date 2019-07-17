@@ -14,8 +14,13 @@
         >
           {{ title }}
           <span>
-            <i
-              :class="visibility ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"
+            <ChevronUpIcon
+              v-if="visibility"
+              size="1.5x"
+            />
+            <ChevronDownIcon
+              v-else
+              size="1.5x"
             />
           </span>
         </b-button>
@@ -33,8 +38,13 @@
 </template>
 
 <script>
+import { ChevronDownIcon, ChevronUpIcon } from 'vue-feather-icons'
 export default {
   name: 'CollapsableItem',
+  components: {
+    ChevronDownIcon,
+    ChevronUpIcon
+  },
   props: {
     title: String,
     initialVisibility: {

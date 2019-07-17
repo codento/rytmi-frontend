@@ -5,7 +5,7 @@
       <b-col cols="12">
         <div
           id="disabled-open-cv-tool-button-wrapper"
-          class="pull-right"
+          class="float-right"
         >
           <b-btn
             id="open-cv-tool-button"

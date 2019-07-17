@@ -36,49 +36,55 @@
         class="align-self-center"
         style="margin-top: 1em;"
       >
-        <SkillRow
+        <div
           v-for="skill in sortedSkills(profile.id)"
-          :key="skill.id"
-          v-bind="skill"
-          :highlight="skillHighlight.includes(skill.skillId)"
-          :show-skills-only="showSkillsOnly"
-          disable-tooltip
-        />
+          :key="skill.skillId"
+        >
+          <b-row>
+            <b-col
+              cols="6"
+              class="text-right skill-name-label"
+            >
+              {{ skillById(skill.skillId).name }}
+            </b-col>
+            <b-col class="knows-circles-containter">
+              <span
+                v-for="knows in knowsCircles(skill.knows)"
+                :key="knows.index"
+                :class="knows.knows ? 'knows-circle' : 'not-knows-circle'"
+              />
+            </b-col>
+          </b-row>
+        </div>
       </b-col>
       <b-col
         cols="12"
         md="1"
-        class="profile-open-button"
+        class="my-auto"
       >
-        <b-button
+        <ChevronRightIcon
           id="open-profile"
+          size="5x"
+          class="clickable"
           @click="openProfile(profile)"
-        >
-          <i
-            style="font-size: 76px; color: gray;"
-            class="fa fa-5x fa-angle-right"
-          />
-        </b-button>
+        />
       </b-col>
     </b-row>
   </b-card>
 </template>
 
 <script>
-import { SkillRow, UtilizationChart } from '@/components/Common'
+import { UtilizationChart } from '@/components/Common'
 import ProfileCardProjectInfo from './ProfileCardProjectInfoRow'
 import { mapGetters } from 'vuex'
-
+import { LANGUAGE_ENUM } from '@/utils/constants'
+import { ChevronRightIcon } from 'vue-feather-icons'
 export default {
   name: 'ProfileCard',
-  components: { SkillRow, UtilizationChart, ProfileCardProjectInfo },
+  components: { UtilizationChart, ProfileCardProjectInfo, ChevronRightIcon },
   props: {
     profile: Object,
     skillHighlight: Array,
-    showSkillsOnly: {
-      type: Boolean,
-      default: false
-    },
     showAllSkills: Boolean
   },
   computed: {
@@ -86,6 +92,7 @@ export default {
       'profileFilter',
       'profileSkillsByProfileId',
       'skillById',
+      'skillCategoryById',
       'futureProjectsOfProfile'
     ])
   },
@@ -93,13 +100,24 @@ export default {
     openProfile (profile) {
       this.$router.push({ name: 'profile', params: { id: profile.id } })
     },
+    knowsCircles (knows) {
+      const ballsArray = new Array(5)
+      for (let i = 0; i < 5; i++) {
+        if (i <= knows) {
+          ballsArray[i] = { index: i, knows: true }
+        } else {
+          ballsArray[i] = { index: i, knows: false }
+        }
+      }
+      return ballsArray
+    },
     sortedSkills (profileId) {
       const sortedByProficiency = this.profileSkillsByProfileId(profileId).sort((a, b) => {
         if (b.knows > a.knows) { return 1 }
         if (b.knows < a.knows) { return -1 }
         return 0
       })
-      return sortedByProficiency.sort((a, b) => {
+      const skillsToShow = sortedByProficiency.sort((a, b) => {
         if (this.skillHighlight.includes(b.skillId) && !this.skillHighlight.includes(a.skillId)) {
           return 1
         }
@@ -109,28 +127,51 @@ export default {
         return 0
       }).filter(skill => {
         if (this.showAllSkills) {
-          return true
+          return this.skillCategoryById(this.skillById(skill.skillId).skillCategoryId).title !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
         } else {
-          return this.skillHighlight.length > 0 ? this.skillHighlight.find(skillId => skillId === skill.skillId) : true
+          return this.skillHighlight.length > 0
+            ? this.skillHighlight.find(skillId => skillId === skill.skillId)
+            : this.skillCategoryById(this.skillById(skill.skillId).skillCategoryId).title !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
         }
       })
+      return skillsToShow.splice(0, 6)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
 img {
   object-fit: contain;
   margin-left: 10px
 }
-.profile-open-button {
-    margin: 0 auto;
-    button {
-        height: 100%;
-        background: #fff;
-        border: 0;
-        width: 100%;
-    }
+.clickable {
+  cursor: pointer;
+}
+.knows-circle {
+  background-color: $c-violet-dark;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  margin: 0 1px 0 1px;
+}
+.not-knows-circle {
+  border: 1px solid $c-violet-dark;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  margin: 0 1px 0 1px;
+}
+.knows-circles-containter {
+  display: flex;
+  align-items: center;
+}
+.skill-name-label {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center; font-size: 1em;
+  font-family: Arvo;
+  font-style: italic;
 }
 </style>

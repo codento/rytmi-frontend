@@ -182,8 +182,9 @@
           >
             <span>
               {{ skill.name }}
-              <i
-                class="fa fa-trash icon"
+              <TrashIcon
+                class="trash-icon"
+                size="1x"
                 @click="removeSkillFromProject(skill)"
               />
             </span>
@@ -223,7 +224,7 @@
       </b-modal>
     </b-row>
     <slot name="custom-form" />
-    <b-row class="mt-4 pull-right">
+    <b-row class="mt-4 float-right">
       <b-col>
         <b-button
           id="submit-project-edits-btn"
@@ -251,11 +252,13 @@ import { mapGetters } from 'vuex'
 import Datepicker from '@/components/helpers/Datepicker'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 import orderBy from 'lodash/orderBy'
+import { TrashIcon } from 'vue-feather-icons'
 
 export default {
   name: 'ProjectForm',
   components: {
-    Datepicker
+    Datepicker,
+    TrashIcon
   },
   props: {
     project: Object,
@@ -413,11 +416,11 @@ export default {
   background-color: $c-dark;
   cursor: pointer;
 }
-.fa.fa-trash {
-  color: gray;
+.trash-icon {
+  color: $c-violet-light;
 }
-.fa.fa-trash:hover {
-  color: black;
+.trash-icon:hover {
+  color: $c-dark;
   cursor: pointer;
 }
 </style>
