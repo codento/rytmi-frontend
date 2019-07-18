@@ -4,10 +4,10 @@
     class="footer"
   >
     <b-row>
-      <b-col class="text-center my-auto">
+      <b-col class="text-left my-auto">
         <span>Rytmiapp &copy; 2019 <a href="https://codento.com">Codento Oy</a></span>
       </b-col>
-      <b-col class="text-center">
+      <b-col class="text-right">
         <span
           v-b-modal="'developer-info'"
         >
