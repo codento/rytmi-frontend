@@ -44,7 +44,7 @@
       </b-row>
       <!-- Progress bars -->
       <b-row
-        v-for="item in soonToBeFreeEmployees"
+        v-for="item in utilizedEmployees"
         :key="item.profile.id"
         class="mx-3"
       >
@@ -100,13 +100,13 @@
             v-show="progressBarData.showEndLabel"
             :class="`float-${getDateLabelPositionAndFormat(item.endsOn).position} project-progress px-2`"
           >
-            Ends on {{ getDateLabelPositionAndFormat(item.endsOn).label}}
+            Ends on {{ getDateLabelPositionAndFormat(item.endsOn).label }}
           </span>
           <span
             v-show="progressBarData.showStartLabel"
             :class="`float-${getDateLabelPositionAndFormat(item.startsOn).position} project-progress px-2`"
           >
-            Starts on {{ getDateLabelPositionAndFormat(item.startsOn).label}}
+            Starts on {{ getDateLabelPositionAndFormat(item.startsOn).label }}
           </span>
         </b-col>
       </b-row>
@@ -190,7 +190,7 @@ export default {
     freeEmployees () {
       return this.orderedProfiles.filter(item => item.daysToZeroUtilization === 0)
     },
-    soonToBeFreeEmployees () {
+    utilizedEmployees () {
       return this.orderedProfiles.filter(item => item.daysToZeroUtilization > 0)
     }
   },
@@ -202,7 +202,7 @@ export default {
         }
         return { label: format(date, 'D/M'), position: date.getDate() < 10 ? 'left' : 'right' }
       }
-      return null
+      return { label: '', position: 'right' }
     },
     mapProjectsToProfiles () {
       // Map projects for each active profile
@@ -225,7 +225,6 @@ export default {
           startsOn = getMinDate(projects)
           daysToProjectStart = differenceInDays(startsOn.setHours(0, 0, 0, 0), new Date().setHours(0, 0, 0, 0))
         }
-
         return {
           profile: profile,
           profileRoleClass: profile.employeeRoles.length === 1 ? 'role-' + profile.employeeRoles[0] : 'combined-role',

@@ -120,7 +120,7 @@ const employersMock = {
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
-      profileFilter: () => () => mockProfiles,
+      profileFilter: () => () => Object.values(mockProfiles),
       futureProjectsOfProfile: () => (id) => mockProjectProfiles.filter(profileProject => {
         return profileProject.profileId === id
       }),
@@ -134,7 +134,11 @@ function createStore (overrideConfig) {
 }
 
 function createWrapper (overrideMountingOptions) {
+  const propsData = {
+    activeRoleSelection: [{ id: 1, title: 'Active role' }, { id: 2, title: 'Active role2' }]
+  }
   const defaultMountingOptions = {
+    propsData,
     localVue,
     store: createStore()
   }
@@ -156,9 +160,10 @@ describe('ConsultantUtilizationList.vue', () => {
     expect(wrapper.vm.freeEmployees[0].daysToZeroUtilization).toEqual(0)
   })
 
-  it('Should list soon to be free consultants in soonToBeFreeEmployees', () => {
+  it('Should list rest of the consultants in utilizedEmployees', () => {
     const wrapper = createWrapper()
-    expect(wrapper.vm.soonToBeFreeEmployees.length).toEqual(2)
-    expect(wrapper.vm.soonToBeFreeEmployees[0].daysToZeroUtilization).toEqual(30)
+    expect(wrapper.vm.utilizedEmployees.length).toEqual(5)
+    // Check sorting
+    expect(wrapper.vm.utilizedEmployees[0].daysToZeroUtilization).toEqual(30)
   })
 })

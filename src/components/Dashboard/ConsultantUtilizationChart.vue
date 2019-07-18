@@ -26,7 +26,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { isWithinRange, isBefore, addDays, addMonths, isAfter } from 'date-fns'
+import { isWithinRange, isBefore, addWeeks, addMonths, isAfter } from 'date-fns'
 import ChartCard from './ChartCard'
 import LineChart from '../Charts/LineChart'
 import { INTERNAL_COMPANY_NAME, COLORS } from '@/utils/constants'
@@ -217,7 +217,7 @@ export default {
           x: new Date(currentDate),
           y: this.countUtilizedConsultantsOnDate(currentDate, roleId).utilized
         })
-        currentDate = addDays(currentDate, 1)
+        currentDate = addWeeks(currentDate, 1)
       }
       return utilizationData
     },
