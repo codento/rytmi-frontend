@@ -47,16 +47,20 @@ export default {
       chartTitleFontSize: '16',
       defaultOptions: {
         pointRadius: 0,
+        pointHoverBorderWidth: 4,
+        pointHitRadius: 10,
         lineTension: 0.1
       },
       optionsForRole: {
         1: {
           label: 'Software developers',
-          baseColor: COLORS.violet
+          baseColor: COLORS.violet,
+          pointHoverBorderColor: COLORS.violet
         },
         2: {
           label: 'Agile coaches',
-          baseColor: COLORS.orange
+          baseColor: COLORS.orange,
+          pointHoverBorderColor: COLORS.orange
         }
       }
     }
@@ -163,7 +167,7 @@ export default {
               ticks: {
                 suggestedMin: 0,
                 suggestedMax: Math.max(...Object.values(this.profileRolesCount)) + 2,
-                stepSize: 1
+                stepSize: Math.ceil(Math.max(...Object.values(this.profileRolesCount)) / 10)
               }
             }
           ],
