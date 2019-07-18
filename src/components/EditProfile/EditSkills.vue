@@ -31,6 +31,7 @@
                 :max="5"
                 height="1.7rem"
                 show-value
+                variant="c-violet-light"
               />
             </span>
           </template>
@@ -48,6 +49,7 @@
                 :max="5"
                 height="1.7rem"
                 show-value
+                variant="c-violet-light"
               />
             </span>
           </template>
