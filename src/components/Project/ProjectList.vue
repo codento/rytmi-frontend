@@ -14,6 +14,7 @@
       :fields="fields"
       :sort-by.sync="sortBy"
       class="clickable"
+      hover
       striped
       @row-clicked="openProject"
     />

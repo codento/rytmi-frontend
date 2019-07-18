@@ -56,20 +56,23 @@
             size="sm"
             class="mr-1"
             variant="success"
+            :disabled="!isAdmin && element.item.profileId !== profileId"
             @click.stop="openEditModal(element)"
           >
             Edit
           </b-btn>
-        </template>        <template
+        </template>
+        <template
           slot="remove"
-          slot-scope="remove"
+          slot-scope="element"
         >
           <b-btn
             name="remove-member"
             size="sm"
             class="mr-1"
             variant="danger"
-            @click.stop="removeMember(remove.item)"
+            :disabled="!isAdmin && element.item.profileId !== profileId"
+            @click.stop="removeMember(element.item)"
           >
             Remove
           </b-btn>
@@ -117,7 +120,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['profileById', 'currentLanguage', 'isAdmin']),
+    ...mapGetters(['profileById', 'currentLanguage', 'isAdmin', 'profileId']),
     fields () {
       return [
         { key: 'profileId', label: 'Name' },
@@ -125,8 +128,8 @@ export default {
         { key: 'startDate', label: 'From' },
         { key: 'endDate', label: 'To' },
         { key: 'workPercentage', label: 'Utilization' },
-        this.isAdmin ? 'edit' : null,
-        this.isAdmin ? 'remove' : null
+        { key: 'edit', label: '' },
+        { key: 'remove', label: '' }
       ]
     }
   },

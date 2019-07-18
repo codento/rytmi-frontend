@@ -178,7 +178,7 @@
         </b-row>
       </b-form-group>
       <b-button
-        variant="primary"
+        variant="secondary"
         block
         name="submit"
         class="mt-2"

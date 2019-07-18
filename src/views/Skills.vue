@@ -40,6 +40,9 @@ export default {
     skillsLoaded () {
       return this.skillList.every(skill => skill.skillCategoryName && skill.skillGroupName)
     }
+  },
+  mounted () {
+    document.title = 'Rytmi - Skills'
   }
 }
 </script>

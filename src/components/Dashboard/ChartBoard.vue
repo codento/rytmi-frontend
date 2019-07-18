@@ -4,19 +4,9 @@
       <b-col
         :cols="6"
       >
-        <h1 class="text-primary">
+        <h1>
           <slot name="header" />
         </h1>
-      </b-col>
-      <b-col
-        :cols="6"
-      >
-        <v-select
-          v-model="selectedEmployeeRoles"
-          :options="employeeRoleOptions"
-          label="title"
-          multiple
-        />
       </b-col>
     </b-row>
     <div>
@@ -25,6 +15,17 @@
       </div>
       <div v-else>
         <b-row class="no-gutters mt-1">
+          <b-col
+            cols="6"
+            class="mb-3"
+          >
+            <v-select
+              v-model="selectedEmployeeRoles"
+              :options="employeeRoleOptions"
+              label="title"
+              multiple
+            />
+          </b-col>
           <b-col
             cols="12"
             md="8"
@@ -35,8 +36,8 @@
             />
           </b-col>
           <b-col
-            :cols="12"
-            :md="4"
+            cols="12"
+            md="4"
           >
             <b-row class="ml-md-1">
               <b-col

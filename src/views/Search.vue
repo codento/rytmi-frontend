@@ -115,7 +115,7 @@ export default {
     this.selectedSkills = this.skillFilter ? this.skillFilter : []
   },
   mounted () {
-    document.title = 'Rytmi - Search'
+    document.title = 'Rytmi - Profiles'
   },
   methods: {
     ...mapActions(['updateSkillFilter']),

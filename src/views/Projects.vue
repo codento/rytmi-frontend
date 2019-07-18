@@ -36,7 +36,7 @@ export default {
     ...mapGetters(['employers'])
   },
   mounted () {
-    document.title = 'Rytmi - Project List'
+    document.title = 'Rytmi - Projects'
   }
 }
 </script>
@@ -44,6 +44,5 @@ export default {
 <style scoped >
 .project-list-container {
   margin: 0 auto;
-  padding: 1em 0;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <h2>Admin</h2>
+    <h1>Admin</h1>
     <b-row>
       <b-col
         sm="12"
@@ -47,6 +47,9 @@ export default {
   },
   computed: {
     ...mapGetters(['users'])
+  },
+  mounted () {
+    document.title = 'Rytmi - Admin'
   },
   methods: {
     ...mapActions(['updateUser', 'deleteUser', 'updateProfile']),
