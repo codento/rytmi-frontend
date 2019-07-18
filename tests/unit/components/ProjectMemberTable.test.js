@@ -13,6 +13,22 @@ localVue.filter('dateFilter', value => {
   return value ? format(value, 'D.M.YYYY') : undefined
 })
 
+function getMembersList () {
+  return {
+    members: [
+      {
+        id: 1,
+        profileId: 1,
+        projectId: 2,
+        startDate: new Date('2018-01-01'),
+        endDate: new Date('2018-02-01'),
+        workPercentage: 45,
+        role: { fi: 'Koodaaja', en: 'Coder' }
+      }
+    ]
+  }
+}
+
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
@@ -20,7 +36,8 @@ function createStore (overrideConfig) {
         firstName: 'Foo',
         lastName: 'Bar'
       })),
-      isAdmin: () => () => true
+      isAdmin: () => () => true,
+      profileId: () => () => 1
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -102,19 +119,3 @@ describe('ProjectMemberTable.vue', () => {
     expect(actions.removeProfileProject).toHaveBeenCalled()
   })
 })
-
-function getMembersList () {
-  return {
-    members: [
-      {
-        id: 1,
-        profileId: 1,
-        projectId: 2,
-        startDate: new Date('2018-01-01'),
-        endDate: new Date('2018-02-01'),
-        workPercentage: 45,
-        role: { fi: 'Koodaaja', en: 'Coder' }
-      }
-    ]
-  }
-}
