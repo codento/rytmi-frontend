@@ -8,8 +8,8 @@
       :md="12"
     >
       <p class="lead px-2">
-        Consultants in project today: <strong>{{ utilized }}</strong><br>
-        Consultants without project: <strong>{{ notUtilized }} </strong>
+        Consultants in project today: <strong>{{ utilizationToday.utilized }}</strong><br>
+        Consultants without project: <strong>{{ utilizationToday.notUtilized }} </strong>
       </p>
     </b-col>
     <b-col
@@ -26,12 +26,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { isWithinRange, isBefore, addMonths, addWeeks, format, isAfter } from 'date-fns'
+import { isWithinRange, isBefore, addDays, addMonths, isAfter } from 'date-fns'
 import ChartCard from './ChartCard'
 import LineChart from '../Charts/LineChart'
-import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
-
-const createLabel = (date) => format(date, 'D.M.YYYY')
+import { INTERNAL_COMPANY_NAME, COLORS } from '@/utils/constants'
 
 export default {
   name: 'ConsultantUtilizationChart',
@@ -46,44 +44,116 @@ export default {
     return {
       today: new Date(),
       endDate: addMonths(Date.now(), 6),
-      utilized: 0,
-      notUtilized: 0,
-      activeProfiles: [],
       chartTitleFontSize: '16',
-      chartColor: 'rgb(66, 244, 92, 0.4)',
-      chartBorderColor: 'rgb(66, 244, 92)'
+      defaultOptions: {
+        pointRadius: 0,
+        lineTension: 0.1
+      },
+      optionsForRole: {
+        1: {
+          label: 'Software developers',
+          baseColor: COLORS.violet
+        },
+        2: {
+          label: 'Agile coaches',
+          baseColor: COLORS.orange
+        }
+      }
     }
   },
   computed: {
     ...mapGetters([
       'profileFilter',
       'futureProjectsOfProfile',
-      'profileById',
       'projectById',
       'employerByName'
     ]),
-    lineChartData () {
-      const utilization = this.mapUtilizationOnTimeFrame(this.today, this.endDate)
-      return {
-        labels: utilization.labels,
-        datasets: [
-          {
-            data: utilization.data,
-            backgroundColor: this.chartColor,
-            borderColor: this.chartBorderColor
-          }
-        ]
+    selectedProfiles () {
+      return this.profileFilter().filter(profile => {
+        return this.activeRoleSelection.some(role => {
+          return profile.employeeRoles.includes(role.id)
+        })
+      })
+    },
+    profileRolesCount () {
+      const count = {}
+      this.selectedProfiles.forEach(profile => {
+        const roleKey = profile.employeeRoles.length === 1 ? profile.employeeRoles[0] : 'multipleRoles'
+        if (count[roleKey]) {
+          count[roleKey] += 1
+        } else {
+          count[roleKey] = 1
+        }
+      })
+      return count
+    },
+    utilizationToday () {
+      let utilized = 0
+      let notUtilized = 0
+      this.activeRoleSelection.forEach(role => {
+        const utilization = this.countUtilizedConsultantsOnDate(this.today, role.id)
+        utilized += utilization.utilized
+        notUtilized += utilization.notUtilized
+      })
+
+      // Handle employees with multiple roles
+      if (this.profileRolesCount.hasOwnProperty('multipleRoles')) {
+        this.selectedProfiles.filter(profile => profile.employeeRoles.length > 1).forEach(profile => {
+          // Remove duplicates from counts
+          this.consultantHasOngoingProject(profile.id, this.today)
+            ? utilized -= 1
+            : notUtilized -= 1
+        })
       }
+      return { utilized, notUtilized }
+    },
+    lineChartData () {
+      const datasets = []
+      const rolesSortedByCount = [...this.activeRoleSelection].sort((a, b) => this.profileRolesCount[a.id] - this.profileRolesCount[b.id])
+
+      let datasetCount = 0
+      rolesSortedByCount.forEach(role => {
+        if (this.profileRolesCount[role.id]) {
+          const utilization = this.mapUtilizationOnTimeFrame(this.today, this.endDate, role.id)
+          const options = this.optionsForRole[role.id]
+          // Add datasets describing maximum capacity to the end of datasets
+          datasets.push(
+            {
+              ...this.defaultOptions,
+              data: this.fullCapacity(this.today, this.endDate, role.id),
+              label: 'Maximum for ' + (options.label || role.title).toLowerCase(),
+              backgroundColor: 'rgb(255, 255, 255)', // For legend only as fill=false
+              fill: false,
+              borderDash: [5, 5],
+              borderColor: `rgb(${options.baseColor}, 0.8)` || 'rgb(66, 244, 92)'
+            }
+          )
+          const colorFactor = ((datasetCount + 1) * 0.1)
+          const lightenColor = (rgbColorString, factor) => {
+            return rgbColorString.split(',').map(value => parseInt(value.trim()) + factor * 255).join(',')
+          }
+          // Add utilized count before free capacity datasets
+          datasets.splice(datasetCount, 0, {
+            ...this.defaultOptions,
+            data: utilization.utilized,
+            label: options.label || role.title,
+            backgroundColor: `rgb(${lightenColor(options.baseColor, colorFactor)}, ${0.7 - colorFactor})` || 'rgb(66, 244, 92, 0.4)',
+            borderColor: `rgb(${options.baseColor})` || 'rgb(66, 244, 92)'
+          })
+          datasetCount++
+        }
+      })
+      return { datasets }
     },
     lineChartOptions () {
       return {
         title: {
           display: true,
           fontSize: this.chartTitleFontSize,
-          text: 'Number of consultants in project'
+          text: 'Number of consultants in projects'
         },
         legend: {
-          display: false
+          display: true
         },
         responsive: true,
         maintainAspectRatio: false,
@@ -92,7 +162,16 @@ export default {
             {
               ticks: {
                 suggestedMin: 0,
-                suggestedMax: Object.keys(this.profileFilter()).length
+                suggestedMax: Math.max(...Object.values(this.profileRolesCount)) + 2,
+                stepSize: 1
+              }
+            }
+          ],
+          xAxes: [
+            {
+              type: 'time',
+              time: {
+                unit: 'month'
               }
             }
           ]
@@ -100,41 +179,20 @@ export default {
       }
     }
   },
-  watch: {
-    activeRoleSelection: {
-      handler: function (after, before) {
-        this.countUtilizedActiveProfiles()
-      },
-      deep: true
-    }
-  },
-  created () {
-    const profiles = this.profileFilter()
-    this.activeProfiles = Object.keys(profiles).map((key) => profiles[key].id)
-    this.countUtilizedActiveProfiles()
-  },
-  beforeUpdate () {
-    this.countUtilizedActiveProfiles()
-  },
   methods: {
-    countUtilizedActiveProfiles () {
-      this.utilized = 0
-      this.notUtilized = 0
-      const consultantProfiles = this.activeProfiles.filter(profile => {
-        return this.activeRoleSelection.some(role => {
-          return this.profileById(profile).employeeRoles.includes(role.id)
-        })
+    countUtilizedConsultantsOnDate (date, roleId) {
+      let utilized = 0
+      let notUtilized = 0
+
+      this.selectedProfiles.filter(profile => profile.employeeRoles.includes(roleId)).forEach((profile) => {
+        this.consultantHasOngoingProject(profile.id, date)
+          ? utilized += 1
+          : notUtilized += 1
       })
-      consultantProfiles.forEach((profile) => {
-        const projectProfiles = this.futureProjectsOfProfile(profile).filter(profileProject =>
-          this.projectById(profileProject.projectId).employerId === this.employerByName(INTERNAL_COMPANY_NAME).id &&
-          !this.projectById(profileProject.projectId).isInternal)
-        this.consultantHasOngoingProject(projectProfiles, this.today)
-          ? this.utilized += 1
-          : this.notUtilized += 1
-      })
+      return { utilized, notUtilized }
     },
-    consultantHasOngoingProject (projectProfiles, date) {
+    consultantHasOngoingProject (profileId, date) {
+      const projectProfiles = this.getProfileProjects(profileId)
       if (projectProfiles.length > 0) {
         const onGoingProjects = projectProfiles.filter(
           pp => (pp.endDate ? isWithinRange(date, pp.startDate, pp.endDate) : isAfter(date, pp.startDate))
@@ -143,30 +201,37 @@ export default {
       }
       return false
     },
-    countUtilizedConsultantsOnDate (currentDate) {
-      let count = 0
-      this.activeProfiles.forEach(profile => {
-        if (this.activeRoleSelection.some(role => this.profileById(profile).employeeRoles.includes(role.id))) {
-          const profileProjects = this.futureProjectsOfProfile(profile).filter(profileProject =>
-            this.projectById(profileProject.projectId).employerId === this.employerByName(INTERNAL_COMPANY_NAME).id &&
-            !this.projectById(profileProject.projectId).isInternal)
-          if (this.consultantHasOngoingProject(profileProjects, currentDate)) {
-            count += 1
-          }
-        }
+    getProfileProjects (profileId) {
+      return this.futureProjectsOfProfile(profileId).filter(profileProject => {
+        const project = this.projectById(profileProject.projectId)
+        return project.employerId === this.employerByName(INTERNAL_COMPANY_NAME).id && !project.isInternal
       })
-      return count
     },
-    mapUtilizationOnTimeFrame (startDate, endDate) {
-      const utilization = []
-      const labels = []
+    mapUtilizationOnTimeFrame (startDate, endDate, roleId) {
+      const utilizationData = { utilized: [], notUtilized: [] }
+
       let currentDate = startDate
+
       for (let i = 0; isBefore(currentDate, endDate); i += 1) {
-        utilization.push(this.countUtilizedConsultantsOnDate(currentDate))
-        labels.push(createLabel(currentDate))
-        currentDate = addWeeks(currentDate, 1)
+        utilizationData.utilized.push({
+          x: new Date(currentDate),
+          y: this.countUtilizedConsultantsOnDate(currentDate, roleId).utilized
+        })
+        currentDate = addDays(currentDate, 1)
       }
-      return { data: utilization, labels }
+      return utilizationData
+    },
+    fullCapacity (startDate, endDate, roleId) {
+      return [
+        {
+          x: new Date(startDate),
+          y: this.profileRolesCount[roleId]
+        },
+        {
+          x: new Date(endDate),
+          y: this.profileRolesCount[roleId]
+        }
+      ]
     }
   }
 }
