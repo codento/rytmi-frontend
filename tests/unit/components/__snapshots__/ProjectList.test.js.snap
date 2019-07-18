@@ -30,6 +30,7 @@ exports[`ProjectList.vue Template is correct 1`] = `
     selectedvariant="primary"
     selectmode="multi"
     sortby="code"
+    sortcompareoptions="[object Object]"
     sortdirection="asc"
     striped="true"
     value=""
