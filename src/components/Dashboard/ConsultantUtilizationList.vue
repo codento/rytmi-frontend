@@ -149,7 +149,7 @@ export default {
         'July', 'August', 'September', 'October', 'November', 'December'
       ],
       monthsDisplayed: 4,
-      imgProps: { blankColor: null, width: 50, height: 50, class: 'm1' },
+      imgProps: { width: 50, height: 50, class: 'm1' },
       imageUrl: {}
     }
   },
