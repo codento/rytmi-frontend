@@ -194,7 +194,7 @@
       <b-col cols="12">
         <b-button
           v-b-modal.project-skill-modal
-          variant="primary"
+          variant="secondary"
         >
           Add skills to project
         </b-button>
