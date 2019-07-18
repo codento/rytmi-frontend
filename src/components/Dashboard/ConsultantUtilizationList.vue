@@ -30,11 +30,11 @@
       cols="12"
       class="mx-2 my-4"
     >
-      <h3>Project ending soon</h3>
+      <h3>In projects</h3>
       <!-- Month labels -->
       <b-row class="mx-3 text-center">
         <!-- First column contains profile label, resize to 1 col after half month has passed -->
-        <b-col :cols="currentDayNumber > 15 ? 1 : 2" />
+        <b-col :cols="currentDayNumber > 20 ? 1 : 2" />
         <b-col
           v-for="(month, labelIndex) in Object.values(monthData)"
           :key="'month-label-' + labelIndex"
@@ -50,8 +50,8 @@
       >
         <!-- First column contains profile label, resize to 1 col after half month has passed -->
         <b-col
-          :cols="currentDayNumber > 15 ? 1 : 2"
-          class="profile-tag-col pt-3"
+          :cols="currentDayNumber > 20 ? 1 : 2"
+          class="profile-tag-col pt-0"
         >
           <div
             class="profile-tag mx-2"
@@ -70,12 +70,12 @@
           </div>
         </b-col>
         <b-col
-          v-for="(progressBarData, monthIndex) in getProgressBarValues(item.daysToZeroUtilization, item.utilization)"
+          v-for="(progressBarData, monthIndex) in getProgressBarValues(item.daysToProjectStart, item.daysToZeroUtilization, item.utilization)"
           :key="'month-' + monthIndex"
           :class="monthIndex < monthData.length - 1 ? 'utilization-bar px-0 border-right' : 'utilization-bar px-0'"
         >
           <b-progress
-            class="mt-2 project-progress"
+            class="mt-4 project-progress"
             :max="monthData[monthIndex].days"
           >
             <b-progress-bar
@@ -97,10 +97,16 @@
             </b-progress-bar>
           </b-progress>
           <span
-            v-show="progressBarData.showLabel"
-            class=" project-progress pr-2 float-right"
+            v-show="progressBarData.showEndLabel"
+            :class="`float-${getDateLabelPositionAndFormat(item.endsOn).position} project-progress px-2`"
           >
-            {{ item.finalDate }}
+            Ends on {{ getDateLabelPositionAndFormat(item.endsOn).label}}
+          </span>
+          <span
+            v-show="progressBarData.showStartLabel"
+            :class="`float-${getDateLabelPositionAndFormat(item.startsOn).position} project-progress px-2`"
+          >
+            Starts on {{ getDateLabelPositionAndFormat(item.startsOn).label}}
           </span>
         </b-col>
       </b-row>
@@ -119,12 +125,19 @@ const getMaxDate = (projectsArray) => {
   return projectsEndDates.length > 0 ? new Date(Math.max.apply(null, projectsEndDates)) : undefined
 }
 
+const getMinDate = (projectsArray) => {
+  const projectsStartDates = projectsArray.map(project => new Date(project.startDate))
+  return new Date(Math.min.apply(null, projectsStartDates))
+}
+
 export default {
   name: 'ConsultantUtilizationList',
   components: {
     ChartCard
   },
-  props: {},
+  props: {
+    activeRoleSelection: Array
+  },
   data () {
     return {
       monthNames: [
@@ -140,14 +153,17 @@ export default {
       'profileFilter',
       'futureProjectsOfProfile',
       'projectById',
-      'employerByName',
-      'currentLanguage'
+      'employerByName'
     ]),
+    selectedProfiles () {
+      return this.profileFilter().filter(profile => {
+        return this.activeRoleSelection.some(role => {
+          return profile.employeeRoles.includes(role.id)
+        })
+      })
+    },
     currentDayNumber () {
       return new Date(Date.now()).getDate()
-    },
-    maximumDaysDisplayed () {
-      return this.monthData.reduce((accumulator, month) => accumulator + month.days, 0)
     },
     monthData () {
       const indexes = []
@@ -158,35 +174,39 @@ export default {
         const dateOnIndex = addMonths(new Date(Date.now()), index)
         const thisMonth = dateOnIndex.getMonth()
         const thisYear = dateOnIndex.getYear()
-        return { label: this.monthNames[thisMonth], days: getDaysInMonth(new Date(thisYear, thisMonth)) }
+        return { month: thisMonth, label: this.monthNames[thisMonth], days: getDaysInMonth(new Date(thisYear, thisMonth)) }
       })
     },
     orderedProfiles () {
       // Filter out profiles having only administrative role
       const mappedObjects = this.mapProjectsToProfiles().filter(item => item.profile.employeeRoles.every(i => [1, 2].includes(i)))
-      return mappedObjects.sort((a, b) => a.utilization === 0 ? a.utilization - b.utilization : a.daysToZeroUtilization - b.daysToZeroUtilization)
+      return mappedObjects.sort((a, b) => {
+        // If project start date is more than 30 days in the future, sort to top
+        const sortValue = a.daysToProjectStart > 30 ? 0 : a.daysToZeroUtilization
+        const compareValue = b.daysToProjectStart > 30 ? 0 : b.daysToZeroUtilization
+        return sortValue - compareValue
+      })
     },
     freeEmployees () {
       return this.orderedProfiles.filter(item => item.daysToZeroUtilization === 0)
     },
     soonToBeFreeEmployees () {
-      return this.orderedProfiles.filter(item => item.daysToZeroUtilization > 0 && item.daysToZeroUtilization < this.maximumDaysDisplayed + 30)
+      return this.orderedProfiles.filter(item => item.daysToZeroUtilization > 0)
     }
   },
   methods: {
-    formatDateLabel (date) {
+    getDateLabelPositionAndFormat (date) {
       if (date) {
-        if (differenceInDays(date, new Date()) > this.maximumDaysDisplayed) {
-          return format(date, 'MM/YYYY')
+        if (differenceInDays(date, new Date()) > this.monthsDisplayed * 31 || !this.monthData.map(item => item.month).includes(date.getMonth())) {
+          return { label: format(date, 'MM/YYYY'), position: 'right' }
         }
-        return 'Ends on ' + format(date, 'D/M')
+        return { label: format(date, 'D/M'), position: date.getDate() < 10 ? 'left' : 'right' }
       }
-      return 'End date not defined'
+      return null
     },
     mapProjectsToProfiles () {
-      const activeProfiles = this.profileFilter()
       // Map projects for each active profile
-      return Object.values(activeProfiles).map(profile => {
+      return this.selectedProfiles.map(profile => {
         const projects = this.futureProjectsOfProfile(profile.id).map(profileProject => {
           const project = this.projectById(profileProject.projectId)
           return { ...project, ...profileProject }
@@ -195,19 +215,25 @@ export default {
           combinedProject.employerId === this.employerByName(INTERNAL_COMPANY_NAME).id)
 
         let daysToZeroUtilization = 0
-        let finalDate
+        let daysToProjectStart = 0
+        let startsOn, endsOn
         if (projects.length > 0) {
           // Handle projects without end date
-          daysToZeroUtilization = getMaxDate(projects) ? differenceInDays(getMaxDate(projects).setHours(0, 0, 0, 0), new Date().setHours(0, 0, 0, 0)) : 100000
-          finalDate = this.formatDateLabel(getMaxDate(projects))
+          endsOn = getMaxDate(projects)
+          daysToZeroUtilization = endsOn ? differenceInDays(endsOn.setHours(0, 0, 0, 0), new Date().setHours(0, 0, 0, 0)) : 100000
+
+          startsOn = getMinDate(projects)
+          daysToProjectStart = differenceInDays(startsOn.setHours(0, 0, 0, 0), new Date().setHours(0, 0, 0, 0))
         }
 
         return {
           profile: profile,
           profileRoleClass: profile.employeeRoles.length === 1 ? 'role-' + profile.employeeRoles[0] : 'combined-role',
           utilization: this.calculateUtilization(projects),
-          daysToZeroUtilization: daysToZeroUtilization,
-          finalDate
+          daysToZeroUtilization,
+          daysToProjectStart,
+          startsOn,
+          endsOn
         }
       })
     },
@@ -236,7 +262,7 @@ export default {
 
         if (utilizationOnPreviousStep !== utilizationOnCurrentStep) {
           utilizations.push({
-            startDay: differenceInDays(date, todaysDate),
+            startDay: differenceInDays(date, todaysDate) - 1,
             value: utilizationOnCurrentStep
           })
 
@@ -251,14 +277,14 @@ export default {
       }
       return utilizations.slice(0, -1)
     },
-    getProgressBarValues (daysToZeroUtilization, utilizations) {
+    getProgressBarValues (daysToProjectStart, daysToZeroUtilization, utilizations) {
       let accumulatedDays = 0
       return Object.values(this.monthData).map((month, monthIndex) => {
         // Handle first month: remove number of days already passed
         const numberOfDaysInMonth = monthIndex === 0 ? month.days - this.currentDayNumber : month.days
 
         const currentMonthsUtilizations = utilizations.filter(utilization => utilization.startDay < accumulatedDays + numberOfDaysInMonth && utilization.endDay >= accumulatedDays)
-        const progressBar = { values: [], showLabel: false, utilization: 0 }
+        const progressBar = { values: [], showEndLabel: false, showStartLabel: false, utilization: 0 }
 
         currentMonthsUtilizations.forEach(utilization => {
           let numDays = utilization.numDays
@@ -280,10 +306,11 @@ export default {
         if (daysToZeroUtilization - accumulatedDays > numberOfDaysInMonth) {
           // Show label for last item if not yet shown
           if (monthIndex === this.monthData.length - 1) {
-            progressBar.showLabel = true
+            progressBar.showEndLabel = daysToProjectStart < accumulatedDays + numberOfDaysInMonth
+            progressBar.showStartLabel = daysToProjectStart > accumulatedDays + numberOfDaysInMonth
           }
         } else if (daysToZeroUtilization - accumulatedDays > 0) {
-          progressBar.showLabel = true
+          progressBar.showEndLabel = true
         }
         accumulatedDays += numberOfDaysInMonth
         return progressBar
@@ -312,19 +339,25 @@ h3 {
 
   }
 }
+.progress {
+  background-color: darken(white, 5%);
+}
+.progress-bar {
+  background-color: $c-violet;
+}
 .role-1 {
   background: $c-violet;
 }
 .role-2 {
-  background: $c-pink;
+  background: $c-orange
 }
 .combined-role {
   background: repeating-linear-gradient(
     45deg,
     $c-violet,
     $c-violet 50px,
-    $c-pink 50px,
-    $c-pink 200px
+    $c-orange 50px,
+    $c-orange 200px
   );
 }
 .profile-tag {
@@ -347,23 +380,12 @@ h3 {
   }
 }
 .project-progress {
+  font-size: 12px;
   font-weight: 700;
   font-style: italic;
   letter-spacing: 1px;
 }
 .hide-progress {
   background-color: white;
-}
-.utilization-100 {
-  background-color: $c-orange;
-}
-.utilization-80 {
-  background-color: lighten($c-orange, 20%);
-}
-.utilization-60 {
-  background-color: lighten($c-orange, 40%);
-}
-.utilization-20 {
-  background-color: lighten($c-orange, 80%);
 }
 </style>

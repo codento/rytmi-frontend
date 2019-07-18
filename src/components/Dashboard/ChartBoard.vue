@@ -29,7 +29,9 @@
             cols="12"
             class="mb-2"
           >
-            <consultant-utilization-list />
+            <ConsultantUtilizationList
+              :active-role-selection="selectedEmployeeRoles"
+            />
           </b-col>
           <b-col
             :cols="12"
