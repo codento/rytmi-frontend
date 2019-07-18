@@ -48,6 +48,9 @@ export default {
   computed: {
     ...mapGetters(['users'])
   },
+  mounted () {
+    document.title = 'Rytmi - Admin'
+  },
   methods: {
     ...mapActions(['updateUser', 'deleteUser', 'updateProfile']),
     setUser (id) {

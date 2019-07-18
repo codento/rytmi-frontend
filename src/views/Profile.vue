@@ -96,6 +96,9 @@ export default {
       }
     }
   },
+  mounted () {
+    document.title = `Rytmi - ${this.profile.firstName} ${this.profile.lastName}`
+  },
   methods: {
     getEmployerName (employerId) {
       const employer = Object.values(this.employers).find(employer => employer.id === employerId)
