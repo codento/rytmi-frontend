@@ -36,7 +36,7 @@ export default {
     ...mapGetters(['employers'])
   },
   mounted () {
-    document.title = 'Rytmi - Project List'
+    document.title = 'Rytmi - Projects'
   }
 }
 </script>
