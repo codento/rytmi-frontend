@@ -15,13 +15,15 @@
         @click="openProfile(item.profile)"
       >
         <b-img
+          :id="'thumbnail-' + item.profile.id"
           v-bind="imgProps"
           thumbnail
           fluid
-          :src="item.profile.photoPath"
+          :src="imageUrl[item.profile.id]"
+          :blank="!imageUrl[item.profile.id] || false"
           class="thumbnail"
           rounded="circle"
-          alt="Image 1"
+          @error="handleBrokenImg(item.profile.id)"
         />
         <span :class="`${item.profileRoleClass} profile-tag-name px-2`"> {{ item.profile.firstName }} {{ item.profile.lastName }} </span>
       </div>
@@ -58,13 +60,15 @@
             @click="openProfile(item.profile)"
           >
             <b-img
+              :id="'thumbnail-' + item.profile.id"
               v-bind="imgProps"
               thumbnail
               fluid
-              :src="item.profile.photoPath"
+              :src="imageUrl[item.profile.id]"
+              :blank="!imageUrl[item.profile.id] || false"
               class="thumbnail"
               rounded="circle"
-              alt="Image 1"
+              @error="handleBrokenImg(item.profile.id)"
             />
             <span :class="`${item.profileRoleClass} profile-tag-name px-2`"> {{ item.profile.firstName }} {{ item.profile.lastName }} </span>
           </div>
@@ -97,7 +101,7 @@
             </b-progress-bar>
           </b-progress>
           <span
-            v-show="progressBarData.showEndLabel"
+            v-show="progressBarData.showEndLabel && item.endsOn"
             :class="`float-${getDateLabelPositionAndFormat(item.endsOn).position} project-progress px-2`"
           >
             Ends on {{ getDateLabelPositionAndFormat(item.endsOn).label }}
@@ -145,7 +149,8 @@ export default {
         'July', 'August', 'September', 'October', 'November', 'December'
       ],
       monthsDisplayed: 4,
-      imgProps: { blankColor: '#777', width: 50, height: 50, class: 'm1' }
+      imgProps: { blankColor: null, width: 50, height: 50, class: 'm1' },
+      imageUrl: {}
     }
   },
   computed: {
@@ -194,6 +199,11 @@ export default {
       return this.orderedProfiles.filter(item => item.daysToZeroUtilization > 0)
     }
   },
+  created () {
+    this.selectedProfiles.forEach(profile => {
+      this.$set(this.imageUrl, profile.id, profile.photoPath)
+    })
+  },
   methods: {
     getDateLabelPositionAndFormat (date) {
       if (date) {
@@ -226,7 +236,7 @@ export default {
           daysToProjectStart = differenceInDays(startsOn.setHours(0, 0, 0, 0), new Date().setHours(0, 0, 0, 0))
         }
         return {
-          profile: profile,
+          profile,
           profileRoleClass: profile.employeeRoles.length === 1 ? 'role-' + profile.employeeRoles[0] : 'combined-role',
           utilization: this.calculateUtilization(projects),
           daysToZeroUtilization,
@@ -239,21 +249,22 @@ export default {
     calculateUtilization (projects) {
       const todaysDate = new Date().setHours(0, 0, 0, 0)
       const utilizations = []
+
       // Array of unique start and end dates
       const uniqueStartAndEndDates = new Set([
         ...projects.map(project => new Date(project.startDate).setHours(0, 0, 0, 0)),
-        ...projects.map(project => addDays(new Date(project.endDate).setHours(0, 0, 0, 0), 1))
+        ...projects.map(project => addDays(new Date(project.endDate || addMonths(todaysDate, this.monthsDisplayed)).setHours(0, 0, 0, 0), 1))
       ])
       // Filter dates in the past from the array and sort it
       const dateSteps = Array.from(uniqueStartAndEndDates).filter(date => date > todaysDate).sort((a, b) => a - b)
-
       let utilizationOnPreviousStep
       // Start iteration with todays date
       for (const date of [todaysDate, ...dateSteps]) {
         let utilizationOnCurrentStep = 0
         // Calculate combined utilization using ongoing projects at current step
         projects.filter(project => {
-          return new Date(project.startDate) <= date && new Date(project.endDate) >= date
+          const endDate = new Date(project.endDate || addMonths(todaysDate, this.monthsDisplayed))
+          return new Date(project.startDate) <= date && endDate >= date
         })
           .forEach(project => {
             utilizationOnCurrentStep += project.workPercentage
@@ -261,7 +272,7 @@ export default {
 
         if (utilizationOnPreviousStep !== utilizationOnCurrentStep) {
           utilizations.push({
-            startDay: differenceInDays(date, todaysDate) - 1,
+            startDay: differenceInDays(date, todaysDate) - 1 > 0 ? differenceInDays(date, todaysDate) - 1 : 0,
             value: utilizationOnCurrentStep
           })
 
@@ -278,6 +289,7 @@ export default {
     },
     getProgressBarValues (daysToProjectStart, daysToZeroUtilization, utilizations) {
       let accumulatedDays = 0
+      let startLabelPlaced = false
       return Object.values(this.monthData).map((month, monthIndex) => {
         // Handle first month: remove number of days already passed
         const numberOfDaysInMonth = monthIndex === 0 ? month.days - this.currentDayNumber : month.days
@@ -300,14 +312,22 @@ export default {
             style: { opacity: (utilization.value) / 100 },
             utilization: utilization.value
           })
+          // Show start date label on the first project only
+          if (daysToProjectStart > 0 && utilization.value > 0 && !startLabelPlaced) {
+            progressBar.showStartLabel = true
+            startLabelPlaced = true
+          }
         })
         // Logic for displaying labels (displayd only once)
+        // If project continues next month
         if (daysToZeroUtilization - accumulatedDays > numberOfDaysInMonth) {
-          // Show label for last item if not yet shown
+          // Show label for last month in display
           if (monthIndex === this.monthData.length - 1) {
             progressBar.showEndLabel = daysToProjectStart < accumulatedDays + numberOfDaysInMonth
-            progressBar.showStartLabel = daysToProjectStart > accumulatedDays + numberOfDaysInMonth
+            // Show start label only if start date is in the future
+            progressBar.showStartLabel = !startLabelPlaced && daysToProjectStart === 0
           }
+        // If project ends this month
         } else if (daysToZeroUtilization - accumulatedDays > 0) {
           progressBar.showEndLabel = true
         }
@@ -317,6 +337,9 @@ export default {
     },
     openProfile (profile) {
       this.$router.push({ name: 'profile', params: { id: profile.id } })
+    },
+    handleBrokenImg (profileId) {
+      this.$set(this.imageUrl, profileId, null)
     }
   }
 }
@@ -324,6 +347,9 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
+.img {
+  min-height: 50px;
+}
 .profile-tag-col {
   z-index: 10;
 }
