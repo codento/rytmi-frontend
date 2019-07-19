@@ -122,6 +122,7 @@
             id="description-fi"
             v-model="profileEmployer.description['fi']"
             type="text"
+            rows="4"
             placeholder="Short description in Finnish about your role, tasks and projects while working for this employer"
             :state="inputStates.jobDescriptionFi"
           />
@@ -134,6 +135,7 @@
             id="description-en"
             v-model="profileEmployer.description['en']"
             type="text"
+            rows="4"
             placeholder="Short description in English about your role, tasks and projects while working for this employer"
             :state="inputStates.jobDescriptionEn"
           />
@@ -146,9 +148,9 @@
           id="submit"
           block
           type="submit"
-          variant="primary"
+          variant="secondary"
         >
-          {{ isNewEntry ? 'Create a new work history entry' : 'Update work history entry' }}
+          Save
         </b-button>
       </b-col>
     </b-row>

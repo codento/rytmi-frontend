@@ -9,7 +9,7 @@
           class="float-right mb-2"
           @click="addNewProfileEmployer"
         >
-          Add a new work history entry
+          Add a new item
         </b-button>
       </b-col>
     </b-row>
