@@ -368,11 +368,3 @@ export default {
     color: black;
   }
 </style>
-<style>
-  #employer-select {
-    height: 35px;
-  }
-  #employer-select div.dropdown-toggle {
-    height: 35px;
-  }
-</style>
