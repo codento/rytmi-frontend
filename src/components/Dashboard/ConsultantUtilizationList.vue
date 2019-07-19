@@ -11,7 +11,7 @@
       <div
         v-for="item in freeEmployees"
         :key="item.profile.id"
-        class="profile-tag mx-2"
+        class="profile-tag mx-2 mb-1"
         @click="openProfile(item.profile)"
       >
         <b-img
@@ -48,7 +48,7 @@
       <b-row
         v-for="item in utilizedEmployees"
         :key="item.profile.id"
-        class="mx-3"
+        class="mx-3 profile-utilization-row"
       >
         <!-- First column contains profile label, resize to 1 col after half month has passed -->
         <b-col
@@ -413,5 +413,8 @@ h3 {
 }
 .hide-progress {
   background-color: white;
+}
+.profile-utilization-row {
+  min-height: 58px;
 }
 </style>
