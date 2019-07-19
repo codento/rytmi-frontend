@@ -1,12 +1,14 @@
 <template>
   <div class="profile-details">
     <div style="text-align: center;">
-      <img
+      <b-img
         alt="profile photo"
-        :src="profile.photoPath"
+        :src="imgSrc"
+        :blank="!imgSrc"
         height="128px"
         width="128px"
-      >
+        @error="imgSrc = null"
+      />
     </div>
     <div style="text-align: center; color:#869fac">
       <span class="profile-name"> {{ getNames }}</span><br>
@@ -45,6 +47,11 @@ export default {
   name: 'UserProfileCard',
   props: {
     'profile': Object
+  },
+  data () {
+    return {
+      imgSrc: this.profile.photoPath
+    }
   },
   computed: {
     ...mapGetters(['profileId', 'isAdmin', 'employeeRoles', 'currentLanguage']),

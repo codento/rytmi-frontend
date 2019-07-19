@@ -6,6 +6,7 @@ $c-violet: #372F85;
 $c-violet-light: #9693C1;
 $c-light: #E3E2E8;
 $c-dark: #1D1433;
+$c-pink: #EC526B;
 
 // Bootstrap overrides
 $theme-colors: (
@@ -32,7 +33,6 @@ $card-border-color: $body-bg;
 $card-cap-bg: darken($color: $body-bg, $amount: 5);
 
 $progress-border-radius: 0;
-$progress-bar-bg: theme-color('primary');
 
 $table-bg: white;
 $table-hover-color: $c-violet;

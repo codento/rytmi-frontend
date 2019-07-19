@@ -110,38 +110,10 @@ const employersMock = {
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
-      profileFilter: () => () => mockProfiles,
+      profileFilter: () => () => Object.values(mockProfiles),
       futureProjectsOfProfile: () => (id) => mockProjectProfiles.filter(pp => {
         return pp.profileId === id
       }),
-      profileByUserId: () => (arg) => {
-        return {
-          id: 1,
-          userId: 2,
-          firstName: 'Bar',
-          lastName: 'Foo',
-          photoPath: '',
-          employeeRoles: [1],
-          title: 'software developer',
-          email: 'foo.bar@foo.com',
-          phone: '1354',
-          description: 'fdas'
-        }
-      },
-      profileById: () => (arg) => {
-        return {
-          id: 1,
-          userId: 2,
-          firstName: 'Bar',
-          lastName: 'Foo',
-          photoPath: '',
-          employeeRoles: [1],
-          title: 'software developer',
-          email: 'foo.bar@foo.com',
-          phone: '1354',
-          description: 'fdas'
-        }
-      },
       projectById: () => (projectId) => filter(mockProjects, project => project.id === projectId),
       employerByName: () => (employerName) => filter(employersMock, employer => employer.name === employerName)
     }
@@ -174,31 +146,20 @@ describe('ConsultantUtilizationChart.vue', () => {
     const utilized = 2
     const notUtilized = 3
     wrapper.vm.today = firstOfNovember
-    wrapper.vm.utilized = 0
-    wrapper.vm.notUtilized = 0
-    wrapper.vm.countUtilizedActiveProfiles()
-    expect(wrapper.vm.utilized).toEqual(utilized)
-    expect(wrapper.vm.notUtilized).toEqual(notUtilized)
+    expect(wrapper.vm.utilizationToday.utilized).toEqual(utilized)
+    expect(wrapper.vm.utilizationToday.notUtilized).toEqual(notUtilized)
   })
 
   it('Should calculate consultant utilization on frequency of one week', () => {
-    const wrapper = createWrapper()
-    const expectedLabels = [
-      '1.11.2018',
-      '8.11.2018',
-      '15.11.2018',
-      '22.11.2018',
-      '29.11.2018',
-      '6.12.2018',
-      '13.12.2018',
-      '20.12.2018',
-      '27.12.2018',
-      '3.1.2019'
-    ]
     const expectedUtilization = [2, 2, 2, 2, 3, 4, 4, 5, 5, 1]
-    const result = wrapper.vm.mapUtilizationOnTimeFrame(firstOfNovember, new Date('2019-01-07'))
-    expect(result.data.length).toBe(result.labels.length)
-    expect(result.data).toEqual(expectedUtilization)
-    expect(result.labels).toEqual(expectedLabels)
+
+    const wrapper = createWrapper()
+    const result = wrapper.vm.mapUtilizationOnTimeFrame(firstOfNovember, new Date('2019-01-07'), 1)
+
+    expect(result.utilized.length).toBe(expectedUtilization.length)
+    expect(result.notUtilized.length).toBe(0)
+    // Check last x value to be 9 weeks in the future
+    expect(result.utilized[result.utilized.length - 1].x).toEqual(new Date('2019-01-03'))
+    expect(result.utilized.map(item => item.y)).toEqual(expectedUtilization)
   })
 })

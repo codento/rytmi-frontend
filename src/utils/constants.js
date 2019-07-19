@@ -12,3 +12,9 @@ export const LANGUAGE_ENUM = Object.freeze({
 })
 
 export const INTERNAL_COMPANY_NAME = 'Codento Oy'
+
+export const COLORS = {
+  orange: '255, 132, 41',
+  violet: '55, 47, 133',
+  pink: '236, 82, 107'
+}

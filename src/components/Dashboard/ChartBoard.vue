@@ -16,13 +16,8 @@
       <div v-else>
         <b-row class="no-gutters mt-1">
           <b-col
-            cols="12"
-            class="mb-2"
-          >
-            <consultant-utilization-list />
-          </b-col>
-          <b-col
-            :cols="6"
+            cols="6"
+            class="mb-3"
           >
             <v-select
               v-model="selectedEmployeeRoles"
@@ -32,16 +27,17 @@
             />
           </b-col>
           <b-col
-            :cols="12"
-            :md="8"
+            cols="12"
+            md="8"
+            class="mb-3"
           >
             <ConsultantUtilizationChart
               :active-role-selection="selectedEmployeeRoles"
             />
           </b-col>
           <b-col
-            :cols="12"
-            :md="4"
+            cols="12"
+            md="4"
           >
             <b-row class="ml-md-1">
               <b-col
@@ -52,7 +48,7 @@
                 />
               </b-col>
               <b-col
-                :cols="12"
+                cols="12"
                 class="mt-2"
               >
                 <MostWillingnessChart
@@ -61,15 +57,23 @@
               </b-col>
             </b-row>
           </b-col>
+          <b-col
+            cols="12"
+            class="mb-2"
+          >
+            <ConsultantUtilizationList
+              :active-role-selection="selectedEmployeeRoles"
+            />
+          </b-col>
         </b-row>
         <b-row class="no-gutters mt-1">
           <b-col
-            :cols="12"
-            :md="12"
+            cols="12"
+            md="12"
           >
             <SkillChart
               v-if="appInitialized"
-              :md-size="12"
+              md-size="12"
               :skills="skillsOnly"
               :skill-info="skillInfo"
               :profile-list="profileList"

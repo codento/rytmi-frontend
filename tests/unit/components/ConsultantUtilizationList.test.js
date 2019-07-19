@@ -3,7 +3,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import { filter, merge } from 'lodash'
-import { UtilizationChart } from '@/components/Common'
 import ConsultantUtilizationList from '@/components/Dashboard/ConsultantUtilizationList'
 import profileProjectGetters from '@/store/modules/profileProjects/getters'
 
@@ -121,7 +120,8 @@ const employersMock = {
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
-      profileFilter: () => () => mockProfiles,
+      profiles: () => () => mockProfiles,
+      profileFilter: () => () => Object.values(mockProfiles),
       futureProjectsOfProfile: () => (id) => mockProjectProfiles.filter(profileProject => {
         return profileProject.profileId === id
       }),
@@ -135,7 +135,11 @@ function createStore (overrideConfig) {
 }
 
 function createWrapper (overrideMountingOptions) {
+  const propsData = {
+    activeRoleSelection: [{ id: 1, title: 'Active role' }, { id: 2, title: 'Active role2' }]
+  }
   const defaultMountingOptions = {
+    propsData,
     localVue,
     store: createStore()
   }
@@ -145,33 +149,22 @@ function createWrapper (overrideMountingOptions) {
 }
 
 describe('ConsultantUtilizationList.vue', () => {
-  it('Should render components', () => {
-    const wrapper = createWrapper()
-    expect(wrapper.find(UtilizationChart).isVisible()).toBeTruthy()
-  })
-
   it('Should filter out profiles if the role they have is only administrative', () => {
     const wrapper = createWrapper()
     expect(wrapper.vm.orderedProfiles.length).toEqual(7)
     expect(wrapper.vm.orderedProfiles.filter(item => item.profile.id === 8)).toEqual([])
   })
 
-  it('Should list free or soon to be free consultants in initiallyVisibleProfiles, ordered by utilization', () => {
+  it('Should list free consultants in freeEmployees', () => {
     const wrapper = createWrapper()
-    expect(wrapper.vm.initiallyVisibleProfiles.length).toEqual(4)
-    expect(wrapper.vm.initiallyVisibleProfiles[0].daysToZeroUtilization).toEqual(0)
-    expect(wrapper.vm.initiallyVisibleProfiles[3].daysToZeroUtilization).toEqual(29)
+    expect(wrapper.vm.freeEmployees.length).toEqual(2)
+    expect(wrapper.vm.freeEmployees[0].daysToZeroUtilization).toEqual(0)
   })
-  it('Should list utilized consultants in initiallyHiddenProfiles, ordered by utilization', () => {
+
+  it('Should list rest of the consultants in utilizedEmployees', () => {
     const wrapper = createWrapper()
-    expect(wrapper.vm.initiallyHiddenProfiles.length).toEqual(3)
-    expect(wrapper.vm.initiallyHiddenProfiles[0].daysToZeroUtilization).toEqual(234)
-  })
-  it('Should show correct amount of data in sections', () => {
-    const wrapper = createWrapper()
-    expect(wrapper.vm.sectionsData[1].length).toEqual(2)
-    expect(wrapper.vm.sectionsData[2].length).toEqual(2)
-    expect(wrapper.vm.sectionsData[3].length).toEqual(2)
-    expect(wrapper.vm.sectionsData[4].length).toEqual(1)
+    expect(wrapper.vm.utilizedEmployees.length).toEqual(5)
+    // Check sorting
+    expect(wrapper.vm.utilizedEmployees[0].daysToZeroUtilization).toEqual(30)
   })
 })
