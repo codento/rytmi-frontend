@@ -120,6 +120,7 @@ const employersMock = {
 function createStore (overrideConfig) {
   const defaultStoreConfig = {
     getters: {
+      profiles: () => () => mockProfiles,
       profileFilter: () => () => Object.values(mockProfiles),
       futureProjectsOfProfile: () => (id) => mockProjectProfiles.filter(profileProject => {
         return profileProject.profileId === id
