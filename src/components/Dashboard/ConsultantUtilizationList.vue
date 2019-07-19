@@ -155,6 +155,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'profiles',
       'profileFilter',
       'futureProjectsOfProfile',
       'projectById',
@@ -200,7 +201,7 @@ export default {
     }
   },
   created () {
-    this.selectedProfiles.forEach(profile => {
+    Object.values(this.profiles).forEach(profile => {
       this.$set(this.imageUrl, profile.id, profile.photoPath)
     })
   },
