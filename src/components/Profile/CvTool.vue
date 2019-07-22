@@ -116,7 +116,7 @@
           >
             <b-button
               slot="modal-cancel"
-              variant="danger"
+              variant="light"
               @click="hideModal()"
             >
               Cancel
@@ -223,6 +223,7 @@ export default {
               description: project.description,
               customerName: project.customerName,
               employerId: project.employerId,
+              isInternal: project.isInternal,
               isSecret: project.isSecret
             })
           }
@@ -284,6 +285,9 @@ export default {
       this.pdfName = this.defaultPDFName
     },
     getFormattedDuration: function (startDate, endDate) {
+      if (endDate && new Date(endDate).getMonth() === new Date(startDate).getMonth()) {
+        return format(startDate, 'MM/YYYY')
+      }
       return `${format(startDate, 'MM/YYYY')}-${endDate ? format(endDate, 'MM/YYYY') : ''}`
     },
     cvIntroductionUpdated: function (inputState) {
@@ -309,7 +313,7 @@ export default {
         projectRole: profileProjectObj.role[this.currentLanguage],
         projectName: profileProjectObj.name[this.currentLanguage],
         projectDescription: profileProjectObj.description[this.currentLanguage],
-        projectCustomer: profileProjectObj.customerName[this.currentLanguage],
+        projectCustomer: !profileProjectObj.isInternal ? profileProjectObj.customerName[this.currentLanguage] : null,
         projectDuration: profileProjectObj.duration,
         projectSkills: profileProjectObj.skills.map(skill => skill.name)
       }
@@ -358,6 +362,7 @@ export default {
         workHistory: workHistory,
         skills: cvSkills,
         education: this.profile.education ? this.profile.education : [],
+        certificatesAndOthers: this.profile.certificatesAndOthers ? this.profile.certificatesAndOthers : [],
         born: this.profile.birthYear,
         skillLevelDescriptions: proficiencyDesc.knows[this.currentLanguage],
         currentLanguage: this.currentLanguage
