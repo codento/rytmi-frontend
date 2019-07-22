@@ -120,7 +120,9 @@ export default {
       return roles.filter(role => !selectedRoles.some(selectedRole => selectedRole.id === role.id))
     },
     submit () {
-      this.update({ id: this.user.id, active: this.isActive, admin: this.isAdmin }, this.profile)
+      this.update(
+        { id: this.user.id, active: this.isActive, admin: this.isAdmin },
+        { id: this.profile.id, active: this.isActive })
     },
     del () {
       const promptMessage = `
