@@ -119,11 +119,12 @@ export default {
   computed: {
     ...mapGetters([
       'skills',
-      'skillCategories'
+      'skillCategories',
+      'currentLanguage'
     ]),
     skillCategoryOptions () {
       return Object.values(this.skillCategories).map(category => {
-        return { value: category.id, text: category.title }
+        return { value: category.id, text: category.title[this.currentLanguage] }
       }).sort((a, b) => a.text.localeCompare(b.text))
     },
     matchesExistingSkill () {

@@ -9,16 +9,18 @@ const mockSkillList = [
   {
     id: 2,
     name: 'C',
-    description: 'old robust shit',
+    description: 'old robust stuff',
     skillCategoryId: 2,
-    skillCategoryName: 'Old stuff'
+    skillCategoryName: { en: 'Old stuff', fi: 'Vanhoi jutui' },
+    skillGroupName: { en: 'Old stuff', fi: 'Vanhoi jutui' }
   },
   {
     id: 1,
     name: 'JavaScript',
     description: 'Jäsää',
     skillCategoryId: 1,
-    skillCategoryName: 'New stuff'
+    skillCategoryName: { en: 'New stuff', fi: 'Uusei jutui' },
+    skillGroupName: { en: 'New stuff', fi: 'Uusei jutui' }
   }
 ]
 
@@ -47,13 +49,15 @@ const defaultStoreConfig = {
   },
   getters: {
     skillProfiles: () => mockSkillProfiles,
-    isAdmin: () => false
+    isAdmin: () => false,
+    currentLanguage: () => 'fi'
   }
 }
 
 const defaultMountingOptions = {
   propsData: {
-    skillList: mockSkillList
+    skillList: mockSkillList,
+    filterValues: []
   },
   mocks: {
     $toasted: {

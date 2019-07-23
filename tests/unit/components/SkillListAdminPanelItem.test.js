@@ -7,17 +7,17 @@ const skillCategoriesAsProps = [
   { id: null, skillGroupId: null },
   {
     id: 3,
-    title: 'New stuff',
+    title: { en: 'New stuff', fi: 'Uusei jutui' },
     skillGroupId: 2
   },
   {
     id: 1,
-    title: 'Old stuff',
+    title: { en: 'Old stuff', fi: 'Vanhoi jutui' },
     skillGroupId: 3
   },
   {
     id: 4,
-    title: 'Same stuff',
+    title: { en: 'Same stuff', fi: 'Samoi jutui' },
     skillGroupId: 3
   }
 ]
@@ -25,15 +25,15 @@ const skillCategoriesAsProps = [
 const mockSkillGroups = {
   2: {
     id: 2,
-    title: 'New group'
+    title: { en: 'New group', fi: 'Uusi ryhmä' }
   },
   3: {
     id: 3,
-    title: 'Old group'
+    title: { en: 'Old group', fi: 'Vanha ryhmä' }
   },
   4: {
     id: 4,
-    title: 'Unused'
+    title: { en: 'Unused', fi: 'Käyttämätön' }
   }
 }
 
@@ -67,7 +67,7 @@ describe('SkillListAdminPanelItem.vue', () => {
     const wrapper = createWrapper(SkillListAdminPanelItem, defaultStoreConfig, defaultMountingOptions)
     const itemsWrapper = wrapper.findAll('.list-group-item')
     expect(itemsWrapper).toHaveLength(3)
-    const expectedTitles = [skillCategoriesAsProps[1].title, skillCategoriesAsProps[2].title, skillCategoriesAsProps[3].title]
+    const expectedTitles = [skillCategoriesAsProps[1].title.fi, skillCategoriesAsProps[2].title.fi, skillCategoriesAsProps[3].title.fi]
     expect(itemsWrapper.filter((item, index) => item.html().includes(expectedTitles[index]))).toHaveLength(3)
   })
 })
@@ -98,7 +98,7 @@ describe('Editing item in SkillListAdminPanelItem.vue', () => {
     expect.assertions(3)
     const editedItem = {
       id: 3,
-      title: 'New stuff2',
+      title: { en: 'New stuff2', fi: 'Uusei jutui' },
       skillGroupId: 2
     }
     // Form (exactly one) should be visible
@@ -117,7 +117,7 @@ describe('Editing item in SkillListAdminPanelItem.vue', () => {
   it('Should reset values if cancel button is clicked', () => {
     const editedItem = {
       id: 3,
-      title: 'New stuff2',
+      title: { en: 'New stuff2', fi: 'Uusei jutui' },
       skillGroupId: 2
     }
     // Edit data
@@ -126,7 +126,7 @@ describe('Editing item in SkillListAdminPanelItem.vue', () => {
     // Save edits
     wrapper.find(`#cancel-${idPrefix}-edits-btn`).trigger('click')
     expect(wrapper.vm.editedId).toEqual(null)
-    expect(wrapper.vm.editedName).toEqual('')
+    expect(wrapper.vm.editedName).toEqual({ fi: '', en: '' })
     expect(wrapper.vm.selectedSkillGroupId).toEqual(null)
     // Form should not be visible
     expect(wrapper.html().includes('input')).toBeFalsy()
@@ -149,7 +149,7 @@ describe('Creating item in SkillListAdminPanelItem.vue', () => {
   it('Should call create action if save button is clicked', async () => {
     expect.assertions(3)
     const expectedItem = {
-      title: 'New stuff2',
+      title: { en: 'New stuff2', fi: 'Uusei jutui' },
       skillGroupId: 2
     }
     // Form (exactly one) should be visible
@@ -173,7 +173,7 @@ describe('Creating item in SkillListAdminPanelItem.vue', () => {
     // Save edits
     wrapper.find(`#cancel-${idPrefix}-edits-btn`).trigger('click')
     expect(wrapper.vm.editedId).toEqual(null)
-    expect(wrapper.vm.editedName).toEqual('')
+    expect(wrapper.vm.editedName).toEqual({ fi: '', en: '' })
     expect(wrapper.vm.selectedSkillGroupId).toEqual(null)
     // Form should not be visible
     expect(wrapper.html().includes('input')).toBeFalsy()

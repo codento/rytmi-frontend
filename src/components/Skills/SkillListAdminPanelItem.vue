@@ -35,16 +35,20 @@
           <b-col><h5>Add a new {{ label.toLowerCase() }}</h5></b-col>
         </b-row>
         <b-row v-if="item.id === editedId && !item.disabled">
-          <b-col cols="12">
-            <small :for="'edit-' + idPrefix + '-name'">{{ label }} name</small>
+          <b-col
+            v-for="lang of languages"
+            :key="lang"
+            cols="12"
+          >
+            <small :for="'edit-' + idPrefix + '-name'">{{ label }} name ({{ lang }})</small>
             <b-input
               :id="'edit-' + idPrefix + '-name'"
-              v-model="editedName"
+              v-model="editedName[lang]"
               type="text"
-              :state="inputState.editedName.state"
+              :state="inputState.editedName.state[lang]"
               @focus="showFeedback = true"
             />
-            <b-form-invalid-feedback :state="inputState.editedName.state">
+            <b-form-invalid-feedback :state="inputState.editedName.state[lang]">
               {{ inputState.editedName.feedback }}
             </b-form-invalid-feedback>
           </b-col>
@@ -76,7 +80,7 @@
               type="submit"
               variant="success"
               class="mt-2"
-              :disabled="!inputState.editedName.state || !inputState.groupId.state"
+              :disabled="!inputState.editedName.isValid() || !inputState.groupId.state"
               @click.prevent="saveEdits(item)"
             >
               {{ item.id !== null ? 'Save edits' : 'Submit' }}
@@ -95,7 +99,7 @@
         <b-row v-else>
           <b-col>
             <span :class="item.disabled ? 'text-muted' : ''">
-              {{ item.title }}
+              {{ item.title[currentLanguage] }}
             </span>
             <b-badge
               v-if="editedId === null && lastUpdatedName === item.title"
@@ -174,31 +178,36 @@ export default {
   data () {
     return {
       editedId: null,
-      editedName: '',
+      editedName: { fi: '', en: ''},
       selectedSkillGroupId: null,
       showFeedback: false,
       showCreateNewForm: false,
       showEditIconByIndex: null,
       lastUpdatedName: null,
       lastUpdatedLabel: null,
-      errorDetails: []
+      errorDetails: [],
+      languages: ['fi', 'en']
     }
   },
   computed: {
-    ...mapGetters(['skillGroups']),
+    ...mapGetters(['skillGroups', 'currentLanguage']),
     idPrefix () {
       return kebabCase(this.label)
     },
     dropdownOptions () {
       return Object.values(this.skillGroups).map(group => {
-        return { value: group.id, text: group.title }
+        return { value: group.id, text: group.title[this.currentLanguage] }
       }).sort((a, b) => a.text.localeCompare(b.text))
     },
     inputState () {
       const nameState = {
         editedName: {
-          state: this.showFeedback ? this.editedName.length > 0 : null,
-          feedback: 'Can\'t be empty'
+          state: {
+            en: this.showFeedback ? this.editedName.en.length > 0 : null,
+            fi: this.showFeedback ? this.editedName.fi.length > 0 : null
+          },
+          feedback: 'Can\'t be empty',
+          isValid: function () { return Object.entries(this.state).reduce(([accKey, accValue], [key, value]) => accValue && value) }
         }
       }
       if (this.isSkillCategory) {
@@ -216,7 +225,7 @@ export default {
   methods: {
     resetEditedItem () {
       this.editedId = null
-      this.editedName = ''
+      this.editedName = { fi: '', en: '' }
       this.selectedSkillGroupId = null
       this.showFeedback = false
       this.showCreateNewForm = false
