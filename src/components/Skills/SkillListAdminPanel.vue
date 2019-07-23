@@ -63,30 +63,31 @@ export default {
   computed: {
     ...mapGetters([
       'skillCategories',
-      'skillGroups'
+      'skillGroups',
+      'currentLanguage'
     ]),
     sortedSkillCategories () {
       const categoryArray = Object.values(this.skillCategories).map(category => {
-        if ([LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, 'Uncategorized'].includes(category.title)) {
+        if ([LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, 'Uncategorized'].includes(category.title[this.currentLanguage])) {
           return { ...category, disabled: true }
         } else {
           return category
         }
       }).sort((a, b) => {
-        return a.disabled ? 1 : b.disabled ? -1 : a.title.localeCompare(b.title)
+        return a.disabled ? 1 : b.disabled ? -1 : a.title[this.currentLanguage].localeCompare(b.title[this.currentLanguage])
       })
       categoryArray.unshift({ id: null, skillGroupId: null })
       return categoryArray
     },
     sortedSkillGroups () {
       const groupArray = Object.values(this.skillGroups).map(group => {
-        if ([LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, 'Uncategorized'].includes(group.title)) {
+        if ([LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, 'Uncategorized'].includes(group.title[this.currentLanguage])) {
           return { ...group, disabled: true }
         } else {
           return group
         }
       }).sort((a, b) => {
-        return a.disabled ? 1 : b.disabled ? -1 : a.title.localeCompare(b.title)
+        return a.disabled ? 1 : b.disabled ? -1 : a.title[this.currentLanguage].localeCompare(b.title[this.currentLanguage])
       })
       groupArray.unshift({ id: null, skillGroupId: null })
       return groupArray

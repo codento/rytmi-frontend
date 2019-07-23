@@ -15,12 +15,12 @@ const mockSkillCategories = {
   1: {
     id: 1,
     skillGroupId: 1,
-    title: 'New stuff'
+    title: { en: 'New stuff', fi: 'Uusei jutui' }
   },
   2: {
     id: 2,
     skillGroupId: 1,
-    title: 'Old stuff'
+    title: { en: 'Old stuff', fi: 'Vanhoi jutui' }
   }
 }
 

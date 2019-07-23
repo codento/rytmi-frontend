@@ -4,17 +4,17 @@ import { SkillListAdminPanel, SkillListAdminPanelItem } from '@/components/Skill
 const mockSkillCategories = {
   1: {
     id: 1,
-    title: 'Old stuff',
+    title: { en: 'Old stuff', fi: 'Vanhoi jutui' },
     skillGroupId: 3
   },
   3: {
     id: 3,
-    title: 'New stuff',
+    title: { en: 'New stuff', fi: 'Uusei jutui' },
     skillGroupId: 2
   },
   4: {
     id: 4,
-    title: 'Same stuff',
+    title: { en: 'Same stuff', fi: 'Samoi jutui' },
     skillGroupId: 3
   }
 }
@@ -22,15 +22,15 @@ const mockSkillCategories = {
 const mockSkillGroups = {
   2: {
     id: 2,
-    title: 'New group'
+    title: { en: 'New group', fi: 'Uusi ryhmä' }
   },
   3: {
     id: 3,
-    title: 'Old group'
+    title: { en: 'Old group', fi: 'Vanha ryhmä' }
   },
   4: {
     id: 4,
-    title: 'Unused'
+    title: { en: 'Unused', fi: 'Käyttämätön' }
   }
 }
 
@@ -55,22 +55,23 @@ describe('SkillListAdminPanel.vue', () => {
   })
 
   it('Should sort categories and add empty item to array', () => {
-    // sorted alphabetically, new item should be first
+    // sorted alphabetically, new item should be first (sorted by fi)
     const expectedCategories = [
       { id: null, skillGroupId: null },
+
+      {
+        id: 4,
+        title: { en: 'Same stuff', fi: 'Samoi jutui' },
+        skillGroupId: 3
+      },
       {
         id: 3,
-        title: 'New stuff',
+        title: { en: 'New stuff', fi: 'Uusei jutui' },
         skillGroupId: 2
       },
       {
         id: 1,
-        title: 'Old stuff',
-        skillGroupId: 3
-      },
-      {
-        id: 4,
-        title: 'Same stuff',
+        title: { en: 'Old stuff', fi: 'Vanhoi jutui' },
         skillGroupId: 3
       }
     ]
@@ -79,20 +80,20 @@ describe('SkillListAdminPanel.vue', () => {
   })
 
   it('Should sort groups and add empty item to array', () => {
-    // sorted alphabetically, new item should be first
+    // sorted alphabetically, new item should be first (sorted by fi)
     const expectedGroups = [
       { id: null, skillGroupId: null },
       {
+        id: 4,
+        title: { en: 'Unused', fi: 'Käyttämätön' }
+      },
+      {
         id: 2,
-        title: 'New group'
+        title: { en: 'New group', fi: 'Uusi ryhmä' }
       },
       {
         id: 3,
-        title: 'Old group'
-      },
-      {
-        id: 4,
-        title: 'Unused'
+        title: { en: 'Old group', fi: 'Vanha ryhmä' }
       }
     ]
     const wrapper = createWrapper(SkillListAdminPanel, defaultStoreConfig, defaultMountingOptions)
