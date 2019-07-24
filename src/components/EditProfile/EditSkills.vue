@@ -57,15 +57,11 @@
             slot="remove"
             slot-scope="remove"
           >
-            <b-btn
+            <Trash2Icon
               name="remove-skill"
-              size="sm"
-              class="mr-1"
-              variant="danger"
+              class="clickable-icon float-right mr-2"
               @click.stop="removeSkillFromProfile(remove.item.id)"
-            >
-              Remove
-            </b-btn>
+            />
           </template>
         </b-table>
       </b-col>
@@ -131,13 +127,15 @@ import { mapActions, mapGetters } from 'vuex'
 import proficiencyDesc from '@/assets/proficiencyDesc'
 import SkillForm from './SkillForm'
 import EditSkillsLevelSelect from '@/components/EditProfile/EditSkillsLevelSelect'
+import { Trash2Icon } from 'vue-feather-icons'
 import { LANGUAGE_ENUM } from '@/utils/constants'
 
 export default {
   name: 'EditSkills',
   components: {
     SkillForm,
-    EditSkillsLevelSelect
+    EditSkillsLevelSelect,
+    Trash2Icon
   },
   props: {
     profileId: Number
@@ -148,7 +146,7 @@ export default {
         { key: 'skillId', label: 'Proficiency' },
         { key: 'knows', label: 'Level' },
         { key: 'wantsTo', label: 'Willingness' },
-        { key: 'remove', label: ' ' }
+        { key: 'remove', label: '' }
       ],
       wantsToOptions: proficiencyDesc.wants,
       editedSkill: {}
@@ -221,9 +219,14 @@ export default {
 }
 </script>
 
-<style scoped >
-button {
-  width: 100%;
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+.clickable-icon {
+  cursor: pointer;
+  color: darken($color: $c-light, $amount: 40);
+}
+.clickable-icon:hover {
+  color: darken($color: $c-light, $amount: 80);
 }
 .modal-btn {
   margin-top: 0.5rem;

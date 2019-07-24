@@ -52,30 +52,22 @@
           slot="edit"
           slot-scope="element"
         >
-          <b-btn
-            size="sm"
-            class="mr-1"
-            variant="success"
-            :disabled="!isAdmin && element.item.profileId !== profileId"
-            @click.stop="openEditModal(element)"
-          >
-            Edit
-          </b-btn>
+          <EditIcon
+            v-show="isAdmin || element.item.profileId === profileId"
+            class="clickable-icon"
+            @click.prevent="openEditModal(element)"
+          />
         </template>
         <template
           slot="remove"
           slot-scope="element"
         >
-          <b-btn
+          <Trash2Icon
+            v-show="isAdmin || element.item.profileId === profileId"
             name="remove-member"
-            size="sm"
-            class="mr-1"
-            variant="danger"
-            :disabled="!isAdmin && element.item.profileId !== profileId"
+            class="clickable-icon"
             @click.stop="removeMember(element.item)"
-          >
-            Remove
-          </b-btn>
+          />
         </template>
       </b-table>
     </div>
@@ -103,11 +95,14 @@
 <script>
 import { ProjectProfileForm } from '@/components/Common'
 import { mapGetters, mapActions } from 'vuex'
+import { EditIcon, Trash2Icon } from 'vue-feather-icons'
 
 export default {
   name: 'ProjectMemberTable',
   components: {
-    ProjectProfileForm
+    ProjectProfileForm,
+    EditIcon,
+    Trash2Icon
   },
   props: {
     members: Array
@@ -174,11 +169,19 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
 .clickable {
   cursor: pointer;
 }
 .clickable:hover {
-  font-weight: bolder;
+  text-shadow: 0px 0px 1px $color-text;
+}
+.clickable-icon {
+  cursor: pointer;
+  color: darken($color: $c-light, $amount: 40);
+}
+.clickable-icon:hover {
+  color: darken($color: $c-light, $amount: 80);
 }
 </style>
