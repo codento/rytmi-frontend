@@ -15,7 +15,6 @@
           Add new skill
         </b-button>
         <b-button
-          v-if="isAdmin"
           id="manage-categories-btn"
           variant="primary"
           class="mx-2"

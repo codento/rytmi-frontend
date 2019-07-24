@@ -47,6 +47,7 @@
               type="text"
               :state="inputState.editedName.state[lang]"
               @focus="showFeedback = true"
+              :disabled="lang === 'en' && (editedName[lang] === 'Language' || editedName[lang] === 'Uncategorized')"
             />
             <b-form-invalid-feedback :state="inputState.editedName.state[lang]">
               {{ inputState.editedName.feedback }}
@@ -64,6 +65,7 @@
               required
               :state="inputState.groupId.state"
               @change="showFeedback = true"
+              :disabled="editedName['en'] === 'Language' || editedName['en'] === 'Uncategorized'"
             />
           </b-col>
           <b-col cols="12">
@@ -190,7 +192,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['skillGroups', 'currentLanguage']),
+    ...mapGetters(['skillGroups', 'currentLanguage', 'isAdmin']),
     idPrefix () {
       return kebabCase(this.label)
     },
@@ -224,6 +226,7 @@ export default {
   },
   methods: {
     resetEditedItem () {
+      this.showEditIconByIndex = null
       this.editedId = null
       this.editedName = { fi: '', en: '' }
       this.selectedSkillGroupId = null
