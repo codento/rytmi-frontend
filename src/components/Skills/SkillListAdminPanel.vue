@@ -62,13 +62,14 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'isAdmin',
       'skillCategories',
       'skillGroups',
       'currentLanguage'
     ]),
     sortedSkillCategories () {
       const categoryArray = Object.values(this.skillCategories).map(category => {
-        if ([LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, 'Uncategorized'].includes(category.title[this.currentLanguage])) {
+        if ([LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, 'Uncategorized'].includes(category.title['en']) && !this.isAdmin) {
           return { ...category, disabled: true }
         } else {
           return category
@@ -81,7 +82,7 @@ export default {
     },
     sortedSkillGroups () {
       const groupArray = Object.values(this.skillGroups).map(group => {
-        if ([LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, 'Uncategorized'].includes(group.title[this.currentLanguage])) {
+        if ([LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, 'Uncategorized'].includes(group.title['en']) && !this.isAdmin) {
           return { ...group, disabled: true }
         } else {
           return group

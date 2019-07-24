@@ -83,11 +83,6 @@ describe('SkillList.vue', () => {
     expect(tableRows).toHaveLength(3)
   })
 
-  it('Should not render manage categories button when user is admin', () => {
-    const wrapper = createWrapper(SkillList, defaultStoreConfig, defaultMountingOptions)
-    expect(wrapper.find('#manage-categories-btn').exists()).toBeFalsy()
-  })
-
   it('Should render manage categories button when user is admin', () => {
     const getters = {
       isAdmin: () => true
