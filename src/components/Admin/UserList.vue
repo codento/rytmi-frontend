@@ -5,9 +5,9 @@
     >
       <b-form-input v-model="filterValue" />
     </b-form-group>
-    <div>
-      Active User<CheckIcon class="check-icon" />
-      Admin User<SettingsIcon />
+    <div class="align-middle my-1">
+      Active User<CheckIcon class="check-icon mx-2" />
+      Admin User<SettingsIcon class="mx-2" />
     </div>
     <b-list-group
       v-for="(user, idx) in usersAsList"
@@ -77,7 +77,7 @@ export default {
   }
   .user-list-item:hover {
     cursor: pointer;
-    background-color: darken(#fff, 5);
+    background-color: map_get($theme-colors, 'light');
   }
   .user-list-item.active:hover {
     background-color: darken(map_get($theme-colors, 'primary'), 5);
