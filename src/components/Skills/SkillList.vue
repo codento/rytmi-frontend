@@ -67,7 +67,7 @@
         slot="edit"
         slot-scope="data"
       >
-        <EditIcon
+        <Edit2Icon
           :id="'edit-skill-item-' + data.index"
           class="clickable-icon"
           @click.prevent="openEditSkillModal(data)"
@@ -110,7 +110,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { orderBy } from 'lodash'
 import vSelect from 'vue-select'
-import { EditIcon, Trash2Icon } from 'vue-feather-icons'
+import { Edit2Icon, Trash2Icon } from 'vue-feather-icons'
 import SkillListEditSkill from './SkillListEditSkill'
 import SkillListAdminPanel from './SkillListAdminPanel'
 
@@ -120,7 +120,7 @@ export default {
     SkillListEditSkill,
     SkillListAdminPanel,
     vSelect,
-    EditIcon,
+    Edit2Icon,
     Trash2Icon
   },
   props: {

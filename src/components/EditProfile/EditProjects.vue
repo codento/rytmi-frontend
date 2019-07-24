@@ -39,7 +39,7 @@
             slot="edit"
             slot-scope="data"
           >
-            <EditIcon
+            <Edit2Icon
               v-show="isAdmin || data.item.profileId === profileId"
               class="clickable-icon"
               @click.prevent="openEditModal(data)"
@@ -97,7 +97,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { EditIcon, Trash2Icon } from 'vue-feather-icons'
+import { Edit2Icon, Trash2Icon } from 'vue-feather-icons'
 import { ProjectProfileForm } from '@/components/Common'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
@@ -105,7 +105,7 @@ export default {
   name: 'EditProjects',
   components: {
     ProjectProfileForm,
-    EditIcon,
+    Edit2Icon,
     Trash2Icon
   },
   props: {

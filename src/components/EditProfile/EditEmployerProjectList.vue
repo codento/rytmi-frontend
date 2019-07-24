@@ -24,8 +24,8 @@
             class="mt-2 mb-2"
           >
             <span class="icon-sized">
-              <EditIcon
-                v-show="showEditIconByIndex === index"
+              <Edit2Icon
+                v-show="showEdit2IconByIndex === index"
                 size="1x"
               />
             </span>
@@ -33,16 +33,16 @@
               v-b-modal="'edit-project-modal'"
               class="project-name clickable mr-2"
               @click.prevent="selectProject(index)"
-              @mouseover="showEditIconByIndex = index"
-              @mouseout="showEditIconByIndex = null"
+              @mouseover="showEdit2IconByIndex = index"
+              @mouseout="showEdit2IconByIndex = null"
             >
               {{ project.name[currentLanguage] }} ({{ formatProjectDuration(profileProject.startDate, profileProject.endDate) }})
             </span>
             <span
               v-b-modal="'edit-project-modal'"
               class="project-role clickable"
-              @mouseover="showEditIconByIndex = index"
-              @mouseout="showEditIconByIndex = null"
+              @mouseover="showEdit2IconByIndex = index"
+              @mouseout="showEdit2IconByIndex = null"
             >
               {{ profileProject.role[currentLanguage] }}
             </span>
@@ -114,7 +114,7 @@ import format from 'date-fns/format'
 import CollapsableItem from '@/components/Common/CollapsableItem'
 import EditEmployerProjectListItem from './EditEmployerProjectListItem'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
-import { AlertCircleIcon, EditIcon, Trash2Icon } from 'vue-feather-icons'
+import { AlertCircleIcon, Edit2Icon, Trash2Icon } from 'vue-feather-icons'
 
 export default {
   name: 'EditEmployerProjectList',
@@ -122,7 +122,7 @@ export default {
     CollapsableItem,
     EditEmployerProjectListItem,
     AlertCircleIcon,
-    EditIcon,
+    Edit2Icon,
     Trash2Icon
   },
   props: {
@@ -137,7 +137,7 @@ export default {
   },
   data () {
     return {
-      showEditIconByIndex: null,
+      showEdit2IconByIndex: null,
       selectedProject: undefined,
       showNewProjectModal: false,
       showUpdateProjectModal: false,
@@ -184,7 +184,7 @@ export default {
       return format(startDate, 'MM/YYYY') + '-' + formattedEndDate
     },
     selectProject (index) {
-      this.selectedProject = this.profileProjectsWithProjectData[this.showEditIconByIndex]
+      this.selectedProject = this.profileProjectsWithProjectData[this.showEdit2IconByIndex]
     },
     newProjectModalClosed (newProfileProject) {
       this.showNewProjectModal = false

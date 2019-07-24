@@ -26,8 +26,8 @@
         :key="idPrefix + '-' + item.id"
         class="clickable"
         @click="startEditMode(item)"
-        @mouseover="showEditIconByIndex = index"
-        @mouseout="showEditIconByIndex = null"
+        @mouseover="showEdit2IconByIndex = index"
+        @mouseout="showEdit2IconByIndex = null"
       >
         <b-row
           v-if="item.id === null"
@@ -106,10 +106,10 @@
             </b-badge>
           </b-col>
           <b-col
-            v-show="showEditIconByIndex === index && !item.disabled"
+            v-show="showEdit2IconByIndex === index && !item.disabled"
             cols="1"
           >
-            <EditIcon
+            <Edit2Icon
               size="1x"
               class="pull-left"
             />
@@ -138,14 +138,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import { kebabCase } from 'lodash'
-import { EditIcon, LockIcon } from 'vue-feather-icons'
+import { Edit2Icon, LockIcon } from 'vue-feather-icons'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel.vue'
 
 export default {
   name: 'SkillListAdminPanelItem',
   components: {
     ApiErrorDetailsPanel,
-    EditIcon,
+    Edit2Icon,
     LockIcon
   },
   props: {
@@ -178,7 +178,7 @@ export default {
       selectedSkillGroupId: null,
       showFeedback: false,
       showCreateNewForm: false,
-      showEditIconByIndex: null,
+      showEdit2IconByIndex: null,
       lastUpdatedName: null,
       lastUpdatedLabel: null,
       errorDetails: []

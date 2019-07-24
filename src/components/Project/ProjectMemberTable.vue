@@ -52,7 +52,7 @@
           slot="edit"
           slot-scope="element"
         >
-          <EditIcon
+          <Edit2Icon
             v-show="isAdmin || element.item.profileId === profileId"
             class="clickable-icon"
             @click.prevent="openEditModal(element)"
@@ -95,13 +95,13 @@
 <script>
 import { ProjectProfileForm } from '@/components/Common'
 import { mapGetters, mapActions } from 'vuex'
-import { EditIcon, Trash2Icon } from 'vue-feather-icons'
+import { Edit2Icon, Trash2Icon } from 'vue-feather-icons'
 
 export default {
   name: 'ProjectMemberTable',
   components: {
     ProjectProfileForm,
-    EditIcon,
+    Edit2Icon,
     Trash2Icon
   },
   props: {

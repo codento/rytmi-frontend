@@ -30,7 +30,7 @@
             slot="edit"
             slot-scope="data"
           >
-            <EditIcon
+            <Edit2Icon
               :id="'edit-education-item-' + data.index"
               class="clickable-icon"
               @click.prevent="openEducationEditModal(data)"
@@ -104,8 +104,7 @@
             slot="edit"
             slot-scope="data"
           >
-            <EditIcon
-              v-show="isAdmin || data.item.profileId === profileId"
+            <Edit2Icon
               :id="'edit-certificate-or-other-item-' + data.index"
               class="clickable-icon"
               @click.prevent="openCertificateOrOtherEditModal(data)"
@@ -117,7 +116,6 @@
             slot-scope="data"
           >
             <Trash2Icon
-              v-show="isAdmin || data.item.profileId === profileId"
               :id="'remove-certificate-or-other-item-' + data.index"
               class="clickable-icon"
               @click.stop="removeCertificateOrOther(data)"
@@ -156,7 +154,7 @@
 <script>
 import { cloneDeep, orderBy } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
-import { EditIcon, Trash2Icon } from 'vue-feather-icons'
+import { Edit2Icon, Trash2Icon } from 'vue-feather-icons'
 import EditEducationForm from './EditEducationForm'
 import EditCertificateOrOtherForm from './EditCertificateOrOtherForm'
 
@@ -196,7 +194,7 @@ export default {
   components: {
     EditEducationForm,
     EditCertificateOrOtherForm,
-    EditIcon,
+    Edit2Icon,
     Trash2Icon
   },
   props: {

@@ -10,7 +10,7 @@
           class="mb-0"
         >
           Profile
-          <EditIcon
+          <Edit2Icon
             v-if="profileId === profile.id || isAdmin"
             v-b-modal.editProfileBasicInfoModal
             size="1x"
@@ -45,7 +45,7 @@
           class="mb-0"
         >
           Skills
-          <EditIcon
+          <Edit2Icon
             v-if="profileId === profile.id || isAdmin"
             v-b-modal.editProfileSkillsModal
             size="1x"
@@ -103,7 +103,7 @@
       >
         <div slot="header">
           Projects
-          <EditIcon
+          <Edit2Icon
             v-if="profileId === profile.id || isAdmin"
             v-b-modal.editProfileProjectsModal
             size="1x"
@@ -147,7 +147,7 @@
         <template #custom-header>
           <div slot="header">
             Education
-            <EditIcon
+            <Edit2Icon
               v-if="profileId === profile.id || isAdmin"
               v-b-modal.editEducationModal
               size="1x"
@@ -185,7 +185,7 @@
       <b-card header="Employer history">
         <div slot="header">
           Employer history
-          <EditIcon
+          <Edit2Icon
             v-if="profileId === profile.id || isAdmin"
             v-b-modal="'work-history'"
             size="1x"
@@ -226,7 +226,7 @@ import { EditWorkHistory, WorkHistoryList, EditSkills, EditProjects } from '@/co
 import CvToolEducation from '@/components/Profile/CvToolEducation'
 import EditEducation from '@/components/EditProfile/EditEducation'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
-import { EditIcon } from 'vue-feather-icons'
+import { Edit2Icon } from 'vue-feather-icons'
 
 export default {
   name: 'UserProfile',
@@ -242,7 +242,7 @@ export default {
     WorkHistoryList,
     EditSkills,
     EditProjects,
-    EditIcon
+    Edit2Icon
   },
   props: {
     profile: Object
