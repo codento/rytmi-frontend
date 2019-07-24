@@ -78,6 +78,7 @@
         </b-row>
         <b-modal
           id="editProfileSkillsModal"
+          size="xl"
           hide-footer
         >
           <template
@@ -88,8 +89,9 @@
             </h5>
           </template>
           <EditSkills :profile-id="profile.id" />
+          <hr>
           <b-btn
-            class="float-right"
+            class="float-left my-2 mx-2"
             variant="light"
             @click="$bvModal.hide('editProfileSkillsModal')"
           >

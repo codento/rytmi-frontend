@@ -1,7 +1,14 @@
 <template>
   <div class="animated fadeIn">
     <b-row>
-      <b-col class="col-12">
+      <b-col
+        cols="12"
+        lg="5"
+        class="mt-4 mx-4"
+      >
+        <SkillForm :profile-id="profileId" />
+      </b-col>
+      <b-col>
         <b-table
           :items="profileSkillsByProfileId(profileId)"
           :fields="fields"
@@ -64,11 +71,6 @@
             />
           </template>
         </b-table>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col class="col-12">
-        <SkillForm :profile-id="profileId" />
       </b-col>
     </b-row>
     <b-modal
