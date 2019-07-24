@@ -178,7 +178,7 @@ export default {
   data () {
     return {
       editedId: null,
-      editedName: { fi: '', en: ''},
+      editedName: { fi: '', en: '' },
       selectedSkillGroupId: null,
       showFeedback: false,
       showCreateNewForm: false,
