@@ -228,7 +228,7 @@
       </b-modal>
     </b-row>
     <slot name="custom-form" />
-    <b-row class="mt-4 float-left">
+    <b-row class="my-4 float-left">
       <b-col>
         <b-button
           id="submit-project-edits-btn"
@@ -418,7 +418,7 @@ export default {
   border-radius: 10px;
 }
 .skill-item.clickable:hover {
-  background-color: $c-dark;
+  background-color: darken($color:  $c-light, $amount: 25);
   cursor: pointer;
 }
 .trash-icon {

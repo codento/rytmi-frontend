@@ -436,7 +436,7 @@ export default {
     background-color: $c-light;
   }
   .skill-item:hover {
-    background-color: $c-dark;
+    background-color: darken($color:  $c-light, $amount: 15);
     cursor: pointer;
   }
 </style>
