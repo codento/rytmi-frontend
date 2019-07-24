@@ -165,7 +165,7 @@
         </b-form-checkbox>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row class="my-4">
       <b-form-group
         id="profile-project-skill-form"
       >
@@ -175,6 +175,12 @@
           </small>
         </b-col>
         <b-col>
+          <small
+            v-show="!editedProject.skills || editedProject.skills.length === 0"
+            class="mt-3 text-muted"
+          >
+            No skills added yet
+          </small>
           <div
             v-for="skill of editedProject.skills"
             :key="skill.skillId"
@@ -222,12 +228,13 @@
       </b-modal>
     </b-row>
     <slot name="custom-form" />
-    <b-row class="mt-4 float-right">
+    <b-row class="mt-4 float-left">
       <b-col>
         <b-button
           id="submit-project-edits-btn"
           class="mr-2 mb-2"
           type="submit"
+          variant="primary"
           @click.prevent="onSubmit()"
         >
           {{ isNewProject ? 'Create a new project' : 'Update project' }}

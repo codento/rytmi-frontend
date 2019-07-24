@@ -7,6 +7,7 @@
       <b-col>
         <b-button
           class="float-right mb-2"
+          variant="primary"
           @click="addNewProfileEmployer"
         >
           Add a new item

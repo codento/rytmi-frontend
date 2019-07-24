@@ -10,8 +10,8 @@ $c-pink: #EC526B;
 
 // Bootstrap overrides
 $theme-colors: (
-  primary:             $c-orange,
-  secondary:           $c-violet,
+  primary:             $c-violet,
+  secondary:           $c-orange,
   info:                white,
   dark:                $c-dark,
   light:               $c-light,
@@ -27,7 +27,7 @@ $btn-font-family: 'Poppins';
 $btn-font-weight: 500;
 $btn-border-width: 0px;
 
-$text-muted: $c-light;
+$text-muted: darken($color: $body-bg, $amount: 25);
 
 $card-border-color: $body-bg;
 $card-cap-bg: darken($color: $body-bg, $amount: 5);

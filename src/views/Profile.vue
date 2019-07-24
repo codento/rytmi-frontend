@@ -11,6 +11,7 @@
             id="open-cv-tool-button"
             v-b-modal.cv-tool-modal
             type="button"
+            variant="primary"
             class="open-cv-tool-button"
             :disabled="!isAllowedToOpenCvTool"
           >

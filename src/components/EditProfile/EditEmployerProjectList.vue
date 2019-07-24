@@ -6,9 +6,9 @@
       :initial-visibility="true"
     >
       <b-row v-if="profileProjectsWithProjectData.length === 0">
-        <b-col class="no-projects">
+        <b-col class="text-muted">
           <AlertCircleIcon
-            class="notice"
+            class="notice mr-2"
             size="1x"
           />
           No projects added
@@ -56,11 +56,12 @@
           </div>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row class="my-3">
         <b-col>
           <b-button
             v-b-modal="'new-project-modal'"
-            class="float-right mt-2"
+            class="float-left mt-2"
+            variant="primary"
           >
             Add a project
           </b-button>
@@ -201,10 +202,6 @@ export default {
 }
 .clickable:hover {
   text-decoration: underline;
-}
-.no-projects {
-  font-style: italic;
-  color: lightslategrey;
 }
 .notice {
   color: red;

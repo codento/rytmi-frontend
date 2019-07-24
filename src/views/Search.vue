@@ -44,7 +44,7 @@
           </b-col>
           <b-col class="col-sm-9">
             <b-button
-              variant="primary"
+              variant="secondary"
               class="position-bottom"
               @click="clearUtilizationDateFilter"
             >
