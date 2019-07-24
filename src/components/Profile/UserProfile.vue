@@ -145,13 +145,15 @@
         :certificate-or-other-list="profile.certificatesAndOthers ? profile.certificatesAndOthers : []"
       >
         <template #custom-header>
-          Education
-          <EditIcon
-            v-if="profileId === profile.id || isAdmin"
-            v-b-modal.editEducationModal
-            size="1x"
-            class="clickable float-right"
-          />
+          <div slot="header">
+            Education
+            <EditIcon
+              v-if="profileId === profile.id || isAdmin"
+              v-b-modal.editEducationModal
+              size="1x"
+              class="clickable float-right"
+            />
+          </div>
         </template>
         <template
           v-if="!profile.education || profile.education.length === 0"

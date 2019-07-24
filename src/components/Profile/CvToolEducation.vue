@@ -3,12 +3,15 @@
     id="education"
     class="mt-2 mb-2"
   >
-    <h5
+    <div
       slot="header"
-      class="mb-0"
     >
-      Education
-    </h5>
+      <slot name="custom-header">
+        <h5 class="mb-0">
+          Education
+        </h5>
+      </slot>
+    </div>
     <slot name="custom-content" />
     <b-row>
       <b-col sm="6">
