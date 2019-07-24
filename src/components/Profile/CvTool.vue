@@ -296,8 +296,8 @@ export default {
       const skillGroup = this.skillGroupBySkillId(skill.id)
       if (skill && skillCategory && skillGroup) {
         profileSkillCopy['skillName'] = skill.name
-        profileSkillCopy['skillCategory'] = skillCategory.title
-        profileSkillCopy['skillGroup'] = skillGroup.title
+        profileSkillCopy['skillCategory'] = skillCategory.title[this.currentLanguage]
+        profileSkillCopy['skillGroup'] = skillGroup.title[this.currentLanguage]
       }
       return profileSkillCopy
     },

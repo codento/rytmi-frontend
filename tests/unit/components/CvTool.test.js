@@ -36,28 +36,28 @@ const mockGetters = {
   skillCategoryById: () => (skillCategoryId) => {
     return {
       id: skillCategoryId,
-      name: 'Programming',
+      title: { en: 'Programming', fi: 'Programming' },
       description: 'Programming desc'
     }
   },
   skillCategoryBySkillId: () => (skillId) => {
     return {
       id: 1,
-      name: 'Programming',
+      title: { en: 'Programming', fi: 'Programming' },
       description: 'Programming desc'
     }
   },
   skillGroupById: () => (skillGroupById) => {
     return {
       id: skillGroupById,
-      name: 'Software development',
+      title: { en: 'Software development', fi: 'Sovelluskehitys' },
       description: 'Software development desc'
     }
   },
   skillGroupBySkillId: () => (skillId) => {
     return {
       id: 1,
-      name: 'Software development',
+      title: { en: 'Software development', fi: 'Sovelluskehitys' },
       description: 'Software development desc'
     }
   },
