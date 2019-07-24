@@ -5,10 +5,11 @@
   >
     <div
       slot="header"
-      class="mb-0"
     >
       <slot name="custom-header">
-        Education
+        <h5 class="mb-0">
+          Education
+        </h5>
       </slot>
     </div>
     <slot name="custom-content" />

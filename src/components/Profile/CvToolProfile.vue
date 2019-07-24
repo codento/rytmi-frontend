@@ -38,7 +38,7 @@
         </b-form-invalid-feedback>
         <div v-if="introductionIsValid">
           <p class="text-right text-success">
-            {{ maxIntroductionLength - modifiedIntroduction.length }}/{{ maxIntroductionLength }}
+            {{ modifiedIntroduction.length }}/{{ maxIntroductionLength }}
           </p>
         </div>
       </div>
@@ -136,7 +136,7 @@ export default {
   data () {
     return {
       modifiedIntroduction: '',
-      maxIntroductionLength: 360
+      maxIntroductionLength: 700
     }
   },
   computed: {

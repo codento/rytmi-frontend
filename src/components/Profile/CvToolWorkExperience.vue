@@ -97,8 +97,15 @@ export default {
     sortedProjects.sort((a, b) => {
       const date1 = new Date(a.endDate)
       const date2 = new Date(b.endDate)
-      return date1 > date2 ? -1 : date1 < date2 ? 1 : 0
+      if (a.endDate && b.endDate) {
+        return date2 - date1
+      } else if (!a.endDate) {
+        return -1
+      } else {
+        return 1
+      }
     })
+
     this.selectedProjects = sortedProjects.map(item => item.projectId).slice(0, this.maxSelected)
     this.updateSelectedProjects()
   },
