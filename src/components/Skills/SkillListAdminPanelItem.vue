@@ -46,8 +46,8 @@
               v-model="editedName[lang]"
               type="text"
               :state="inputState.editedName.state[lang]"
-              @focus="showFeedback = true"
               :disabled="lang === 'en' && (editedName[lang] === 'Language' || editedName[lang] === 'Uncategorized')"
+              @focus="showFeedback = true"
             />
             <b-form-invalid-feedback :state="inputState.editedName.state[lang]">
               {{ inputState.editedName.feedback }}
@@ -64,8 +64,8 @@
               :options="dropdownOptions"
               required
               :state="inputState.groupId.state"
-              @change="showFeedback = true"
               :disabled="editedName['en'] === 'Language' || editedName['en'] === 'Uncategorized'"
+              @change="showFeedback = true"
             />
           </b-col>
           <b-col cols="12">
@@ -242,7 +242,7 @@ export default {
         this.resetEditedItem()
         this.lastUpdatedName = null
         this.editedId = item.id
-        this.editedName = item.id === null ? '' : item.title
+        this.editedName = item.id === null ? '' : { ...item.title }
         // Only categories have skillGroupId
         if (this.isSkillCategory) {
           // Select no group for new item
