@@ -8,6 +8,8 @@ $c-light: #E3E2E8;
 $c-dark: #1D1433;
 $c-pink: #EC526B;
 
+$color-text: #1D1433;
+
 // Bootstrap overrides
 $theme-colors: (
   primary:             $c-violet,
@@ -30,12 +32,13 @@ $btn-border-width: 0px;
 $text-muted: darken($color: $body-bg, $amount: 25);
 
 $card-border-color: $body-bg;
-$card-cap-bg: darken($color: $body-bg, $amount: 5);
+$card-cap-color: $c-light;
+$card-cap-bg: $c-light;
 
 $progress-border-radius: 0;
 
 $table-bg: white;
-$table-hover-color: $c-violet;
+$table-hover-bg: darken($color: $c-light, $amount: 3);
 $table-accent-bg: $c-light;
 
 $input-border-color: #e4e7ea;
