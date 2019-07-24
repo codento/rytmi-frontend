@@ -55,13 +55,14 @@ import { SkillExplanations } from '@/components/Common'
 import proficiencyDescriptions from '@/assets/proficiencyDesc'
 import { sortBy } from 'lodash'
 import vSelect from 'vue-select'
+import { COLORS } from '@/utils/constants'
 
 const colors = {
-  skillLevelColor: 'rgb(253, 167, 8, 0.4)',
-  skillLevelBorderColor: 'rgb(253, 167, 8)',
-  willingnessColor: 'rgb(66, 244, 92, 0.4)',
-  willingnessBorderColor: 'rgb(66, 244, 92)',
-  barChartColors: ['#ff3333', '#ff9234', '#ffcd3c', '#fefed5', '#35d0ba']
+  skillLevelColor: `rgb(${COLORS.orange},0.4)`,
+  skillLevelBorderColor: `rgb(${COLORS.orange})`,
+  willingnessColor: `rgb(${COLORS.violet},0.4)`,
+  willingnessBorderColor: `rgb(${COLORS.violet})`,
+  barChartColors: COLORS.oranges.filter((item, index) => index % 2 === 0).map(rgbValue => `rgb(${rgbValue}, 0.9)`)
 }
 
 const mapColorsForDatasets = (labels, colors) => {
