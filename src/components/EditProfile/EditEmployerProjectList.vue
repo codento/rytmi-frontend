@@ -47,7 +47,7 @@
               {{ profileProject.role[currentLanguage] }}
             </span>
             <span>
-              <TrashIcon
+              <Trash2Icon
                 class="clickable float-right trash-icon"
                 size="1x"
                 @click="deleteProfileProject(profileProject)"
@@ -114,7 +114,7 @@ import format from 'date-fns/format'
 import CollapsableItem from '@/components/Common/CollapsableItem'
 import EditEmployerProjectListItem from './EditEmployerProjectListItem'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
-import { AlertCircleIcon, EditIcon, TrashIcon } from 'vue-feather-icons'
+import { AlertCircleIcon, EditIcon, Trash2Icon } from 'vue-feather-icons'
 
 export default {
   name: 'EditEmployerProjectList',
@@ -123,7 +123,7 @@ export default {
     EditEmployerProjectListItem,
     AlertCircleIcon,
     EditIcon,
-    TrashIcon
+    Trash2Icon
   },
   props: {
     employerId: {

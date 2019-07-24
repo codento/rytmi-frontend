@@ -32,8 +32,7 @@ $btn-border-width: 0px;
 $text-muted: darken($color: $body-bg, $amount: 25);
 
 $card-border-color: $body-bg;
-$card-cap-color: $c-light;
-$card-cap-bg: $c-light;
+$card-cap-bg: darken($color: $body-bg, $amount: 5);
 
 $progress-border-radius: 0;
 

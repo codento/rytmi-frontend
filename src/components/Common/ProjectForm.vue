@@ -188,8 +188,8 @@
           >
             <span>
               {{ skill.name }}
-              <TrashIcon
-                class="trash-icon"
+              <Trash2Icon
+                class="trash-icon svg-icon"
                 size="1x"
                 @click="removeSkillFromProject(skill)"
               />
@@ -257,13 +257,13 @@ import { mapGetters } from 'vuex'
 import Datepicker from '@/components/helpers/Datepicker'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 import orderBy from 'lodash/orderBy'
-import { TrashIcon } from 'vue-feather-icons'
+import { Trash2Icon } from 'vue-feather-icons'
 
 export default {
   name: 'ProjectForm',
   components: {
     Datepicker,
-    TrashIcon
+    Trash2Icon
   },
   props: {
     project: Object,

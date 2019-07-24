@@ -38,6 +38,8 @@ td > button {
 .card {
   border-left: 1px solid $body-bg !important;
   border-top: 1px solid $body-bg !important;
+  border-right: 0px;
+  border-bottom: 0px;
   box-shadow: 3px 3px darken($color: $body-bg, $amount: 5);
 }
 .card-header {
