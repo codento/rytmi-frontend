@@ -90,7 +90,7 @@ export default {
     isLanguageSkill () {
       if (this.profileSkill && this.profileSkill.id) {
         const skillGroup = this.skillGroupBySkillId(this.profileSkill.id)
-        return skillGroup ? skillGroup.title === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
+        return skillGroup ? skillGroup.title.en === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
       }
       return false
     },

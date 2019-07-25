@@ -181,7 +181,7 @@ export default {
     ]),
     isLanguageSkill (skillId) {
       const skillGroup = this.skillGroupBySkillId(skillId)
-      return skillGroup ? skillGroup.title === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
+      return skillGroup ? skillGroup.title.en === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
     },
     removeSkillFromProfile (skillId) {
       const confirmation = confirm('Are you sure?')
