@@ -99,7 +99,7 @@ describe('SkillList.vue', () => {
     }
     const mergedConfig = merge({}, defaultStoreConfig, { actions })
     const wrapper = createWrapper(SkillList, mergedConfig, defaultMountingOptions)
-    wrapper.find('#remove-skill-item-btn-0').trigger('click')
+    wrapper.find('#remove-skill-item-0').trigger('click')
     await flushPromises()
     expect(actions.deleteSkill).toHaveBeenCalledWith(expect.anything(), mockSkillList[0].id, undefined)
   })

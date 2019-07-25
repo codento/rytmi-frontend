@@ -69,7 +69,7 @@
         <Edit2Icon
           :id="'edit-skill-item-' + data.index"
           class="clickable-icon"
-          @click.prevent="openEditSkillModal(data)"
+          @click.prevent="openEditSkillModal(data.item)"
         />
       </template>
 
@@ -80,7 +80,7 @@
         <Trash2Icon
           :id="'remove-skill-item-' + data.index"
           class="clickable-icon"
-          @click.stop="confirmDelete(data)"
+          @click.stop="confirmDelete(data.item)"
         />
       </template>
     </b-table>
@@ -242,7 +242,7 @@ export default {
       this.$refs['edit-skill-category-modal'].hide()
     },
     confirmDelete (item) {
-      this.selectedSkill = item
+      this.selectedSkill = { ...item }
       const message = this.numberOfProfilesWithSelectedSkill > 0
         ? `There are currently ${this.numberOfProfilesWithSelectedSkill} ` +
         'persons who have this skill in their CV. ' +

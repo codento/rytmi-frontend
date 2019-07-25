@@ -65,7 +65,7 @@
             slot-scope="remove"
           >
             <Trash2Icon
-              name="remove-skill"
+              :id="'remove-skill-' + remove.index"
               class="clickable-icon float-right mr-2"
               @click.stop="removeSkillFromProfile(remove.item.id)"
             />

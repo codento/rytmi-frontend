@@ -41,11 +41,13 @@ exports[`Admin.vue Template is correct 1`] = `
           </div>
         </fieldset>
          
-        <div>
+        <div
+          class="align-middle my-1"
+        >
           
     Active User
           <svg
-            class="check-icon feather feather-check"
+            class="check-icon mx-2 feather feather-check"
             fill="none"
             height="24px"
             stroke="currentColor"
@@ -63,7 +65,7 @@ exports[`Admin.vue Template is correct 1`] = `
           
     Admin User
           <svg
-            class="feather feather-settings"
+            class="mx-2 feather feather-settings"
             fill="none"
             height="24px"
             stroke="currentColor"

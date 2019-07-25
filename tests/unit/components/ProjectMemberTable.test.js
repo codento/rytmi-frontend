@@ -37,7 +37,8 @@ function createStore (overrideConfig) {
         lastName: 'Bar'
       })),
       isAdmin: () => () => true,
-      profileId: () => () => 1
+      profileId: () => () => 1,
+      currentLanguage: () => () => 'fi'
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -112,7 +113,7 @@ describe('ProjectMemberTable.vue', () => {
     })
     const wrapper = createWrapper({ propsData, store })
     const removeProfileSpy = jest.spyOn(wrapper.vm, 'removeMember')
-    wrapper.find('tbody').find('.btn-danger').trigger('click')
+    wrapper.find('tbody').find('#remove-project-member-0').trigger('click')
     await flushPromises()
     expect(removeProfileSpy).toHaveBeenCalledWith(propsData.members[0])
     expect(confirmSpy).toHaveBeenCalled()

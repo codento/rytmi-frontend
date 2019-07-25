@@ -64,7 +64,7 @@
         >
           <Trash2Icon
             v-show="isAdmin || element.item.profileId === profileId"
-            name="remove-member"
+            :id="'remove-project-member-' + element.index"
             class="clickable-icon"
             @click.stop="removeMember(element.item)"
           />

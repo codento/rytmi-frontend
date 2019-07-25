@@ -25,7 +25,7 @@ exports[`Profile.vue shallowMount Template is correct 1`] = `
           tag="button"
           target="_self"
           type="button"
-          variant="secondary"
+          variant="primary"
         >
           
           Open CV tool

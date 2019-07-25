@@ -63,7 +63,7 @@ describe('EditEducation.vue', () => {
     }
     const overrideStoreConfig = merge({}, defaultStoreConfig, { actions })
     const wrapper = createWrapper(EditEducation, overrideStoreConfig, defaultMountingOptions)
-    wrapper.find('#remove-education-item-btn-0').trigger('click')
+    wrapper.find('#remove-education-item-0').trigger('click')
     await flushPromises()
     expect(actions.updateProfile).toHaveBeenCalledWith(
       expect.anything(), editedProfile, undefined)
