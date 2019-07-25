@@ -135,7 +135,7 @@
           <b-textarea
             id="project-description-fi-input"
             v-model="editedProject.description.fi"
-            :placeholder="isInternalCompanyProject? 'Projektin kuvaus' : 'Kuvaile projektia ja mitä teit siinä'"
+            :placeholder="isInternalCompanyProject ? 'Projektin kuvaus' : 'Kuvaile projektia ja mitä teit siinä'"
             type="text"
             rows="5"
             :state="inputStates.projectDescriptionFi"
@@ -148,7 +148,7 @@
           <b-textarea
             id="project-description-en-input"
             v-model="editedProject.description.en"
-            :placeholder="isInternalCompanyProject? 'Project description' : 'Describe the project and what you did in it'"
+            :placeholder="isInternalCompanyProject ? 'Project description' : 'Describe the project and what you did in it'"
             type="text"
             rows="5"
             :state="inputStates.projectDescriptionEn"
