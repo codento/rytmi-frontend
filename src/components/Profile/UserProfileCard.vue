@@ -66,6 +66,9 @@ export default {
         })
       })
     }
+  },
+  updated () {
+    this.imgSrc = this.profile.photoPath
   }
 }
 </script>
