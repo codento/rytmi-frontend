@@ -66,6 +66,6 @@ describe('CvToolWorkExperience.test.js', () => {
 
   it('Should select by default latest 3 (maxSelexted=3) projects', () => {
     const wrapper = createShallowWrapper(CvToolWorkExperience, storeConfig, defaultMountingOptions)
-    expect(wrapper.vm.selectedProjects).toEqual([10, 40, 30])
+    expect(wrapper.vm.selectedProjects).toEqual([1, 4, 3])
   })
 })

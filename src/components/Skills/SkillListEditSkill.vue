@@ -66,7 +66,7 @@
         <b-button
           id="save-edits"
           type="submit"
-          variant="success"
+          variant="primary"
           class="mr-2"
           @click.prevent="submitSkill()"
         >

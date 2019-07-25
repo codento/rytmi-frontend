@@ -131,7 +131,7 @@ export default {
     skillsOnlyList () {
       const filteredSkillKeys = Object.keys(this.skills).filter(skillId => {
         const skillGroup = this.skillGroupBySkillId(skillId)
-        return skillGroup ? skillGroup.title !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
+        return skillGroup ? skillGroup.title.en !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
       })
       return filteredSkillKeys.map(key => this.skills[key])
     },

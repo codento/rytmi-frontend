@@ -40,7 +40,6 @@
             slot-scope="data"
           >
             <Edit2Icon
-              v-show="isAdmin || data.item.profileId === profileId"
               class="clickable-icon"
               @click.prevent="openEditModal(data)"
             />
@@ -51,7 +50,6 @@
             slot-scope="data"
           >
             <Trash2Icon
-              v-show="isAdmin || data.item.profileId === profileId"
               name="remove-member"
               class="clickable-icon"
               @click.stop="confirmDelete(data.item)"

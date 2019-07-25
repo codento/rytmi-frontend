@@ -23,18 +23,18 @@
       </b-row>
       <b-row
         v-for="project in projects"
-        :key="project.projectId"
+        :key="project.id"
       >
         <b-col
           cols="1"
           align-self="center"
         >
           <input
-            :id="'project-checkbox-' + project.projectId"
+            :id="'project-checkbox-' + project.id"
             v-model="selectedProjects"
             type="checkbox"
-            :value="project.projectId"
-            :disabled="isNotSelectable(project.projectId)"
+            :value="project.id"
+            :disabled="isNotSelectable(project.id)"
             @change="updateSelectedProjects"
           >
         </b-col>
@@ -106,16 +106,16 @@ export default {
       }
     })
 
-    this.selectedProjects = sortedProjects.map(item => item.projectId).slice(0, this.maxSelected)
+    this.selectedProjects = sortedProjects.map(item => item.id).slice(0, this.maxSelected)
     this.updateSelectedProjects()
   },
   methods: {
     ...mapActions(['updateTopProjects']),
-    isNotSelectable: function (projectId) {
-      return this.selectedProjects.length >= this.maxSelected && !(this.selectedProjects.includes(projectId))
+    isNotSelectable: function (id) {
+      return this.selectedProjects.length >= this.maxSelected && !(this.selectedProjects.includes(id))
     },
     updateSelectedProjects: function () {
-      this.updateTopProjects(this.profileProjects.filter(item => this.selectedProjects.includes(item.projectId)))
+      this.updateTopProjects(this.profileProjects.filter(item => this.selectedProjects.includes(item.id)))
     }
   }
 }

@@ -78,15 +78,15 @@
       <b-col>
         <b-btn
           id="save-certificate-or-other"
-          class="float-right"
-          variant="success"
+          class="float-right my-2 mx-2"
+          variant="primary"
           @click="save()"
         >
           Save and close
         </b-btn>
         <b-btn
           id="close-certificate-or-other-form"
-          class="float-right"
+          class="float-left my-2 mx-2"
           variant="light"
           @click="cancel()"
         >

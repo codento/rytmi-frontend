@@ -204,12 +204,12 @@ export default {
     },
     skills: function () {
       return this.skillsAndLanguages.filter(
-        skill => skill.skillGroup !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
+        skill => !skill.isLanguage
       )
     },
     languages: function () {
       return this.skillsAndLanguages.filter(
-        skill => skill.skillGroup === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
+        skill => skill.isLanguage
       )
     },
     mappedProfileProjects: function () {
@@ -302,6 +302,7 @@ export default {
         profileSkillCopy['skillName'] = skill.name
         profileSkillCopy['skillCategory'] = skillCategory.title[this.currentLanguage]
         profileSkillCopy['skillGroup'] = skillGroup.title[this.currentLanguage]
+        profileSkillCopy['isLanguage'] = skillGroup.title.en === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
       }
       return profileSkillCopy
     },
