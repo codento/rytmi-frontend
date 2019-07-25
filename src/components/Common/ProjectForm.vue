@@ -3,7 +3,7 @@
     :id="formId"
     class="animated fadeIn"
   >
-    <b-row v-if="showProjectCode">
+    <b-row v-if="isInternalCompanyProject">
       <b-col>
         <small for="project-code-input">Project code *</small>
         <b-form-group
@@ -135,7 +135,7 @@
           <b-textarea
             id="project-description-fi-input"
             v-model="editedProject.description.fi"
-            placeholder="Kuvaile projektia ja mitä teit siinä"
+            :placeholder="isInternalCompanyProject? 'Projektin kuvaus' : 'Kuvaile projektia ja mitä teit siinä'"
             type="text"
             rows="5"
             :state="inputStates.projectDescriptionFi"
@@ -148,7 +148,7 @@
           <b-textarea
             id="project-description-en-input"
             v-model="editedProject.description.en"
-            placeholder="Describe the project and what you did in it."
+            :placeholder="isInternalCompanyProject? 'Project description' : 'Describe the project and what you did in it'"
             type="text"
             rows="5"
             :state="inputStates.projectDescriptionEn"
@@ -156,7 +156,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row v-if="employerId === internalCompanyId">
+    <b-row v-show="isInternalCompanyProject">
       <b-col class="mt-2 mb-2">
         <b-form-checkbox
           v-model="editedProject.isSecret"
@@ -255,7 +255,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Datepicker from '@/components/helpers/Datepicker'
-import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+import { INTERNAL_COMPANY_NAME, LANGUAGE_ENUM } from '@/utils/constants'
 import orderBy from 'lodash/orderBy'
 import { Trash2Icon } from 'vue-feather-icons'
 
@@ -300,6 +300,7 @@ export default {
       'employerByName',
       'projects',
       'skillById',
+      'skillGroupBySkillId',
       'skills',
       'currentLanguage'
     ]),
@@ -310,7 +311,7 @@ export default {
       const projectCodes = Object.values(this.projects).filter(project => project.employerId === this.internalCompanyId).map(project => project.code)
       return this.isNewProject ? projectCodes : projectCodes.filter(projectCode => projectCode !== this.project.code)
     },
-    showProjectCode () {
+    isInternalCompanyProject () {
       return this.employerId === this.internalCompanyId
     },
     showCustomerName () {
@@ -319,8 +320,11 @@ export default {
     projectSkillList () {
       if (this.skills) {
         const unorderedSkills = Object.values(this.skills)
-          .filter(skill =>
-            !this.editedProject.skills.map(projectSkill => projectSkill.id).includes(skill.id))
+          .filter(skill => {
+            const skillGroup = this.skillGroupBySkillId(skill.id)
+            const isLanguage = skillGroup ? skillGroup.title.en === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
+            return !isLanguage && !this.editedProject.skills.map(projectSkill => projectSkill.id).includes(skill.id)
+          })
         return orderBy(unorderedSkills.filter(skill => skill.name.toLowerCase().includes(this.skillFilterText.toLowerCase())), [skill => skill.name.toLowerCase()])
       }
       return []
@@ -363,7 +367,7 @@ export default {
         stateArray.push(entry[1])
       }
       // Required sometimes
-      if (this.showProjectCode) {
+      if (this.isInternalCompanyProject) {
         Array.prototype.push.apply(stateArray, this.projectCodeState.map(item => item.state))
       }
       if (this.showCustomerName) {
