@@ -1,6 +1,9 @@
 <template>
   <div>
-    <b-row align-v="center">
+    <b-row
+      align-v="center"
+      class="my-4 pb-2"
+    >
       <b-col>
         <h4>
           <slot name="group-title">
@@ -8,15 +11,15 @@
           </slot>
         </h4>
       </b-col>
-      <b-col cols="3">
+      <b-col cols="5">
         <b-button
           :id="'add-new-' + idPrefix + '-btn'"
           type="submit"
-          variant="success"
+          variant="primary"
           class="float-right mb-2"
           @click.prevent="startCreateMode()"
         >
-          Add
+          Add new
         </b-button>
       </b-col>
     </b-row>

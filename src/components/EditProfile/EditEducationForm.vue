@@ -107,17 +107,17 @@
     </div>
     <b-btn
       id="save"
-      class="float-right"
-      variant="success"
+      class="float-right my-2 mx-2"
+      variant="primary"
       @click="handleNextButton()"
     >
-      {{ currentStep === steps.length - 1 ? 'Save' : 'Next' }}
+      {{ currentStep === steps.length - 1 ? 'Save and close' : 'Next' }}
     </b-btn>
     <b-btn
       id="cancel"
       type="button"
       variant="light"
-      class="float-right"
+      class="float-left my-2 mx-2"
       @click="handleBackButton()"
     >
       {{ currentStep === 0 ? 'Cancel' : 'Back' }}
