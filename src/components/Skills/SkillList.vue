@@ -15,7 +15,6 @@
           Add new skill
         </b-button>
         <b-button
-          v-if="isAdmin"
           id="manage-categories-btn"
           variant="primary"
           class="mx-2"
@@ -131,13 +130,28 @@ export default {
   data () {
     return {
       selectedSkill: null,
-      fields: [
+      filterValues: {
+        name: undefined,
+        skillCategoryName: [],
+        skillGroupName: []
+      }
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'skillProfiles',
+      'isAdmin',
+      'skillFilter',
+      'currentLanguage'
+    ]),
+    fields () {
+      return [
         {
           key: 'name',
           sortable: true
         },
         {
-          key: 'skillCategoryName',
+          key: `skillCategoryName.${this.currentLanguage}`,
           label: 'Skill Category',
           sortable: true
         },
@@ -163,20 +177,8 @@ export default {
           label: '',
           sortable: false
         }
-      ],
-      filterValues: {
-        name: undefined,
-        skillCategoryName: [],
-        skillGroupName: []
-      }
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'skillProfiles',
-      'isAdmin',
-      'skillFilter'
-    ]),
+      ]
+    },
     tableItems () {
       const orderedSkills = orderBy(this.skillList, [skill => skill.name.toLowerCase()], ['asc'])
       return orderedSkills.map(skill => {
@@ -194,7 +196,7 @@ export default {
               return skill[key].toLowerCase().includes(this.filterValues[key])
             }
             // Dropdown options
-            return this.filterValues[key].includes(skill[key])
+            return this.filterValues[key].includes(skill[key][this.currentLanguage])
           }
           return true
         })
@@ -209,7 +211,7 @@ export default {
     filterOptions () {
       const options = {}
       Object.keys(this.filterValues).forEach(key => {
-        const values = this.skillList.map(item => item[key])
+        const values = this.skillList.map(item => item[key][this.currentLanguage])
         // Unique values sorted alphabetically
         options[key] = Array.from(new Set(values)).sort()
       })
