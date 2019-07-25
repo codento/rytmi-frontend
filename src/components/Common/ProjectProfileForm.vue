@@ -178,8 +178,7 @@
         </b-row>
       </b-form-group>
       <b-button
-        variant="secondary"
-        block
+        variant="primary"
         name="submit"
         class="mt-2"
         type="submit"
@@ -437,7 +436,7 @@ export default {
     background-color: $c-light;
   }
   .skill-item:hover {
-    background-color: $c-dark;
+    background-color: darken($color:  $c-light, $amount: 15);
     cursor: pointer;
   }
 </style>

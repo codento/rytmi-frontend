@@ -165,7 +165,7 @@
         </b-form-checkbox>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row class="my-4">
       <b-form-group
         id="profile-project-skill-form"
       >
@@ -175,6 +175,12 @@
           </small>
         </b-col>
         <b-col>
+          <small
+            v-show="!editedProject.skills || editedProject.skills.length === 0"
+            class="mt-3 text-muted"
+          >
+            No skills added yet
+          </small>
           <div
             v-for="skill of editedProject.skills"
             :key="skill.skillId"
@@ -182,8 +188,8 @@
           >
             <span>
               {{ skill.name }}
-              <TrashIcon
-                class="trash-icon"
+              <Trash2Icon
+                class="trash-icon svg-icon"
                 size="1x"
                 @click="removeSkillFromProject(skill)"
               />
@@ -222,12 +228,13 @@
       </b-modal>
     </b-row>
     <slot name="custom-form" />
-    <b-row class="mt-4 float-right">
+    <b-row class="my-4 float-left">
       <b-col>
         <b-button
           id="submit-project-edits-btn"
           class="mr-2 mb-2"
           type="submit"
+          variant="primary"
           @click.prevent="onSubmit()"
         >
           {{ isNewProject ? 'Create a new project' : 'Update project' }}
@@ -250,13 +257,13 @@ import { mapGetters } from 'vuex'
 import Datepicker from '@/components/helpers/Datepicker'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 import orderBy from 'lodash/orderBy'
-import { TrashIcon } from 'vue-feather-icons'
+import { Trash2Icon } from 'vue-feather-icons'
 
 export default {
   name: 'ProjectForm',
   components: {
     Datepicker,
-    TrashIcon
+    Trash2Icon
   },
   props: {
     project: Object,
@@ -411,7 +418,7 @@ export default {
   border-radius: 10px;
 }
 .skill-item.clickable:hover {
-  background-color: $c-dark;
+  background-color: darken($color:  $c-light, $amount: 25);
   cursor: pointer;
 }
 .trash-icon {

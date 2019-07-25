@@ -122,7 +122,7 @@
             id="description-fi"
             v-model="profileEmployer.description['fi']"
             type="text"
-            rows="4"
+            rows="6"
             placeholder="Short description in Finnish about your role, tasks and projects while working for this employer"
             :state="inputStates.jobDescriptionFi"
           />
@@ -135,20 +135,19 @@
             id="description-en"
             v-model="profileEmployer.description['en']"
             type="text"
-            rows="4"
+            rows="6"
             placeholder="Short description in English about your role, tasks and projects while working for this employer"
             :state="inputStates.jobDescriptionEn"
           />
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row class="mt-2">
+    <b-row class="my-2">
       <b-col>
         <b-button
           id="submit"
-          block
           type="submit"
-          variant="secondary"
+          variant="primary"
         >
           Save
         </b-button>

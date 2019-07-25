@@ -63,30 +63,25 @@
       hover
     >
       <template
-        slot="actions"
+        slot="edit"
         slot-scope="data"
       >
-        <b-button-group>
-          <b-btn
-            :id="'edit-skill-item-btn-' + data.index"
-            size="sm"
-            class="mr-1 table-button"
-            variant="success"
-            @click="openEditSkillModal(data.item)"
-          >
-            Edit
-          </b-btn>
-          <b-btn
-            :id="'remove-skill-item-btn-' + data.index"
-            name="remove"
-            size="sm"
-            class="mr-1 table-button"
-            variant="danger"
-            @click.stop="confirmDelete(data.item)"
-          >
-            Remove
-          </b-btn>
-        </b-button-group>
+        <Edit2Icon
+          :id="'edit-skill-item-' + data.index"
+          class="clickable-icon"
+          @click.prevent="openEditSkillModal(data.item)"
+        />
+      </template>
+
+      <template
+        slot="remove"
+        slot-scope="data"
+      >
+        <Trash2Icon
+          :id="'remove-skill-item-' + data.index"
+          class="clickable-icon"
+          @click.stop="confirmDelete(data.item)"
+        />
       </template>
     </b-table>
     <b-modal
@@ -114,6 +109,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { orderBy } from 'lodash'
 import vSelect from 'vue-select'
+import { Edit2Icon, Trash2Icon } from 'vue-feather-icons'
 import SkillListEditSkill from './SkillListEditSkill'
 import SkillListAdminPanel from './SkillListAdminPanel'
 
@@ -122,7 +118,9 @@ export default {
   components: {
     SkillListEditSkill,
     SkillListAdminPanel,
-    vSelect
+    vSelect,
+    Edit2Icon,
+    Trash2Icon
   },
   props: {
     skillList: {
@@ -170,7 +168,13 @@ export default {
           sortable: true
         },
         {
-          key: 'actions',
+          key: 'edit',
+          label: '',
+          sortable: false
+        },
+        {
+          key: 'remove',
+          label: '',
           sortable: false
         }
       ]
@@ -238,7 +242,7 @@ export default {
       this.$refs['edit-skill-category-modal'].hide()
     },
     confirmDelete (item) {
-      this.selectedSkill = item
+      this.selectedSkill = { ...item }
       const message = this.numberOfProfilesWithSelectedSkill > 0
         ? `There are currently ${this.numberOfProfilesWithSelectedSkill} ` +
         'persons who have this skill in their CV. ' +
@@ -267,7 +271,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+.clickable-icon {
+  cursor: pointer;
+  color: darken($color: $c-light, $amount: 40);
+}
+.clickable-icon:hover {
+  color: darken($color: $c-light, $amount: 80);
+}
 #skill-list-table td:nth-child(3), #skill-list-table th:nth-child(3) {
   width: 40%;
 }

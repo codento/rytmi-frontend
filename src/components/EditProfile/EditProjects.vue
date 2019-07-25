@@ -39,28 +39,23 @@
             slot="edit"
             slot-scope="data"
           >
-            <b-btn
-              size="sm"
-              class="mr-1"
-              variant="success"
-              @click="openEditModal(data)"
-            >
-              Edit
-            </b-btn>
+            <Edit2Icon
+              v-show="isAdmin || data.item.profileId === profileId"
+              class="clickable-icon"
+              @click.prevent="openEditModal(data)"
+            />
           </template>
+
           <template
             slot="remove"
             slot-scope="data"
           >
-            <b-btn
-              name="remove"
-              size="sm"
-              class="mr-1"
-              variant="danger"
+            <Trash2Icon
+              v-show="isAdmin || data.item.profileId === profileId"
+              name="remove-member"
+              class="clickable-icon"
               @click.stop="confirmDelete(data.item)"
-            >
-              Remove
-            </b-btn>
+            />
           </template>
         </b-table>
       </b-col>
@@ -102,13 +97,16 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { Edit2Icon, Trash2Icon } from 'vue-feather-icons'
 import { ProjectProfileForm } from '@/components/Common'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 export default {
   name: 'EditProjects',
   components: {
-    ProjectProfileForm
+    ProjectProfileForm,
+    Edit2Icon,
+    Trash2Icon
   },
   props: {
     profileId: Number
@@ -135,8 +133,8 @@ export default {
         { key: 'startDate', label: 'From' },
         { key: 'endDate', label: 'To' },
         { key: 'workPercentage', label: 'Utilization' },
-        'edit',
-        'remove'
+        { key: 'edit', label: '' },
+        { key: 'remove', label: '' }
       ]
     },
     internalCompanyId () {
@@ -171,3 +169,13 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+.clickable-icon {
+  cursor: pointer;
+  color: darken($color: $c-light, $amount: 40);
+}
+.clickable-icon:hover {
+  color: darken($color: $c-light, $amount: 80);
+}
+</style>

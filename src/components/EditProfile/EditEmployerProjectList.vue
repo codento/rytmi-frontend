@@ -6,9 +6,9 @@
       :initial-visibility="true"
     >
       <b-row v-if="profileProjectsWithProjectData.length === 0">
-        <b-col class="no-projects">
+        <b-col class="text-muted">
           <AlertCircleIcon
-            class="notice"
+            class="notice mr-2"
             size="1x"
           />
           No projects added
@@ -24,8 +24,8 @@
             class="mt-2 mb-2"
           >
             <span class="icon-sized">
-              <EditIcon
-                v-show="showEditIconByIndex === index"
+              <Edit2Icon
+                v-show="showEdit2IconByIndex === index"
                 size="1x"
               />
             </span>
@@ -33,21 +33,21 @@
               v-b-modal="'edit-project-modal'"
               class="project-name clickable mr-2"
               @click.prevent="selectProject(index)"
-              @mouseover="showEditIconByIndex = index"
-              @mouseout="showEditIconByIndex = null"
+              @mouseover="showEdit2IconByIndex = index"
+              @mouseout="showEdit2IconByIndex = null"
             >
               {{ project.name[currentLanguage] }} ({{ formatProjectDuration(profileProject.startDate, profileProject.endDate) }})
             </span>
             <span
               v-b-modal="'edit-project-modal'"
               class="project-role clickable"
-              @mouseover="showEditIconByIndex = index"
-              @mouseout="showEditIconByIndex = null"
+              @mouseover="showEdit2IconByIndex = index"
+              @mouseout="showEdit2IconByIndex = null"
             >
               {{ profileProject.role[currentLanguage] }}
             </span>
             <span>
-              <TrashIcon
+              <Trash2Icon
                 class="clickable float-right trash-icon"
                 size="1x"
                 @click="deleteProfileProject(profileProject)"
@@ -56,11 +56,12 @@
           </div>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row class="my-3">
         <b-col>
           <b-button
             v-b-modal="'new-project-modal'"
-            class="float-right mt-2"
+            class="float-left mt-2"
+            variant="primary"
           >
             Add a project
           </b-button>
@@ -113,7 +114,7 @@ import format from 'date-fns/format'
 import CollapsableItem from '@/components/Common/CollapsableItem'
 import EditEmployerProjectListItem from './EditEmployerProjectListItem'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
-import { AlertCircleIcon, EditIcon, TrashIcon } from 'vue-feather-icons'
+import { AlertCircleIcon, Edit2Icon, Trash2Icon } from 'vue-feather-icons'
 
 export default {
   name: 'EditEmployerProjectList',
@@ -121,8 +122,8 @@ export default {
     CollapsableItem,
     EditEmployerProjectListItem,
     AlertCircleIcon,
-    EditIcon,
-    TrashIcon
+    Edit2Icon,
+    Trash2Icon
   },
   props: {
     employerId: {
@@ -136,7 +137,7 @@ export default {
   },
   data () {
     return {
-      showEditIconByIndex: null,
+      showEdit2IconByIndex: null,
       selectedProject: undefined,
       showNewProjectModal: false,
       showUpdateProjectModal: false,
@@ -183,7 +184,7 @@ export default {
       return format(startDate, 'MM/YYYY') + '-' + formattedEndDate
     },
     selectProject (index) {
-      this.selectedProject = this.profileProjectsWithProjectData[this.showEditIconByIndex]
+      this.selectedProject = this.profileProjectsWithProjectData[this.showEdit2IconByIndex]
     },
     newProjectModalClosed (newProfileProject) {
       this.showNewProjectModal = false
@@ -201,10 +202,6 @@ export default {
 }
 .clickable:hover {
   text-decoration: underline;
-}
-.no-projects {
-  font-style: italic;
-  color: lightslategrey;
 }
 .notice {
   color: red;

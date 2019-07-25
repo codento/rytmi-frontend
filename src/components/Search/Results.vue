@@ -15,21 +15,24 @@
             v-model="showAllSkills"
             name="show-all-skills-checkbox"
             inline
+            class="mb-2"
           >
             Show all skills
           </b-form-checkbox>
         </div>
-        <small>Sort profiles by: </small>
+        <span class="mx-3">Sort profiles by:</span>
         <b-form-radio-group
           id="btnradios"
           v-model="sortAttribute"
           :options="sortOptions"
           buttons
+          button-variant="primary"
           name="radioBtnStacked"
         />
         <b-btn
           id="reverse-order-btn"
           title="Reverse order"
+          variant="primary"
           @click="reversedOrder = !reversedOrder"
         >
           <ChevronUpIcon

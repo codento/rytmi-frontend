@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-row class="my-2">
+    <b-row class="py-4">
       <b-col cols="12">
         <h2>Education</h2>
       </b-col>
@@ -9,6 +9,7 @@
           id="education-table"
           :items="educationTableItems"
           :fields="educationFields"
+          hover
           stacked="sm"
         >
           <template
@@ -26,30 +27,25 @@
           </template>
 
           <template
-            slot="actions"
+            slot="edit"
             slot-scope="data"
           >
-            <b-button-group>
-              <b-btn
-                :id="'edit-education-item-btn-' + data.index"
-                size="sm"
-                class="mr-1 table-button"
-                variant="primary"
-                @click="openEducationEditModal(data)"
-              >
-                Edit
-              </b-btn>
-              <b-btn
-                :id="'remove-education-item-btn-' + data.index"
-                name="remove"
-                size="sm"
-                class="mr-1 table-button"
-                variant="danger"
-                @click.stop="removeEducation(data)"
-              >
-                Remove
-              </b-btn>
-            </b-button-group>
+            <Edit2Icon
+              :id="'edit-education-item-' + data.index"
+              class="clickable-icon"
+              @click.prevent="openEducationEditModal(data)"
+            />
+          </template>
+
+          <template
+            slot="remove"
+            slot-scope="data"
+          >
+            <Trash2Icon
+              :id="'remove-education-item-' + data.index"
+              class="clickable-icon"
+              @click.stop="removeEducation(data)"
+            />
           </template>
         </b-table>
       </b-col>
@@ -78,8 +74,7 @@
         @submit="submitEducationForm"
       />
     </b-modal>
-
-    <b-row class="pt-3">
+    <b-row class="py-4">
       <b-col cols="12">
         <h2>Certificates and other validations of expertise</h2>
       </b-col>
@@ -106,30 +101,25 @@
           </template>
 
           <template
-            slot="actions"
+            slot="edit"
             slot-scope="data"
           >
-            <b-button-group>
-              <b-btn
-                :id="'edit-certificate-or-other-item-btn-' + data.index"
-                size="sm"
-                class="mr-1 table-button"
-                variant="primary"
-                @click="openCertificateOrOtherEditModal(data)"
-              >
-                Edit
-              </b-btn>
-              <b-btn
-                :id="'remove-certificate-or-other-item-btn-' + data.index"
-                name="remove"
-                size="sm"
-                class="mr-1 table-button"
-                variant="danger"
-                @click.stop="removeCertificateOrOther(data)"
-              >
-                Remove
-              </b-btn>
-            </b-button-group>
+            <Edit2Icon
+              :id="'edit-certificate-or-other-item-' + data.index"
+              class="clickable-icon"
+              @click.prevent="openCertificateOrOtherEditModal(data)"
+            />
+          </template>
+
+          <template
+            slot="remove"
+            slot-scope="data"
+          >
+            <Trash2Icon
+              :id="'remove-certificate-or-other-item-' + data.index"
+              class="clickable-icon"
+              @click.stop="removeCertificateOrOther(data)"
+            />
           </template>
         </b-table>
       </b-col>
@@ -164,6 +154,7 @@
 <script>
 import { cloneDeep, orderBy } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
+import { Edit2Icon, Trash2Icon } from 'vue-feather-icons'
 import EditEducationForm from './EditEducationForm'
 import EditCertificateOrOtherForm from './EditCertificateOrOtherForm'
 
@@ -202,7 +193,9 @@ export default {
   name: 'EditEducation',
   components: {
     EditEducationForm,
-    EditCertificateOrOtherForm
+    EditCertificateOrOtherForm,
+    Edit2Icon,
+    Trash2Icon
   },
   props: {
     profile: Object
@@ -214,7 +207,8 @@ export default {
         { key: 'startYear', label: 'Starting year' },
         { key: 'endYear', label: 'Finishing year' },
         { key: 'degree', label: 'Degree' },
-        'actions'
+        { key: 'edit', label: '' },
+        { key: 'remove', label: '' }
       ],
       editedEducation: this.profile.education ? this.profile.education : [],
       editedEducationItem: cloneDeep(educationTemplate),
@@ -223,7 +217,8 @@ export default {
         { key: 'name', label: 'Certificate\'s or other similar item\'s name' },
         { key: 'description', label: 'Description' },
         { key: 'year', label: 'Year' },
-        'actions'
+        { key: 'edit', label: '' },
+        { key: 'remove', label: '' }
       ],
       editedCertificatesAndOthers: this.profile.certificatesAndOthers ? this.profile.certificatesAndOthers : [],
       editedCertificateOrOtherItem: cloneDeep(certificateOrOtherTemplate),
@@ -336,17 +331,19 @@ export default {
 }
 </script>
 
-<style scoped >
-button.table-button {
-  width: 100%;
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+.clickable-icon {
+  cursor: pointer;
+  color: darken($color: $c-light, $amount: 40);
+}
+.clickable-icon:hover {
+  color: darken($color: $c-light, $amount: 80);
 }
 .table-cell-text {
   width: 0;
   min-width: 100%;
   display: inline-block;
   max-width: 150px;
-}
-.modal-btn {
-  margin-top: 0.5rem;
 }
 </style>

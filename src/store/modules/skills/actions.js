@@ -48,7 +48,6 @@ export function deleteSkill ({ commit, dispatch, state }, id) {
       .then(response => {
         commit(types.DELETE_SKILL, id)
         dispatch('fetchProfileSkills')
-        dispatch('fetchActiveProjectSkills')
         resolve(response.data)
       }).catch(error => {
         console.log(error)

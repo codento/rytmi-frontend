@@ -7,6 +7,7 @@
       <b-col>
         <b-button
           class="float-right mb-2"
+          variant="primary"
           @click="addNewProfileEmployer"
         >
           Add a new item
@@ -39,8 +40,8 @@
         v-for="(profileEmployer, index) in profileEmployers"
         :key="profileEmployer.id"
         :class="isHoveredProfileEmployerCardSelected(profileEmployer.id) ? '' : 'clickable'"
-        @mouseover="showEditIconByIndex = index"
-        @mouseout="showEditIconByIndex = null"
+        @mouseover="showEdit2IconByIndex = index"
+        @mouseout="showEdit2IconByIndex = null"
       >
         <b-row
           class="work-history-list-titlebar"
@@ -53,10 +54,10 @@
             />
           </b-col>
           <b-col
-            v-show="showEditIconByIndex === index && !isHoveredProfileEmployerCardSelected(profileEmployer.id)"
+            v-show="showEdit2IconByIndex === index && !isHoveredProfileEmployerCardSelected(profileEmployer.id)"
             cols="1"
           >
-            <EditIcon size="1x" />
+            <Edit2Icon size="1x" />
           </b-col>
         </b-row>
         <b-row v-if="selectedProfileEmployer && selectedProfileEmployer.id === profileEmployer.id">
@@ -83,14 +84,14 @@ import { orderBy } from 'lodash'
 import EditEmployer from './EditEmployer'
 import WorkHistoryListItem from './WorkHistoryListItem'
 import sortBy from 'lodash/sortBy'
-import { EditIcon } from 'vue-feather-icons'
+import { Edit2Icon } from 'vue-feather-icons'
 
 export default {
   name: 'EditWorkHistory',
   components: {
     EditEmployer,
     WorkHistoryListItem,
-    EditIcon
+    Edit2Icon
   },
   props: {
     profileId: Number
@@ -98,7 +99,7 @@ export default {
   data () {
     return {
       selectedProfileEmployer: null,
-      showEditIconByIndex: null,
+      showEdit2IconByIndex: null,
       profileEmployerIdToOpenForEditing: null
     }
   },

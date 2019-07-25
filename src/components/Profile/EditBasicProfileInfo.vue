@@ -1,8 +1,12 @@
 <template>
-  <div class="text-center">
+  <div class="text-center mx-3">
     <b-form
       @submit="onSubmit"
     >
+      <h5 class="text-left subtitle">
+        Basic Info
+      </h5>
+      <hr>
       <b-form-group
         id="first-name-label"
         label="First name *"
@@ -86,97 +90,96 @@
           type="tel"
         />
       </b-form-group>
-      <b-card>
-        <div>
-          <h4>
-            Information to include in CV
-          </h4>
+      <h5 class="text-left mt-4 subtitle">
+        Information to include in CV
+      </h5>
+      <hr>
+      <b-form-group
+        v-for="lang in languages"
+        :key="'edit-introduction-elem-' + lang.key"
+        :label="`Introduction for CV main page (in ${lang.label}) *`"
+        :label-for="'introduction-input-' + lang.key"
+        label-align-md="left"
+        label-size="sm"
+        sm="5"
+      >
+        <b-textarea
+          :id="'introduction-input-' + lang.key"
+          v-model="editedProfile.introduction[lang.key]"
+          :placeholder="`Describe shortly in ${lang.label} your work experience, strengths, interests and motivation`"
+          type="text"
+          rows="5"
+          :state="introductionIsValid(lang.key)"
+          @focus="introductionEdited[lang.key] = true"
+        />
+        <b-form-invalid-feedback
+          :id="'introduction-input-feedback-' + lang.key"
+          class="text-left"
+        >
+          <div v-if="editedProfile.introduction[lang.key].length === 0">
+            Introduction cannot be empty
+          </div>
+          <div v-else>
+            Maximum number of characters reached ({{ editedProfile.introduction[lang.key].length }}/{{ maxLengths.introduction }})
+          </div>
+        </b-form-invalid-feedback>
+        <div v-if="introductionIsValid(lang.key)">
+          <p class="text-right text-success">
+            {{ editedProfile.introduction[lang.key].length }}/{{ maxLengths.introduction }}
+          </p>
         </div>
-        <b-form-group
-          v-for="lang in languages"
-          :key="'edit-introduction-elem-' + lang.key"
-          :label="`Introduction for CV main page (in ${lang.label}) *`"
-          :label-for="'introduction-input-' + lang.key"
-          label-align-md="left"
-          label-size="sm"
-          sm="5"
-        >
-          <b-textarea
-            :id="'introduction-input-' + lang.key"
-            v-model="editedProfile.introduction[lang.key]"
-            :placeholder="`Describe shortly in ${lang.label} your work experience, strengths, interests and motivation`"
-            type="text"
-            rows="5"
-            :state="introductionIsValid(lang.key)"
-            @focus="introductionEdited[lang.key] = true"
-          />
-          <b-form-invalid-feedback
-            :id="'introduction-input-feedback-' + lang.key"
-            class="text-left"
-          >
-            <div v-if="editedProfile.introduction[lang.key].length === 0">
-              Introduction cannot be empty
-            </div>
-            <div v-else>
-              Maximum number of characters reached ({{ editedProfile.introduction[lang.key].length }}/{{ maxLengths.introduction }})
-            </div>
-          </b-form-invalid-feedback>
-          <div v-if="introductionIsValid(lang.key)">
-            <p class="text-right text-success">
-              {{ editedProfile.introduction[lang.key].length }}/{{ maxLengths.introduction }}
-            </p>
-          </div>
-        </b-form-group>
-        <b-form-group
-          v-for="lang in languages"
-          :key="'edit-other-info-elem-' + lang.key"
-          :label="`Other info to include in CV (in ${lang.label})`"
-          :label-for="'other-info-input-' + lang.key"
-          label-align-md="left"
-          label-size="sm"
-          sm="6"
-        >
-          <b-textarea
-            :id="'other-info-input-' + lang.key"
-            v-model="editedProfile.otherInfo[lang.key]"
-            :placeholder="`Optional description of hobbies, interests etc for CV final page under heading Other info (in ${lang.label})`"
-            type="text"
-            rows="3"
-            :state="otherInfoIsValid(lang.key)"
-            @focus="otherInfoEdited[lang.key] = true"
-          />
-          <b-form-invalid-feedback
-            :id="'other-info-input-feedback-' + lang.key"
-            class="text-left"
-          >
-            <div v-if="editedProfile.otherInfo[lang.key].length > 0">
-              Maximum number of characters reached ({{ editedProfile.otherInfo[lang.key].length }}/{{ maxLengths.otherInfo }})
-            </div>
-          </b-form-invalid-feedback>
-          <div v-if="otherInfoIsValid(lang.key)">
-            <p class="text-right text-success">
-              {{ editedProfile.otherInfo[lang.key].length }}/{{ maxLengths.otherInfo }}
-            </p>
-          </div>
-        </b-form-group>
-      </b-card>
-      <b-button
-        id="submit-basic-details"
-        type="submit"
-        variant="primary"
-        class="pull-left"
+      </b-form-group>
+      <b-form-group
+        v-for="lang in languages"
+        :key="'edit-other-info-elem-' + lang.key"
+        :label="`Other info to include in CV (in ${lang.label})`"
+        :label-for="'other-info-input-' + lang.key"
+        label-align-md="left"
+        label-size="sm"
+        sm="6"
       >
-        Save
-      </b-button>
-      <b-button
-        id="reset-basic-details"
-        type="button"
-        variant="light"
-        class="float-right"
-        @click="onCancel"
-      >
-        Close
-      </b-button>
+        <b-textarea
+          :id="'other-info-input-' + lang.key"
+          v-model="editedProfile.otherInfo[lang.key]"
+          :placeholder="`Optional description of hobbies, interests etc for CV final page under heading Other info (in ${lang.label})`"
+          type="text"
+          rows="3"
+          :state="otherInfoIsValid(lang.key)"
+          @focus="otherInfoEdited[lang.key] = true"
+        />
+        <b-form-invalid-feedback
+          :id="'other-info-input-feedback-' + lang.key"
+          class="text-left"
+        >
+          <div v-if="editedProfile.otherInfo[lang.key].length > 0">
+            Maximum number of characters reached ({{ editedProfile.otherInfo[lang.key].length }}/{{ maxLengths.otherInfo }})
+          </div>
+        </b-form-invalid-feedback>
+        <div v-if="otherInfoIsValid(lang.key)">
+          <p class="text-right text-success">
+            {{ editedProfile.otherInfo[lang.key].length }}/{{ maxLengths.otherInfo }}
+          </p>
+        </div>
+      </b-form-group>
+      <div class="my-4">
+        <b-button
+          id="submit-basic-details"
+          type="submit"
+          variant="primary"
+          class="float-left"
+        >
+          Save
+        </b-button>
+        <b-button
+          id="reset-basic-details"
+          type="button"
+          variant="light"
+          class="float-right"
+          @click="onCancel"
+        >
+          Close
+        </b-button>
+      </div>
     </b-form>
   </div>
 </template>
@@ -310,3 +313,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.subtitle {
+  font-weight: 500;
+}
+</style>

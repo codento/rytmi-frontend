@@ -34,7 +34,7 @@
             <b-col sm="3">
               <b-button
                 name="update"
-                variant="success"
+                variant="primary"
                 @click="submit"
               >
                 Update

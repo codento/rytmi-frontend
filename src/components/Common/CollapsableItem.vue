@@ -4,12 +4,10 @@
       no-body
       class="mb-1 rounded border-0"
     >
-      <b-card-header
-        class="p-1 btn-rytmi-light"
-      >
+      <b-card-header>
         <b-button
           block
-          variant="rytmi-light"
+          variant="light"
           @click="visibility = !visibility"
         >
           {{ title }}
@@ -59,9 +57,18 @@ export default {
   }
 }
 </script>
-<style scoped >
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
   .btn {
     font-size: 18px;
     font-weight: 500;
+    background-color: $c-light;
+  }
+  .btn:hover {
+    background-color:$c-light;
+  }
+  .btn:focus,.btn:active {
+    outline: none !important;
+    box-shadow: none;
   }
 </style>

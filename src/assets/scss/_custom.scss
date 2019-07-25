@@ -35,27 +35,18 @@ td > button {
   text-transform: uppercase;
 }
 
-.btn-rytmi-light {
-  background-color:darken($color: $body-bg, $amount: 5);
-  border: none;
-}
-
-.btn-rytmi-light:hover {
-  background-color: darken($color: $body-bg, $amount: 5);
-}
-
-.btn-rytmi-light:focus,.btn-rytmi-light:active {
-  outline: none !important;
-  box-shadow: none;
-}
-
 .card {
-  box-shadow: 2px 2px darken($color: $body-bg, $amount: 5);
+  border-left: 1px solid $body-bg !important;
+  border-top: 1px solid $body-bg !important;
+  border-right: 0px;
+  border-bottom: 0px;
+  box-shadow: 3px 3px darken($color: $body-bg, $amount: 5);
 }
 .card-header {
   font-family: 'Poppins';
   font-weight: 500;
   text-transform: uppercase;
+  border-bottom: none;
 }
 
 

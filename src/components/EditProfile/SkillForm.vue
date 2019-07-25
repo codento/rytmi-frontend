@@ -1,13 +1,13 @@
 <template>
   <b-card
     class="addNew"
-    title="Add new"
+    title="Add new skill"
   >
     <b-form @submit="onSubmit">
       <b-form-group
         id="skillLabel"
         vertical
-        label="Skill"
+        label="Skill/proficiency name"
         label-for="skill"
         label-size="lg"
       >

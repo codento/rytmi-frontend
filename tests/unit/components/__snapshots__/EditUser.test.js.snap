@@ -179,7 +179,7 @@ exports[`EditUser.vue Template is correct 1`] = `
                 class="col-sm-3"
               >
                 <button
-                  class="btn btn-success"
+                  class="btn btn-primary"
                   name="update"
                   type="button"
                 >
