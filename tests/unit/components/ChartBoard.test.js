@@ -46,9 +46,9 @@ const mockSkills = {
 }
 
 const mockSkillGroups = {
-  1: { id: 100, title: 'SomeGroup' },
-  2: { id: 100, title: 'SomeGroup' },
-  3: { id: 200, title: LANGUAGE_ENUM.LANGUAGE_GROUP_NAME }
+  1: { id: 100, title: { en: 'SomeGroup', fi: 'SomeGroup' } },
+  2: { id: 100, title: { en: 'SomeGroup', fi: 'SomeGroup' } },
+  3: { id: 200, title: { en: LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, fi: '' } }
 }
 
 const mockSkillProfiles = [
