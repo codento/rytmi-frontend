@@ -103,7 +103,7 @@ export default {
     knowsCircles (knows) {
       const ballsArray = new Array(5)
       for (let i = 0; i < 5; i++) {
-        if (i <= knows) {
+        if (i < knows) {
           ballsArray[i] = { index: i, knows: true }
         } else {
           ballsArray[i] = { index: i, knows: false }
