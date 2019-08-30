@@ -49,7 +49,7 @@ const defaultStoreConfig = {
   },
   getters: {
     skillProfiles: () => mockSkillProfiles,
-    isAdmin: () => false,
+    skillFilter: () => false,
     currentLanguage: () => 'fi'
   }
 }
@@ -79,17 +79,23 @@ const defaultMountingOptions = {
 describe('SkillList.vue', () => {
   it('Should render the list of skills', () => {
     const wrapper = createWrapper(SkillList, defaultStoreConfig, defaultMountingOptions)
-    const tableRows = wrapper.find('#skill-list-table').findAll('tr')
-    expect(tableRows).toHaveLength(3)
+    expect(wrapper.vm.tableItems).toHaveLength(2)
   })
 
-  it('Should render manage categories button when user is admin', () => {
-    const getters = {
-      isAdmin: () => true
-    }
-    const mergedConfig = merge({}, defaultStoreConfig, { getters })
-    const wrapper = createWrapper(SkillList, mergedConfig, defaultMountingOptions)
-    expect(wrapper.find('#manage-categories-btn').isVisible()).toBeTruthy()
+  it('Should filter skills by name or category', () => {
+    const wrapper = createWrapper(SkillList, defaultStoreConfig, defaultMountingOptions)
+    // check sorting with lower case value
+    wrapper.setData({ filterValues: { name: 'java' } })
+    expect(wrapper.vm.tableItems).toHaveLength(1)
+    expect(wrapper.vm.tableItems[0].name).toEqual('JavaScript')
+
+    // check sorting with upper case value
+    wrapper.setData({ filterValues: { name: 'Java' } })
+    expect(wrapper.vm.tableItems).toHaveLength(1)
+
+    // check dropdown item sorting
+    wrapper.setData({ filterValues: { skillCategoryName: ['Uusei jutui'] } })
+    expect(wrapper.vm.tableItems).toHaveLength(1)
   })
 
   it('Should call the delete action if remove skill button is clicked', async () => {
