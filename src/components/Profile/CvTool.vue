@@ -217,15 +217,7 @@ export default {
         profileProject => {
           const project = this.projectById(profileProject.projectId)
           if (project) {
-            Object.assign(profileProject, {
-              duration: this.getFormattedDuration(profileProject.startDate, profileProject.endDate),
-              name: project.name,
-              description: project.description,
-              customerName: project.customerName,
-              employerId: project.employerId,
-              isInternal: project.isInternal,
-              isSecret: project.isSecret
-            })
+            return { ...project, ...profileProject, duration: this.getFormattedDuration(profileProject.startDate, profileProject.endDate) }
           }
           return profileProject
         }
@@ -316,7 +308,8 @@ export default {
         projectDescription: profileProjectObj.description[this.currentLanguage],
         projectCustomer: !profileProjectObj.isInternal ? profileProjectObj.customerName[this.currentLanguage] : null,
         projectDuration: profileProjectObj.duration,
-        projectSkills: profileProjectObj.skills.map(skill => skill.name)
+        projectSkills: profileProjectObj.skills.map(skill => skill.name),
+        isConfidential: profileProjectObj.isConfidential
       }
     },
     mapSkillForCV (skillObj) {
