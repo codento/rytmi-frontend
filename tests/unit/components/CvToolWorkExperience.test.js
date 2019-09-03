@@ -54,7 +54,6 @@ describe('CvToolWorkExperience.test.js', () => {
   it('Should show correct components', () => {
     const wrapper = createShallowWrapper(CvToolWorkExperience, storeConfig, defaultMountingOptions)
     expect(wrapper.findAll(ProjectRow).length).toBe(4)
-    expect(wrapper.findAll('input').length).toBe(4)
   })
 
   it('Should disable selection when maximum skills are selected', () => {

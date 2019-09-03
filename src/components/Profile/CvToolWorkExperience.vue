@@ -29,14 +29,12 @@
           cols="1"
           align-self="center"
         >
-          <input
+          <b-form-checkbox
             :id="'project-checkbox-' + project.id"
             v-model="selectedProjects"
-            type="checkbox"
             :value="project.id"
             :disabled="isNotSelectable(project.id)"
-            @change="updateSelectedProjects"
-          >
+          />
         </b-col>
         <b-col>
           <ProjectRow
@@ -87,6 +85,11 @@ export default {
             projects: this.profileProjects.filter(project => project.employerId === item.employerId)
           }
         })
+    }
+  },
+  watch: {
+    selectedProjects () {
+      this.updateSelectedProjects()
     }
   },
   created: function () {
