@@ -38,8 +38,7 @@ const additionalMountingOptions = {
 describe('CvToolSkills.test.js', () => {
   it('Should show correct components', () => {
     const wrapper = createShallowWrapper(CvToolSkills, defaultStoreConfig, additionalMountingOptions)
-    expect(wrapper.findAll(SkillRow).length).toBe(6)
-    expect(wrapper.findAll('input').length).toBe(3) // languages can't be selected
+    expect(wrapper.findAll(SkillRow).length).toBe(3)
   })
 
   it('Should disable selection when maximum skills are selected', () => {

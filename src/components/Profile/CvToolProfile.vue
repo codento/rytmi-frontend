@@ -93,12 +93,6 @@
           class="mt-2 mb-2"
           title="Top skills"
         >
-          <div
-            v-if="orderedSkills.length === 0"
-            style="color: grey"
-          >
-            No skills chosen, use checkboxes below to add skills!
-          </div>
           <b-list-group
             id="top-skills"
             v-sortable="{onEnd: reorder}"
@@ -115,6 +109,18 @@
               />
             </b-list-group-item>
           </b-list-group>
+          <div
+            v-if="orderedSkills.length === 0"
+            class="text-muted"
+          >
+            No skills chosen, use checkboxes below to add skills!
+          </div>
+          <div
+            v-else-if="orderedSkills.length > 1"
+            class="text-center text-muted"
+          >
+            Order skills by dragging them
+          </div>
         </b-card>
       </b-col>
     </b-row>

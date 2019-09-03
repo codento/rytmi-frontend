@@ -67,6 +67,7 @@
               v-for="skill in profileSkillsByProfileId(profile.id)"
               :key="skill.id"
               v-bind="skill"
+              disable-tooltip
             />
           </b-col>
           <b-col

@@ -52,6 +52,7 @@
           id="open-create-cv-modal"
           v-b-modal.create-cv-modal
           :disabled="!allRequiredFieldsFilled"
+          variant="primary"
         >
           Create CV
         </b-button>
