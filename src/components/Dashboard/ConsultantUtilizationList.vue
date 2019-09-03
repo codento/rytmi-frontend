@@ -7,7 +7,9 @@
       cols="12"
       class="mx-2 my-4"
     >
-      <h3>Free capacity</h3>
+      <h3 class="mb-4">
+        Free capacity
+      </h3>
       <div
         v-for="item in freeEmployees"
         :key="item.profile.id"
@@ -33,6 +35,17 @@
       class="mx-2 my-4"
     >
       <h3>In projects</h3>
+      <b-form-group
+        v-if="maximumMonthsOnScreen >= displayOptions[0].value"
+        label="Number of months displayed"
+        class="mb-4"
+      >
+        <b-form-radio-group
+          id="consultant-display-options"
+          v-model="monthsDisplayed"
+          :options="displayOptions.filter(option => option.value <= maximumMonthsOnScreen)"
+        />
+      </b-form-group>
       <!-- Month labels -->
       <b-row class="mx-3 text-center">
         <!-- First column contains profile label, resize to 1 col after half month has passed -->
@@ -41,7 +54,7 @@
           v-for="(month, labelIndex) in Object.values(monthData)"
           :key="'month-label-' + labelIndex"
         >
-          {{ month.label }}
+          {{ monthsDisplayed > 6 || maximumMonthsOnScreen === displayOptions[0].value ? month.label.substring(0, 3) : month.label }}
         </b-col>
       </b-row>
       <!-- Progress bars -->
@@ -53,7 +66,7 @@
         <!-- First column contains profile label, resize to 1 col after half month has passed -->
         <b-col
           :cols="currentDayNumber > 20 ? 1 : 2"
-          class="profile-tag-col pt-0"
+          class="profile-tag-col pt-2"
         >
           <div
             class="profile-tag mx-2"
@@ -101,16 +114,16 @@
             </b-progress-bar>
           </b-progress>
           <span
-            v-show="progressBarData.showEndLabel && item.endsOn"
+            v-show="monthsDisplayed <= 6 && progressBarData.showEndLabel && item.endsOn"
             :class="`float-${getDateLabelPositionAndFormat(item.endsOn).position} project-progress px-2`"
           >
-            Ends on {{ getDateLabelPositionAndFormat(item.endsOn).label }}
+            Ends: {{ getDateLabelPositionAndFormat(item.endsOn).label }}
           </span>
           <span
-            v-show="progressBarData.showStartLabel"
+            v-show="monthsDisplayed <= 6 && progressBarData.showStartLabel"
             :class="`float-${getDateLabelPositionAndFormat(item.startsOn).position} project-progress px-2`"
           >
-            Starts on {{ getDateLabelPositionAndFormat(item.startsOn).label }}
+            Starts: {{ getDateLabelPositionAndFormat(item.startsOn).label }}
           </span>
         </b-col>
       </b-row>
@@ -144,11 +157,18 @@ export default {
   },
   data () {
     return {
+      windowWidth: 0,
       monthNames: [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
       ],
-      monthsDisplayed: 4,
+      monthsDisplayed: 6,
+      displayOptions: [
+        { text: '3 months', value: 3, breakpoint: 0 },
+        { text: '6 months', value: 6, breakpoint: 800 },
+        { text: '9 months', value: 9, breakpoint: 1200 },
+        { text: '12 months', value: 12, breakpoint: 1600 }
+      ],
       imgProps: { width: 50, height: 50, class: 'm1' },
       imageUrl: {}
     }
@@ -173,7 +193,9 @@ export default {
     },
     monthData () {
       const indexes = []
-      for (let i = 0; i < this.monthsDisplayed; i++) {
+      // Show more months if month is ending
+      const actualMonthsDisplayed = this.currentDayNumber > 20 ? this.monthsDisplayed + 1 : this.monthsDisplayed
+      for (let i = 0; i < actualMonthsDisplayed; i++) {
         indexes.push(i)
       }
       return indexes.map((arg, index) => {
@@ -198,6 +220,9 @@ export default {
     },
     utilizedEmployees () {
       return this.orderedProfiles.filter(item => item.daysToZeroUtilization > 0)
+    },
+    maximumMonthsOnScreen () {
+      return Math.max(...this.displayOptions.filter(option => option.breakpoint < this.windowWidth).map(option => option.value))
     }
   },
   created () {
@@ -205,13 +230,26 @@ export default {
       this.$set(this.imageUrl, profile.id, profile.photoPath)
     })
   },
+  mounted () {
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.handeResize)
+      // Init
+      this.handeResize()
+    })
+  },
   methods: {
+    handeResize () {
+      this.windowWidth = document.documentElement.clientWidth
+      if (this.monthsDisplayed > this.maximumMonthsOnScreen) {
+        this.monthsDisplayed = this.maximumMonthsOnScreen
+      }
+    },
     getDateLabelPositionAndFormat (date) {
       if (date) {
         if (differenceInDays(date, new Date()) > this.monthsDisplayed * 31 || !this.monthData.map(item => item.month).includes(date.getMonth())) {
           return { label: format(date, 'MM/YYYY'), position: 'right' }
         }
-        return { label: format(date, 'D/M'), position: date.getDate() < 10 ? 'left' : 'right' }
+        return { label: format(date, 'MMM Do'), position: date.getDate() < 10 ? 'left' : 'right' }
       }
       return { label: '', position: 'right' }
     },
@@ -355,7 +393,6 @@ export default {
   z-index: 10;
 }
 h3 {
-  padding-bottom: 2em;
   &:after {
     content: "";
     display: block;
@@ -373,9 +410,11 @@ h3 {
 }
 .role-1 {
   background: $c-violet;
+  border: 2px solid white;
 }
 .role-2 {
-  background: $c-orange
+  background: $c-orange;
+  border: 2px solid white;
 }
 .combined-role {
   background: repeating-linear-gradient(
