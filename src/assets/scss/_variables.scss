@@ -1,6 +1,7 @@
 // Variable overrides
 $c-orange: #FF8429;
-$c-orange-light: #FF9A4F;
+$c-orange-med: #FF9A4F;
+$c-orange-light: #FFDDC4;
 $c-violet-dark: #1F1A4E;
 $c-violet: #372F85;
 $c-violet-light: #9693C1;
@@ -19,6 +20,8 @@ $theme-colors: (
   light:               $c-light,
   c-violet-dark:       $c-violet-dark,
   c-violet-light:      $c-violet-light,
+  c-orange:            $c-orange-med,
+  c-orange-light:      $c-orange-light,
   text-c-violet-dark:  $c-light
 );
 
