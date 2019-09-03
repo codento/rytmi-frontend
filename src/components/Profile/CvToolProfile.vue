@@ -9,7 +9,9 @@
           alt="profile photo"
           :src="profile.photoPath"
         >
-        <h4 class="my-2">{{ fullName }}</h4>
+        <h4 class="my-2">
+          {{ fullName }}
+        </h4>
         <div>Born {{ profile.birthYear }}</div>
       </b-col>
       <b-col>
