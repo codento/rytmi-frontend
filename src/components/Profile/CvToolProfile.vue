@@ -1,26 +1,25 @@
 <template>
   <div>
-    <div class="text-center">
-      <div>
+    <b-row align-v="center">
+      <b-col
+        cols="4"
+        class="text-center"
+      >
         <img
           alt="profile photo"
           :src="profile.photoPath"
         >
-      </div>
-      <div style="color:#869fac">
-        <span class="profile-name"> {{ fullName }}</span><br>
-        <span class="profile-title">{{ profile.title }}</span>
-      </div>
-      <div>
+        <h4 class="my-2">{{ fullName }}</h4>
         <div>Born {{ profile.birthYear }}</div>
-      </div>
-      <div class="profileCardDetails profile-card-detail-row">
+      </b-col>
+      <b-col>
+        <h3>{{ jobTitle }}</h3>
         <b-textarea
           id="input-introduction"
           v-model="modifiedIntroduction"
           class="form-control"
           type="text"
-          rows="6"
+          rows="10"
           placeholder="Add profile description for CV"
           :state="introductionIsValid"
           @update="updateIntroduction"
@@ -41,8 +40,8 @@
             {{ modifiedIntroduction.length }}/{{ maxIntroductionLength }}
           </p>
         </div>
-      </div>
-    </div>
+      </b-col>
+    </b-row>
     <b-row>
       <b-col
         md="12"
@@ -54,7 +53,7 @@
         >
           <div
             v-if="topProjects.length === 0"
-            style="color: grey"
+            class="text-muted"
           >
             No relevant projects chosen, use checkboxes below to add projects!
           </div>
@@ -96,6 +95,7 @@
           <b-list-group
             id="top-skills"
             v-sortable="{onEnd: reorder}"
+            class="mb-2"
           >
             <b-list-group-item
               v-for="skill of orderedSkills"
@@ -137,7 +137,8 @@ export default {
     SkillRow
   },
   props: {
-    profile: Object
+    profile: Object,
+    jobTitle: String
   },
   data () {
     return {
@@ -184,17 +185,12 @@ export default {
 </script>
 
 <style scoped>
-  .profile-card-detail-row {
-    margin-top: 0.5em;
-  }
-  .profile-title {
-    font-size: 13px;
-  }
-  .profile-name {
-    font-size: 32px;
+  #input-introduction {
+    font-size: 13px
   }
   #top-skills .borderless {
     border: 0;
+    padding: 0.2rem;
     cursor: pointer;
   }
 </style>
