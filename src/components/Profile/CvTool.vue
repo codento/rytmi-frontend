@@ -23,9 +23,14 @@
             {{ languageButton.label }}
           </b-button>
         </b-button-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
         <CvToolProfile
           v-if="profile"
           :profile="profile"
+          :job-title="jobTitle"
           @update-introduction="cvIntroductionUpdated"
         />
       </b-col>
@@ -239,6 +244,10 @@ export default {
     },
     defaultPDFName: function () {
       return `Codento CV ${this.profile.firstName} ${this.profile.lastName} ${this.currentLanguage.toUpperCase()}`
+    },
+    jobTitle () {
+      const currentEmployer = this.profileEmployersByProfileId(this.profile.id).find(item => item.employerId === this.internalCompanyId)
+      return currentEmployer ? currentEmployer.title[this.currentLanguage] : null
     },
     allRequiredFieldsFilled: {
       get: function () {

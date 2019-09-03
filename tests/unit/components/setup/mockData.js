@@ -47,3 +47,5 @@ export const mockProject = {
   endDate: '2017-06-16',
   employerId: 1
 }
+
+export const mockEmployer = { id: 1, name: 'Codento Oy' }
