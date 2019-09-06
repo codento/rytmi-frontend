@@ -100,9 +100,6 @@ export default {
       this.isActive = newUser.active
       this.profile = this.getActiveEmployeeProfile()
       this.selectedEmployeeRoles = this.employeeRoleList([]).filter(role => this.profile.employeeRoles.includes(role.id))
-    },
-    selectedEmployeeRoles (newRoles) {
-      this.profile.employeeRoles = newRoles.map(role => role.id)
     }
   },
   created () {
@@ -122,7 +119,7 @@ export default {
     submit () {
       this.update(
         { id: this.user.id, active: this.isActive, admin: this.isAdmin },
-        { id: this.profile.id, active: this.isActive })
+        { id: this.profile.id, active: this.isActive, employeeRoles: this.selectedEmployeeRoles.map(role => role.id) })
     },
     del () {
       const promptMessage = `
@@ -135,7 +132,7 @@ export default {
       }
     },
     getActiveEmployeeProfile () {
-      return this.profileByUserId(this.user.id)
+      return { ...this.profileByUserId(this.user.id) }
     }
   }
 }

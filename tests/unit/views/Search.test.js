@@ -6,6 +6,7 @@ import Search from '@/views/Search.vue'
 import { Results } from '@/components/Search'
 import Loading from '@/components/helpers/LoadingSpinner'
 import vSelect from 'vue-select'
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -18,8 +19,15 @@ function skillsMock () {
     1: { id: 1, name: 'Python' },
     2: { id: 2, name: 'JavaScript' },
     3: { id: 3, name: 'Scala' },
-    4: { id: 4, name: 'Go' }
+    4: { id: 4, name: 'some natural language' }
   }
+}
+
+const mockSkillGroups = {
+  1: { id: 100, title: { en: 'SomeGroup', fi: 'SomeGroup' } },
+  2: { id: 100, title: { en: 'SomeGroup', fi: 'SomeGroup' } },
+  3: { id: 100, title: { en: 'SomeGroup', fi: 'SomeGroup' } },
+  4: { id: 200, title: { en: LANGUAGE_ENUM.LANGUAGE_GROUP_NAME, fi: '' } }
 }
 
 function createStore (overrideConfig) {
@@ -33,7 +41,8 @@ function createStore (overrideConfig) {
           { id: 2, title: 'hardcore soft engineer' }
         ]
       },
-      skillFilter: () => []
+      skillFilter: () => [],
+      skillGroupBySkillId: () => (id) => mockSkillGroups[id]
     },
     actions: {
       updateSkillFilter: jest.fn(() => [])
@@ -55,7 +64,8 @@ function createWrapper (overrideMountingOptions) {
 describe('Search.vue', () => {
   it('should have all skills in the skill filter select', () => {
     const wrapper = createWrapper()
-    expect(wrapper.findAll(vSelect).at(1).props().options.length).toBe(Object.keys(skillsMock()).length)
+    const numSkillsNoLanguages = Object.keys(skillsMock()).length - 1
+    expect(wrapper.findAll(vSelect).at(1).props().options.length).toBe(numSkillsNoLanguages)
   })
 
   it('should pass right attributes to Results component', () => {
