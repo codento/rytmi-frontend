@@ -23,9 +23,14 @@
             {{ languageButton.label }}
           </b-button>
         </b-button-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
         <CvToolProfile
           v-if="profile"
           :profile="profile"
+          :job-title="jobTitle"
           @update-introduction="cvIntroductionUpdated"
         />
       </b-col>
@@ -52,6 +57,7 @@
           id="open-create-cv-modal"
           v-b-modal.create-cv-modal
           :disabled="!allRequiredFieldsFilled"
+          variant="primary"
         >
           Create CV
         </b-button>
@@ -217,15 +223,7 @@ export default {
         profileProject => {
           const project = this.projectById(profileProject.projectId)
           if (project) {
-            Object.assign(profileProject, {
-              duration: this.getFormattedDuration(profileProject.startDate, profileProject.endDate),
-              name: project.name,
-              description: project.description,
-              customerName: project.customerName,
-              employerId: project.employerId,
-              isInternal: project.isInternal,
-              isSecret: project.isSecret
-            })
+            return { ...project, ...profileProject, duration: this.getFormattedDuration(profileProject.startDate, profileProject.endDate) }
           }
           return profileProject
         }
@@ -238,6 +236,10 @@ export default {
     },
     defaultPDFName: function () {
       return `Codento CV ${this.profile.firstName} ${this.profile.lastName} ${this.currentLanguage.toUpperCase()}`
+    },
+    jobTitle () {
+      const currentEmployer = this.profileEmployersByProfileId(this.profile.id).find(item => item.employerId === this.internalCompanyId)
+      return currentEmployer ? currentEmployer.title[this.currentLanguage] : null
     },
     allRequiredFieldsFilled: {
       get: function () {
@@ -316,7 +318,8 @@ export default {
         projectDescription: profileProjectObj.description[this.currentLanguage],
         projectCustomer: !profileProjectObj.isInternal ? profileProjectObj.customerName[this.currentLanguage] : null,
         projectDuration: profileProjectObj.duration,
-        projectSkills: profileProjectObj.skills.map(skill => skill.name)
+        projectSkills: profileProjectObj.skills.map(skill => skill.name),
+        isConfidential: profileProjectObj.isConfidential
       }
     },
     mapSkillForCV (skillObj) {

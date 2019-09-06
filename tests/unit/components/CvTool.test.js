@@ -10,7 +10,7 @@ import {
 import { getters } from '@/store/modules/cvTool/getters'
 
 import { createShallowWrapper } from './setup/setup'
-import { mockProfile, mockProject, mockProfileProject } from './setup/mockData'
+import { mockProfile, mockProject, mockProfileProject, mockEmployer } from './setup/mockData'
 
 const mockGetters = {
   profileSkillsByProfileId: () => (profileId) => {
@@ -66,6 +66,17 @@ const mockGetters = {
   },
   projectById: () => (projectId) => {
     return mockProject
+  },
+  employerByName: () => (name) => {
+    return mockEmployer
+  },
+  profileEmployersByProfileId: () => (profileId) => {
+    return [
+      {
+        employerId: 1,
+        title: { en: 'Software developer', fi: 'Sovelluskehittäjä' }
+      }
+    ]
   }
 }
 

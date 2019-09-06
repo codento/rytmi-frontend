@@ -1,26 +1,27 @@
 <template>
   <div>
-    <div class="text-center">
-      <div>
+    <b-row align-v="center">
+      <b-col
+        cols="4"
+        class="text-center"
+      >
         <img
           alt="profile photo"
           :src="profile.photoPath"
         >
-      </div>
-      <div style="color:#869fac">
-        <span class="profile-name"> {{ fullName }}</span><br>
-        <span class="profile-title">{{ profile.title }}</span>
-      </div>
-      <div>
+        <h4 class="my-2">
+          {{ fullName }}
+        </h4>
         <div>Born {{ profile.birthYear }}</div>
-      </div>
-      <div class="profileCardDetails profile-card-detail-row">
+      </b-col>
+      <b-col>
+        <h3>{{ jobTitle }}</h3>
         <b-textarea
           id="input-introduction"
           v-model="modifiedIntroduction"
           class="form-control"
           type="text"
-          rows="6"
+          rows="10"
           placeholder="Add profile description for CV"
           :state="introductionIsValid"
           @update="updateIntroduction"
@@ -41,8 +42,8 @@
             {{ modifiedIntroduction.length }}/{{ maxIntroductionLength }}
           </p>
         </div>
-      </div>
-    </div>
+      </b-col>
+    </b-row>
     <b-row>
       <b-col
         md="12"
@@ -54,7 +55,7 @@
         >
           <div
             v-if="topProjects.length === 0"
-            style="color: grey"
+            class="text-muted"
           >
             No relevant projects chosen, use checkboxes below to add projects!
           </div>
@@ -93,15 +94,10 @@
           class="mt-2 mb-2"
           title="Top skills"
         >
-          <div
-            v-if="orderedSkills.length === 0"
-            style="color: grey"
-          >
-            No skills chosen, use checkboxes below to add skills!
-          </div>
           <b-list-group
             id="top-skills"
             v-sortable="{onEnd: reorder}"
+            class="mb-2"
           >
             <b-list-group-item
               v-for="skill of orderedSkills"
@@ -115,6 +111,18 @@
               />
             </b-list-group-item>
           </b-list-group>
+          <div
+            v-if="orderedSkills.length === 0"
+            class="text-muted"
+          >
+            No skills chosen, use checkboxes below to add skills!
+          </div>
+          <div
+            v-else-if="orderedSkills.length > 1"
+            class="text-center text-muted"
+          >
+            Order skills by dragging them
+          </div>
         </b-card>
       </b-col>
     </b-row>
@@ -131,7 +139,8 @@ export default {
     SkillRow
   },
   props: {
-    profile: Object
+    profile: Object,
+    jobTitle: String
   },
   data () {
     return {
@@ -178,17 +187,12 @@ export default {
 </script>
 
 <style scoped>
-  .profile-card-detail-row {
-    margin-top: 0.5em;
-  }
-  .profile-title {
-    font-size: 13px;
-  }
-  .profile-name {
-    font-size: 32px;
+  #input-introduction {
+    font-size: 13px
   }
   #top-skills .borderless {
     border: 0;
+    padding: 0.2rem;
     cursor: pointer;
   }
 </style>

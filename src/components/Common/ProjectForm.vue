@@ -87,7 +87,7 @@
         </small>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row class="mt-4">
       <b-col class="mt-2 mb-2">
         <b-form-checkbox
           v-model="editedProject.isInternal"
@@ -96,7 +96,10 @@
         </b-form-checkbox>
       </b-col>
     </b-row>
-    <b-row v-if="showCustomerName">
+    <b-row
+      v-if="showCustomerName"
+      class="my-4"
+    >
       <b-col sm="6">
         <small for="project-customer-name-fi-input">Customer name (in Finnish) *</small>
         <b-form-group
@@ -127,8 +130,22 @@
           />
         </b-form-group>
       </b-col>
+      <b-col class="mb-6">
+        <b-form-checkbox
+          id="is-confidential-checkbox"
+          v-model="editedProject.isConfidential"
+        >
+          <span id="is-confidential-checkbox-label">This is a confidential project</span>
+        </b-form-checkbox>
+        <b-popover
+          target="is-confidential-checkbox-label"
+          placement="right"
+          triggers="hover focus"
+          content="If the project is confidential, the customer name will be replaced in CV by Customer: confidential"
+        />
+      </b-col>
     </b-row>
-    <b-row>
+    <b-row class="my-4">
       <b-col sm="6">
         <b-form-group invalid-feedback="Required">
           <small for="project-description-fi-input">Description (in Finnish) *</small>
@@ -157,12 +174,19 @@
       </b-col>
     </b-row>
     <b-row v-show="isInternalCompanyProject">
-      <b-col class="mt-2 mb-2">
+      <b-col>
         <b-form-checkbox
+          id="is-secret-checkbox"
           v-model="editedProject.isSecret"
         >
-          This is a secret project
+          <span id="is-secret-checkbox-label">This is a secret project</span>
         </b-form-checkbox>
+        <b-popover
+          target="is-secret-checkbox-label"
+          placement="right"
+          triggers="hover focus"
+          content="If the project is secret, it will not show in CV"
+        />
       </b-col>
     </b-row>
     <b-row class="my-4">
@@ -395,6 +419,7 @@ export default {
         startDate: !this.isNewProject ? new Date(this.project.startDate) : null,
         endDate: !this.isNewProject && this.project.endDate ? new Date(this.project.endDate) : null,
         isSecret: !this.isNewProject ? this.project.isSecret : false,
+        isConfidential: !this.isNewProject ? this.project.isConfidential : false,
         isInternal: !this.isNewProject ? this.project.isInternal : false,
         name: !this.isNewProject && this.project.name ? { ...this.project.name } : { fi: '', en: '' },
         description: !this.isNewProject && this.project.description ? { ...this.project.description } : { fi: '', en: '' },

@@ -160,7 +160,7 @@ export default {
           .catch(error => {
             this.setAppInitializeError(error)
           })
-          .finally(() => {
+          .then(() => {
             this.setAppInitialized(this.isTokenValid && isSignedInToGoogle)
           })
       }

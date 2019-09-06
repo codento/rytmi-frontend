@@ -63,6 +63,20 @@
       hover
     >
       <template
+        slot="createdAt"
+        slot-scope="data"
+      >
+        {{ $options.filters.dateFilter(data.value) }}
+      </template>
+
+      <template
+        slot="updatedAt"
+        slot-scope="data"
+      >
+        {{ $options.filters.dateFilter(data.value) }}
+      </template>
+
+      <template
         slot="edit"
         slot-scope="data"
       >
@@ -140,7 +154,6 @@ export default {
   computed: {
     ...mapGetters([
       'skillProfiles',
-      'isAdmin',
       'skillFilter',
       'currentLanguage'
     ]),
@@ -181,19 +194,13 @@ export default {
     },
     tableItems () {
       const orderedSkills = orderBy(this.skillList, [skill => skill.name.toLowerCase()], ['asc'])
-      return orderedSkills.map(skill => {
-        const formattedDates = {
-          createdAt: this.$options.filters.dateFilter(skill.createdAt),
-          updatedAt: this.$options.filters.dateFilter(skill.updatedAt)
-        }
-        return { ...skill, ...formattedDates }
-      }).filter(skill => {
+      return orderedSkills.filter(skill => {
         // Filter data based on user selection/input
         return Object.keys(this.filterValues).every(key => {
           if (this.filterValues[key] && this.filterValues[key].length > 0) {
             // Input text field
             if (key === 'name') {
-              return skill[key].toLowerCase().includes(this.filterValues[key])
+              return skill[key].toLowerCase().includes(this.filterValues[key].toLowerCase())
             }
             // Dropdown options
             return this.filterValues[key].includes(skill[key][this.currentLanguage])

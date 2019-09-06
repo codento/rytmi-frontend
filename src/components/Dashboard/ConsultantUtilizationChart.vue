@@ -58,7 +58,7 @@ export default {
           pointHoverBorderColor: COLORS.violet
         },
         2: {
-          label: 'Agile coaches',
+          label: 'Method coaches',
           baseColor: COLORS.orange,
           pointHoverBorderColor: COLORS.orange
         }

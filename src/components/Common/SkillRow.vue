@@ -2,28 +2,27 @@
   <b-row
     v-b-tooltip.hover.top="description"
     :disabled.sync="disableTooltip"
-    class="skillRow"
+    class="my-1"
+    align-v="center"
   >
     <b-col
-      :class="{ skillname:true, 'skillname-highlight': highlight, 'text-right': true, 'valign-middle': true }"
-      cols="5"
+      cols="4"
+      class="text-right"
     >
-      {{ skillName(skillId) }}:
+      {{ skillName(skillId) }}
     </b-col>
     <b-col
-      cols="7"
-      class=""
+      cols="8"
       @mouseenter="active = id"
       @mouseleave="active = null"
     >
       <b-progress
         :max="5"
-        class="mb-6"
-        height="0.9rem"
+        :class="showSkillsOnly ? 'my-2' : 'mt-1'"
       >
         <b-progress-bar
           :value="knows"
-          class="rytmi-progress-knowledge"
+          variant="c-orange"
         >
           <slot
             v-if="active !== id"
@@ -42,12 +41,11 @@
       <b-progress
         v-show="!showSkillsOnly"
         :max="5"
-        class="mb-6"
-        height="0.9rem"
+        class="mb-1"
       >
         <b-progress-bar
           :value="wantsTo"
-          class="rytmi-progress-wants"
+          variant="c-orange-light"
         >
           <slot
             v-if="active !== id"
@@ -85,6 +83,10 @@ export default {
     disableTooltip: {
       type: Boolean,
       default: false
+    },
+    selectable: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -105,43 +107,18 @@ export default {
     }
   },
   methods: {
+    selectSkill (skillId) {
+      this.$emit('skill-selected', skillId)
+    }
   }
 }
 </script>
 
-<style>
-.tooltip-inner {
-    max-width: 550px;
-    width: inherit;
-}
-</style>
-
 <style scoped>
-.skillrow {
-  padding-bottom: 12px;
-}
-.rytmi-progress-knowledge {
-  background-color: #fda708;
-}
-.rytmi-progress-wants {
-  background-color: #fedfa7;
-}
-.valign-middle {
-  margin-top: auto;
-  margin-bottom: auto;
-}
 .skilldesc-center {
   position: absolute;
   left: 0;
   right: 0;
   text-align: center;
-}
-.skillname {
-  color: gray;
-  font-weight: bolder;
-}
-.skillname-highlight {
-  color: black;
-  font-weight: 700;
 }
 </style>

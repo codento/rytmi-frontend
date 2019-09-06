@@ -69,6 +69,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { Results } from '../components/Search'
 import { orderBy } from 'lodash'
 import vSelect from 'vue-select'
+import { LANGUAGE_ENUM } from '@/utils/constants'
 
 export default {
   name: 'Search',
@@ -88,13 +89,21 @@ export default {
   computed: {
     ...mapGetters([
       'skills',
+      'skillGroupBySkillId',
       'skillName',
       'skillFilter',
       'profiles',
       'employeeRoles'
     ]),
+    skillsOnly () {
+      return Object.values(this.skills)
+        .filter(skill => {
+          const skillGroup = this.skillGroupBySkillId(skill.id)
+          return skillGroup ? skillGroup.title.en !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : true
+        })
+    },
     selectFilterOptions () {
-      const skills = Object.values(this.skills).map(skill => ({ label: skill.name, id: skill.id }))
+      const skills = this.skillsOnly.map(skill => ({ label: skill.name, id: skill.id }))
       const unselectedSkills = skills.filter(selectableSkill => !(this.selectedSkills.map(skill => skill.id)).includes(selectableSkill.id))
       return orderBy(unselectedSkills, [skill => skill.label.toLowerCase()], ['asc'])
     },
@@ -113,6 +122,7 @@ export default {
   },
   created () {
     this.selectedSkills = this.skillFilter ? this.skillFilter : []
+    this.selectedRole = this.employeeRoleList.filter(role => role.label !== 'administrative')
   },
   mounted () {
     document.title = 'Rytmi - Profiles'
