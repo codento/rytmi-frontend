@@ -113,6 +113,7 @@ export default {
   },
   created () {
     this.selectedSkills = this.skillFilter ? this.skillFilter : []
+    this.selectedRole = this.employeeRoleList.filter(role => role.label !== 'administrative')
   },
   mounted () {
     document.title = 'Rytmi - Profiles'
