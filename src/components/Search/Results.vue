@@ -61,7 +61,7 @@ import { isEmpty, sortBy, difference } from 'lodash'
 import { mapGetters } from 'vuex'
 import ProfileCard from './ProfileCard'
 import { isValid, startOfDay } from 'date-fns'
-import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
+import { INTERNAL_COMPANY_NAME, LANGUAGE_ENUM } from '@/utils/constants'
 import { ChevronDownIcon, ChevronUpIcon } from 'vue-feather-icons'
 
 const sortAttributeEnum = Object.freeze({ name: 1, wantsTo: 2, knows: 3, utilization: 4 })
@@ -105,6 +105,7 @@ export default {
     ...mapGetters([
       'profileFilter',
       'profileSkillsByProfileId',
+      'skillGroupBySkillId',
       'profiles',
       'futureProjectsOfProfile',
       'profileProjectsByProfileId',
@@ -183,9 +184,14 @@ export default {
         this.futureProjectsOfProfile(profile.id).map(project => {
           utilizationOnSelectedDate += project.workPercentage
         })
+        const skillsOnly = this.profileSkillsByProfileId(profile.id)
+          .filter(skill => {
+            const skillGroup = this.skillGroupBySkillId(skill.skillId)
+            return skillGroup ? skillGroup.title.en !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : true
+          })
         return {
           profile: profile,
-          skills: this.profileSkillsByProfileId(profile.id),
+          skills: skillsOnly,
           projects: this.futureProjectsOfProfile(profile.id).filter(profileProject => this.projectById(profileProject.projectId).employerId === this.employerByName(INTERNAL_COMPANY_NAME).id),
           utilization: utilizationOnSelectedDate
         }
