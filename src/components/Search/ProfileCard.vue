@@ -93,6 +93,7 @@ export default {
       'profileSkillsByProfileId',
       'skillById',
       'skillCategoryById',
+      'skillGroupBySkillId',
       'futureProjectsOfProfile'
     ])
   },
@@ -112,7 +113,12 @@ export default {
       return ballsArray
     },
     sortedSkills (profileId) {
-      const sortedByProficiency = this.profileSkillsByProfileId(profileId).sort((a, b) => {
+      const skillsOnly = this.profileSkillsByProfileId(profileId)
+        .filter(skill => {
+          const skillGroup = this.skillGroupBySkillId(skill.skillId)
+          return skillGroup ? skillGroup.title.en !== LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : true
+        })
+      const sortedByProficiency = skillsOnly.sort((a, b) => {
         if (b.knows > a.knows) { return 1 }
         if (b.knows < a.knows) { return -1 }
         return 0
