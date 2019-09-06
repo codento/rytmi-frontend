@@ -64,7 +64,7 @@ function createWrapper (overrideMountingOptions) {
 describe('Search.vue', () => {
   it('should have all skills in the skill filter select', () => {
     const wrapper = createWrapper()
-    const numSkillsNoLanguages = Object.keys(skillsMock()).length -1
+    const numSkillsNoLanguages = Object.keys(skillsMock()).length - 1
     expect(wrapper.findAll(vSelect).at(1).props().options.length).toBe(numSkillsNoLanguages)
   })
 

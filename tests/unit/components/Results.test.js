@@ -89,7 +89,7 @@ function createStore (overrideConfig) {
       futureProjectsOfProfile: () => (profileId) => filter(profileProjectsMock, project => project.profileId === profileId),
       projectById: () => (projectId) => filter(projectsMock, project => project.id === projectId),
       employerByName: () => (employerName) => filter(employersMock, employer => employer.name === employerName),
-      skillGroupBySkillId: () => (id) => ({ title: { en: 'some group'} })
+      skillGroupBySkillId: () => (id) => ({ title: { en: 'some group' } })
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
