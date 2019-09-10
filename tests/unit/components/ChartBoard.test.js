@@ -35,14 +35,15 @@ const storeConfig = {
         phone: '1354'
       }
     },
-    skillGroupBySkillId: () => (id) => mockSkillGroups[id]
+    skillGroupBySkillId: () => (id) => mockSkillGroups[id],
+    currentLanguage: () => 'fi'
   }
 }
 
 const mockSkills = {
-  1: { id: 1, name: 'SkillOne' },
-  2: { id: 2, name: 'SkillTwo' },
-  3: { id: 3, name: 'LanguageOne' }
+  1: { id: 1, name: { fi: 'SkillOne', en: 'SkillOne' } },
+  2: { id: 2, name: { fi: 'SkillTwo', en: 'SkillTwo' } },
+  3: { id: 3, name: { fi: 'LanguageOne', en: 'LanguageOne' } }
 }
 
 const mockSkillGroups = {

@@ -8,16 +8,16 @@ import { format } from 'date-fns'
 const mockSkillList = [
   {
     id: 2,
-    name: 'C',
-    description: 'old robust stuff',
+    name: { fi: 'C', en: 'C' },
+    description: { fi: 'old robust stuff', en: 'old robust stuff' },
     skillCategoryId: 2,
     skillCategoryName: { en: 'Old stuff', fi: 'Vanhoi jutui' },
     skillGroupName: { en: 'Old stuff', fi: 'Vanhoi jutui' }
   },
   {
     id: 1,
-    name: 'JavaScript',
-    description: 'Jäsää',
+    name: { fi: 'JavaScript', en: 'JavaScript' },
+    description: { fi: 'Jäsää', en: 'Jäsää' },
     skillCategoryId: 1,
     skillCategoryName: { en: 'New stuff', fi: 'Uusei jutui' },
     skillGroupName: { en: 'New stuff', fi: 'Uusei jutui' }
@@ -87,7 +87,7 @@ describe('SkillList.vue', () => {
     // check sorting with lower case value
     wrapper.setData({ filterValues: { name: 'java' } })
     expect(wrapper.vm.tableItems).toHaveLength(1)
-    expect(wrapper.vm.tableItems[0].name).toEqual('JavaScript')
+    expect(wrapper.vm.tableItems[0].name.fi).toEqual('JavaScript')
 
     // check sorting with upper case value
     wrapper.setData({ filterValues: { name: 'Java' } })
