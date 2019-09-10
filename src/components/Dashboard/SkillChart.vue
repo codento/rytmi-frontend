@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ChartCard from './ChartCard'
 import RadarChart from '../Charts/RadarChart'
 import BarChart from '../Charts/BarChart'
@@ -109,6 +110,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['currentLanguage']),
     skillsLength () {
       return Object.keys(this.skills).length
     },
@@ -206,7 +208,7 @@ export default {
       this.selectedSkills = this.formatForVueSelect(top3Skills)
     },
     formatForVueSelect (skills) {
-      return skills.map(skill => ({ label: skill.name, id: skill.id }))
+      return skills.map(skill => ({ label: skill.name[this.currentLanguage], id: skill.id }))
     }
   }
 }

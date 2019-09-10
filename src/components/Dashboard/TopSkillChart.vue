@@ -7,7 +7,7 @@
       <p class="lead px-2">
         Our top skill is
         <strong>{{ topSkillLevel.name }}</strong>. <br>
-        There are <strong>{{ topSkillLevel.numberOfPeople }}</strong>
+        There are <strong>{{ topSkillLevel.numberOfPeople }}</strong> people
         who's skill level is 4 or 5 and the average is
         <strong>{{ topSkillLevel.currentKnowledgeAverage }}</strong>
       </p>

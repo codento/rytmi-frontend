@@ -9,7 +9,7 @@
       cols="4"
       class="text-right"
     >
-      {{ skillName(skillId) }}
+      {{ skillName(skillId)[currentLanguage] }}
     </b-col>
     <b-col
       cols="8"
@@ -97,7 +97,8 @@ export default {
   computed: {
     ...mapGetters([
       'skillById',
-      'skillName'
+      'skillName',
+      'currentLanguage'
     ]),
     knowsToDesc: function () {
       return proficiencyDesc.knows['en'][this.knows]
