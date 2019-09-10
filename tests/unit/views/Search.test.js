@@ -42,7 +42,8 @@ function createStore (overrideConfig) {
         ]
       },
       skillFilter: () => [],
-      skillGroupBySkillId: () => (id) => mockSkillGroups[id]
+      skillGroupBySkillId: () => (id) => mockSkillGroups[id],
+      currentLanguage: () => 'fi'
     },
     actions: {
       updateSkillFilter: jest.fn(() => [])
@@ -70,10 +71,10 @@ describe('Search.vue', () => {
 
   it('should pass right attributes to Results component', () => {
     const wrapper = createWrapper()
-    const skill = skillsMock()[1]
-    wrapper.vm.selectedSkills = [{ label: skill.name.fi, id: skill.id }]
+    const expected = { id: 1, name: 'Python' }
+    wrapper.vm.selectedSkills = [{ label: 'Python', id: 1 }]
     wrapper.vm.nameFilter = 'foo'
-    expect(wrapper.find(Results).props().skillFilters).toEqual([skillsMock()[1]])
+    expect(wrapper.find(Results).props().skillFilters).toEqual([expected])
     expect(wrapper.find(Results).props().nameFilter).toBe('foo')
   })
 })

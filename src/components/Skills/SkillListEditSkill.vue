@@ -149,8 +149,8 @@ export default {
         en: this.skill.name ? this.skill.name.en : ''
       },
       description: {
-        fi: this.skill.description ? this.skill.name.fi : '',
-        en: this.skill.description ? this.skill.name.en : ''
+        fi: this.skill.description ? this.skill.description.fi : '',
+        en: this.skill.description ? this.skill.description.en : ''
       },
       selectedSkillCategoryId: this.skill.skillCategoryId || null,
       showSimilarSkills: false,
