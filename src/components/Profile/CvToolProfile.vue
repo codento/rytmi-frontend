@@ -1,18 +1,24 @@
 <template>
   <div>
-    <b-row align-v="center">
+    <b-row
+      class="my-4"
+      align-v="center"
+    >
       <b-col
         cols="4"
         class="text-center"
       >
-        <img
+        <b-img
           alt="profile photo"
+          fluid
           :src="profile.photoPath"
-        >
-        <h4 class="my-2">
+        />
+        <h5 class="my-2">
           {{ fullName }}
-        </h4>
-        <div>Born {{ profile.birthYear }}</div>
+        </h5>
+        <div v-show="profile.birthYear">
+          Born {{ profile.birthYear }}
+        </div>
       </b-col>
       <b-col>
         <h3>{{ jobTitle }}</h3>
