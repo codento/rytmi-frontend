@@ -16,10 +16,10 @@ localVue.component('vSelect', vSelect)
 
 function skillsMock () {
   return {
-    1: { id: 1, name: 'Python' },
-    2: { id: 2, name: 'JavaScript' },
-    3: { id: 3, name: 'Scala' },
-    4: { id: 4, name: 'some natural language' }
+    1: { id: 1, name: { fi: 'Python', en: 'Python' } },
+    2: { id: 2, name: { fi: 'JavaScript', en: 'JavaScript' } },
+    3: { id: 3, name: { fi: 'Scala', en: 'Scala' } },
+    4: { id: 4, name: { fi: 'some natural language', en: 'some natural language' } }
   }
 }
 
@@ -71,7 +71,7 @@ describe('Search.vue', () => {
   it('should pass right attributes to Results component', () => {
     const wrapper = createWrapper()
     const skill = skillsMock()[1]
-    wrapper.vm.selectedSkills = [{ label: skill.name, id: skill.id }]
+    wrapper.vm.selectedSkills = [{ label: skill.name.fi, id: skill.id }]
     wrapper.vm.nameFilter = 'foo'
     expect(wrapper.find(Results).props().skillFilters).toEqual([skillsMock()[1]])
     expect(wrapper.find(Results).props().nameFilter).toBe('foo')

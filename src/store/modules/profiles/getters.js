@@ -16,8 +16,8 @@ export const getters = {
     return state.profileSkills
       .filter(skill => skill.profileId === profileId)
       .sort((a, b) => {
-        const nameA = getters.skillName(a.skillId).toLowerCase()
-        const nameB = getters.skillName(b.skillId).toLowerCase()
+        const nameA = getters.skillName(a.skillId)[getters.currentLanguage].toLowerCase()
+        const nameB = getters.skillName(b.skillId)[getters.currentLanguage].toLowerCase()
         if (nameA < nameB) return -1
         else if (nameA > nameB) return 1
         return 0

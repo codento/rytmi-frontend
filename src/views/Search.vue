@@ -93,7 +93,8 @@ export default {
       'skillName',
       'skillFilter',
       'profiles',
-      'employeeRoles'
+      'employeeRoles',
+      'currentLanguage'
     ]),
     skillsOnly () {
       return Object.values(this.skills)
@@ -103,7 +104,7 @@ export default {
         })
     },
     selectFilterOptions () {
-      const skills = this.skillsOnly.map(skill => ({ label: skill.name, id: skill.id }))
+      const skills = this.skillsOnly.map(skill => ({ label: skill.name[this.currentLanguage], id: skill.id }))
       const unselectedSkills = skills.filter(selectableSkill => !(this.selectedSkills.map(skill => skill.id)).includes(selectableSkill.id))
       return orderBy(unselectedSkills, [skill => skill.label.toLowerCase()], ['asc'])
     },

@@ -45,7 +45,7 @@
               cols="6"
               class="text-right skill-name-label"
             >
-              {{ skillById(skill.skillId).name }}
+              {{ skillById(skill.skillId).name[currentLanguage] }}
             </b-col>
             <b-col class="knows-circles-containter">
               <span
@@ -94,7 +94,8 @@ export default {
       'skillById',
       'skillCategoryById',
       'skillGroupBySkillId',
-      'futureProjectsOfProfile'
+      'futureProjectsOfProfile',
+      'currentLanguage'
     ])
   },
   methods: {
