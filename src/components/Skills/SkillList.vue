@@ -253,8 +253,8 @@ export default {
       const message = this.numberOfProfilesWithSelectedSkill > 0
         ? `There are currently ${this.numberOfProfilesWithSelectedSkill} ` +
         'persons who have this skill in their CV. ' +
-        `Are you sure you want to delete skill ${item.name}?`
-        : `Are you sure you want to delete skill ${item.name}?`
+        `Are you sure you want to delete skill ${item.name[this.currentLanguage]}?`
+        : `Are you sure you want to delete skill ${item.name[this.currentLanguage]}?`
       const confirmation = confirm(message)
       if (confirmation) {
         this.resetSelectedSkill()
