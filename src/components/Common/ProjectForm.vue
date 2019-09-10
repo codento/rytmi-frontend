@@ -421,7 +421,7 @@ export default {
         startDate: !this.isNewProject ? new Date(this.project.startDate) : null,
         endDate: !this.isNewProject && this.project.endDate ? new Date(this.project.endDate) : null,
         isSecret: !this.isNewProject ? this.project.isSecret : false,
-        isConfidential: !this.isNewProject ? this.project.isConfidential : false,
+        isConfidential: !this.isNewProject ? this.project.isConfidential : true,
         isInternal: !this.isNewProject ? this.project.isInternal : false,
         name: !this.isNewProject && this.project.name ? { ...this.project.name } : { fi: '', en: '' },
         description: !this.isNewProject && this.project.description ? { ...this.project.description } : { fi: '', en: '' },
