@@ -160,7 +160,7 @@ export default {
     fields () {
       return [
         {
-          key: 'name',
+          key: `name.${this.currentLanguage}`,
           sortable: true
         },
         {
@@ -169,7 +169,7 @@ export default {
           sortable: true
         },
         {
-          key: 'description',
+          key: `description.${this.currentLanguage}`,
           sortable: false
         },
         {
@@ -193,14 +193,14 @@ export default {
       ]
     },
     tableItems () {
-      const orderedSkills = orderBy(this.skillList, [skill => skill.name.toLowerCase()], ['asc'])
+      const orderedSkills = orderBy(this.skillList, [skill => skill.name[this.currentLanguage].toLowerCase()], ['asc'])
       return orderedSkills.filter(skill => {
         // Filter data based on user selection/input
         return Object.keys(this.filterValues).every(key => {
           if (this.filterValues[key] && this.filterValues[key].length > 0) {
             // Input text field
             if (key === 'name') {
-              return skill[key].toLowerCase().includes(this.filterValues[key].toLowerCase())
+              return skill[key][this.currentLanguage].toLowerCase().includes(this.filterValues[key].toLowerCase())
             }
             // Dropdown options
             return this.filterValues[key].includes(skill[key][this.currentLanguage])
