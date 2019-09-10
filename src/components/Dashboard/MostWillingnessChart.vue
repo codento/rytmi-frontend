@@ -7,7 +7,7 @@
       <p class="lead px-2">
         Employees are most enthusiastic about
         <strong>{{ mostWillingnessToWorkWith.name }}</strong>. <br>
-        There are <strong>{{ mostWillingnessToWorkWith.numberOfPeople }}</strong>
+        There are <strong>{{ mostWillingnessToWorkWith.numberOfPeople }}</strong> people
         who would prefer working with the tech
         and our current skill level average is
         <strong>{{ mostWillingnessToWorkWith.currentKnowledgeAverage }}</strong>

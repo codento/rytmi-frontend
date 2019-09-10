@@ -85,7 +85,8 @@ export default {
     ...mapGetters([
       'skills',
       'profileSkillsByProfileId',
-      'skillGroupBySkillId'
+      'skillGroupBySkillId',
+      'currentLanguage'
     ]),
     isLanguageSkill () {
       if (this.profileSkill && this.profileSkill.id) {
@@ -103,7 +104,7 @@ export default {
     availableSkillsForVueSelect () {
       const existingSkillsIds = this.profileSkillsByProfileId(this.profileId).map(profileSkill => profileSkill.skillId)
       const allSkillsMappedForVueSelect = Object.values(this.skills).map(skill => ({
-        label: skill.name,
+        label: skill.name[this.currentLanguage],
         id: skill.id
       }))
       return orderBy(allSkillsMappedForVueSelect.filter(skill => !existingSkillsIds.includes(skill.id)), [skill => skill.label.toLowerCase()])
