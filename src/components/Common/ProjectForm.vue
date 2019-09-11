@@ -55,36 +55,26 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col>
+      <b-col sm="6">
         <small>Start date *</small>
         <Datepicker
           v-model="editedProject.startDate"
           name="project-start-date"
           required
-          :is-valid="inputStates.startDate"
+          :validator="{ isValid: inputStates.startDate, message: 'Required'}"
+          :max-value="editedProject.endDate"
+          @input-state="childComponentState.startDate = $event"
         />
-        <small
-          v-if="!inputStates.startDate && inputStates.startDate !== undefined"
-          class="text-danger"
-        >
-          Required
-        </small>
       </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
+      <b-col sm="6">
         <small>End date</small>
         <Datepicker
           v-model="editedProject.endDate"
           name="project-end-date"
-          :is-valid="inputStates.endDate"
+          label="End date"
+          :min-value="editedProject.startDate"
+          @input-state="childComponentState.endDate = $event"
         />
-        <small
-          v-if="!inputStates.endDate && inputStates.endDate !== undefined"
-          class="text-danger"
-        >
-          End date can't be before start date
-        </small>
       </b-col>
     </b-row>
     <b-row class="mt-4">
@@ -130,6 +120,8 @@
           />
         </b-form-group>
       </b-col>
+    </b-row>
+    <b-row>
       <b-col class="mb-6">
         <b-form-checkbox
           id="is-confidential-checkbox"
@@ -316,7 +308,11 @@ export default {
     return {
       editedProject: this.initProject(),
       validated: false,
-      skillFilterText: ''
+      skillFilterText: '',
+      childComponentState: {
+        startDate: true,
+        endDate: true
+      }
     }
   },
   computed: {
@@ -375,7 +371,6 @@ export default {
     inputStates () {
       return {
         startDate: this.validated ? !!this.editedProject.startDate : undefined,
-        endDate: this.validated ? !this.editedProject.endDate || this.editedProject.endDate >= this.editedProject.startDate : undefined,
         projectNameFi: this.validated ? this.editedProject.name.fi.length > 0 : undefined,
         projectNameEn: this.validated ? this.editedProject.name.en.length > 0 : undefined,
         customerNameFi: this.validated ? this.editedProject.customerName.fi.length > 0 || this.editedProject.isInternal : undefined,
@@ -385,7 +380,7 @@ export default {
       }
     },
     formIsValid () {
-      const stateArray = []
+      const stateArray = [Object.entries(this.childComponentState).map(entry => entry[1])]
       // Required always
       for (let entry of Object.entries(this.inputStates)) {
         stateArray.push(entry[1])
@@ -404,6 +399,7 @@ export default {
     onSubmit () {
       this.$emit('validate-custom-form')
       this.validated = true
+      console.log(this.editedProject)
       if (this.formIsValid) {
         this.validated = undefined
         this.$emit('on-submit', this.editedProject)
@@ -419,7 +415,7 @@ export default {
         startDate: !this.isNewProject ? new Date(this.project.startDate) : null,
         endDate: !this.isNewProject && this.project.endDate ? new Date(this.project.endDate) : null,
         isSecret: !this.isNewProject ? this.project.isSecret : false,
-        isConfidential: !this.isNewProject ? this.project.isConfidential : false,
+        isConfidential: !this.isNewProject ? this.project.isConfidential : true,
         isInternal: !this.isNewProject ? this.project.isInternal : false,
         name: !this.isNewProject && this.project.name ? { ...this.project.name } : { fi: '', en: '' },
         description: !this.isNewProject && this.project.description ? { ...this.project.description } : { fi: '', en: '' },
