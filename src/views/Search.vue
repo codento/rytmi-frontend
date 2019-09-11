@@ -40,6 +40,7 @@
             <Datepicker
               v-model="utilizationDateFilter"
               name="utilization-date-filter"
+              no-validation
             />
           </b-col>
           <b-col class="col-sm-9">
