@@ -399,7 +399,6 @@ export default {
     onSubmit () {
       this.$emit('validate-custom-form')
       this.validated = true
-      console.log(this.editedProject)
       if (this.formIsValid) {
         this.validated = undefined
         this.$emit('on-submit', this.editedProject)
