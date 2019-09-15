@@ -58,7 +58,7 @@ const isValidDateString = (dateString) => {
 const dateStringToDate = (dateString) => {
   if (dateString) {
     const [day, month, year] = dateString.split('.')
-    return new Date(Date.UTC(year, month - 1, day, 0, 0, 0))
+    return new Date(`${year}-${month < 10 ? '0' + month.toString() : month}-${day < 10 ? '0' + day.toString() : day}`)
   }
   return null
 }
@@ -180,7 +180,6 @@ export default {
     onSelect () {
       this.validFeedback.show = false
       this.dateString = format(this.datePicker.getDate(), 'D.M.YYYY')
-      this.$emit('input', this.datePicker.getDate())
     },
     onChange () {
       this.validFeedback.show = false
@@ -206,7 +205,6 @@ export default {
         }
         this.$emit('input-state', true)
       } else {
-        console.log(this.validFeedback)
         this.$emit('input-state', false)
       }
     },
