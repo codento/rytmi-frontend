@@ -16,6 +16,8 @@ import getters from './getters'
 import mutations from './mutations'
 import employers from './modules/employers'
 import profileEmployers from './modules/profileEmployers'
+import leaves from './modules/leaves'
+import absences from './modules/absences'
 
 Vue.use(Vuex)
 const state = {
@@ -42,6 +44,8 @@ export default new Vuex.Store({
     employers,
     profileEmployers,
     cvTool,
-    projectSkills
+    projectSkills,
+    leaves,
+    absences
   }
 })

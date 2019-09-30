@@ -11,7 +11,6 @@ export function fetchSkills ({ commit, state }) {
         resolve(response.data)
       })
       .catch(err => {
-        console.log(err)
         reject(err)
       }
       )

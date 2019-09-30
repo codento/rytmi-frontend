@@ -70,7 +70,10 @@ export default {
       'profileFilter',
       'futureProjectsOfProfile',
       'projectById',
-      'employerByName'
+      'employerByName',
+      'profileEmployersByProfileId',
+      'employerById',
+      'absencesByProfileId'
     ]),
     selectedProfiles () {
       return this.profileFilter().filter(profile => {
@@ -187,13 +190,15 @@ export default {
     countUtilizedConsultantsOnDate (date, roleId) {
       let utilized = 0
       let notUtilized = 0
+      let total = 0
 
       this.selectedProfiles.filter(profile => profile.employeeRoles.includes(roleId)).forEach((profile) => {
+        if (this.isAvailableOnDate(profile.id, date)) { total += 1 }
         this.consultantHasOngoingProject(profile.id, date)
           ? utilized += 1
           : notUtilized += 1
       })
-      return { utilized, notUtilized }
+      return { utilized, notUtilized, total }
     },
     consultantHasOngoingProject (profileId, date) {
       const projectProfiles = this.getProfileProjects(profileId)
@@ -225,17 +230,26 @@ export default {
       }
       return utilizationData
     },
+    isAvailableOnDate (profileId, date) {
+      const current = this.profileEmployersByProfileId(profileId).filter(job => this.employerByName(INTERNAL_COMPANY_NAME).id === job.employerId)
+      current.length > 0 || current.push({ startDate: new Date('1970-01-01'), endDate: new Date('2100-12-31') })
+      const normalized = current.map(relation => { return { startDate: new Date(relation.startDate), endDate: relation.endDate ? new Date(relation.endDate) : new Date('2100-12-31') } })[0]
+      return isWithinRange(date, normalized.startDate, normalized.endDate)
+    },
     fullCapacity (startDate, endDate, roleId) {
-      return [
-        {
-          x: new Date(startDate),
-          y: this.profileRolesCount[roleId]
-        },
-        {
-          x: new Date(endDate),
-          y: this.profileRolesCount[roleId]
-        }
-      ]
+      const availabilityData = []
+      let currentDate = startDate
+
+      for (let i = 0; isBefore(currentDate, endDate); i += 1) {
+        availabilityData.push(
+          {
+            x: new Date(currentDate),
+            y: this.countUtilizedConsultantsOnDate(currentDate, roleId).total
+          })
+        currentDate = addWeeks(currentDate, 1)
+      }
+
+      return availabilityData
     }
   }
 }
