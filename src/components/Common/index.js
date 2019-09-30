@@ -7,6 +7,7 @@ import EducationCard from './EducationCard.vue'
 import CertificateOrOtherCard from './CertificateOrOtherCard.vue'
 import ProjectForm from './ProjectForm.vue'
 import ProjectProfileForm from './ProjectProfileForm.vue'
+import LeaveForm from './LeaveForm.vue'
 
 export {
   ProjectRow,
@@ -17,5 +18,6 @@ export {
   EducationCard,
   CertificateOrOtherCard,
   ProjectForm,
-  ProjectProfileForm
+  ProjectProfileForm,
+  LeaveForm
 }

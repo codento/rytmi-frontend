@@ -232,13 +232,13 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      window.addEventListener('resize', this.handeResize)
+      window.addEventListener('resize', this.handleResize)
       // Init
-      this.handeResize()
+      this.handleResize()
     })
   },
   methods: {
-    handeResize () {
+    handleResize () {
       this.windowWidth = document.documentElement.clientWidth
       if (this.monthsDisplayed > this.maximumMonthsOnScreen) {
         this.monthsDisplayed = this.maximumMonthsOnScreen
