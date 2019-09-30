@@ -180,8 +180,13 @@ export default {
     onSelect () {
       this.validFeedback.show = false
       this.dateString = format(this.datePicker.getDate(), 'D.M.YYYY')
+      this.$emit('input', this.datePicker.getDate())
     },
     onChange () {
+      if (this.dateString === '') {
+        this.$emit('input', null)
+        return
+      }
       this.validFeedback.show = false
       if (this.invalidFeedback.length === 0) {
         if (this.dateString) {
