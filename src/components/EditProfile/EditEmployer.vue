@@ -221,7 +221,7 @@ export default {
         jobDescriptionFi: this.validated ? this.editedProfileEmployer.description['fi'].length > 0 : undefined,
         jobDescriptionEn: this.validated ? this.editedProfileEmployer.description['en'].length > 0 : undefined,
         startDate: this.validated ? new Date(this.editedProfileEmployer.startDate) > 1 : undefined,
-        endDate: this.validated && this.selectedEmployer && this.selectedEmployer.label !== INTERNAL_COMPANY_NAME ? !this.editedProfileEmployer.endDate : undefined,
+        endDate: this.validated && this.selectedEmployer && this.selectedEmployer.label !== INTERNAL_COMPANY_NAME ? !!this.editedProfileEmployer.endDate : !!this.editedProfileEmployer.endDate || this.selectedEmployer.label === INTERNAL_COMPANY_NAME || undefined,
         selectedEmployer: this.validated ? !!this.selectedEmployer : undefined
       }
     },
