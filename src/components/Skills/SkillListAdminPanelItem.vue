@@ -107,7 +107,7 @@
               {{ item.title[currentLanguage] }}
             </span>
             <b-badge
-              v-if="editedId === null && lastUpdatedName === item.title"
+              v-if="editedId === null && lastUpdatedName === item.title.fi"
               pill
               variant="success"
             >
@@ -268,9 +268,9 @@ export default {
           await this.updateAction(newValues)
         }
         this.$toasted.global.rytmi_success({
-          message: isNewItem ? `${this.label} ${this.editedName} added` : `${this.label} updated`
+          message: isNewItem ? `${this.label} ${this.editedName[this.currentLanguage]} added` : `${this.label} updated`
         })
-        this.lastUpdatedName = this.editedName
+        this.lastUpdatedName = this.editedName.fi
         this.lastUpdatedLabel = isNewItem ? 'New' : 'Updated'
         this.resetEditedItem()
       } catch (error) {

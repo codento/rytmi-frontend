@@ -160,7 +160,7 @@
               @click="editableProfileProject.skills.some(profileProjectSkill => profileProjectSkill.id === skill.id) ? removeSkill(skill) : addSkillToProfileProject(skill)"
             >
               <span>
-                {{ (isSelectedSkill(skill) ? '✓ ' : '') + skill.name }}
+                {{ (isSelectedSkill(skill) ? '✓ ' : '') + skill.name[currentLanguage] }}
               </span>
             </div>
             <div

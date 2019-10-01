@@ -6,8 +6,8 @@ import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel'
 
 const mockSkill = {
   id: 1,
-  name: 'JavaScript',
-  description: 'Jäsää',
+  name: { en: 'JavaScript', fi: 'JavaScript' },
+  description: { en: 'Jäsää', fi: 'Jäsää' },
   skillCategoryId: 1
 }
 
@@ -31,7 +31,8 @@ const defaultStoreConfig = {
   },
   getters: {
     skills: () => [],
-    skillCategories: () => mockSkillCategories
+    skillCategories: () => mockSkillCategories,
+    currentLanguage: () => 'fi'
   }
 }
 
@@ -53,9 +54,9 @@ const defaultMountingOptions = {
 describe('SkillListEditSkill.vue', () => {
   it('Should show form with skill props data', () => {
     const wrapper = createWrapper(SkillListEditSkill, defaultStoreConfig, defaultMountingOptions)
-    expect(wrapper.find('input[type="text"]').element.value).toBe(mockSkill.name)
+    expect(wrapper.find('input[type="text"]').element.value).toBe(mockSkill.name.fi)
     expect(wrapper.vm.selectedSkillCategoryId).toBe(mockSkillCategories[1].id)
-    expect(wrapper.find('textarea').element.value).toBe(mockSkill.description)
+    expect(wrapper.find('textarea').element.value).toBe(mockSkill.description.fi)
   })
 
   it('Should submit new skill if id is null', async () => {
@@ -67,15 +68,15 @@ describe('SkillListEditSkill.vue', () => {
       skill: { id: null }
     }
     const expected = {
-      name: 'New skill',
-      description: 'Some description',
+      name: { fi: 'New skill', en: 'New skill' },
+      description: { fi: 'Some description', en: 'Some description' },
       skillCategoryId: 1
     }
     const mergedConfig = merge({}, defaultStoreConfig, { actions })
     const mergedOptions = merge({}, defaultMountingOptions, { propsData })
     const wrapper = createWrapper(SkillListEditSkill, mergedConfig, mergedOptions)
-    wrapper.find('input[type="text"]').setValue('New skill')
-    wrapper.find('textarea').setValue('Some description')
+    wrapper.setData({ name: { fi: 'New skill', en: 'New skill' } })
+    wrapper.setData({ description: { fi: 'Some description', en: 'Some description' } })
     wrapper.setData({ selectedSkillCategoryId: 1 })
     expect(wrapper.find('button[type="submit"]').html().includes('disabled')).toBeFalsy()
     wrapper.find('button[type="submit"]').trigger('click')
@@ -91,14 +92,14 @@ describe('SkillListEditSkill.vue', () => {
     }
     const expected = {
       id: 1,
-      name: 'TypeScript',
-      description: 'TypeScript is betterer',
+      name: { fi: 'TypeScript', en: 'TypeScript' },
+      description: { fi: 'TypeScript is betterer', en: 'TypeScript is betterer' },
       skillCategoryId: 1
     }
     const mergedConfig = merge({}, defaultStoreConfig, { actions })
     const wrapper = createWrapper(SkillListEditSkill, mergedConfig, defaultMountingOptions)
-    wrapper.find('input[type="text"]').setValue('TypeScript')
-    wrapper.find('textarea').setValue('TypeScript is betterer')
+    wrapper.setData({ name: { fi: 'TypeScript', en: 'TypeScript' } })
+    wrapper.setData({ description: { fi: 'TypeScript is betterer', en: 'TypeScript is betterer' } })
     wrapper.find('button[type="submit"]').trigger('click')
     await flushPromises()
     expect(actions.updateSkill).toHaveBeenCalledWith(expect.anything(), expected, undefined)

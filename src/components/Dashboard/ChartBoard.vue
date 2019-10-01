@@ -141,7 +141,8 @@ export default {
       'skillGroupBySkillId',
       'profileList',
       'employeeRoles',
-      'profileById'
+      'profileById',
+      'currentLanguage'
     ]),
     skillsOnlyList () {
       const filteredSkillKeys = Object.keys(this.skills).filter(skillId => {
@@ -177,7 +178,7 @@ export default {
       const skillProfiencyBySkillId = {}
       this.skillsOnlyList.forEach((skill) => {
         skillProfiencyBySkillId[skill.id] = {
-          name: skill.name,
+          name: skill.name[this.currentLanguage],
           proficiencies: [],
           willingness: []
         }

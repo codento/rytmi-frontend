@@ -160,7 +160,8 @@ export default {
     fields () {
       return [
         {
-          key: 'name',
+          key: `name.${this.currentLanguage}`,
+          label: 'Name',
           sortable: true
         },
         {
@@ -169,15 +170,18 @@ export default {
           sortable: true
         },
         {
-          key: 'description',
+          key: `description.${this.currentLanguage}`,
+          label: 'Description',
           sortable: false
         },
         {
           key: 'createdAt',
+          label: 'Created',
           sortable: true
         },
         {
           key: 'updatedAt',
+          label: 'Updated',
           sortable: true
         },
         {
@@ -193,14 +197,14 @@ export default {
       ]
     },
     tableItems () {
-      const orderedSkills = orderBy(this.skillList, [skill => skill.name.toLowerCase()], ['asc'])
+      const orderedSkills = orderBy(this.skillList, [skill => skill.name[this.currentLanguage].toLowerCase()], ['asc'])
       return orderedSkills.filter(skill => {
         // Filter data based on user selection/input
         return Object.keys(this.filterValues).every(key => {
           if (this.filterValues[key] && this.filterValues[key].length > 0) {
             // Input text field
             if (key === 'name') {
-              return skill[key].toLowerCase().includes(this.filterValues[key].toLowerCase())
+              return skill[key][this.currentLanguage].toLowerCase().includes(this.filterValues[key].toLowerCase())
             }
             // Dropdown options
             return this.filterValues[key].includes(skill[key][this.currentLanguage])
@@ -253,8 +257,8 @@ export default {
       const message = this.numberOfProfilesWithSelectedSkill > 0
         ? `There are currently ${this.numberOfProfilesWithSelectedSkill} ` +
         'persons who have this skill in their CV. ' +
-        `Are you sure you want to delete skill ${item.name}?`
-        : `Are you sure you want to delete skill ${item.name}?`
+        `Are you sure you want to delete skill ${item.name[this.currentLanguage]}?`
+        : `Are you sure you want to delete skill ${item.name[this.currentLanguage]}?`
       const confirmation = confirm(message)
       if (confirmation) {
         this.resetSelectedSkill()

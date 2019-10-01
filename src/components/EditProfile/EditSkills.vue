@@ -23,7 +23,7 @@
             slot="skillId"
             slot-scope="skillId"
           >
-            {{ skillById(skillId.value).name }}
+            {{ skillById(skillId.value).name[currentLanguage] }}
           </template>
           <template
             slot="knows"
@@ -159,7 +159,8 @@ export default {
       'skills',
       'skillById',
       'profileSkillsByProfileId',
-      'skillGroupBySkillId'
+      'skillGroupBySkillId',
+      'currentLanguage'
     ]),
     currentSkillIsLanguage () {
       if (this.editedSkill && this.editedSkill.skillId) {

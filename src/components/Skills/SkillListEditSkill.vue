@@ -3,38 +3,61 @@
     <h3>{{ skill.id ? 'Edit skill' : 'Add new skill' }}</h3>
     <hr>
     <b-form @submit.prevent="submitSkill">
-      <small for="edit-skill-name">Skill name *</small>
-      <b-form-group
-        :invalid-feedback="inputState.name.feedback"
+      <b-row>
+        <b-col cols="6">
+          <small for="edit-skill-name-fi">Skill name (in Finnish) *</small>
+          <b-form-group
+            :invalid-feedback="inputState.name.fi.feedback"
+          >
+            <b-form-input
+              id="edit-skill-name-fi"
+              v-model="name.fi"
+              type="text"
+              required
+              :state="inputState.name.fi.state"
+              @focus="changeFocus('fi')"
+              @blur="dirtyFields.name.fi = true"
+            />
+          </b-form-group>
+        </b-col>
+        <b-col cols="6">
+          <small for="edit-skill-name-en">Skill name (in English) *</small>
+          <b-form-group
+            :invalid-feedback="inputState.name.en.feedback"
+          >
+            <b-form-input
+              id="edit-skill-name-en"
+              v-model="name.en"
+              type="text"
+              required
+              :state="inputState.name.en.state"
+              @focus="changeFocus('en')"
+              @blur="dirtyFields.name.en = true"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row
+        v-if="showSimilarSkills && similarSkillNames.length > 0"
+        class="mb-4"
       >
-        <b-form-input
-          id="edit-skill-name"
-          v-model="name"
-          type="text"
-          required
-          :state="inputState.name.state"
-          @focus="showSimilarSkills = true"
-          @blur="dirtyFields.name = true"
-        />
-        <b-row>
-          <b-col cols="12">
-            <div v-if="showSimilarSkills && similarSkillNames.length > 0">
-              <div class="mt-2">
-                <small>
-                  Existing skills with a similar name
-                </small>
-              </div>
-              <div
-                v-for="skillName in similarSkillNames"
-                :key="skillName"
-                :class="`existing-skill-item mx-1 my-1 ${matchesExistingSkill ? 'highlighted-skill' : ''}`"
-              >
-                {{ skillName }}
-              </div>
+        <b-col cols="12">
+          <div>
+            <div class="mt-2">
+              <small>
+                Existing skills with a similar name
+              </small>
             </div>
-          </b-col>
-        </b-row>
-      </b-form-group>
+            <div
+              v-for="skillName in similarSkillNames"
+              :key="skillName"
+              :class="`existing-skill-item mx-1 my-1 ${matchesExistingSkill ? 'highlighted-skill' : ''}`"
+            >
+              {{ skillName }}
+            </div>
+          </div>
+        </b-col>
+      </b-row>
       <small for="edit-skill-category">Skill category *</small>
       <b-form-group
         :invalid-feedback="inputState.selectedSkillCategoryId.feedback"
@@ -47,13 +70,26 @@
           :state="inputState.selectedSkillCategoryId.state"
         />
       </b-form-group>
-      <small for="edit-skill-description">Skill description</small>
-      <b-form-textarea
-        id="edit-skill-description"
-        v-model="description"
-        :rows="4"
-        placeholder="Short description for skill if needed"
-      />
+      <b-row>
+        <b-col cols="6">
+          <small for="edit-skill-description-fi">Skill description (in Finnish)</small>
+          <b-form-textarea
+            id="edit-skill-description-fi"
+            v-model="description.fi"
+            :rows="6"
+            placeholder="Short description for skill if needed (in Finnish)"
+          />
+        </b-col>
+        <b-col cols="6">
+          <small for="edit-skill-description-en">Skill description (in English)</small>
+          <b-form-textarea
+            id="edit-skill-description-en"
+            v-model="description.en"
+            :rows="6"
+            placeholder="Short description for skill if needed (in English)"
+          />
+        </b-col>
+      </b-row>
     </b-form>
     <b-row
       v-if="errorDetails.length > 0"
@@ -104,15 +140,25 @@ export default {
   },
   data () {
     return {
-      originalName: this.skill.name || '',
-      name: this.skill.name || '',
-      description: this.skill.description || '',
+      originalName: {
+        fi: this.skill.name ? this.skill.name.fi : '',
+        en: this.skill.name ? this.skill.name.en : ''
+      },
+      name: {
+        fi: this.skill.name ? this.skill.name.fi : '',
+        en: this.skill.name ? this.skill.name.en : ''
+      },
+      description: {
+        fi: this.skill.description ? this.skill.description.fi : '',
+        en: this.skill.description ? this.skill.description.en : ''
+      },
       selectedSkillCategoryId: this.skill.skillCategoryId || null,
       showSimilarSkills: false,
       errorDetails: [],
       validated: false,
+      focusedNameLanguage: this.currentLanguage,
       dirtyFields: {
-        name: false
+        name: { fi: false, en: false }
       }
     }
   },
@@ -127,25 +173,25 @@ export default {
         return { value: category.id, text: category.title[this.currentLanguage] }
       }).sort((a, b) => a.text.localeCompare(b.text))
     },
-    matchesExistingSkill () {
-      const skillNames = Object.values(this.skills).map(skill => skill.name)
-      return skillNames.some(name => {
-        return name.toLowerCase() === this.name.toLowerCase() && name.toLowerCase() !== this.originalName.toLowerCase()
-      })
-    },
     similarSkillNames () {
-      if (isEmpty(this.name)) {
+      if (isEmpty(this.name[this.focusedNameLanguage])) {
         return []
       }
-      const skillNames = Object.values(this.skills).map(skill => skill.name)
-      const matchingSkillNames = skillNames.filter(skillName => skillName.toLowerCase().includes(this.name.toLowerCase()) && skillName !== this.originalName)
+      const skillNames = Object.values(this.skills).map(skill => skill.name[this.focusedNameLanguage])
+      const matchingSkillNames = skillNames.filter(skillName => skillName.toLowerCase().includes(this.name[this.focusedNameLanguage].toLowerCase()) && skillName !== this.originalName[this.focusedNameLanguage])
       return matchingSkillNames.sort()
     },
     inputState () {
       return {
         name: {
-          state: this.validated || this.dirtyFields.name ? this.name.length > 0 && !this.matchesExistingSkill : undefined,
-          feedback: this.name.length > 0 ? 'Skill name must be unique' : 'Skill name can\'t be empty'
+          fi: {
+            state: this.validated || this.dirtyFields.name.fi ? this.name.fi.length > 0 && !this.matchesExistingSkill('fi') : undefined,
+            feedback: this.name.fi.length > 0 ? 'Skill name must be unique' : 'Skill name can\'t be empty'
+          },
+          en: {
+            state: this.validated || this.dirtyFields.name.en ? this.name.en.length > 0 && !this.matchesExistingSkill('en') : undefined,
+            feedback: this.name.en.length > 0 ? 'Skill name must be unique' : 'Skill name can\'t be empty'
+          }
         },
         selectedSkillCategoryId: {
           state: this.validated ? this.selectedSkillCategoryId !== null : undefined,
@@ -159,6 +205,16 @@ export default {
       'addSkill',
       'updateSkill'
     ]),
+    matchesExistingSkill (langKey) {
+      const skillNames = Object.values(this.skills).map(skill => skill.name[langKey])
+      return skillNames.some(name => {
+        return name.toLowerCase() === this.name[langKey].toLowerCase() && name.toLowerCase() !== this.originalName[langKey].toLowerCase()
+      })
+    },
+    changeFocus (langKey) {
+      this.focusedNameLanguage = langKey
+      this.showSimilarSkills = true
+    },
     async submitSkill () {
       this.validated = true
       this.errorDetails = []
@@ -168,7 +224,7 @@ export default {
         description: this.description,
         skillCategoryId: this.selectedSkillCategoryId
       }
-      if (!Object.values(this.inputState).every(item => item.state)) {
+      if (!Object.values(this.inputState).every(item => item.state ? item.state : item.fi.state && item.en.state)) {
         return
       }
       try {
@@ -179,7 +235,7 @@ export default {
           await this.updateSkill(skill)
         }
         this.$toasted.global.rytmi_success({
-          message: isNewSkill ? `Skill ${this.name} added` : 'Skill updated'
+          message: isNewSkill ? `Skill ${this.name[this.currentLanguage]} added` : 'Skill updated'
         })
         this.validated = false
         this.showSimilarSkills = false

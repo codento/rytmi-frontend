@@ -301,7 +301,7 @@ export default {
       const skillCategory = this.skillCategoryBySkillId(skill.id)
       const skillGroup = this.skillGroupBySkillId(skill.id)
       if (skill && skillCategory && skillGroup) {
-        profileSkillCopy['skillName'] = skill.name
+        profileSkillCopy['skillName'] = skill.name[this.currentLanguage]
         profileSkillCopy['skillCategory'] = skillCategory.title[this.currentLanguage]
         profileSkillCopy['skillGroup'] = skillGroup.title[this.currentLanguage]
         profileSkillCopy['isLanguage'] = skillGroup.title.en === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
@@ -318,7 +318,7 @@ export default {
         projectDescription: profileProjectObj.description[this.currentLanguage],
         projectCustomer: !profileProjectObj.isInternal ? profileProjectObj.customerName[this.currentLanguage] : null,
         projectDuration: profileProjectObj.duration,
-        projectSkills: profileProjectObj.skills.map(skill => skill.name),
+        projectSkills: profileProjectObj.skills.map(skill => skill.name[this.currentLanguage]),
         isConfidential: profileProjectObj.isConfidential
       }
     },

@@ -203,7 +203,7 @@
             class="skill-item mx-1 my-1"
           >
             <span>
-              {{ skill.name }}
+              {{ skill.name[currentLanguage] }}
               <Trash2Icon
                 class="trash-icon svg-icon"
                 size="1x"
@@ -235,11 +235,11 @@
         />
         <div
           v-for="skill in projectSkillList"
-          :key="skill.name"
+          :key="'project-skill-list-item-' + skill.id"
           class="skill-item clickable mx-1 my-1"
           @click.once="addSkillToProject(skill)"
         >
-          {{ skill.name }}
+          {{ skill.name[currentLanguage] }}
         </div>
       </b-modal>
     </b-row>
@@ -345,7 +345,9 @@ export default {
             const isLanguage = skillGroup ? skillGroup.title.en === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME : false
             return !isLanguage && !this.editedProject.skills.map(projectSkill => projectSkill.id).includes(skill.id)
           })
-        return orderBy(unorderedSkills.filter(skill => skill.name.toLowerCase().includes(this.skillFilterText.toLowerCase())), [skill => skill.name.toLowerCase()])
+          .map(skill => ({ ...skill, nameForFilter: skill.name[this.currentLanguage].toLowerCase() }))
+        const filteredSkills = unorderedSkills.filter(skill => skill.nameForFilter.includes(this.skillFilterText.toLowerCase()))
+        return orderBy(filteredSkills, [skill => skill.nameForFilter])
       }
       return []
     },
