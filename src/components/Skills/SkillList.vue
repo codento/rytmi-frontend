@@ -161,6 +161,7 @@ export default {
       return [
         {
           key: `name.${this.currentLanguage}`,
+          label: 'Name',
           sortable: true
         },
         {
@@ -170,14 +171,17 @@ export default {
         },
         {
           key: `description.${this.currentLanguage}`,
+          label: 'Description',
           sortable: false
         },
         {
           key: 'createdAt',
+          label: 'Created',
           sortable: true
         },
         {
           key: 'updatedAt',
+          label: 'Updated',
           sortable: true
         },
         {
