@@ -203,7 +203,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { Trash2Icon, Edit2Icon } from 'vue-feather-icons'
-import { areRangesOverlapping } from 'date-fns'
+import { areRangesOverlapping, subDays } from 'date-fns'
 import { cloneDeep } from 'lodash'
 import vSelect from 'vue-select'
 import Datepicker from '@/components/helpers/Datepicker'
@@ -343,7 +343,7 @@ export default {
       for (let absence of Object.values(absences)) {
         // do not match absence against itself
         if (date.id !== absence.id) {
-          overlapMatches.push(!areRangesOverlapping(date.startDate, endDate.setHours(0, 0, 0, 0), absence.startDate.setHours(0, 0, 0, 0), absence.endDate.setHours(0, 0, 0, 0)))
+          overlapMatches.push(!areRangesOverlapping(subDays(date.startDate, 1), endDate.setHours(0, 0, 0, 0), absence.startDate.setHours(0, 0, 0, 0), absence.endDate.setHours(0, 0, 0, 0)))
         }
       }
 

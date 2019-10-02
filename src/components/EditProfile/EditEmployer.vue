@@ -221,7 +221,7 @@ export default {
         jobDescriptionFi: this.validated ? this.editedProfileEmployer.description['fi'].length > 0 : undefined,
         jobDescriptionEn: this.validated ? this.editedProfileEmployer.description['en'].length > 0 : undefined,
         startDate: this.validated ? new Date(this.editedProfileEmployer.startDate) > 1 : undefined,
-        endDate: this.validated && this.selectedEmployer && this.selectedEmployer.label !== INTERNAL_COMPANY_NAME ? !!this.editedProfileEmployer.endDate : !!this.editedProfileEmployer.endDate || this.selectedEmployer.label === INTERNAL_COMPANY_NAME || undefined,
+        endDate: this.validated && !this.isInternalCompany(this.selectedEmployer) ? !!this.editedProfileEmployer.endDate : !!this.editedProfileEmployer.endDate || this.isInternalCompany(this.selectedEmployer) || undefined,
         selectedEmployer: this.validated ? !!this.selectedEmployer : undefined
       }
     },
@@ -248,6 +248,14 @@ export default {
       'updateEmployer',
       'fetchEmployers'
     ]),
+    isInternalCompany (employer) {
+      if (employer) {
+        if (employer.label) {
+          return employer.label === INTERNAL_COMPANY_NAME
+        }
+      }
+      return false
+    },
     initProfileEmployer () {
       if (!this.profileEmployer.id) {
         return {
