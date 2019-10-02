@@ -52,7 +52,7 @@
               class="thumbnail"
               rounded="circle"
             />
-            <span :class="`${item.firstName} profile-tag-name px-2`"> {{ item.firstName }} {{ item.lastName }} </span>
+            <span :class="`${item.profileRoleClass} profile-tag-name px-2`"> {{ item.firstName }} {{ item.lastName }} </span>
           </div>
         </b-col>
         <b-col
@@ -121,11 +121,18 @@ export default {
       return new Date(addMonths(new Date(), this.monthsDisplayed))
     },
     profilesOnLeave () {
-      return Object.keys(this.profiles).map(key => this.profiles[key]).filter(profile => profile.absences.some(absence => {
-        return isWithinRange(absence.startDate, new Date(), this.lastDay) ||
-          isWithinRange(absence.endDate, new Date(), this.lastDay) ||
-          (isBefore(absence.startDate, new Date()) && isAfter(absence.endDate, this.lastDay))
-      }))
+      return Object.keys(this.profiles)
+        .map(key => {
+          return {
+            ...this.profiles[key],
+            profileRoleClass: this.profiles[key].employeeRoles.length === 1 ? 'role-' + this.profiles[key].employeeRoles[0] : 'combined-role'
+          }
+        })
+        .filter(profile => profile.absences.some(absence => {
+          return isWithinRange(absence.startDate, new Date(), this.lastDay) ||
+            isWithinRange(absence.endDate, new Date(), this.lastDay) ||
+            (isBefore(absence.startDate, new Date()) && isAfter(absence.endDate, this.lastDay))
+        }))
     },
     absences () {
       const absences = Object.keys(this.profiles).map(key => {
@@ -252,7 +259,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import '@/assets/scss/_variables.scss';
   .img {
     min-height: 50px;
   }
@@ -305,5 +313,22 @@ export default {
   }
   .profile-utilization-row {
     min-height: 58px;
+  }
+  .role-1 {
+    background: $c-violet;
+    border: 2px solid white;
+  }
+  .role-2 {
+    background: $c-orange;
+    border: 2px solid white;
+  }
+  .combined-role {
+    background: repeating-linear-gradient(
+        45deg,
+        $c-violet,
+        $c-violet 50px,
+        $c-orange 50px,
+        $c-orange 200px
+    );
   }
 </style>
