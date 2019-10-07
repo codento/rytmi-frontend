@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { denormalize } from 'normalizr'
-import { profile, skill, project, employer } from '@/store/schema'
+import { leave, profile, skill, project, employer, absence } from '@/store/schema'
 import store from '@/store'
 import * as types from '@/store/mutation-types'
 
@@ -18,6 +18,8 @@ const PATH_EMPLOYEEROLES = '/employeeroles'
 const PATH_EMPLOYERS = '/employers'
 const PATH_PROFILEEMPLOYERS = '/profileemployers'
 const PATH_PROJECTSKILLS = '/projectskills'
+const PATH_LEAVES = '/leaves'
+const PATH_ABSENCES = '/absences'
 
 export function login (token) {
   return axios.post(API_URL + PATH_AUTH, { id_token: token })
@@ -342,4 +344,58 @@ function handleError (error) {
     }
   }
   throw error
+}
+
+export function getLeaves () {
+  return axios.get(API_URL + PATH_LEAVES, getAuthHeaders()).catch(handleError)
+}
+
+export function newLeave (data) {
+  return axios.post(
+    API_URL + PATH_LEAVES,
+    denormalize(data, [leave]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function alterLeave (data) {
+  return axios.put(
+    API_URL + PATH_LEAVES + '/' + data.id,
+    denormalize(data, [leave]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function deleteLeave (id) {
+  return axios.delete(
+    API_URL + PATH_LEAVES + '/' + id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function getAbsencesForProfile (profileId) {
+  return axios.get(API_URL + PATH_PROFILES + '/' + profileId + PATH_ABSENCES, getAuthHeaders()).catch(handleError)
+}
+
+export function newAbsenceForProfile ({ profileId, data }) {
+  return axios.post(
+    API_URL + PATH_PROFILES + '/' + profileId + PATH_ABSENCES,
+    denormalize(data, [absence]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function alterAbsenceForProfile (data) {
+  return axios.put(
+    API_URL + PATH_PROFILES + '/' + data.profileId + PATH_ABSENCES + '/' + data.id,
+    denormalize(data, [absence]),
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function deleteAbsence ({ profileId, id }) {
+  return axios.delete(
+    API_URL + PATH_PROFILES + '/' + profileId + PATH_ABSENCES + '/' + id,
+    getAuthHeaders())
+    .catch(handleError)
 }

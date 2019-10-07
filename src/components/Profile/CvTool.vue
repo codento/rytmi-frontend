@@ -186,8 +186,8 @@ export default {
       'profileProjectsByProfileId',
       'projectById',
       'cvIntroduction',
-      'topSkills',
-      'topProjects',
+      'keySkills',
+      'recentProjects',
       'cvExportPending',
       'employers',
       'employerById',
@@ -244,9 +244,9 @@ export default {
     allRequiredFieldsFilled: {
       get: function () {
         return (
-          this.topSkills.length > 0 &&
+          this.keySkills.length > 0 &&
           this.isIntroductionValid &&
-          this.topProjects.length > 0
+          this.recentProjects.length > 0
         )
       },
       set: function () {}
@@ -256,11 +256,11 @@ export default {
       if (!this.isIntroductionValid) {
         missingInfo.push('profile description')
       }
-      if (!this.topProjects.length) {
-        missingInfo.push('relevant projects')
+      if (!this.recentProjects.length) {
+        missingInfo.push('recent projects')
       }
-      if (!this.topSkills.length) {
-        missingInfo.push('top skills')
+      if (!this.keySkills.length) {
+        missingInfo.push('key skills')
       }
       return 'Required info missing: '.concat(missingInfo.join(', '))
     }
@@ -301,7 +301,7 @@ export default {
       const skillCategory = this.skillCategoryBySkillId(skill.id)
       const skillGroup = this.skillGroupBySkillId(skill.id)
       if (skill && skillCategory && skillGroup) {
-        profileSkillCopy['skillName'] = skill.name
+        profileSkillCopy['skillName'] = skill.name[this.currentLanguage]
         profileSkillCopy['skillCategory'] = skillCategory.title[this.currentLanguage]
         profileSkillCopy['skillGroup'] = skillGroup.title[this.currentLanguage]
         profileSkillCopy['isLanguage'] = skillGroup.title.en === LANGUAGE_ENUM.LANGUAGE_GROUP_NAME
@@ -318,15 +318,29 @@ export default {
         projectDescription: profileProjectObj.description[this.currentLanguage],
         projectCustomer: !profileProjectObj.isInternal ? profileProjectObj.customerName[this.currentLanguage] : null,
         projectDuration: profileProjectObj.duration,
-        projectSkills: profileProjectObj.skills.map(skill => skill.name),
+        projectSkills: profileProjectObj.skills.map(skill => skill.name[this.currentLanguage]),
         isConfidential: profileProjectObj.isConfidential
       }
     },
     mapSkillForCV (skillObj) {
+      // CV uses a 3 point level system that joins levels 1 & 2 and leves 4 & 5 and uses the level name
+      const setSkillLevelNameForCV = (level) => {
+        switch (level) {
+          case 1:
+          case 2:
+            return proficiencyDesc.knows[this.currentLanguage].filter(level => level.value === 2).map(level => level.text)[0]
+          case 4:
+          case 5:
+            return proficiencyDesc.knows[this.currentLanguage].filter(level => level.value === 4).map(level => level.text)[0]
+          default:
+            return proficiencyDesc.knows[this.currentLanguage].filter(level => level.value === 3).map(level => level.text)[0]
+        }
+      }
       return {
         skillId: skillObj.skillId,
         skillName: skillObj.skillName,
         skillLevel: skillObj.knows,
+        skillLevelName: setSkillLevelNameForCV(skillObj.knows),
         skillCategory: skillObj.skillCategory,
         skillGroup: skillObj.skillGroup
       }
@@ -360,15 +374,15 @@ export default {
         employeePicture: this.profile.photoPath,
         jobTitle: workHistory.find(item => item.employerName === INTERNAL_COMPANY_NAME).jobTitle,
         employeeDescription: this.cvIntroduction,
-        topProjects: this.topProjects.map(project => this.mapProfileProjectForCV(project)),
-        topSkills: this.topSkills.map(skill => this.mapSkillForCV(skill)),
+        recentProjects: this.recentProjects.map(project => this.mapProfileProjectForCV(project)),
+        keySkills: this.keySkills.map(skill => this.mapSkillForCV(skill)),
         languages: cvLanguages,
         workHistory: workHistory,
         skills: cvSkills,
         education: this.profile.education ? this.profile.education : [],
         certificatesAndOthers: this.profile.certificatesAndOthers ? this.profile.certificatesAndOthers : [],
         born: this.profile.birthYear,
-        skillLevelDescriptions: proficiencyDesc.knows[this.currentLanguage],
+        skillLevelDescriptions: [...proficiencyDesc.knows[this.currentLanguage]].slice(1, 5), // send only relevant descriptions to cv that has 3 levels of skills
         currentLanguage: this.currentLanguage
       }
     },

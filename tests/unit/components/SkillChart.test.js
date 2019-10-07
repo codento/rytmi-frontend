@@ -48,7 +48,8 @@ function createStore (overrideConfig) {
     },
     getters: {
       appInitialized: () => true,
-      profileList: () => [{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }]
+      profileList: () => [{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }],
+      currentLanguage: () => 'fi'
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)
@@ -59,10 +60,10 @@ function createWrapper (overrideMountingOptions) {
   const defaultMountingOptions = {
     propsData: {
       size: 12,
-      skills: { 1: { id: 1, name: 'SkillOne' },
-        2: { id: 2, name: 'SkillTwo' },
-        3: { id: 3, name: 'SkillThree' },
-        4: { id: 4, name: 'SkillFour' }
+      skills: { 1: { id: 1, name: { fi: 'SkillOne', en: 'SkillOne' } },
+        2: { id: 2, name: { fi: 'SkillTwo', en: 'SkillTwo' } },
+        3: { id: 3, name: { fi: 'SkillThree', en: 'SkillThree' } },
+        4: { id: 4, name: { fi: 'SkillFour', en: 'SkillFour' } }
       },
       skillInfo: mockSkillInfo,
       profileList: [{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }]

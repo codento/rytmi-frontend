@@ -16,7 +16,7 @@
             push-tags
           />
           <EditIcon
-            v-if="profileEmployer.employerId !== internalCompanyId && selectedEmployerOption ? selectedEmployerOption.id : false"
+            v-if="editedProfileEmployer.employerId !== internalCompanyId && selectedEmployerOption ? selectedEmployerOption.id : false"
             v-b-tooltip.hover
             v-b-modal.edit-employer-name
             title="Change name of existing employer"
@@ -29,9 +29,9 @@
             @show="setEditableEmployer"
             @ok.prevent="handleUpdateEmployer"
           >
-            <small :for="`edit-employer-name-input-${profileEmployer.id}`">Employer name</small>
+            <small :for="`edit-employer-name-input-${editedProfileEmployer.id}`">Employer name</small>
             <b-input
-              :id="`edit-employer-name-input-${profileEmployer.id}`"
+              :id="`edit-employer-name-input-${editedProfileEmployer.id}`"
               v-model="editedEmployerName"
               type="text"
               @keyup.enter="handleUpdateEmployer"
@@ -50,7 +50,7 @@
           v-if="!isNewEntry"
           variant="danger"
           class="float-right"
-          @click="deleteEntry(profileEmployer)"
+          @click="deleteEntry(editedProfileEmployer)"
         >
           Delete entry
         </b-button>
@@ -58,34 +58,26 @@
     </b-row>
     <b-row>
       <b-col>
-        <small :for="`profile-employer-start-date${profileEmployer.id}`">Start date *</small>
+        <small :for="`profile-employer-start-date${editedProfileEmployer.id}`">Start date *</small>
         <Datepicker
-          :id="`profile-employer-start-date${profileEmployer.id}`"
-          v-model="profileEmployer.startDate"
-          :name="`profile-employer-start-date${profileEmployer.id}`"
-          :is-valid="inputStates.startDate"
+          :id="`profile-employer-start-date${editedProfileEmployer.id}`"
+          v-model="editedProfileEmployer.startDate"
+          :name="`profile-employer-start-date${editedProfileEmployer.id}`"
+          :validator="{ isValid: inputStates.startDate, message: 'Required'}"
+          :max-value="editedProfileEmployer.endDate"
+          @input-state="childComponentState.startDate = $event"
         />
-        <small
-          v-if="!inputStates.startDate && inputStates.startDate !== undefined"
-          class="text-danger"
-        >
-          Required
-        </small>
       </b-col>
       <b-col>
-        <small :for="`profile-employer-end-date${profileEmployer.id}`">{{ endDateLabel }}</small>
+        <small :for="`profile-employer-end-date${editedProfileEmployer.id}`">{{ endDateLabel }}</small>
         <Datepicker
-          :id="`profile-employer-end-date${profileEmployer.id}`"
-          v-model="profileEmployer.endDate"
-          :name="`profile-employer-end-date${profileEmployer.id}`"
-          :is-valid="inputStates.endDate"
+          :id="`profile-employer-end-date${editedProfileEmployer.id}`"
+          v-model="editedProfileEmployer.endDate"
+          :name="`profile-employer-end-date${editedProfileEmployer.id}`"
+          :validator="{ isValid: inputStates.endDate, message: 'Required' }"
+          :min-value="editedProfileEmployer.startDate"
+          @input-state="childComponentState.endDate = $event"
         />
-        <small
-          v-if="!inputStates.endDate && inputStates.endDate !== undefined"
-          class="text-danger"
-        >
-          Required
-        </small>
       </b-col>
     </b-row>
     <b-row>
@@ -94,7 +86,7 @@
           <small for="title-fi">Job title (in Finnish) *</small>
           <b-input
             id="title-fi"
-            v-model="profileEmployer.title['fi']"
+            v-model="editedProfileEmployer.title['fi']"
             type="text"
             placeholder="Job title in Finnish"
             :state="inputStates.titleFi"
@@ -106,7 +98,7 @@
           <small for="title-en">Job title (in English) *</small>
           <b-input
             id="title-en"
-            v-model="profileEmployer.title['en']"
+            v-model="editedProfileEmployer.title['en']"
             type="text"
             placeholder="Job title in English"
             :state="inputStates.titleEn"
@@ -120,7 +112,7 @@
           <small for="description-fi">Job description (in Finnish) *</small>
           <b-textarea
             id="description-fi"
-            v-model="profileEmployer.description['fi']"
+            v-model="editedProfileEmployer.description['fi']"
             type="text"
             rows="6"
             placeholder="Short description in Finnish about your role, tasks and projects while working for this employer"
@@ -133,7 +125,7 @@
           <small for="description-en">Job description (in English) *</small>
           <b-textarea
             id="description-en"
-            v-model="profileEmployer.description['en']"
+            v-model="editedProfileEmployer.description['en']"
             type="text"
             rows="6"
             placeholder="Short description in English about your role, tasks and projects while working for this employer"
@@ -154,9 +146,9 @@
       </b-col>
     </b-row>
     <EditEmployerProjectList
-      v-if="profileEmployer.employerId && profileEmployer.employerId !== internalCompanyId && selectedEmployer.id && profileEmployer.id"
-      :employer-id="profileEmployer.employerId"
-      :profile-id="profileEmployer.profileId"
+      v-if="editedProfileEmployer.employerId && editedProfileEmployer.employerId !== internalCompanyId && selectedEmployer.id && editedProfileEmployer.id"
+      :employer-id="editedProfileEmployer.employerId"
+      :profile-id="editedProfileEmployer.profileId"
     />
   </b-form>
 </template>
@@ -165,6 +157,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import Datepicker from '../helpers/Datepicker'
 import vSelect from 'vue-select'
+import cloneDeep from 'lodash/cloneDeep'
 import EditEmployerProjectList from './EditEmployerProjectList'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 import { EditIcon } from 'vue-feather-icons'
@@ -184,8 +177,13 @@ export default {
   data () {
     return {
       editedEmployerName: '',
+      editedProfileEmployer: this.initProfileEmployer(),
       selectedEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
-      validated: false
+      validated: false,
+      childComponentState: {
+        startDate: true,
+        endDate: true
+      }
     }
   },
   computed: {
@@ -199,7 +197,7 @@ export default {
       },
       set (item) {
         this.selectedEmployer = item
-        this.profileEmployer.employerId = item ? item.id : null
+        this.editedProfileEmployer.employerId = item ? item.id : null
       }
     },
     internalCompanyId () {
@@ -218,24 +216,17 @@ export default {
     },
     inputStates () {
       return {
-        titleFi: this.validated ? this.profileEmployer.title.fi.length > 0 : undefined,
-        titleEn: this.validated ? this.profileEmployer.title.en.length > 0 : undefined,
-        jobDescriptionFi: this.validated ? this.profileEmployer.description['fi'].length > 0 : undefined,
-        jobDescriptionEn: this.validated ? this.profileEmployer.description['en'].length > 0 : undefined,
-        startDate: this.validated ? new Date(this.profileEmployer.startDate) > 1 : undefined,
-        endDate: this.validated ? this.endDateValidation : undefined,
+        titleFi: this.validated ? this.editedProfileEmployer.title.fi.length > 0 : undefined,
+        titleEn: this.validated ? this.editedProfileEmployer.title.en.length > 0 : undefined,
+        jobDescriptionFi: this.validated ? this.editedProfileEmployer.description['fi'].length > 0 : undefined,
+        jobDescriptionEn: this.validated ? this.editedProfileEmployer.description['en'].length > 0 : undefined,
+        startDate: this.validated ? new Date(this.editedProfileEmployer.startDate) > 1 : undefined,
+        endDate: this.validated && !this.isInternalCompany(this.selectedEmployer) ? !!this.editedProfileEmployer.endDate : !!this.editedProfileEmployer.endDate || this.isInternalCompany(this.selectedEmployer) || undefined,
         selectedEmployer: this.validated ? !!this.selectedEmployer : undefined
       }
     },
-    endDateValidation () {
-      if (this.selectedEmployer) {
-        return this.selectedEmployer.label !== INTERNAL_COMPANY_NAME ? new Date(this.profileEmployer.endDate) > 1 : true
-      } else {
-        return new Date(this.profileEmployer.endDate) > 1
-      }
-    },
     formIsValid () {
-      const stateArray = []
+      const stateArray = [Object.entries(this.childComponentState).map(entry => entry[1])]
       // Required always
       for (let entry of Object.entries(this.inputStates)) {
         stateArray.push(entry[1])
@@ -257,6 +248,22 @@ export default {
       'updateEmployer',
       'fetchEmployers'
     ]),
+    isInternalCompany (employer) {
+      if (employer) {
+        if (employer.label) {
+          return employer.label === INTERNAL_COMPANY_NAME
+        }
+      }
+      return false
+    },
+    initProfileEmployer () {
+      if (!this.profileEmployer.id) {
+        return {
+          ...this.profileEmployer
+        }
+      }
+      return cloneDeep(this.profileEmployer)
+    },
     loadData: function () {
       this.fetchEmployers()
     },
@@ -289,7 +296,7 @@ export default {
             })
           }
         }
-        const profileEmployer = { ...this.profileEmployer, employerId: employerId.id }
+        const profileEmployer = { ...this.editedProfileEmployer, employerId: employerId.id }
         if (this.isNewEntry) {
           this.callCreateAction(profileEmployer)
         } else {

@@ -8,8 +8,8 @@ import { mockProfile } from './setup/mockData'
 
 const initialState = {
   cvIntroduction: '',
-  topSkills: [],
-  topProjects: []
+  keySkills: [],
+  recentProjects: []
 }
 
 const defaultStoreConfig = {
@@ -35,10 +35,10 @@ describe('CvToolProfile.test.js', () => {
     expect(wrapper.vm.modifiedIntroduction).toBe(expectedIntroduction)
   })
 
-  it('Shows top skills', () => {
+  it('Shows key skills', () => {
     const overrideStore = {
       state: {
-        topSkills: [
+        keySkills: [
           {
             skillId: 1,
             name: 'Python',

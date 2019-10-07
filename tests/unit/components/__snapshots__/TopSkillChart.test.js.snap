@@ -27,7 +27,7 @@ exports[`TopSkillChart.vue Should match the template 1`] = `
       <strong>
         1
       </strong>
-      
+       people
       who's skill level is 4 or 5 and the average is
       
       <strong>

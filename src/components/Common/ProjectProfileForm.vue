@@ -113,14 +113,12 @@
             id="profile-project-start-date"
             v-model="editableProfileProject.startDate"
             :name="`profile-project-start-date-${profileProject.id}${isInModal ? '-modal' : ''}`"
-            :is-valid="inputStates.startDate"
+            :default-value="projectDates.start"
+            :min-value="projectDates.start"
+            :max-value="editableProfileProject.endDate || projectDates.end"
+            :validator="{ isValid: inputStates.startDate, message: 'Required'}"
+            @input-state="childComponentState.startDate = $event"
           />
-          <small
-            v-if="!inputStates.startDate && inputStates.startDate !== undefined"
-            class="text-danger"
-          >
-            Required
-          </small>
         </b-col>
         <b-col>
           <small for="profile-project-end-date">End date</small>
@@ -128,14 +126,11 @@
             id="profile-project-end-date"
             v-model="editableProfileProject.endDate"
             :name="`profile-project-end-date-${profileProject.id}${isInModal ? '-modal' : ''}`"
-            :is-valid="inputStates.endDate"
+            :default-value="projectDates.end"
+            :min-value="editableProfileProject.startDate || projectDates.start"
+            :max-value="projectDates.end"
+            @input-state="childComponentState.endDate = $event"
           />
-          <small
-            v-if="!inputStates.endDate && inputStates.endDate !== undefined"
-            class="text-danger"
-          >
-            End date can't be before start date
-          </small>
         </b-col>
       </b-row>
       <b-form-group
@@ -165,7 +160,7 @@
               @click="editableProfileProject.skills.some(profileProjectSkill => profileProjectSkill.id === skill.id) ? removeSkill(skill) : addSkillToProfileProject(skill)"
             >
               <span>
-                {{ (isSelectedSkill(skill) ? '✓ ' : '') + skill.name }}
+                {{ (isSelectedSkill(skill) ? '✓ ' : '') + skill.name[currentLanguage] }}
               </span>
             </div>
             <div
@@ -243,7 +238,11 @@ export default {
       projectVisible: true,
       profileVisible: false,
       editableProfileProject: this.initProfileProject(),
-      validated: false
+      validated: false,
+      childComponentState: {
+        startDate: true,
+        endDate: true
+      }
     }
   },
   computed: {
@@ -256,6 +255,10 @@ export default {
       'skillById',
       'profileId'
     ]),
+    projectDates () {
+      const project = this.projectById(this.profileProject.projectId || this.editableProfileProject.projectId)
+      return { start: new Date(project.startDate), end: project.endDate ? new Date(project.endDate) : null }
+    },
     projectSkills () {
       if (this.profileProject.projectId) {
         return this.projectById(this.profileProject.projectId).skills
@@ -296,8 +299,7 @@ export default {
         profileId: this.validated ? !!this.editableProfileProject.profileId : undefined,
         projectRoleFi: this.validated ? this.editableProfileProject.role.fi.length > 0 : undefined,
         projectRoleEn: this.validated ? this.editableProfileProject.role.en.length > 0 : undefined,
-        startDate: this.validated ? new Date(this.editableProfileProject.startDate) > 1 : undefined,
-        endDate: this.validated ? !this.editableProfileProject.endDate || new Date(this.editableProfileProject.endDate) >= new Date(this.editableProfileProject.startDate) : undefined
+        startDate: this.validated ? new Date(this.editableProfileProject.startDate) > 1 : undefined
       }
     },
     submitButtonText () {
@@ -311,7 +313,7 @@ export default {
       }
     },
     formIsValid () {
-      const stateArray = []
+      const stateArray = [Object.entries(this.childComponentState).map(entry => entry[1])]
       for (let entry of Object.entries(this.inputStates)) {
         stateArray.push(entry[1])
       }

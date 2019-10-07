@@ -70,6 +70,19 @@
           <b-col
             cols="12"
             md="12"
+            class="mb-2"
+          >
+            <LeaveCalendar
+              v-if="appInitialized"
+              md-size="12"
+              class="pb-1"
+            />
+          </b-col>
+        </b-row>
+        <b-row class="no-gutters mt-1">
+          <b-col
+            cols="12"
+            md="12"
           >
             <SkillChart
               v-if="appInitialized"
@@ -95,6 +108,7 @@ import TopSkillChart from './TopSkillChart'
 import MostWillingnessChart from './MostWillingnessChart'
 import ConsultantUtilizationChart from './ConsultantUtilizationChart'
 import ConsultantUtilizationList from './ConsultantUtilizationList'
+import LeaveCalendar from './LeaveCalendar'
 import { LANGUAGE_ENUM } from '@/utils/constants'
 
 const calculateAverage = (arr) => {
@@ -111,7 +125,8 @@ export default {
     MostWillingnessChart,
     ConsultantUtilizationChart,
     ConsultantUtilizationList,
-    vSelect
+    vSelect,
+    LeaveCalendar
   },
   data () {
     return {
@@ -126,7 +141,8 @@ export default {
       'skillGroupBySkillId',
       'profileList',
       'employeeRoles',
-      'profileById'
+      'profileById',
+      'currentLanguage'
     ]),
     skillsOnlyList () {
       const filteredSkillKeys = Object.keys(this.skills).filter(skillId => {
@@ -162,7 +178,7 @@ export default {
       const skillProfiencyBySkillId = {}
       this.skillsOnlyList.forEach((skill) => {
         skillProfiencyBySkillId[skill.id] = {
-          name: skill.name,
+          name: skill.name[this.currentLanguage],
           proficiencies: [],
           willingness: []
         }

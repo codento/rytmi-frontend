@@ -5,11 +5,11 @@ export const actions = {
   updateCvIntroduction ({ commit }, params) {
     commit(types.UPDATE_CV_INTRODUCTION, params)
   },
-  updateTopSkills ({ commit }, params) {
-    commit(types.UPDATE_TOP_SKILLS, params)
+  updateKeySkills ({ commit }, params) {
+    commit(types.UPDATE_KEY_SKILLS, params)
   },
-  updateTopProjects ({ commit }, params) {
-    commit(types.UPDATE_TOP_PROJECTS, params)
+  updateRecentProjects ({ commit }, params) {
+    commit(types.UPDATE_RECENT_PROJECTS, params)
   },
   downloadCv ({ commit }, params) {
     commit(types.EXPORT_CV_PENDING, true)

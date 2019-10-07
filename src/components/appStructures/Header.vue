@@ -135,13 +135,24 @@
             </b-dropdown-item>
             <b-dropdown-divider variant="c-violet-dark" />
             <b-dropdown-item
+              id="account-dropdown-item-leave"
+              v-b-modal.add-leave-modal
+              variant="c-violet-dark"
+            >
+              <CalendarIcon
+                size="1x"
+                class="feather-icon-dropdown"
+              />
+              Manage absences
+            </b-dropdown-item>
+            <b-dropdown-item
               id="account-dropdown-item-signout"
               variant="c-violet-dark"
               @click="logout"
             >
               <LockIcon
                 size="1x"
-                class="lock-icon"
+                class="feather-icon-dropdown"
               />
               Sign Out
             </b-dropdown-item>
@@ -149,13 +160,23 @@
         </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
+    <b-modal
+      id="add-leave-modal"
+      hide-footer
+      hide-header
+    >
+      <leave-form
+        :profile="profileById(profileId)"
+      />
+    </b-modal>
   </b-navbar>
 </template>
 
 <script>
 
 import { mapGetters, mapActions } from 'vuex'
-import { UsersIcon, GlobeIcon, StarIcon, ArchiveIcon, SettingsIcon, LockIcon, UnlockIcon } from 'vue-feather-icons'
+import { UsersIcon, GlobeIcon, StarIcon, ArchiveIcon, SettingsIcon, LockIcon, UnlockIcon, CalendarIcon } from 'vue-feather-icons'
+import { LeaveForm } from '../Common/'
 
 export default {
   name: 'CHeader',
@@ -166,7 +187,9 @@ export default {
     ArchiveIcon,
     SettingsIcon,
     UnlockIcon,
-    LockIcon
+    LockIcon,
+    CalendarIcon,
+    LeaveForm
   },
   computed: {
     ...mapGetters(['isAuthenticated', 'isAdmin', 'profileId', 'getToken', 'profileById'])
@@ -188,7 +211,7 @@ export default {
 
 <style lang="scss">
 @import '@/assets/scss/_variables.scss';
-.profile-icon, .lock-icon {
+.profile-icon, .feather-icon-dropdown {
   margin: 0 10px 0 -10px;
   width: 20px;
   height: 20px;
