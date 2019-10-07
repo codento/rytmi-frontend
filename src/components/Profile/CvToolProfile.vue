@@ -57,16 +57,16 @@
       >
         <b-card
           class="mt-2 mb-2"
-          title="Relevant projects"
+          title="Latest projects"
         >
           <div
-            v-if="topProjects.length === 0"
+            v-if="recentProjects.length === 0"
             class="text-muted"
           >
-            No relevant projects chosen, use checkboxes below to add projects!
+            No latest projects chosen, use checkboxes below to add projects!
           </div>
           <b-row
-            v-for="project of topProjects"
+            v-for="project of recentProjects"
             :key="project.id"
             class="justify-content-md-center mb-2 mt-2"
           >
@@ -98,10 +98,10 @@
       >
         <b-card
           class="mt-2 mb-2"
-          title="Top skills"
+          title="Key competence"
         >
           <b-list-group
-            id="top-skills"
+            id="key-skills"
             v-sortable="{onEnd: reorder}"
             class="mb-2"
           >
@@ -156,15 +156,15 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'topSkills',
-      'topProjects',
+      'keySkills',
+      'recentProjects',
       'currentLanguage'
     ]),
     fullName: function () {
       return this.profile ? this.profile.firstName + ' ' + this.profile.lastName : '-'
     },
     orderedSkills: function () {
-      return this.topSkills
+      return this.keySkills
     },
     introductionIsValid: function () {
       return this.modifiedIntroduction.length > 0 && this.modifiedIntroduction.length <= this.maxIntroductionLength
@@ -177,12 +177,12 @@ export default {
   methods: {
     ...mapActions([
       'updateCvIntroduction',
-      'updateTopSkills'
+      'updateKeySkills'
     ]),
     reorder ({ oldIndex, newIndex }) {
       const movedItem = this.orderedSkills.splice(oldIndex, 1)[0]
       this.orderedSkills.splice(newIndex, 0, movedItem)
-      this.updateTopSkills(this.orderedSkills)
+      this.updateKeySkills(this.orderedSkills)
     },
     updateIntroduction: function () {
       this.updateCvIntroduction(this.modifiedIntroduction)
@@ -196,7 +196,7 @@ export default {
   #input-introduction {
     font-size: 13px
   }
-  #top-skills .borderless {
+  #key-skills .borderless {
     border: 0;
     padding: 0.2rem;
     cursor: pointer;

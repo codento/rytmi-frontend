@@ -82,8 +82,8 @@ const mockGetters = {
 
 const initialState = {
   cvIntroduction: '',
-  topSkills: [],
-  topProjects: [],
+  keySkills: [],
+  recentProjects: [],
   cvExportPending: false
 }
 
@@ -118,14 +118,14 @@ describe('CvTool.test.js', () => {
   // const overrideState = {
   //   state: {
   //     cvIntroduction: 'Test introduction',
-  //     topSkills: [
+  //     keySkills: [
   //       {
   //         id: 1,
   //         name: 'Python',
   //         description: 'Python desc'
   //       }
   //     ],
-  //     topProjects: [
+  //     recentProjects: [
   //       {
   //         id: mockProfileProject.id,
   //         profile: mockProfile.id,

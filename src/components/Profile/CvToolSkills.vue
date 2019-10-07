@@ -112,7 +112,7 @@ export default {
   computed: {
     ...mapGetters([
       'skillFilter',
-      'topSkills'
+      'keySkills'
     ]),
     skillsByGroupingOptions () {
       if (this.selectedGrouping === 'name') {
@@ -161,7 +161,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateTopSkills']),
+    ...mapActions(['updateKeySkills']),
     isNotSelectable (skillId) {
       return this.selectedSkills.length >= this.maxSelected && !(this.selectedSkills.includes(skillId))
     },
@@ -169,9 +169,9 @@ export default {
       const updatedSkills = this.selectedSkills
         .map(skillId => this.skills.find(skill => skill.skillId === skillId))
       updatedSkills.sort((a, b) => {
-        return this.topSkills.indexOf(a) > 0 ? this.topSkills.indexOf(a) - this.topSkills.indexOf(b) : 0
+        return this.keySkills.indexOf(a) > 0 ? this.keySkills.indexOf(a) - this.keySkills.indexOf(b) : 0
       })
-      this.updateTopSkills(updatedSkills)
+      this.updateKeySkills(updatedSkills)
     }
   }
 }

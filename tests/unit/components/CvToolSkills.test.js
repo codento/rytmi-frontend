@@ -9,8 +9,8 @@ import { createShallowWrapper } from './setup/setup'
 
 const initialState = {
   cvIntroduction: '',
-  topSkills: [],
-  topProjects: []
+  keySkills: [],
+  recentProjects: []
 }
 
 const defaultStoreConfig = {

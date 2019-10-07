@@ -186,8 +186,8 @@ export default {
       'profileProjectsByProfileId',
       'projectById',
       'cvIntroduction',
-      'topSkills',
-      'topProjects',
+      'keySkills',
+      'recentProjects',
       'cvExportPending',
       'employers',
       'employerById',
@@ -244,9 +244,9 @@ export default {
     allRequiredFieldsFilled: {
       get: function () {
         return (
-          this.topSkills.length > 0 &&
+          this.keySkills.length > 0 &&
           this.isIntroductionValid &&
-          this.topProjects.length > 0
+          this.recentProjects.length > 0
         )
       },
       set: function () {}
@@ -256,11 +256,11 @@ export default {
       if (!this.isIntroductionValid) {
         missingInfo.push('profile description')
       }
-      if (!this.topProjects.length) {
-        missingInfo.push('relevant projects')
+      if (!this.recentProjects.length) {
+        missingInfo.push('recent projects')
       }
-      if (!this.topSkills.length) {
-        missingInfo.push('top skills')
+      if (!this.keySkills.length) {
+        missingInfo.push('key skills')
       }
       return 'Required info missing: '.concat(missingInfo.join(', '))
     }
@@ -360,8 +360,8 @@ export default {
         employeePicture: this.profile.photoPath,
         jobTitle: workHistory.find(item => item.employerName === INTERNAL_COMPANY_NAME).jobTitle,
         employeeDescription: this.cvIntroduction,
-        topProjects: this.topProjects.map(project => this.mapProfileProjectForCV(project)),
-        topSkills: this.topSkills.map(skill => this.mapSkillForCV(skill)),
+        recentProjects: this.recentProjects.map(project => this.mapProfileProjectForCV(project)),
+        keySkills: this.keySkills.map(skill => this.mapSkillForCV(skill)),
         languages: cvLanguages,
         workHistory: workHistory,
         skills: cvSkills,

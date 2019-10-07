@@ -1,6 +1,6 @@
 export const getters = {
   cvIntroduction: (state) => state.cvIntroduction,
-  topSkills: (state) => state.topSkills,
-  topProjects: (state) => state.topProjects,
+  keySkills: (state) => state.keySkills,
+  recentProjects: (state) => state.recentProjects,
   cvExportPending: (state) => state.cvExportPending
 }

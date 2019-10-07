@@ -113,12 +113,12 @@ export default {
     this.updateSelectedProjects()
   },
   methods: {
-    ...mapActions(['updateTopProjects']),
+    ...mapActions(['updateRecentProjects']),
     isNotSelectable: function (id) {
       return this.selectedProjects.length >= this.maxSelected && !(this.selectedProjects.includes(id))
     },
     updateSelectedProjects: function () {
-      this.updateTopProjects(this.profileProjects.filter(item => this.selectedProjects.includes(item.id)))
+      this.updateRecentProjects(this.profileProjects.filter(item => this.selectedProjects.includes(item.id)))
     }
   }
 }
