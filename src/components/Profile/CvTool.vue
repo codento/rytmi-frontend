@@ -323,10 +323,24 @@ export default {
       }
     },
     mapSkillForCV (skillObj) {
+      // CV uses a 3 point level system that joins levels 1 & 2 and leves 4 & 5 and uses the level name
+      const setSkillLevelNameForCV = (level) => {
+        switch (level) {
+          case 1:
+          case 2:
+            return proficiencyDesc.knows[this.currentLanguage].filter(level => level.value === 2).map(level => level.text)[0]
+          case 4:
+          case 5:
+            return proficiencyDesc.knows[this.currentLanguage].filter(level => level.value === 4).map(level => level.text)[0]
+          default:
+            return proficiencyDesc.knows[this.currentLanguage].filter(level => level.value === 3).map(level => level.text)[0]
+        }
+      }
       return {
         skillId: skillObj.skillId,
         skillName: skillObj.skillName,
         skillLevel: skillObj.knows,
+        skillLevelName: setSkillLevelNameForCV(skillObj.knows),
         skillCategory: skillObj.skillCategory,
         skillGroup: skillObj.skillGroup
       }
@@ -368,7 +382,7 @@ export default {
         education: this.profile.education ? this.profile.education : [],
         certificatesAndOthers: this.profile.certificatesAndOthers ? this.profile.certificatesAndOthers : [],
         born: this.profile.birthYear,
-        skillLevelDescriptions: proficiencyDesc.knows[this.currentLanguage],
+        skillLevelDescriptions: [...proficiencyDesc.knows[this.currentLanguage]].slice(1, 5), // send only relevant descriptions to cv that has 3 levels of skills
         currentLanguage: this.currentLanguage
       }
     },

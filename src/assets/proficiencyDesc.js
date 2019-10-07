@@ -18,7 +18,7 @@ export default {
       },
       {
         value: 3,
-        text: 'Professional',
+        text: 'Mid level',
         description: 'Knows the technology well and is capable in effective independent development work.'
       },
       {
@@ -50,7 +50,7 @@ export default {
       },
       {
         value: 3,
-        text: 'Ammattilainen',
+        text: 'Keskitaso',
         description: 'Hallitsee teknologian hyvin ja kykenee tehokkaaseen itsenäiseen työskentelyyn.'
       },
       {
