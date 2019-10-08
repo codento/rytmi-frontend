@@ -24,15 +24,17 @@
         <h3
           v-if="!editJobTitle"
           class="job-title"
-          @click="editJobTitle = !editJobTitle"
+          @click="toggleJobTitleEdit"
         >
           {{ modifiedJobTitle }}
         </h3>
         <h3 v-else>
           <b-input
+            ref="jobTitleInput"
             v-model="modifiedJobTitle"
             @update="updateJobTitle"
-            @keyup.enter="editJobTitle = !editJobTitle"
+            @keyup.enter="editJobTitle = false"
+            @blur="editJobTitle = false"
           />
         </h3>
         <b-textarea
@@ -205,6 +207,10 @@ export default {
     },
     updateJobTitle () {
       this.$emit('update-job-title', this.modifiedJobTitle)
+    },
+    toggleJobTitleEdit () {
+      this.editJobTitle = !this.editJobTitle
+      setTimeout(() => this.$refs.jobTitleInput.$el.focus(), 50)
     }
   }
 }

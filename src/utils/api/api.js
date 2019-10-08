@@ -111,6 +111,14 @@ export function generateCv (data) {
     .catch(handleError)
 }
 
+export function generateCvUrl (data) {
+  return axios.post(
+    CV_API_URL + '?url=true',
+    data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function newProject (data) {
   return axios.post(
     API_URL + PATH_PROJECTS,

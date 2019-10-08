@@ -6,7 +6,8 @@ const initialState = {
   cvIntroduction: '',
   keySkills: [],
   recentProjects: [],
-  cvExportPending: false
+  cvExportPending: false,
+  url: ''
 }
 
 export default {
