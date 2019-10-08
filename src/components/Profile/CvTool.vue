@@ -32,6 +32,7 @@
           :profile="profile"
           :job-title="jobTitle"
           @update-introduction="cvIntroductionUpdated"
+          @update-job-title="cvJobTitleUpdated"
         />
       </b-col>
       <b-col cols="12">
@@ -171,7 +172,8 @@ export default {
       isIntroductionValid: false,
       showButtonInfo: true,
       pdfName: '',
-      invalidFilenameCharacters: '/:*?"<>|.[]'
+      invalidFilenameCharacters: '/:*?"<>|.[]',
+      jobTitleForCv: ''
     }
   },
   computed: {
@@ -267,6 +269,7 @@ export default {
   },
   created () {
     this.pdfName = this.defaultPDFName
+    this.jobTitleForCv = this.jobTitle
   },
   updated () {
     this.pdfName = this.defaultPDFName
@@ -294,6 +297,9 @@ export default {
     },
     cvIntroductionUpdated: function (inputState) {
       this.isIntroductionValid = inputState
+    },
+    cvJobTitleUpdated (title) {
+      this.jobTitleForCv = title
     },
     joinSkillCategory: function (profileSkill) {
       const profileSkillCopy = clone(profileSkill)
@@ -372,7 +378,7 @@ export default {
       return {
         employeeName: this.profile.firstName + ' ' + this.profile.lastName,
         employeePicture: this.profile.photoPath,
-        jobTitle: workHistory.find(item => item.employerName === INTERNAL_COMPANY_NAME).jobTitle,
+        jobTitle: this.jobTitleForCv,
         employeeDescription: this.cvIntroduction,
         recentProjects: this.recentProjects.map(project => this.mapProfileProjectForCV(project)),
         keySkills: this.keySkills.map(skill => this.mapSkillForCV(skill)),

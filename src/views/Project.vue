@@ -97,9 +97,12 @@ export default {
   watch: {
     project: function (val, oldVal) {
       if (val) {
-        document.title = 'Rytmi - ' + val.name
+        document.title = 'Rytmi - ' + val.name[this.currentLanguage]
       }
     }
+  },
+  created () {
+    this.project && (document.title = `Rytmi - ${this.project.name[this.currentLanguage]}`)
   }
 }
 </script>
