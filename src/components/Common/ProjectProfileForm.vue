@@ -257,7 +257,10 @@ export default {
     ]),
     projectDates () {
       const project = this.projectById(this.profileProject.projectId || this.editableProfileProject.projectId)
-      return { start: new Date(project.startDate), end: project.endDate ? new Date(project.endDate) : null }
+      return {
+        start: project ? new Date(project.startDate) : null,
+        end: project ? new Date(project.endDate) : null
+      }
     },
     projectSkills () {
       if (this.profileProject.projectId) {
