@@ -36,13 +36,11 @@
 
 <style scoped>
   .loader{
-    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
     width: 100%;
-    text-align: center;
-    padding: 1em;
-    margin: 0 auto 1em;
-    display: inline-block;
-    vertical-align: top;
   }
 
   svg path {
