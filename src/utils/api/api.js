@@ -381,8 +381,16 @@ export function deleteLeave (id) {
     .catch(handleError)
 }
 
+export function getAbsences () {
+  return axios.get(API_URL + PATH_ABSENCES,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function getAbsencesForProfile (profileId) {
-  return axios.get(API_URL + PATH_PROFILES + '/' + profileId + PATH_ABSENCES, getAuthHeaders()).catch(handleError)
+  return axios.get(API_URL + PATH_PROFILES + '/' + profileId + PATH_ABSENCES,
+    getAuthHeaders())
+    .catch(handleError)
 }
 
 export function newAbsenceForProfile ({ profileId, data }) {

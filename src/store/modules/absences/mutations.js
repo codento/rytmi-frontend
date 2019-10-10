@@ -2,8 +2,11 @@ import * as types from '../../mutation-types'
 import Vue from 'vue'
 
 export const mutations = {
-  [types.FETCH_ABSENCES] (state, { profileId, data }) {
-    // change timestamps to date objects to avoid avoid boilerplate in components
+  [types.FETCH_ABSENCES] (state, data) {
+    state.absences = data
+  },
+  [types.FETCH_ABSENCES_FOR_PROFILE] (state, { profileId, data }) {
+    // change timestamps to date objects for easier handling in components
     for (let absence in data) {
       if (data.hasOwnProperty(absence)) {
         data[absence].startDate = new Date(data[absence].startDate)

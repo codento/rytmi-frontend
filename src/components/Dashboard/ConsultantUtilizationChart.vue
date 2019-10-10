@@ -73,7 +73,9 @@ export default {
       'employerByName',
       'profileEmployersByProfileId',
       'employerById',
-      'absencesByProfileId'
+      'absencesByProfileId',
+      'absences',
+      'leaveById'
     ]),
     selectedProfiles () {
       return this.profileFilter().filter(profile => {
@@ -230,11 +232,29 @@ export default {
       }
       return utilizationData
     },
+    isAbsent (profileId, date) {
+      return this.mapLeavesToAbsences() ? this.mapLeavesToAbsences().some(absence => (
+        absence.profileId === profileId &&
+        isWithinRange(date, absence.startDate, absence.endDate) &&
+        absence.leave.affectsUtilisation)) : false
+    },
     isAvailableOnDate (profileId, date) {
-      const current = this.profileEmployersByProfileId(profileId).filter(job => this.employerByName(INTERNAL_COMPANY_NAME).id === job.employerId)
+      const current = this.profileEmployersByProfileId(profileId)
+        .filter(job => this.employerByName(INTERNAL_COMPANY_NAME).id === job.employerId)
       current.length > 0 || current.push({ startDate: new Date('1970-01-01'), endDate: new Date('2100-12-31') })
-      const normalized = current.map(relation => { return { startDate: new Date(relation.startDate), endDate: relation.endDate ? new Date(relation.endDate) : new Date('2100-12-31') } })[0]
-      return isWithinRange(date, normalized.startDate, normalized.endDate)
+      const normalized = current.map(relation => {
+        return {
+          startDate: new Date(relation.startDate),
+          endDate: relation.endDate
+            ? new Date(relation.endDate)
+            : new Date('2100-12-31') }
+      })[0]
+      return isWithinRange(date, normalized.startDate, normalized.endDate) && !this.isAbsent(profileId, date)
+    },
+    mapLeavesToAbsences () {
+      return this.absences && Object.values(this.absences).map(absence => {
+        return { ...absence, leave: this.leaveById(absence.leaveId) }
+      })
     },
     fullCapacity (startDate, endDate, roleId) {
       const availabilityData = []
