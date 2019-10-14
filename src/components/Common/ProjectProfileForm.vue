@@ -126,7 +126,7 @@
             id="profile-project-end-date"
             v-model="editableProfileProject.endDate"
             :name="`profile-project-end-date-${profileProject.id}${isInModal ? '-modal' : ''}`"
-            :default-value="projectDates.end"
+            :default-value="new Date()"
             :min-value="editableProfileProject.startDate || projectDates.start"
             :max-value="projectDates.end"
             @input-state="childComponentState.endDate = $event"
@@ -257,6 +257,9 @@ export default {
     ]),
     projectDates () {
       const project = this.projectById(this.profileProject.projectId || this.editableProfileProject.projectId)
+      if (project) {
+        project.endDate = project.endDate ? project.endDate : new Date('2100-12-31')
+      }
       return {
         start: project ? new Date(project.startDate) : null,
         end: project ? new Date(project.endDate) : null

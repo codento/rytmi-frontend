@@ -235,7 +235,7 @@ export default {
     isAbsent (profileId, date) {
       return this.mapLeavesToAbsences() ? this.mapLeavesToAbsences().some(absence => (
         absence.profileId === profileId &&
-        isWithinRange(date, absence.startDate, absence.endDate) &&
+        isWithinRange(date, absence.startDate, absence.endDate ? absence.endDate : new Date('2100-12-31')) &&
         absence.leave.affectsUtilisation)) : false
     },
     isAvailableOnDate (profileId, date) {
