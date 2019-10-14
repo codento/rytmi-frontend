@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card :title="fullName">
-      <div>
+      <b-card>
         <b-form-group>
           <b-form-checkbox
             v-model="isAdmin"
@@ -54,7 +54,12 @@
             </b-col>
           </b-row>
         </b-form-group>
-      </div>
+      </b-card>
+      <b-card>
+        <b-form-group>
+          <LeaveForm :profile="profile" />
+        </b-form-group>
+      </b-card>
     </b-card>
   </div>
 </template>
@@ -62,9 +67,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
+import { LeaveForm } from '../Common/'
 
 export default {
-  components: { vSelect },
+  components: { vSelect, LeaveForm },
   props: {
     user: {
       type: Object,

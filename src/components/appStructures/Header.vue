@@ -167,6 +167,7 @@
     >
       <leave-form
         :profile="profileById(profileId)"
+        in-modal
       />
     </b-modal>
   </b-navbar>

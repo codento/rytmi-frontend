@@ -113,6 +113,7 @@ export default {
       'fetchEmployers',
       'fetchProfileEmployers',
       'fetchLeaves',
+      'fetchAbsences',
       'handleLogin',
       'startNow'
     ]),
@@ -157,7 +158,8 @@ export default {
           this.fetchUsers(),
           this.fetchEmployers(),
           this.fetchProfileEmployers(),
-          this.fetchLeaves()
+          this.fetchLeaves(),
+          this.fetchAbsences()
         ])
           .catch(error => {
             this.setAppInitializeError(error)

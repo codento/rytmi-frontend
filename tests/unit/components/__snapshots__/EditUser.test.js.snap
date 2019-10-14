@@ -16,96 +16,131 @@ exports[`EditUser.vue Template is correct 1`] = `
         Bar Foo
       </h4>
       <!---->
-      <div>
-        <fieldset
-          class="form-group"
-          id="__BVID__6"
+      <div
+        class="card"
+      >
+        <!---->
+        <!---->
+        <div
+          class="card-body"
         >
           <!---->
-          <div
-            role="group"
-            tabindex="-1"
+          <!---->
+          <fieldset
+            class="form-group"
+            id="__BVID__6"
           >
-            <div
-              class="custom-control custom-control-inline custom-checkbox"
-            >
-              <input
-                autocomplete="off"
-                class="custom-control-input"
-                id="__BVID__7"
-                type="checkbox"
-                value="true"
-              />
-              <label
-                class="custom-control-label"
-                for="__BVID__7"
-              >
-                
-          Is admin?
-        
-              </label>
-            </div>
-             
-            <div
-              class="custom-control custom-control-inline custom-checkbox"
-            >
-              <input
-                autocomplete="off"
-                class="custom-control-input"
-                id="__BVID__8"
-                type="checkbox"
-                value="true"
-              />
-              <label
-                class="custom-control-label"
-                for="__BVID__8"
-              >
-                
-          Is active?
-        
-              </label>
-            </div>
             <!---->
-            <!---->
-            <!---->
-          </div>
-        </fieldset>
-         
-        <div
-          class="form-row form-group"
-          id="roleLabel"
-          role="group"
-        >
-          <label
-            class="col-sm-2 col-form-label"
-            for="roleInput"
-            id="roleLabel__BV_label_"
-          >
-            Role:
-          </label>
-          <div
-            class="col"
-          >
             <div
-              class="dropdown v-select searchable"
-              dir="auto"
-              id="roleInput"
+              role="group"
+              tabindex="-1"
             >
               <div
-                class="dropdown-toggle"
+                class="custom-control custom-control-inline custom-checkbox"
+              >
+                <input
+                  autocomplete="off"
+                  class="custom-control-input"
+                  id="__BVID__7"
+                  type="checkbox"
+                  value="true"
+                />
+                <label
+                  class="custom-control-label"
+                  for="__BVID__7"
+                >
+                  
+          Is admin?
+        
+                </label>
+              </div>
+               
+              <div
+                class="custom-control custom-control-inline custom-checkbox"
+              >
+                <input
+                  autocomplete="off"
+                  class="custom-control-input"
+                  id="__BVID__8"
+                  type="checkbox"
+                  value="true"
+                />
+                <label
+                  class="custom-control-label"
+                  for="__BVID__8"
+                >
+                  
+          Is active?
+        
+                </label>
+              </div>
+              <!---->
+              <!---->
+              <!---->
+            </div>
+          </fieldset>
+           
+          <div
+            class="form-row form-group"
+            id="roleLabel"
+            role="group"
+          >
+            <label
+              class="col-sm-2 col-form-label"
+              for="roleInput"
+              id="roleLabel__BV_label_"
+            >
+              Role:
+            </label>
+            <div
+              class="col"
+            >
+              <div
+                class="dropdown v-select searchable"
+                dir="auto"
+                id="roleInput"
               >
                 <div
-                  class="vs__selected-options"
+                  class="dropdown-toggle"
                 >
-                  <span
-                    class="selected-tag"
+                  <div
+                    class="vs__selected-options"
                   >
-                    
+                    <span
+                      class="selected-tag"
+                    >
+                      
             soft mengineer
            
+                      <button
+                        aria-label="Remove option"
+                        class="close"
+                        type="button"
+                      >
+                        <span
+                          aria-hidden="true"
+                        >
+                          ×
+                        </span>
+                      </button>
+                    </span>
+                     
+                    <input
+                      aria-label="Search for option"
+                      autocomplete="off"
+                      class="form-control"
+                      role="combobox"
+                      type="search"
+                    />
+                  </div>
+                   
+                  <div
+                    class="vs__actions"
+                  >
                     <button
-                      aria-label="Remove option"
-                      class="close"
+                      class="clear"
+                      style="display: none;"
+                      title="Clear selection"
                       type="button"
                     >
                       <span
@@ -114,100 +149,308 @@ exports[`EditUser.vue Template is correct 1`] = `
                         ×
                       </span>
                     </button>
-                  </span>
-                   
-                  <input
-                    aria-label="Search for option"
-                    autocomplete="off"
-                    class="form-control"
-                    role="combobox"
-                    type="search"
-                  />
+                     
+                    <i
+                      class="open-indicator"
+                      role="presentation"
+                    />
+                     
+                    <div
+                      class="spinner"
+                      style="display: none;"
+                    >
+                      Loading...
+                    </div>
+                  </div>
+                </div>
+                 
+                <!---->
+              </div>
+              <!---->
+              <!---->
+              <!---->
+            </div>
+          </div>
+           
+          <fieldset
+            class="form-group"
+            id="__BVID__12"
+          >
+            <!---->
+            <div
+              role="group"
+              tabindex="-1"
+            >
+              <div
+                class="row"
+              >
+                <div
+                  class="col-sm-3"
+                >
+                  <button
+                    class="btn btn-primary"
+                    name="update"
+                    type="button"
+                  >
+                    
+              Update
+            
+                  </button>
                 </div>
                  
                 <div
-                  class="vs__actions"
+                  class="col-sm-3 offset-sm-6"
                 >
                   <button
-                    class="clear"
-                    style="display: none;"
-                    title="Clear selection"
+                    class="btn btn-danger"
+                    name="delete"
                     type="button"
                   >
-                    <span
-                      aria-hidden="true"
-                    >
-                      ×
-                    </span>
-                  </button>
-                   
-                  <i
-                    class="open-indicator"
-                    role="presentation"
-                  />
-                   
-                  <div
-                    class="spinner"
-                    style="display: none;"
-                  >
-                    Loading...
-                  </div>
-                </div>
-              </div>
-               
-              <!---->
-            </div>
-            <!---->
-            <!---->
-            <!---->
-          </div>
-        </div>
-         
-        <fieldset
-          class="form-group"
-          id="__BVID__12"
-        >
-          <!---->
-          <div
-            role="group"
-            tabindex="-1"
-          >
-            <div
-              class="row"
-            >
-              <div
-                class="col-sm-3"
-              >
-                <button
-                  class="btn btn-primary"
-                  name="update"
-                  type="button"
-                >
-                  
-              Update
-            
-                </button>
-              </div>
-               
-              <div
-                class="col-sm-3 offset-sm-6"
-              >
-                <button
-                  class="btn btn-danger"
-                  name="delete"
-                  type="button"
-                >
-                  
+                    
               Delete
             
-                </button>
+                  </button>
+                </div>
               </div>
+              <!---->
+              <!---->
+              <!---->
             </div>
+          </fieldset>
+        </div>
+        <!---->
+        <!---->
+      </div>
+       
+      <div
+        class="card"
+      >
+        <!---->
+        <!---->
+        <div
+          class="card-body"
+        >
+          <!---->
+          <!---->
+          <fieldset
+            class="form-group"
+            id="__BVID__13"
+          >
             <!---->
-            <!---->
-            <!---->
-          </div>
-        </fieldset>
+            <div
+              role="group"
+              tabindex="-1"
+            >
+              <form
+                class=""
+                id="leave-form"
+              >
+                <div
+                  class="row"
+                >
+                  <div
+                    class="col-12 projects-table col"
+                  >
+                    <table
+                      aria-busy="false"
+                      aria-colcount="5"
+                      aria-describedby="__BVID__15__caption_"
+                      class="table b-table b-table-stacked-sm"
+                      id="__BVID__15"
+                      role="table"
+                    >
+                      <caption
+                        class="b-table-caption-top"
+                        id="__BVID__15__caption_"
+                      >
+                        <h4>
+                          Leaves
+                        </h4>
+                      </caption>
+                      <!---->
+                      <thead
+                        class=""
+                        role="rowgroup"
+                      >
+                        <!---->
+                        <tr
+                          role="row"
+                        >
+                          <th
+                            aria-colindex="1"
+                            class=""
+                            role="columnheader"
+                            scope="col"
+                          >
+                            Description
+                          </th>
+                          <th
+                            aria-colindex="2"
+                            class=""
+                            role="columnheader"
+                            scope="col"
+                          >
+                            From
+                          </th>
+                          <th
+                            aria-colindex="3"
+                            class=""
+                            role="columnheader"
+                            scope="col"
+                          >
+                            To
+                          </th>
+                          <th
+                            aria-colindex="4"
+                            aria-label="Edit"
+                            class=""
+                            role="columnheader"
+                            scope="col"
+                          >
+                            
+                          </th>
+                          <th
+                            aria-colindex="5"
+                            aria-label="Remove"
+                            class=""
+                            role="columnheader"
+                            scope="col"
+                          >
+                            
+                          </th>
+                        </tr>
+                      </thead>
+                      <!---->
+                      <tbody
+                        class=""
+                        role="rowgroup"
+                      >
+                        <!---->
+                        <!---->
+                        <!---->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                 
+                <h4>
+                  Add leave
+                </h4>
+                 
+                <div
+                  class="row mt-4"
+                >
+                  <div
+                    class="col-sm-6"
+                  >
+                    <small
+                      for="leave-description-input"
+                    >
+                      Leave type *
+                    </small>
+                     
+                    <fieldset
+                      class="form-group"
+                      id="__BVID__16"
+                    >
+                      <!---->
+                      <div
+                        role="group"
+                        tabindex="-1"
+                      >
+                        <div
+                          class="dropdown v-select single searchable"
+                          dir="auto"
+                        >
+                          <div
+                            class="dropdown-toggle"
+                          >
+                            <div
+                              class="vs__selected-options"
+                            >
+                               
+                              <input
+                                aria-label="Search for option"
+                                autocomplete="off"
+                                class="form-control"
+                                role="combobox"
+                                type="search"
+                              />
+                            </div>
+                             
+                            <div
+                              class="vs__actions"
+                            >
+                              <button
+                                class="clear"
+                                style="display: none;"
+                                title="Clear selection"
+                                type="button"
+                              >
+                                <span
+                                  aria-hidden="true"
+                                >
+                                  ×
+                                </span>
+                              </button>
+                               
+                              <i
+                                class="open-indicator"
+                                role="presentation"
+                              />
+                               
+                              <div
+                                class="spinner"
+                                style="display: none;"
+                              >
+                                Loading...
+                              </div>
+                            </div>
+                          </div>
+                           
+                          <!---->
+                        </div>
+                        <div
+                          aria-atomic="true"
+                          aria-live="assertive"
+                          class="invalid-feedback"
+                          role="alert"
+                          tabindex="-1"
+                        >
+                          Required
+                        </div>
+                        <!---->
+                        <!---->
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+                 
+                <!---->
+                 
+                <!---->
+                 
+                <button
+                  class="btn mt-2 btn-primary disabled"
+                  disabled="disabled"
+                  name="submit"
+                  type="submit"
+                >
+                  
+    Add
+  
+                </button>
+                 
+                <!---->
+              </form>
+              <!---->
+              <!---->
+              <!---->
+            </div>
+          </fieldset>
+        </div>
+        <!---->
+        <!---->
       </div>
     </div>
     <!---->

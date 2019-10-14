@@ -12,5 +12,8 @@ export const mutations = {
   },
   [types.EXPORT_CV_PENDING] (state, boolean) {
     state.cvExportPending = boolean
+  },
+  [types.SET_CV_URL]: (state, url) => {
+    state.url = url
   }
 }

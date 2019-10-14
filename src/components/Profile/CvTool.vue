@@ -32,6 +32,7 @@
           :profile="profile"
           :job-title="jobTitle"
           @update-introduction="cvIntroductionUpdated"
+          @update-job-title="cvJobTitleUpdated"
         />
       </b-col>
       <b-col cols="12">
@@ -54,12 +55,21 @@
     <template v-slot:modal-footer>
       <div id="disabled-button-wrapper">
         <b-button
+          id="get-cv-url-modal"
+          v-b-modal.get-cv-url-modal
+          :disabled="!allRequiredFieldsFilled"
+          variant="primary"
+          @click="startGetCvUrl()"
+        >
+          Get CV link
+        </b-button>
+        <b-button
           id="open-create-cv-modal"
           v-b-modal.create-cv-modal
           :disabled="!allRequiredFieldsFilled"
           variant="primary"
         >
-          Create CV
+          Create pdf CV
         </b-button>
         <b-tooltip
           :disabled.sync="allRequiredFieldsFilled"
@@ -138,6 +148,38 @@
             </b-button>
           </template>
         </b-modal>
+        <b-modal
+          id="get-cv-url-modal"
+          title="Get cv url"
+          hide-header-close
+        >
+          <b-row>
+            <b-col cols="12">
+              <div v-if="cvExportPending">
+                <LoadingSpinner />
+              </div>
+              <b-link
+                v-else-if="cvUrl"
+                :href="cvUrl"
+                target="_blank"
+              >
+                Click here to open CV in Google Slides
+              </b-link>
+            </b-col>
+          </b-row>
+          <template
+            slot="modal-footer"
+            class="mx-1"
+          >
+            <b-button
+              slot="modal-cancel"
+              variant="light"
+              @click="$bvModal.hide('get-cv-url-modal')"
+            >
+              Close
+            </b-button>
+          </template>
+        </b-modal>
       </div>
     </template>
   </b-modal>
@@ -171,7 +213,8 @@ export default {
       isIntroductionValid: false,
       showButtonInfo: true,
       pdfName: '',
-      invalidFilenameCharacters: '/:*?"<>|.[]'
+      invalidFilenameCharacters: '/:*?"<>|.[]',
+      jobTitleForCv: ''
     }
   },
   computed: {
@@ -192,7 +235,8 @@ export default {
       'employers',
       'employerById',
       'employerByName',
-      'profileEmployersByProfileId'
+      'profileEmployersByProfileId',
+      'cvUrl'
     ]),
     internalCompanyId () {
       return this.employerByName(INTERNAL_COMPANY_NAME).id
@@ -267,12 +311,13 @@ export default {
   },
   created () {
     this.pdfName = this.defaultPDFName
+    this.jobTitleForCv = this.jobTitle
   },
   updated () {
     this.pdfName = this.defaultPDFName
   },
   methods: {
-    ...mapActions(['changeLanguage', 'downloadCv']),
+    ...mapActions(['changeLanguage', 'downloadCv', 'getCvUrl']),
     containsInvalidCharacters (text) {
       // Escape special characters for regexp
       const escapedCharacters = this.invalidFilenameCharacters.replace(
@@ -294,6 +339,9 @@ export default {
     },
     cvIntroductionUpdated: function (inputState) {
       this.isIntroductionValid = inputState
+    },
+    cvJobTitleUpdated (title) {
+      this.jobTitleForCv = title
     },
     joinSkillCategory: function (profileSkill) {
       const profileSkillCopy = clone(profileSkill)
@@ -372,7 +420,7 @@ export default {
       return {
         employeeName: this.profile.firstName + ' ' + this.profile.lastName,
         employeePicture: this.profile.photoPath,
-        jobTitle: workHistory.find(item => item.employerName === INTERNAL_COMPANY_NAME).jobTitle,
+        jobTitle: this.jobTitleForCv,
         employeeDescription: this.cvIntroduction,
         recentProjects: this.recentProjects.map(project => this.mapProfileProjectForCV(project)),
         keySkills: this.keySkills.map(skill => this.mapSkillForCV(skill)),
@@ -400,6 +448,19 @@ export default {
           })
           this.hideModal()
         })
+    },
+    async startGetCvUrl () {
+      this.getCvUrl(this.generateCvData())
+        .then(response => {
+          this.$toasted.global.rytmi_success({
+            message: `CV link succesfully generated`
+          })
+        })
+        .catch(error => {
+          this.$toasted.global.rytmi_error({
+            message: error
+          })
+        })
     }
   }
 }
@@ -414,6 +475,10 @@ export default {
 #disabled-button-wrapper .btn :disabled {
   /* don't let button block mouse events from reaching wrapper */
   pointer-events: none;
+}
+
+#get-cv-url-modal {
+  margin-right: 10px;
 }
 
 .language-button.btn.btn-outline-light:not(.active) {

@@ -132,7 +132,7 @@
             v-if="leaveList"
             v-model="leave"
             :options="Object.values(leaveList)"
-            :reduce="leave => leave.description"
+            :reduce="vSelectReducer"
             label="description"
           />
         </b-form-group>
@@ -190,6 +190,7 @@
       Add
     </b-button>
     <b-button
+      v-if="inModal"
       variant="secondary"
       name="close"
       type="button"
@@ -217,7 +218,11 @@ export default {
     Edit2Icon
   },
   props: {
-    profile: Object
+    profile: Object,
+    inModal: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
@@ -260,6 +265,17 @@ export default {
         stateArray.push(entry[1])
       }
       return stateArray.every(item => item)
+    },
+    vSelectReducer (leave) {
+      return leave.description
+    }
+  },
+  watch: {
+    async profile (profile) {
+      await this.fetchAbsencesForProfile(profile.id)
+      this.absences = Object.values(this.absencesByProfileId(profile.id) || [])
+      this.leaveList = cloneDeep(this.leaves)
+      this.leave = null
     }
   },
   async created () {

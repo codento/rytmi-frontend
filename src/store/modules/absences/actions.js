@@ -2,17 +2,30 @@ import { normalize } from 'normalizr'
 import * as types from '@/store/mutation-types'
 import { absence } from '@/store/schema'
 import {
+  getAbsences,
   getAbsencesForProfile,
   newAbsenceForProfile,
   deleteAbsence,
   alterAbsenceForProfile
 } from '@/utils/api/api'
 
+export function fetchAbsences ({ commit }, date) {
+  return new Promise((resolve, reject) => {
+    getAbsences()
+      .then(response => {
+        commit(types.FETCH_ABSENCES, normalize(response.data, [absence]).entities.absences)
+        resolve(response.data)
+      }).catch(error => {
+        reject(error)
+      })
+  })
+}
+
 export function fetchAbsencesForProfile ({ commit, state }, profileId) {
   return new Promise((resolve, reject) => {
     getAbsencesForProfile(profileId)
       .then(response => {
-        commit(types.FETCH_ABSENCES, { profileId: profileId, data: normalize(response.data, [absence]).entities.absences })
+        commit(types.FETCH_ABSENCES_FOR_PROFILE, { profileId: profileId, data: normalize(response.data, [absence]).entities.absences })
         resolve(response.data)
       })
       .catch(err => {

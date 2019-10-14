@@ -21,7 +21,22 @@
         </div>
       </b-col>
       <b-col>
-        <h3>{{ jobTitle }}</h3>
+        <h3
+          v-if="!editJobTitle"
+          class="job-title"
+          @click="toggleJobTitleEdit"
+        >
+          {{ modifiedJobTitle }}
+        </h3>
+        <h3 v-else>
+          <b-input
+            ref="jobTitleInput"
+            v-model="modifiedJobTitle"
+            @update="updateJobTitle"
+            @keyup.enter="editJobTitle = false"
+            @blur="editJobTitle = false"
+          />
+        </h3>
         <b-textarea
           id="input-introduction"
           v-model="modifiedIntroduction"
@@ -151,7 +166,9 @@ export default {
   data () {
     return {
       modifiedIntroduction: '',
-      maxIntroductionLength: 700
+      maxIntroductionLength: 700,
+      modifiedJobTitle: this.jobTitle,
+      editJobTitle: false
     }
   },
   computed: {
@@ -187,6 +204,13 @@ export default {
     updateIntroduction: function () {
       this.updateCvIntroduction(this.modifiedIntroduction)
       this.$emit('update-introduction', this.introductionIsValid)
+    },
+    updateJobTitle () {
+      this.$emit('update-job-title', this.modifiedJobTitle)
+    },
+    toggleJobTitleEdit () {
+      this.editJobTitle = !this.editJobTitle
+      setTimeout(() => this.$refs.jobTitleInput.$el.focus(), 50)
     }
   }
 }
@@ -200,5 +224,9 @@ export default {
     border: 0;
     padding: 0.2rem;
     cursor: pointer;
+  }
+  .job-title {
+    cursor: pointer;
+    display: inline-block;
   }
 </style>

@@ -1,4 +1,4 @@
-import { generateCv } from '../../../utils/api/api'
+import { generateCv, generateCvUrl } from '../../../utils/api/api'
 import * as types from '../../mutation-types'
 
 export const actions = {
@@ -10,6 +10,20 @@ export const actions = {
   },
   updateRecentProjects ({ commit }, params) {
     commit(types.UPDATE_RECENT_PROJECTS, params)
+  },
+  getCvUrl ({ commit }, cvData) {
+    commit(types.EXPORT_CV_PENDING, true)
+    return new Promise((resolve, reject) => {
+      generateCvUrl(cvData)
+        .then(response => {
+          commit(types.SET_CV_URL, response.data)
+          commit(types.EXPORT_CV_PENDING, false)
+          resolve()
+        }).catch(error => {
+          commit(types.EXPORT_CV_PENDING, false)
+          reject(error)
+        })
+    })
   },
   downloadCv ({ commit }, params) {
     commit(types.EXPORT_CV_PENDING, true)

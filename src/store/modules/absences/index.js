@@ -3,7 +3,8 @@ import * as getters from './getters'
 import { mutations } from './mutations'
 
 const initialState = {
-  profile: {}
+  profile: {},
+  absences: {}
 }
 
 export default {

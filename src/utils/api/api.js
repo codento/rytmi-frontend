@@ -111,6 +111,14 @@ export function generateCv (data) {
     .catch(handleError)
 }
 
+export function generateCvUrl (data) {
+  return axios.post(
+    CV_API_URL + '?url=true',
+    data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function newProject (data) {
   return axios.post(
     API_URL + PATH_PROJECTS,
@@ -373,8 +381,16 @@ export function deleteLeave (id) {
     .catch(handleError)
 }
 
+export function getAbsences () {
+  return axios.get(API_URL + PATH_ABSENCES,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function getAbsencesForProfile (profileId) {
-  return axios.get(API_URL + PATH_PROFILES + '/' + profileId + PATH_ABSENCES, getAuthHeaders()).catch(handleError)
+  return axios.get(API_URL + PATH_PROFILES + '/' + profileId + PATH_ABSENCES,
+    getAuthHeaders())
+    .catch(handleError)
 }
 
 export function newAbsenceForProfile ({ profileId, data }) {
