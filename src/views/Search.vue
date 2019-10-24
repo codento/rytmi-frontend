@@ -46,7 +46,7 @@
           <b-col class="col-sm-9">
             <b-button
               variant="secondary"
-              class="position-bottom"
+              class="position-bottom search-button"
               @click="clearUtilizationDateFilter"
             >
               Clear date
@@ -150,5 +150,8 @@ export default {
 .position-bottom {
   position: absolute;
   bottom: 0;
+}
+.search-button {
+  margin-bottom: 1em;
 }
 </style>
