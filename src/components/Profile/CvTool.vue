@@ -332,7 +332,11 @@ export default {
       this.pdfName = this.defaultPDFName
     },
     getFormattedDuration: function (startDate, endDate) {
-      if (endDate && new Date(endDate).getMonth() === new Date(startDate).getMonth()) {
+      if (
+        endDate &&
+        new Date(endDate).getMonth() === new Date(startDate).getMonth() &&
+        new Date(endDate).getYear() === new Date(startDate).getYear()
+        ) {
         return format(startDate, 'MM/YYYY')
       }
       return `${format(startDate, 'MM/YYYY')}-${endDate ? format(endDate, 'MM/YYYY') : ''}`
