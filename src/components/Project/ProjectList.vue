@@ -21,10 +21,16 @@
       striped
       @row-clicked="openProject"
     >
-      <template slot="name" slot-scope="data">
+      <template
+        slot="name"
+        slot-scope="data"
+      >
         {{ data.value.title }}
-        <span v-if="data.value.isConfidential" class="confidential">
-          {{ ' *' }}
+        <span
+          v-if="data.value.isConfidential"
+          class="confidential"
+        >
+          {{ ' *' }}
         </span>
       </template>
     </b-table>

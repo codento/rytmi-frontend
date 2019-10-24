@@ -11,7 +11,7 @@
           :to="{ name: 'project', params: { id: '' + project.id }}"
         >
           <span class="project-header">{{ project.name[currentLanguage] }}</span>
-          <span class="project-header confidential">{{ project.isConfidential ? ' *' : '' }}</span>
+          <span class="project-header confidential">{{ project.isConfidential ? ' *' : '' }}</span>
         </router-link>
       </div>
       <div class="col-sm-12 duration-container">
