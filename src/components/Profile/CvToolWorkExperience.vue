@@ -43,6 +43,7 @@
         </b-col>
       </b-row>
     </div>
+    <small><span class="confidential">* </span>Confidential project</small>
   </b-card>
 </template>
 <script>
@@ -123,3 +124,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.confidential {
+  color: red;
+}
+</style>

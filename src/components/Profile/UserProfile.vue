@@ -126,6 +126,7 @@
         >
           No projects joined
         </div>
+        <small><span class="confidential">* </span>Confidential project</small>
         <b-modal
           id="editProfileProjectsModal"
           ok-only
@@ -304,5 +305,8 @@ export default {
 }
 .clickable:hover {
   cursor: pointer;
+}
+.confidential {
+  color: red;
 }
 </style>

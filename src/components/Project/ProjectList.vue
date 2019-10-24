@@ -8,6 +8,9 @@
       placeholder="Filter projects (by name or project code)"
       class="mb-2"
     />
+    <small>
+      <span class="confidential">*</span> Confidential project
+    </small>
     <b-table
       id="project-table"
       :items="results"
@@ -17,7 +20,14 @@
       hover
       striped
       @row-clicked="openProject"
-    />
+    >
+      <template slot="name" slot-scope="data">
+        {{ data.value.title }}
+        <span v-if="data.value.isConfidential" class="confidential">
+          {{ ' *' }}
+        </span>
+      </template>
+    </b-table>
   </b-container>
 </template>
 <script>
@@ -60,7 +70,7 @@ export default {
         return {
           id: project.id,
           code: project.code,
-          name: project.name[this.currentLanguage]
+          name: { title: project.name[this.currentLanguage], isConfidential: project.isConfidential }
         }
       })
     }
@@ -75,5 +85,9 @@ export default {
 <style scoped>
 .clickable {
   cursor: pointer;
+}
+
+.confidential {
+  color: red;
 }
 </style>
