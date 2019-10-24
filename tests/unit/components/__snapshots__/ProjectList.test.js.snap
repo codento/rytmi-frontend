@@ -14,6 +14,16 @@ exports[`ProjectList.vue Template is correct 1`] = `
     value=""
   />
    
+  <small>
+    <span
+      class="confidential"
+    >
+      *
+    </span>
+     Confidential project
+  
+  </small>
+   
   <b-table-stub
     apiurl=""
     class="clickable"
