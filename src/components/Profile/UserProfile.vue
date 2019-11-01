@@ -280,7 +280,11 @@ export default {
         .filter(profileProject => {
           const employerId = this.projectById(profileProject.projectId).employerId
           return employerId === this.internalCompanyId
-        })
+        }).sort((a, b) => { 
+          if (a.startDate < b.startDate) { return 1 }
+          if (a.startDate > b.startDate) { return -1 }
+          return 0
+          })
     }
   },
   methods: {
