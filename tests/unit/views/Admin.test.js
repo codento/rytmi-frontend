@@ -63,10 +63,15 @@ describe('Admin.vue', () => {
           { id: 1, title: 'soft mengineer' },
           { id: 2, title: 'hardcore soft engineer' }
         ]
-      }
+      },
+      absencesByProfileId: () => (id) => {},
+      leaves: () => []
+    }
+    const actions = {
+      fetchAbsencesForProfile: () => (id) => {}
     }
 
-    store = new Vuex.Store({ getters })
+    store = new Vuex.Store({ getters, actions })
     wrapper = mount(View, {
       store,
       localVue

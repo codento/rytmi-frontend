@@ -15,7 +15,8 @@ function createStore (overrideConfig) {
     getters: {
       profiles: jest.fn(() => []),
       projects: jest.fn(() => []),
-      projectById: () => (id) => ({ id })
+      projectById: () => (id) => ({ id }),
+      profileId: () => {}
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)

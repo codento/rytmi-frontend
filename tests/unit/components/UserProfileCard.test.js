@@ -36,7 +36,8 @@ describe('UserProfileCard.test.js', () => {
           photoPath: 'shouldNotWork',
           employeeRoles: [1]
         }
-      }
+      },
+      stubs: ['b-img']
     })
     expect(wrapper.element).toMatchSnapshot()
   })

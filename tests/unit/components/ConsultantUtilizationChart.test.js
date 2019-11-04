@@ -116,7 +116,8 @@ function createStore (overrideConfig) {
       }),
       projectById: () => (projectId) => filter(mockProjects, project => project.id === projectId),
       employerByName: () => (employerName) => filter(employersMock, employer => employer.name === employerName),
-      profileEmployersByProfileId: () => (id) => filter(employersMock, employer => employer.id === id)
+      profileEmployersByProfileId: () => (id) => filter(employersMock, employer => employer.id === id),
+      absences: () => () => []
     }
   }
   const mergedConfig = merge(defaultStoreConfig, overrideConfig)

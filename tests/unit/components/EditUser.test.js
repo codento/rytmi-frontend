@@ -28,7 +28,13 @@ describe('EditUser.vue', () => {
         { id: 1, title: 'soft mengineer' },
         { id: 2, title: 'hardcore soft engineer' }
       ]
-    }
+    },
+    absencesByProfileId: () => (id) => {},
+    leaves: () => {}
+  }
+
+  const actions = {
+    fetchAbsencesForProfile: () => (id) => {}
   }
 
   const propsData = {
@@ -46,7 +52,7 @@ describe('EditUser.vue', () => {
   let wrapper, store
 
   beforeEach(() => {
-    store = new Vuex.Store({ getters })
+    store = new Vuex.Store({ getters, actions })
     wrapper = mount(EditUser, {
       store,
       propsData,

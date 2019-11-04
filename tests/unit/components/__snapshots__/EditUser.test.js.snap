@@ -358,58 +358,7 @@ exports[`EditUser.vue Template is correct 1`] = `
                         role="group"
                         tabindex="-1"
                       >
-                        <div
-                          class="dropdown v-select single searchable"
-                          dir="auto"
-                        >
-                          <div
-                            class="dropdown-toggle"
-                          >
-                            <div
-                              class="vs__selected-options"
-                            >
-                               
-                              <input
-                                aria-label="Search for option"
-                                autocomplete="off"
-                                class="form-control"
-                                role="combobox"
-                                type="search"
-                              />
-                            </div>
-                             
-                            <div
-                              class="vs__actions"
-                            >
-                              <button
-                                class="clear"
-                                style="display: none;"
-                                title="Clear selection"
-                                type="button"
-                              >
-                                <span
-                                  aria-hidden="true"
-                                >
-                                  ×
-                                </span>
-                              </button>
-                               
-                              <i
-                                class="open-indicator"
-                                role="presentation"
-                              />
-                               
-                              <div
-                                class="spinner"
-                                style="display: none;"
-                              >
-                                Loading...
-                              </div>
-                            </div>
-                          </div>
-                           
-                          <!---->
-                        </div>
+                        <!---->
                         <div
                           aria-atomic="true"
                           aria-live="assertive"

@@ -168,7 +168,7 @@ describe('Creating item in SkillListAdminPanelItem.vue', () => {
 
   it('Should reset values if cancel button is clicked', () => {
     // Edit data
-    wrapper.setData({ editedName: 'Something' })
+    wrapper.setData({ editedName: { en: 'Something', fi: 'jotain' } })
     wrapper.setData({ showFeedback: true })
     // Save edits
     wrapper.find(`#cancel-${idPrefix}-edits-btn`).trigger('click')

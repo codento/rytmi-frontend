@@ -12,7 +12,8 @@ const getters = {
   profileById: () => (arg) => arg,
   profiles: () => (arg) => arg,
   skillsById: () => (arg) => arg,
-  skillName: () => (skillId) => 'Python'
+  skillName: () => (skillId) => 'Python',
+  currentLanguage: () => 'fi'
 }
 const store = new Vuex.Store({ getters })
 

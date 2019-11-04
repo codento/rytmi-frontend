@@ -34,7 +34,8 @@ describe('ProjectRow.test.js', () => {
       localVue,
       propsData: {
         profileProject: mockProject
-      }
+      },
+      stubs: ['router-link']
     })
     expect(wrapper.html()).toMatchSnapshot()
   })
