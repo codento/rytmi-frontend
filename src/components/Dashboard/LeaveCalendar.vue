@@ -38,22 +38,11 @@
           :cols="new Date(Date.now()).getDate() > 20 ? 1 : 2"
           class="profile-tag-col pt-2"
         >
-          <div
-            class="profile-tag mx-2"
-            @click="openProfile(item.id)"
-          >
-            <b-img
-              :id="'leave-profile-thumbnail-' + item.id"
-              v-bind="imgProps"
-              thumbnail
-              fluid
-              :src="item.photoPath"
-              :blank="!item.photoPath || false"
-              class="thumbnail"
-              rounded="circle"
-            />
-            <span :class="`${item.profileRoleClass} profile-tag-name px-2`"> {{ item.firstName }} {{ item.lastName }} </span>
-          </div>
+          <ProfileImageTag
+            :profile-data="{ profile: item, profileRoleClass: item.profileRoleClass }"
+            :image-props="imgProps"
+            :image-url="item.photoPath"
+          />
         </b-col>
         <b-col
           v-for="(progressBarData, monthIndex) in getProgressBarValues(new Date(), item.absences)"
@@ -92,11 +81,13 @@
 import { mapGetters } from 'vuex'
 import { isWithinRange, addMonths, addDays, getDaysInMonth, differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import ChartCard from './ChartCard'
+import ProfileImageTag from '../Common/ProfileImageTag'
 
 export default {
   name: 'LeaveCalendar',
   components: {
-    ChartCard
+    ChartCard,
+    ProfileImageTag
   },
   data () {
     return {

@@ -336,7 +336,7 @@ export default {
         endDate &&
         new Date(endDate).getMonth() === new Date(startDate).getMonth() &&
         new Date(endDate).getYear() === new Date(startDate).getYear()
-        ) {
+      ) {
         return format(startDate, 'MM/YYYY')
       }
       return `${format(startDate, 'MM/YYYY')}-${endDate ? format(endDate, 'MM/YYYY') : ''}`

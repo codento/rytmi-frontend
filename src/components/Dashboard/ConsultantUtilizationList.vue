@@ -10,25 +10,13 @@
       <h3 class="mb-4">
         Free capacity
       </h3>
-      <div
-        v-for="item in freeEmployees"
-        :key="item.profile.id"
-        class="profile-tag mx-2 mb-1"
-        @click="openProfile(item.profile)"
-      >
-        <b-img
-          :id="'thumbnail-' + item.profile.id"
-          v-bind="imgProps"
-          thumbnail
-          fluid
-          :src="imageUrl[item.profile.id]"
-          :blank="!imageUrl[item.profile.id] || false"
-          class="thumbnail"
-          rounded="circle"
-          @error="handleBrokenImg(item.profile.id)"
-        />
-        <span :class="`${item.profileRoleClass} profile-tag-name px-2`"> {{ item.profile.firstName }} {{ item.profile.lastName }} </span>
-      </div>
+      <ProfileImageTag
+        v-for="profile in freeEmployees"
+        :key="`$free-employee-tag-${profile.profile.id}`"
+        :profile-data="profile"
+        :image-props="imgProps"
+        :image-url="imageUrl[profile.profile.id]"
+      />
     </b-col>
     <b-col
       cols="12"
@@ -68,23 +56,11 @@
           :cols="currentDayNumber > 20 ? 1 : 2"
           class="profile-tag-col pt-2"
         >
-          <div
-            class="profile-tag mx-2"
-            @click="openProfile(item.profile)"
-          >
-            <b-img
-              :id="'thumbnail-' + item.profile.id"
-              v-bind="imgProps"
-              thumbnail
-              fluid
-              :src="imageUrl[item.profile.id]"
-              :blank="!imageUrl[item.profile.id] || false"
-              class="thumbnail"
-              rounded="circle"
-              @error="handleBrokenImg(item.profile.id)"
-            />
-            <span :class="`${item.profileRoleClass} profile-tag-name px-2`"> {{ item.profile.firstName }} {{ item.profile.lastName }} </span>
-          </div>
+          <ProfileImageTag
+            :profile-data="item"
+            :image-props="imgProps"
+            :image-url="imageUrl[item.profile.id]"
+          />
         </b-col>
         <b-col
           v-for="(progressBarData, monthIndex) in getProgressBarValues(item.daysToProjectStart, item.daysToZeroUtilization, item.utilization)"
@@ -135,6 +111,7 @@
 import { mapGetters } from 'vuex'
 import { format, differenceInDays, addMonths, addDays, getDaysInMonth } from 'date-fns'
 import ChartCard from './ChartCard'
+import ProfileImageTag from '../Common/ProfileImageTag'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 const getMaxDate = (projectsArray) => {
@@ -150,7 +127,8 @@ const getMinDate = (projectsArray) => {
 export default {
   name: 'ConsultantUtilizationList',
   components: {
-    ChartCard
+    ChartCard,
+    ProfileImageTag
   },
   props: {
     activeRoleSelection: Array
@@ -376,9 +354,6 @@ export default {
     },
     openProfile (profile) {
       this.$router.push({ name: 'profile', params: { id: profile.id } })
-    },
-    handleBrokenImg (profileId) {
-      this.$set(this.imageUrl, profileId, null)
     }
   }
 }
@@ -407,42 +382,6 @@ h3 {
 }
 .progress-bar {
   background-color: $c-violet;
-}
-.role-1 {
-  background: $c-violet;
-  border: 2px solid white;
-}
-.role-2 {
-  background: $c-orange;
-  border: 2px solid white;
-}
-.combined-role {
-  background: repeating-linear-gradient(
-    45deg,
-    $c-violet,
-    $c-violet 50px,
-    $c-orange 50px,
-    $c-orange 200px
-  );
-}
-.profile-tag {
-  float: left;
-  white-space: nowrap;
-  cursor: pointer;
-  .profile-tag-name {
-    color: white;
-    font-family: 'Poppins';
-    font-weight: 400;
-    white-space: nowrap;
-  }
-  .profile-tag-name:hover {
-    background: white;
-    color: $c-violet-dark;
-  }
-  .thumbnail {
-    position: relative;
-    left: 5px;
-  }
 }
 .project-progress {
   font-size: 12px;
