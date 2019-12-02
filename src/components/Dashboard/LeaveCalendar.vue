@@ -49,28 +49,13 @@
           :key="'month-' + monthIndex"
           :class="monthIndex < monthData.length - 1 ? 'utilization-bar px-0 border-right' : 'utilization-bar px-0'"
         >
-          <b-progress
-            class="mt-4 project-progress"
-            :max="monthData[monthIndex].days"
-          >
-            <b-progress-bar
-              v-show="monthIndex === 0"
-              class="hide-progress"
-              :value="new Date(Date.now()).getDate()"
-            />
-            <b-progress-bar
-              v-for="(progressBar, barIndex) in progressBarData.values"
-              :id="`leave-progress-${barIndex}-month-${monthIndex}-profile-${item.id}`"
-              :key="`leave-progress-${barIndex}-month-${monthIndex}-profile-${item.id}`"
-              :value="progressBar.daysLeft"
-              :style="progressBar.style"
-            >
-              <b-tooltip
-                :target="`leave-progress-${barIndex}-month-${monthIndex}-profile-${item.id}`"
-                :title="progressBar.description"
-              />
-            </b-progress-bar>
-          </b-progress>
+          <MonthProgessbar
+            :progress-bar-data="progressBarData"
+            :month-data="monthData"
+            :month-index="monthIndex"
+            :profile-data=" { ...item, profile: { id: item.id } }"
+            :name="'leave'"
+          />
         </b-col>
       </b-row>
     </b-col>
@@ -82,12 +67,14 @@ import { mapGetters } from 'vuex'
 import { isWithinRange, addMonths, addDays, getDaysInMonth, differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import ChartCard from './ChartCard'
 import ProfileImageTag from '../Common/ProfileImageTag'
+import MonthProgessbar from '../Common/MonthProgessbar'
 
 export default {
   name: 'LeaveCalendar',
   components: {
     ChartCard,
-    ProfileImageTag
+    ProfileImageTag,
+    MonthProgessbar
   },
   data () {
     return {

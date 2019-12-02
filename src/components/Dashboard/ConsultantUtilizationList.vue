@@ -67,28 +67,13 @@
           :key="'month-' + monthIndex"
           :class="monthIndex < monthData.length - 1 ? 'utilization-bar px-0 border-right' : 'utilization-bar px-0'"
         >
-          <b-progress
-            class="mt-4 project-progress"
-            :max="monthData[monthIndex].days"
-          >
-            <b-progress-bar
-              v-show="monthIndex === 0"
-              class="hide-progress"
-              :value="currentDayNumber"
-            />
-            <b-progress-bar
-              v-for="(progressBar, barIndex) in progressBarData.values"
-              :id="`progress-${barIndex}-month-${monthIndex}-profile-${item.profile.id}`"
-              :key="`progress-${barIndex}-month-${monthIndex}-profile-${item.profile.id}`"
-              :value="progressBar.daysLeft"
-              :style="progressBar.style"
-            >
-              <b-tooltip
-                :target="`progress-${barIndex}-month-${monthIndex}-profile-${item.profile.id}`"
-                :title="'Utilization: ' + progressBar.utilization + '%'"
-              />
-            </b-progress-bar>
-          </b-progress>
+          <MonthProgessbar
+            :progress-bar-data="progressBarData"
+            :month-data="monthData"
+            :month-index="monthIndex"
+            :profile-data="item"
+            :name="'utilisation'"
+          />
           <span
             v-show="monthsDisplayed <= 6 && progressBarData.showEndLabel && item.endsOn"
             :class="`float-${getDateLabelPositionAndFormat(item.endsOn).position} project-progress px-2`"
@@ -112,6 +97,7 @@ import { mapGetters } from 'vuex'
 import { format, differenceInDays, addMonths, addDays, getDaysInMonth } from 'date-fns'
 import ChartCard from './ChartCard'
 import ProfileImageTag from '../Common/ProfileImageTag'
+import MonthProgessbar from '../Common/MonthProgessbar'
 import { INTERNAL_COMPANY_NAME } from '@/utils/constants'
 
 const getMaxDate = (projectsArray) => {
@@ -128,7 +114,8 @@ export default {
   name: 'ConsultantUtilizationList',
   components: {
     ChartCard,
-    ProfileImageTag
+    ProfileImageTag,
+    MonthProgessbar
   },
   props: {
     activeRoleSelection: Array
@@ -327,7 +314,8 @@ export default {
           progressBar.values.push({
             daysLeft: numDays,
             style: { opacity: (utilization.value) / 100 },
-            utilization: utilization.value
+            utilization: utilization.value,
+            description: 'Utilization: ' + utilization.value + '%'
           })
           // Show start date label on the first project only
           if (daysToProjectStart > 0 && utilization.value > 0 && !startLabelPlaced) {
