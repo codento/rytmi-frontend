@@ -41,6 +41,7 @@ exports[`ProjectList.vue Template is correct 1`] = `
     selectedvariant="primary"
     selectmode="multi"
     sortby="code"
+    sortcompare="function () { [native code] }"
     sortcompareoptions="[object Object]"
     sortdirection="asc"
     striped="true"

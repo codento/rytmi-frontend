@@ -16,6 +16,7 @@
       :items="results"
       :fields="fields"
       :sort-by.sync="sortBy"
+      :sort-compare="bTableSortCompare"
       class="clickable"
       hover
       striped
@@ -84,6 +85,20 @@ export default {
   methods: {
     openProject (project) {
       this.$router.push({ name: 'project', params: { id: project.id } })
+    },
+    bTableSortCompare (aRow, bRow, key, sortDesc, formatter, compareOptions, compareLocale) {
+      // created because b-table default sorting uses a string comparison for objects
+      const a = aRow[key]
+      const b = bRow[key]
+      if (typeof a === 'number' && typeof b === 'number') {
+        return a < b ? -1 : a > b ? 1 : 0
+      }
+      if (typeof a === 'object' && typeof b === 'object') {
+        if (a.title && b.title) {
+          return a.title < b.title ? -1 : a.title > b.title ? 1 : 0
+        }
+      }
+      return toString(a).localeCompare(toString(b), compareLocale, compareOptions)
     }
   }
 }
