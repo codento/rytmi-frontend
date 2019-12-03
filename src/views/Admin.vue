@@ -6,6 +6,12 @@
         sm="12"
         md="6"
       >
+        <b-button
+          v-b-modal="'create-profile-modal'"
+          class="mb-1 mt-2"
+        >
+          Create a new user
+        </b-button>
         <UserList
           :users="users"
           @user-selected="setUser"
@@ -26,6 +32,13 @@
         </div>
       </b-col>
     </b-row>
+    <b-modal
+      id="create-profile-modal"
+      hide-footer
+      hide-header
+    >
+      <CreateUserForm />
+    </b-modal>
   </b-container>
 </template>
 
@@ -33,11 +46,13 @@
 import { mapGetters, mapActions } from 'vuex'
 import UserList from '@/components/Admin/UserList'
 import EditUser from '@/components/Admin/EditUser'
+import CreateUserForm from '@/components/Admin/CreateUserForm'
 
 export default {
   components: {
     UserList,
-    EditUser
+    EditUser,
+    CreateUserForm
   },
   data () {
     return {

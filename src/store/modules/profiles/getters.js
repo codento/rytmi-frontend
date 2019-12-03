@@ -10,7 +10,12 @@ export const getters = {
   profiles: (state) => state.profiles,
   profileList: (state) => state.profileList,
   profileById: (state) => (id) => state.profiles[id],
-  profileByUserId: (state) => (userId) => state.profiles[userId],
+  profileByUserId: (state) => (userId) => {
+    const profiles = Object.values(state.profiles)
+    return profiles.filter(profile => {
+      return profile.userId === userId
+    })[0]
+  },
   skillProfiles: (state) => state.profileSkills,
   profileSkillsByProfileId: (state, getters) => (profileId) => {
     return state.profileSkills

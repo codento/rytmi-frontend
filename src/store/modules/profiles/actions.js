@@ -7,7 +7,8 @@ import {
   alterProfile,
   newProfileSkill,
   deleteProfileSkill,
-  alterProfileSkill
+  alterProfileSkill,
+  postProfile
 } from '@/utils/api/api'
 
 export const actions = {
@@ -29,6 +30,15 @@ export const actions = {
           resolve()
         })
         .catch(err => reject(err))
+    })
+  },
+  createProfile ({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      postProfile(data)
+        .then(response => {
+          commit(types.CREATE_PROFILE, response.data)
+          resolve(response.data)
+        }).catch(err => reject(err))
     })
   },
   updateProfile ({ commit, state }, data) {

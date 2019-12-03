@@ -171,7 +171,7 @@ export default {
     }
   },
   mounted () {
-    this.selectedEmployeeRoles = this.employeeRoleOptions
+    this.selectedEmployeeRoles = this.employeeRoleOptions.filter(role => role.title !== 'subcontractor')
   },
   methods: {
     createEmptySkillObject () {

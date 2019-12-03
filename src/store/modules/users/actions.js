@@ -1,13 +1,27 @@
 import * as usersApi from '@/utils/api/users'
 import { normalize } from 'normalizr'
 import { user } from '../../schema'
-import { FETCH_USERS, UPDATE_USER, DELETE_USER } from '../../mutation-types'
+import {
+  FETCH_USERS,
+  UPDATE_USER,
+  DELETE_USER,
+  CREATE_USER
+} from '../../mutation-types'
 
 export const actions = {
   fetchUsers: async ({ commit, state }) => {
     try {
       const users = await usersApi.getUsers()
       commit(FETCH_USERS, normalize(users, [user]).entities.users)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  createUser: async ({ commit, state }, data) => {
+    try {
+      const user = await usersApi.createUser(data)
+      commit(CREATE_USER, user)
+      return user
     } catch (error) {
       console.error(error)
     }

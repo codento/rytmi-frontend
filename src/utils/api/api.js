@@ -65,6 +65,10 @@ export function getProfiles () {
   return axios.get(API_URL + PATH_PROFILES, getAuthHeaders()).catch(handleError)
 }
 
+export function postProfile (data) {
+  return axios.post(API_URL + PATH_PROFILES, data, getAuthHeaders()).catch(handleError)
+}
+
 export function getProfileSkills () {
   return axios.get(API_URL + PATH_PROFILESKILLS, getAuthHeaders()).catch(handleError)
 }

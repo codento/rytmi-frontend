@@ -51,18 +51,20 @@ export default {
         pointHitRadius: 10,
         lineTension: 0.1
       },
-      optionsForRole: {
-        1: {
-          label: 'Software developers',
+      optionsForRole: [
+        {
           baseColor: COLORS.violet,
           pointHoverBorderColor: COLORS.violet
         },
-        2: {
-          label: 'Method coaches',
+        {
           baseColor: COLORS.orange,
           pointHoverBorderColor: COLORS.orange
+        },
+        {
+          baseColor: COLORS.pink,
+          pointHoverBorderColor: COLORS.pink
         }
-      }
+      ]
     }
   },
   computed: {
@@ -118,13 +120,16 @@ export default {
     },
     lineChartData () {
       const datasets = []
-      const rolesSortedByCount = [...this.activeRoleSelection].sort((a, b) => this.profileRolesCount[a.id] - this.profileRolesCount[b.id])
+      const rolesSortedByCount = [...this.activeRoleSelection]
+        // add chart options to roles. use remainder so that options (colors etc) loop
+        .map((role, index) => ({ ...role, options: this.optionsForRole[index % this.optionsForRole.length] }))
+        .sort((a, b) => this.profileRolesCount[a.id] - this.profileRolesCount[b.id])
 
       let datasetCount = 0
       rolesSortedByCount.forEach(role => {
         if (this.profileRolesCount[role.id]) {
           const utilization = this.mapUtilizationOnTimeFrame(this.today, this.endDate, role.id)
-          const options = this.optionsForRole[role.id]
+          const options = role.options
           // Add datasets describing maximum capacity to the end of datasets
           datasets.push(
             {
