@@ -1,7 +1,12 @@
 import * as types from '@/store/mutation-types'
 import { normalize } from 'normalizr'
 import { skillGroup } from '@/store/schema'
-import { getSkillGroups, newSkillGroup, alterSkillGroup } from '@/utils/api/api'
+import {
+  getSkillGroups,
+  newSkillGroup,
+  alterSkillGroup,
+  deleteSkillGroup
+} from '@/utils/api/api'
 
 export function fetchSkillGroups ({ commit, state }) {
   return new Promise((resolve, reject) => {
@@ -38,6 +43,18 @@ export function updateSkillGroup ({ commit, state }, data) {
         resolve(response.data)
       }).catch(err => {
         reject(err)
+      })
+  })
+}
+
+export function removeSkillGroup ({ commit, state }, id) {
+  return new Promise((resolve, reject) => {
+    deleteSkillGroup(id)
+      .then(response => {
+        getSkillGroups({ commit, state })
+        resolve(response.data)
+      }).catch(error => {
+        reject(error)
       })
   })
 }

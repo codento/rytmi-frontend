@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { denormalize } from 'normalizr'
 import { leave, profile, skill, project, employer, absence } from '@/store/schema'
-import store from '@/store'
-import * as types from '@/store/mutation-types'
+import { handleError } from '@/utils/api/errorHandler'
 
 const CV_API_URL = `${process.env.VUE_APP_BASE_URL}/cv`
 const API_URL = `${process.env.VUE_APP_BASE_URL}/api`
@@ -233,6 +232,13 @@ export function alterSkillCategory (data) {
     .catch(handleError)
 }
 
+export function deleteSkillCategory (id) {
+  return axios.delete(
+    API_URL + PATH_SKILLCATEGORIES + '/' + id,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
 export function getSkillGroups () {
   return axios.get(
     API_URL + PATH_SKILLGROUPS,
@@ -252,6 +258,13 @@ export function alterSkillGroup (data) {
   return axios.put(
     API_URL + PATH_SKILLGROUPS + '/' + data.id,
     data,
+    getAuthHeaders())
+    .catch(handleError)
+}
+
+export function deleteSkillGroup (id) {
+  return axios.delete(
+    API_URL + PATH_SKILLGROUPS + '/' + id,
     getAuthHeaders())
     .catch(handleError)
 }
@@ -347,15 +360,6 @@ export function getProjectsForProfile (id) {
     API_URL + PATH_PROFILES + `/${id}` + PATH_PROJECTS,
     getAuthHeaders())
     .catch(handleError)
-}
-
-function handleError (error) {
-  if (error.response) {
-    if (error.response.status === 401) {
-      store.commit(types.AUTH_LOGOUT)
-    }
-  }
-  throw error
 }
 
 export function getLeaves () {

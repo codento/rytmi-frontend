@@ -99,6 +99,12 @@
             >
               Cancel
             </b-button>
+            <b-button
+              class="float-right mt-2"
+              @click="deleteItem(item.id, label)"
+            >
+              Delete
+            </b-button>
           </b-col>
         </b-row>
         <b-row v-else>
@@ -145,7 +151,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { kebabCase } from 'lodash'
 import { Edit2Icon, LockIcon } from 'vue-feather-icons'
 import ApiErrorDetailsPanel from '@/components/helpers/ApiErrorDetailsPanel.vue'
@@ -228,6 +234,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['removeSkillCategory', 'removeSkillGroup']),
     resetEditedItem () {
       this.showEditIconByIndex = null
       this.editedId = null
@@ -251,6 +258,23 @@ export default {
           // Select no group for new item
           this.selectedSkillGroupId = item.skillGroupId >= 0 ? item.skillGroupId : null
         }
+      }
+    },
+    async deleteItem (id, label) {
+      try {
+        if (label.toLowerCase() === 'skill category') {
+          await this.removeSkillCategory(id)
+        }
+        if (label.toLowerCase() === 'skill group') {
+          await this.removeSkillGroup(id)
+        }
+        this.$toasted.global.rytmi_success({
+          message: `${this.label} deleted`
+        })
+      } catch (error) {
+        this.$toasted.global.rytmi_error({
+          message: error.message
+        })
       }
     },
     async saveEdits (item) {
