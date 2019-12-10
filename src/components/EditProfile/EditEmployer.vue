@@ -178,7 +178,7 @@ export default {
     return {
       editedEmployerName: '',
       editedProfileEmployer: this.initProfileEmployer(),
-      selectedEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId),
+      selectedEmployer: this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId) || { },
       validated: false,
       childComponentState: {
         startDate: true,
@@ -193,7 +193,7 @@ export default {
     ]),
     selectedEmployerOption: {
       get () {
-        return this.vueSelectsEmployers.find(employer => employer.id === this.profileEmployer.employerId) || Object.assign({ label: '' }, this.selectedEmployer)
+        return this.vueSelectsEmployers.find(employer => employer.id === this.selectedEmployer.id) || Object.assign({ label: '' }, this.selectedEmployer)
       },
       set (item) {
         this.selectedEmployer = item
