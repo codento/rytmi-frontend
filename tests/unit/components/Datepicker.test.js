@@ -103,6 +103,6 @@ describe('Datepicker.test.js', () => {
     // assert emitted state is true
     expect(wrapper.emitted('input-state')).toEqual([[ true ]])
     // should not emit input value
-    expect(wrapper.emitted('input')[0]).toEqual([new Date('2015-12-10')])
+    expect(wrapper.emitted('input')[0]).toEqual([new Date(2015, 11, 10)])
   })
 })
