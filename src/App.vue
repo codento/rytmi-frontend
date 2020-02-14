@@ -135,10 +135,10 @@ export default {
     },
     async initialAuth () {
       const isSignedInToGoogle = await gapi.auth2.getAuthInstance().isSignedIn.get()
-      let googleUserToken = isSignedInToGoogle ? await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token : false
+      let googleUserToken = isSignedInToGoogle ? await gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token : false
       if (!this.isTokenValid && isSignedInToGoogle) {
         await this.requestAuth(googleUserToken)
-        googleUserToken = await gapi.auth2.getAuthInstance().currentUser.Ab.Zi.id_token
+        googleUserToken = await gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
       } else if (await !isSignedInToGoogle || !this.isTokenValid) {
         await this.clearLoginData()
       }
